@@ -1,6 +1,30 @@
 {
   "hits": [
     {
+      "id": "e6e559a1312f",
+      "title": "El gerente del CNIO señalado por acoso había denunciado decenas de corruptelas, entre ellas el contrato a medida de la 'acosada'",
+      "link": "https://www.elmundo.es/espana/2026/02/27/69a0a99bfdddff45408b45ab.html",
+      "source": "NewsAPI-Q2 · El Mundo",
+      "raw_date": "2026-02-26T23:02:18Z",
+      "fetched_at": "2026-02-27T23:34:36.486108+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "corrupción",
+        "acoso laboral",
+        "incumplimiento de deberes de diligencia"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Ley Orgánica 3/2018 de protección de datos personales y garantía de los derechos digitales",
+        "Ley 31/1995 de prevención de riesgos laborales"
+      ],
+      "summary": "El gerente del CNIO denunció presuntas corruptelas, incluyendo un contrato a medida para una ex secretaria. Las denuncias incluyen acoso laboral y presuntas irregularidades en contratos públicos.",
+      "vulnerability": "Falta de mecanismos efectivos de denuncia interna y protección al denunciante.",
+      "financial_impact": "Multa superior a 500.000€ por incumplimiento de normativas anticorrupción y de protección de datos.",
+      "recommended_action": "Implementar un canal de denuncia interno seguro y anónimo, y revisar los procedimientos de contratación pública para garantizar transparencia."
+    },
+    {
       "id": "665ffa2b6cad",
       "title": "Sala Segunda. Sentencia 187/2025, de 15 de diciembre de 2025. Recurso de amparo 285-2023. Promovido por don Nikita Bakutin en relación con las resoluciones dictadas por las salas de lo contencioso-administrativo del Tribunal Supremo y del Tribunal Superior de Justicia de Cataluña y un juzgado de lo contencioso-administrativo de Barcelona, que desestimaron su impugnación de la resolución administrativa sancionadora que decretó su expulsión del territorio nacional. Vulneración de los derechos a la tutela judicial efectiva y a la legalidad sancionadora: aplicación irrazonable de la norma sancionadora que, anteponiendo la expulsión a la multa, infringió la garantía material del derecho (STC 47/2023).",
       "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-1753",
@@ -425,12 +449,12 @@
     }
   ],
   "stats": {
-    "total_hits": 19,
-    "critical_count": 6,
+    "total_hits": 20,
+    "critical_count": 7,
     "warning_count": 13,
     "info_count": 0,
-    "new_this_run": 19,
-    "articles_checked": 24,
+    "new_this_run": 1,
+    "articles_checked": 6,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -449,5 +473,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-02-27T22:03:30.428290+00:00"
+  "last_updated": "2026-02-27T23:34:42.659905+00:00"
 }
