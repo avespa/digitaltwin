@@ -4,1199 +4,530 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CDT — Compliance Digital Twin</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #080c10;
-    --surface: #0d1218;
-    --surface2: #131a22;
-    --border: #1e2a36;
-    --accent: #00e5a0;
-    --accent2: #0070f3;
-    --warn: #f59e0b;
-    --danger: #ef4444;
-    --text: #e2e8f0;
-    --text-muted: #4a6075;
-    --text-dim: #8aa0b4;
-    --font-display: 'Syne', sans-serif;
-    --font-mono: 'DM Mono', monospace;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-mono);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* SCANLINE EFFECT */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,229,160,0.012) 2px, rgba(0,229,160,0.012) 4px);
-    pointer-events: none;
-    z-index: 9999;
-  }
-
-  /* LAYOUT */
-  .app { display: flex; min-height: 100vh; }
-
-  /* SIDEBAR */
-  .sidebar {
-    width: 220px;
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0; left: 0; bottom: 0;
-    z-index: 100;
-  }
-
-  .sidebar-logo {
-    padding: 28px 20px 20px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .logo-mark {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 18px;
-    letter-spacing: -0.5px;
-    color: var(--accent);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .logo-mark::before {
-    content: '';
-    width: 8px; height: 8px;
-    background: var(--accent);
-    border-radius: 50%;
-    box-shadow: 0 0 12px var(--accent);
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--accent); }
-    50% { opacity: 0.6; box-shadow: 0 0 20px var(--accent); }
-  }
-
-  .logo-sub {
-    font-size: 9px;
-    color: var(--text-muted);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-top: 4px;
-  }
-
-  .sidebar-nav { padding: 16px 0; flex: 1; }
-
-  .nav-section {
-    padding: 8px 20px 4px;
-    font-size: 9px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
-  .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 12px;
-    color: var(--text-dim);
-    transition: all 0.15s;
-    border-left: 2px solid transparent;
-    position: relative;
-  }
-
-  .nav-item:hover { color: var(--text); background: rgba(0,229,160,0.04); }
-  .nav-item.active {
-    color: var(--accent);
-    border-left-color: var(--accent);
-    background: rgba(0,229,160,0.06);
-  }
-
-  .nav-icon { font-size: 14px; width: 16px; text-align: center; }
-
-  .nav-badge {
-    margin-left: auto;
-    background: var(--danger);
-    color: white;
-    font-size: 9px;
-    padding: 1px 5px;
-    border-radius: 10px;
-    font-weight: 500;
-  }
-
-  .sidebar-footer {
-    padding: 16px 20px;
-    border-top: 1px solid var(--border);
-    font-size: 10px;
-    color: var(--text-muted);
-  }
-
-  .status-dot {
-    display: inline-block;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 6px var(--accent);
-    margin-right: 6px;
-    animation: pulse 2s infinite;
-  }
-
-  /* MAIN */
-  .main {
-    margin-left: 220px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-
-  /* TOPBAR */
-  .topbar {
-    height: 56px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    padding: 0 28px;
-    gap: 16px;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-  }
-
-  .topbar-title {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 15px;
-    flex: 1;
-  }
-
-  .topbar-meta {
-    font-size: 11px;
-    color: var(--text-muted);
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 14px;
-    border-radius: 4px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    cursor: pointer;
-    border: 1px solid transparent;
-    transition: all 0.15s;
-    text-decoration: none;
-  }
-
-  .btn-primary {
-    background: var(--accent);
-    color: #000;
-    font-weight: 500;
-  }
-  .btn-primary:hover { background: #00ffb0; box-shadow: 0 0 20px rgba(0,229,160,0.3); }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--text-dim);
-    border-color: var(--border);
-  }
-  .btn-ghost:hover { color: var(--text); border-color: var(--text-muted); }
-
-  .btn-danger {
-    background: transparent;
-    color: var(--danger);
-    border-color: var(--danger);
-  }
-  .btn-danger:hover { background: rgba(239,68,68,0.1); }
-
-  /* CONTENT */
-  .content { padding: 28px; flex: 1; }
-
-  /* VIEWS */
-  .view { display: none; }
-  .view.active { display: block; }
-
-  /* CARDS */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 20px;
-  }
-
-  .card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-
-  .card-title {
-    font-family: var(--font-display);
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-  }
-
-  /* GRID */
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-
-  /* STAT CARDS */
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 18px 20px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .stat-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--accent-color, var(--accent));
-  }
-
-  .stat-label {
-    font-size: 9px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 8px;
-  }
-
-  .stat-value {
-    font-family: var(--font-display);
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--accent-color, var(--accent));
-    line-height: 1;
-  }
-
-  .stat-sub {
-    font-size: 10px;
-    color: var(--text-muted);
-    margin-top: 6px;
-  }
-
-  /* FORM */
-  .form-group { margin-bottom: 16px; }
-
-  .form-label {
-    display: block;
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-  }
-
-  .form-input {
-    width: 100%;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 10px 12px;
-    color: var(--text);
-    font-family: var(--font-mono);
-    font-size: 12px;
-    transition: border-color 0.15s;
-    outline: none;
-  }
-
-  .form-input:focus { border-color: var(--accent); }
-  .form-input::placeholder { color: var(--text-muted); }
-
-  .form-input[type="password"] { letter-spacing: 2px; }
-
-  select.form-input {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234a6075'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    cursor: pointer;
-  }
-
-  textarea.form-input { resize: vertical; min-height: 80px; line-height: 1.5; }
-
-  .form-hint {
-    font-size: 10px;
-    color: var(--text-muted);
-    margin-top: 4px;
-  }
-
-  /* SECTION TITLE */
-  .section-title {
-    font-family: var(--font-display);
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-
-  .section-sub {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-bottom: 24px;
-  }
-
-  /* CONFIG PAGE */
-  .config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-
-  .api-key-field {
-    position: relative;
-  }
-
-  .api-key-field .form-input {
-    padding-right: 40px;
-  }
-
-  .toggle-visibility {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 14px;
-    padding: 2px;
-  }
-
-  .toggle-visibility:hover { color: var(--text); }
-
-  .api-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: 10px;
-    margin-left: 8px;
-  }
-
-  .api-status.ok { background: rgba(0,229,160,0.1); color: var(--accent); }
-  .api-status.error { background: rgba(239,68,68,0.1); color: var(--danger); }
-  .api-status.pending { background: rgba(245,158,11,0.1); color: var(--warn); }
-
-  /* CLIENTS LIST */
-  .client-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    cursor: pointer;
-    transition: all 0.15s;
-    margin-bottom: 8px;
-  }
-
-  .client-card:hover { border-color: var(--accent); background: rgba(0,229,160,0.03); }
-
-  .client-avatar {
-    width: 40px; height: 40px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 14px;
-    color: var(--accent);
-    flex-shrink: 0;
-  }
-
-  .client-info { flex: 1; }
-
-  .client-name {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 13px;
-    margin-bottom: 3px;
-  }
-
-  .client-meta { font-size: 10px; color: var(--text-muted); }
-
-  .client-risk {
-    font-size: 11px;
-    font-weight: 500;
-    padding: 3px 10px;
-    border-radius: 4px;
-  }
-
-  .risk-alto { background: rgba(239,68,68,0.15); color: #ef4444; }
-  .risk-medio { background: rgba(245,158,11,0.15); color: #f59e0b; }
-  .risk-bajo { background: rgba(0,229,160,0.15); color: var(--accent); }
-
-  /* HITS FEED */
-  .hit-item {
-    border-left: 3px solid var(--border);
-    padding: 12px 16px;
-    margin-bottom: 8px;
-    background: var(--surface);
-    border-radius: 0 4px 4px 0;
-    transition: all 0.15s;
-  }
-
-  .hit-item.critical { border-left-color: var(--danger); }
-  .hit-item.warning { border-left-color: var(--warn); }
-  .hit-item.info { border-left-color: var(--accent2); }
-
-  .hit-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 6px;
-  }
-
-  .hit-tag {
-    font-size: 9px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-weight: 500;
-  }
-
-  .hit-tag.critical { background: rgba(239,68,68,0.15); color: var(--danger); }
-  .hit-tag.warning { background: rgba(245,158,11,0.15); color: var(--warn); }
-  .hit-tag.info { background: rgba(0,112,243,0.15); color: var(--accent2); }
-
-  .hit-date { font-size: 10px; color: var(--text-muted); margin-left: auto; }
-
-  .hit-title { font-size: 12px; font-weight: 500; margin-bottom: 4px; }
-  .hit-desc { font-size: 11px; color: var(--text-dim); line-height: 1.5; }
-
-  /* RADAR CHART */
-  .radar-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-
-  svg.radar { overflow: visible; }
-
-  /* MODAL */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.8);
-    backdrop-filter: blur(4px);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .modal-overlay.open { display: flex; }
-
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 28px;
-    width: 560px;
-    max-height: 85vh;
-    overflow-y: auto;
-    position: relative;
-  }
-
-  .modal-title {
-    font-family: var(--font-display);
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 20px;
-    padding-right: 24px;
-  }
-
-  .modal-close {
-    position: absolute;
-    top: 20px; right: 20px;
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 18px;
-  }
-
-  .modal-close:hover { color: var(--text); }
-
-  /* ALERT */
-  .alert {
-    padding: 10px 14px;
-    border-radius: 4px;
-    font-size: 11px;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .alert-success { background: rgba(0,229,160,0.1); border: 1px solid rgba(0,229,160,0.2); color: var(--accent); }
-  .alert-error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: var(--danger); }
-  .alert-warn { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); color: var(--warn); }
-
-  /* DIVIDER */
-  .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
-
-  /* LOADING */
-  .spinner {
-    width: 16px; height: 16px;
-    border: 2px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.6s linear infinite;
-    display: inline-block;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ANALYSIS RESULT */
-  .analysis-block {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 16px;
-    margin-top: 16px;
-    font-size: 12px;
-    line-height: 1.7;
-    white-space: pre-wrap;
-  }
-
-  .analysis-block.loading {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--text-muted);
-  }
-
-  /* TAGS */
-  .tag {
-    display: inline-block;
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: 3px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    margin: 2px;
-  }
-
-  /* TABLE */
-  .table { width: 100%; border-collapse: collapse; font-size: 11px; }
-  .table th {
-    text-align: left;
-    padding: 8px 12px;
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    border-bottom: 1px solid var(--border);
-  }
-  .table td { padding: 12px; border-bottom: 1px solid rgba(30,42,54,0.5); }
-  .table tr:hover td { background: rgba(0,229,160,0.02); }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
-
-  /* PROGRESS BAR */
-  .progress { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: 6px; }
-  .progress-bar { height: 100%; border-radius: 2px; transition: width 0.5s; }
-
-  /* SEPARATOR */
-  .flex { display: flex; }
-  .flex-col { flex-direction: column; }
-  .items-center { align-items: center; }
-  .justify-between { justify-content: space-between; }
-  .gap-8 { gap: 8px; }
-  .gap-16 { gap: 16px; }
-  .mt-8 { margin-top: 8px; }
-  .mt-16 { margin-top: 16px; }
-  .mt-24 { margin-top: 24px; }
-  .mb-8 { margin-bottom: 8px; }
-  .mb-16 { margin-bottom: 16px; }
-  .text-muted { color: var(--text-muted); font-size: 11px; }
-  .text-accent { color: var(--accent); }
-  .font-display { font-family: var(--font-display); }
-
-  /* MONITOR MODE */
-  .monitor-mode {
-    position: fixed;
-    inset: 0;
-    background: var(--bg);
-    z-index: 2000;
-    display: none;
-    flex-direction: column;
-    padding: 32px;
-  }
-
-  .monitor-mode.active { display: flex; }
-
-  .monitor-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 32px;
-  }
-
-  .monitor-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 24px;
-    flex: 1;
-  }
-
-  .monitor-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .monitor-card-title {
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 16px;
-  }
-
-  .monitor-big-number {
-    font-family: var(--font-display);
-    font-size: 72px;
-    font-weight: 800;
-    line-height: 1;
-    color: var(--accent);
-  }
-
-  .ticker {
-    flex: 1;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .ticker-item {
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-    animation: fadeIn 0.3s ease;
-  }
-
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
-
-  /* EMPTY STATE */
-  .empty-state {
-    text-align: center;
-    padding: 48px 24px;
-    color: var(--text-muted);
-  }
-
-  .empty-icon { font-size: 32px; margin-bottom: 12px; }
-  .empty-title { font-family: var(--font-display); font-size: 14px; color: var(--text-dim); margin-bottom: 6px; }
-  .empty-desc { font-size: 11px; }
+:root {
+  --bg: #070b0f;
+  --surface: #0c1117;
+  --surface2: #111820;
+  --border: #1a2530;
+  --border2: #243040;
+  --accent: #00e5a0;
+  --accent2: #0066ff;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+  --text: #dce8f0;
+  --text-muted: #3d5468;
+  --text-dim: #7a96aa;
+  --font-ui: 'Syne', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font-mono);min-height:100vh;overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,229,160,.008) 3px,rgba(0,229,160,.008) 4px);pointer-events:none;z-index:9999}
+
+/* LAYOUT */
+.app{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:210px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100}
+.logo{padding:24px 18px 18px;border-bottom:1px solid var(--border)}
+.logo-name{font-family:var(--font-ui);font-weight:800;font-size:17px;color:var(--accent);display:flex;align-items:center;gap:8px}
+.logo-dot{width:7px;height:7px;background:var(--accent);border-radius:50%;box-shadow:0 0 10px var(--accent);animation:glow 2s infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 6px var(--accent)}50%{box-shadow:0 0 18px var(--accent),0 0 30px rgba(0,229,160,.3)}}
+.logo-sub{font-size:9px;color:var(--text-muted);letter-spacing:2.5px;text-transform:uppercase;margin-top:3px}
+.nav{padding:12px 0;flex:1}
+.nav-sec{padding:10px 18px 3px;font-size:8.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-muted)}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 18px;cursor:pointer;font-size:11.5px;color:var(--text-dim);transition:all .15s;border-left:2px solid transparent;user-select:none}
+.nav-item:hover{color:var(--text);background:rgba(0,229,160,.03)}
+.nav-item.active{color:var(--accent);border-left-color:var(--accent);background:rgba(0,229,160,.05)}
+.nav-icon{width:14px;text-align:center;font-size:13px}
+.nav-badge{margin-left:auto;background:var(--danger);color:#fff;font-size:9px;padding:1px 5px;border-radius:8px;min-width:16px;text-align:center}
+.sidebar-foot{padding:14px 18px;border-top:1px solid var(--border);font-size:10px;color:var(--text-muted);display:flex;align-items:center;gap:6px}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent);animation:glow 2s infinite;flex-shrink:0}
+
+/* MAIN */
+.main{margin-left:210px;flex:1;display:flex;flex-direction:column}
+.topbar{height:54px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:12px;position:sticky;top:0;z-index:50}
+.topbar-title{font-family:var(--font-ui);font-weight:700;font-size:14px;flex:1}
+.topbar-sync{font-size:10px;color:var(--text-muted)}
+.content{padding:24px;flex:1}
+
+/* VIEWS */
+.view{display:none}.view.active{display:block}
+
+/* BTN */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:4px;font-family:var(--font-mono);font-size:11px;cursor:pointer;border:1px solid transparent;transition:all .15s;text-decoration:none;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#000;font-weight:500}.btn-primary:hover{background:#00ffb3;box-shadow:0 0 18px rgba(0,229,160,.35)}
+.btn-ghost{background:transparent;color:var(--text-dim);border-color:var(--border)}.btn-ghost:hover{color:var(--text);border-color:var(--border2)}
+.btn-danger{background:transparent;color:var(--danger);border-color:var(--danger)}.btn-danger:hover{background:rgba(239,68,68,.08)}
+.btn-sm{padding:4px 10px;font-size:10px}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:18px}
+.card-title{font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.3px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px 18px;position:relative;overflow:hidden}
+.stat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--c,var(--accent))}
+.stat-label{font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:7px}
+.stat-value{font-family:var(--font-ui);font-size:26px;font-weight:800;color:var(--c,var(--accent));line-height:1}
+.stat-sub{font-size:9.5px;color:var(--text-muted);margin-top:5px}
+
+/* GRID */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+
+/* HITS */
+.hit{border-left:3px solid var(--border);padding:11px 14px;margin-bottom:7px;background:var(--surface);border-radius:0 4px 4px 0;transition:border-color .15s}
+.hit:hover{border-left-color:var(--text-muted)}
+.hit.critical{border-left-color:var(--danger)}
+.hit.warning{border-left-color:var(--warn)}
+.hit.info{border-left-color:var(--accent2)}
+.hit-head{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.level-tag{font-size:8.5px;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;border-radius:3px;font-weight:600}
+.level-tag.critical{background:rgba(239,68,68,.15);color:var(--danger)}
+.level-tag.warning{background:rgba(245,158,11,.15);color:var(--warn)}
+.level-tag.info{background:rgba(0,102,255,.15);color:var(--accent2)}
+.hit-source{font-size:9.5px;color:var(--text-muted)}
+.hit-date{font-size:9.5px;color:var(--text-muted);margin-left:auto}
+.hit-title{font-size:11.5px;font-weight:500;margin-bottom:3px;line-height:1.4}
+.hit-summary{font-size:10.5px;color:var(--text-dim);line-height:1.5}
+.hit-detail{margin-top:8px;display:none}
+.hit-detail.open{display:block}
+.hit-detail-item{font-size:10px;color:var(--text-dim);margin-bottom:5px;line-height:1.5}
+.hit-detail-label{font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:2px}
+.score-bar{height:3px;background:var(--border2);border-radius:2px;margin-top:4px}
+.score-fill{height:100%;border-radius:2px;background:var(--accent);transition:width .5s}
+
+/* FORM */
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:9px;letter-spacing:1.8px;text-transform:uppercase;color:var(--text-muted);margin-bottom:5px}
+.form-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:9px 11px;color:var(--text);font-family:var(--font-mono);font-size:11.5px;transition:border-color .15s;outline:none}
+.form-input:focus{border-color:var(--accent)}
+.form-input::placeholder{color:var(--text-muted)}
+select.form-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%233d5468'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;cursor:pointer}
+textarea.form-input{resize:vertical;line-height:1.6;min-height:70px}
+.form-hint{font-size:9.5px;color:var(--text-muted);margin-top:3px}
+input[type="password"].form-input{letter-spacing:3px}
+
+/* API KEY FIELD */
+.key-wrap{position:relative}
+.key-wrap .form-input{padding-right:36px}
+.key-eye{position:absolute;right:9px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:13px;padding:2px}
+.key-eye:hover{color:var(--text)}
+.api-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;padding:2px 7px;border-radius:8px;margin-left:8px}
+.api-badge.ok{background:rgba(0,229,160,.1);color:var(--accent)}
+.api-badge.err{background:rgba(239,68,68,.1);color:var(--danger)}
+.api-badge.pend{background:rgba(245,158,11,.1);color:var(--warn)}
+
+/* CONFIG SECTIONS */
+.config-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* QUERY LIST */
+.query-item{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:4px;margin-bottom:6px;font-size:10.5px;line-height:1.5;color:var(--text-dim)}
+.query-num{color:var(--accent);font-weight:600;flex-shrink:0;font-size:10px;margin-top:1px}
+.query-text{flex:1;word-break:break-word}
+.query-del{flex-shrink:0;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:14px;padding:0 2px;line-height:1}
+.query-del:hover{color:var(--danger)}
+
+/* KEYWORD TAGS */
+.kw-wrap{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.kw-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 8px;border-radius:3px;background:var(--surface2);border:1px solid var(--border);color:var(--text-dim)}
+.kw-tag button{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:12px;padding:0;line-height:1}.kw-tag button:hover{color:var(--danger)}
+.kw-add-row{display:flex;gap:6px}
+
+/* RSS SOURCE LIST */
+.rss-item{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--border);font-size:11px}
+.rss-item:last-child{border-bottom:none}
+.rss-toggle{width:32px;height:18px;background:var(--border2);border-radius:9px;cursor:pointer;position:relative;transition:background .2s;border:none;flex-shrink:0}
+.rss-toggle.on{background:var(--accent)}
+.rss-toggle::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;background:#fff;border-radius:50%;transition:left .2s}
+.rss-toggle.on::after{left:16px}
+.rss-name{flex:1;color:var(--text-dim)}
+.rss-name.on{color:var(--text)}
+
+/* SECTION HEADER */
+.sec-head{margin-bottom:20px}
+.sec-title{font-family:var(--font-ui);font-size:17px;font-weight:800;margin-bottom:3px}
+.sec-sub{font-size:11px;color:var(--text-muted)}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:11px}
+.tbl th{text-align:left;padding:7px 11px;font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border)}
+.tbl td{padding:11px;border-bottom:1px solid rgba(26,37,48,.6)}
+.tbl tr:hover td{background:rgba(0,229,160,.015)}
+
+/* RISK BADGE */
+.risk{font-size:10px;font-weight:600;padding:2px 8px;border-radius:3px}
+.risk.alto{background:rgba(239,68,68,.15);color:var(--danger)}
+.risk.medio{background:rgba(245,158,11,.15);color:var(--warn)}
+.risk.bajo{background:rgba(0,229,160,.15);color:var(--accent)}
+
+/* EMPTY */
+.empty{text-align:center;padding:40px 20px;color:var(--text-muted)}
+.empty-icon{font-size:28px;margin-bottom:10px}
+.empty-title{font-family:var(--font-ui);font-size:13px;color:var(--text-dim);margin-bottom:5px}
+.empty-desc{font-size:10.5px}
+
+/* ALERT */
+.alert{padding:9px 13px;border-radius:4px;font-size:11px;margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.alert.ok{background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.2);color:var(--accent)}
+.alert.err{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--danger)}
+.alert.warn{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);color:var(--warn)}
+
+/* DIVIDER */
+hr.div{border:none;border-top:1px solid var(--border);margin:18px 0}
+
+/* SPINNER */
+.spin{width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:rotate .6s linear infinite;display:inline-block}
+@keyframes rotate{to{transform:rotate(360deg)}}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(3px);z-index:1000;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px;width:580px;max-height:88vh;overflow-y:auto;position:relative}
+.modal-title{font-family:var(--font-ui);font-size:15px;font-weight:700;margin-bottom:18px;padding-right:24px}
+.modal-x{position:absolute;top:18px;right:18px;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:17px}.modal-x:hover{color:var(--text)}
+
+/* MONITOR */
+.monitor{position:fixed;inset:0;background:var(--bg);z-index:2000;display:none;flex-direction:column;padding:28px}
+.monitor.on{display:flex}
+.monitor-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.monitor-logo{font-family:var(--font-ui);font-weight:800;font-size:20px;color:var(--accent);display:flex;align-items:center;gap:10px}
+.monitor-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;flex:1}
+.monitor-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:22px;display:flex;flex-direction:column}
+.monitor-label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px}
+.monitor-big{font-family:var(--font-ui);font-size:66px;font-weight:800;line-height:1}
+.ticker-item{padding:9px 0;border-bottom:1px solid var(--border);animation:fadein .3s}
+@keyframes fadein{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* UTILS */
+.flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-8{gap:8px}.gap-12{gap:12px}.mt-8{margin-top:8px}.mt-14{margin-top:14px}.mt-18{margin-top:18px}.mb-14{margin-bottom:14px}.text-muted{color:var(--text-muted);font-size:10.5px}.text-accent{color:var(--accent)}
 </style>
 </head>
 <body>
-
 <div class="app">
-  <!-- SIDEBAR -->
-  <nav class="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-mark">CDT</div>
-      <div class="logo-sub">Compliance Digital Twin</div>
-    </div>
 
-    <div class="sidebar-nav">
-      <div class="nav-section">Principal</div>
-      <div class="nav-item active" onclick="showView('dashboard')">
-        <span class="nav-icon">◈</span> Dashboard
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="logo">
+    <div class="logo-name"><span class="logo-dot"></span>CDT</div>
+    <div class="logo-sub">Compliance Digital Twin</div>
+  </div>
+  <div class="nav">
+    <div class="nav-sec">Principal</div>
+    <div class="nav-item active" onclick="go('dashboard')"><span class="nav-icon">◈</span>Dashboard</div>
+    <div class="nav-item" onclick="go('clientes')"><span class="nav-icon">◎</span>Clientes</div>
+    <div class="nav-sec" style="margin-top:10px">Monitor</div>
+    <div class="nav-item" onclick="go('hits')"><span class="nav-icon">⟁</span>Hits Detectados<span class="nav-badge" id="badge-hits">0</span></div>
+    <div class="nav-item" onclick="go('analisis')"><span class="nav-icon">◉</span>Análisis IA</div>
+    <div class="nav-sec" style="margin-top:10px">Sistema</div>
+    <div class="nav-item" onclick="go('fuentes')"><span class="nav-icon">📡</span>Fuentes & Búsquedas</div>
+    <div class="nav-item" onclick="go('config')"><span class="nav-icon">⚙</span>Configuración APIs</div>
+    <div class="nav-item" onclick="toggleMonitor()"><span class="nav-icon">▣</span>Modo Pantalla</div>
+  </div>
+  <div class="sidebar-foot"><span class="status-dot"></span><span id="foot-status">Cargando...</span></div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">Dashboard</div>
+    <div class="topbar-sync" id="topbar-sync"></div>
+    <button class="btn btn-ghost" onclick="syncNow()" id="sync-btn">⟳ Sincronizar</button>
+    <button class="btn btn-primary" onclick="go('analisis')">+ Análisis manual</button>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="view active" id="view-dashboard">
+      <div class="stats-grid">
+        <div class="stat" style="--c:var(--accent)"><div class="stat-label">Clientes activos</div><div class="stat-value" id="s-clientes">0</div><div class="stat-sub">en seguimiento</div></div>
+        <div class="stat" style="--c:var(--warn)"><div class="stat-label">Hits totales</div><div class="stat-value" id="s-hits">0</div><div class="stat-sub">eventos analizados</div></div>
+        <div class="stat" style="--c:var(--danger)"><div class="stat-label">Críticos</div><div class="stat-value" id="s-criticos">0</div><div class="stat-sub">alertas activas</div></div>
+        <div class="stat" style="--c:var(--accent2)"><div class="stat-label">Última sync</div><div class="stat-value" style="font-size:14px;margin-top:4px" id="s-sync">—</div><div class="stat-sub">actualización</div></div>
       </div>
-      <div class="nav-item" onclick="showView('clientes')">
-        <span class="nav-icon">◎</span> Clientes
-      </div>
 
-      <div class="nav-section" style="margin-top:12px;">Monitor</div>
-      <div class="nav-item" onclick="showView('hits')">
-        <span class="nav-icon">⟁</span> Hits Detectados
-        <span class="nav-badge" id="hits-badge">0</span>
-      </div>
-      <div class="nav-item" onclick="showView('analisis')">
-        <span class="nav-icon">◉</span> Análisis IA
-      </div>
-
-      <div class="nav-section" style="margin-top:12px;">Sistema</div>
-      <div class="nav-item" onclick="showView('config')">
-        <span class="nav-icon">⚙</span> Configuración
-      </div>
-      <div class="nav-item" onclick="toggleMonitor()">
-        <span class="nav-icon">▣</span> Modo Pantalla
-      </div>
-    </div>
-
-    <div class="sidebar-footer">
-      <span class="status-dot"></span>
-      <span id="sidebar-status">Sistema activo</span>
-    </div>
-  </nav>
-
-  <!-- MAIN -->
-  <div class="main">
-    <!-- TOPBAR -->
-    <div class="topbar">
-      <div class="topbar-title" id="topbar-title">Dashboard</div>
-      <div class="topbar-meta" id="topbar-date"></div>
-      <button class="btn btn-ghost" onclick="runAnalysis()" id="run-btn">
-        ⟳ Ejecutar análisis
-      </button>
-    </div>
-
-    <!-- CONTENT -->
-    <div class="content">
-
-      <!-- ===== DASHBOARD ===== -->
-      <div class="view active" id="view-dashboard">
-        <div class="grid-4 mb-16">
-          <div class="stat-card" style="--accent-color: var(--accent)">
-            <div class="stat-label">Clientes activos</div>
-            <div class="stat-value" id="stat-clientes">0</div>
-            <div class="stat-sub">en seguimiento</div>
-          </div>
-          <div class="stat-card" style="--accent-color: var(--warn)">
-            <div class="stat-label">Hits hoy</div>
-            <div class="stat-value" id="stat-hits">0</div>
-            <div class="stat-sub">eventos relevantes</div>
-          </div>
-          <div class="stat-card" style="--accent-color: var(--danger)">
-            <div class="stat-label">Riesgo crítico</div>
-            <div class="stat-value" id="stat-criticos">0</div>
-            <div class="stat-sub">alertas pendientes</div>
-          </div>
-          <div class="stat-card" style="--accent-color: var(--accent2)">
-            <div class="stat-label">Ahorro estimado</div>
-            <div class="stat-value" id="stat-ahorro">€0</div>
-            <div class="stat-sub">impacto evitado</div>
-          </div>
+      <div class="grid-2" style="gap:18px;margin-bottom:18px">
+        <div class="card">
+          <div class="card-title">Últimos Hits <span class="text-muted" id="dash-hits-count"></span></div>
+          <div id="dash-hits-list"></div>
         </div>
-
-        <div class="grid-2" style="gap:20px;">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Radar de Riesgo Global</div>
-              <span class="text-muted">Todos los clientes</span>
-            </div>
-            <div class="radar-container">
-              <svg class="radar" width="240" height="240" viewBox="0 0 240 240" id="radar-svg">
-              </svg>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Últimos Hits</div>
-              <span class="text-muted" id="hits-count">0 eventos</span>
-            </div>
-            <div id="dashboard-hits">
-              <div class="empty-state">
-                <div class="empty-icon">⟁</div>
-                <div class="empty-title">Sin hits detectados</div>
-                <div class="empty-desc">Configura las APIs y ejecuta un análisis</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card mt-16">
-          <div class="card-header">
-            <div class="card-title">Estado por cliente</div>
-          </div>
-          <table class="table" id="dashboard-table">
-            <thead>
-              <tr>
-                <th>Cliente</th>
-                <th>Sector</th>
-                <th>Último análisis</th>
-                <th>Hits</th>
-                <th>Riesgo</th>
-                <th>Ahorro est.</th>
-              </tr>
-            </thead>
-            <tbody id="dashboard-table-body">
-              <tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 32px;">
-                Sin clientes. Ve a <strong>Clientes</strong> para añadir el primero.
-              </td></tr>
-            </tbody>
+        <div class="card">
+          <div class="card-title">Estado por cliente</div>
+          <table class="tbl" id="dash-clients-tbl">
+            <thead><tr><th>Cliente</th><th>Sector</th><th>Hits</th><th>Riesgo</th></tr></thead>
+            <tbody id="dash-clients-body"></tbody>
           </table>
         </div>
       </div>
 
-      <!-- ===== CLIENTES ===== -->
-      <div class="view" id="view-clientes">
-        <div class="flex items-center justify-between mb-16">
-          <div>
-            <div class="section-title">Clientes</div>
-            <div class="section-sub">Gestión de perfiles empresariales</div>
-          </div>
-          <button class="btn btn-primary" onclick="openClientModal()">
-            + Nuevo cliente
-          </button>
-        </div>
+      <div class="card">
+        <div class="card-title">Fuentes activas <span class="text-muted" id="dash-sources-count"></span></div>
+        <div id="dash-sources-list" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+      </div>
+    </div>
 
-        <div id="clients-list">
-          <div class="empty-state">
-            <div class="empty-icon">◎</div>
-            <div class="empty-title">Sin clientes aún</div>
-            <div class="empty-desc">Añade tu primer cliente para empezar el seguimiento</div>
-          </div>
+    <!-- CLIENTES -->
+    <div class="view" id="view-clientes">
+      <div class="flex items-center justify-between mb-14">
+        <div class="sec-head" style="margin-bottom:0"><div class="sec-title">Clientes</div><div class="sec-sub">Perfiles empresariales en seguimiento</div></div>
+        <button class="btn btn-primary" onclick="openClientModal()">+ Nuevo cliente</button>
+      </div>
+      <div id="clients-list"></div>
+    </div>
+
+    <!-- HITS -->
+    <div class="view" id="view-hits">
+      <div class="flex items-center justify-between mb-14">
+        <div class="sec-head" style="margin-bottom:0"><div class="sec-title">Hits Detectados</div><div class="sec-sub">Eventos relevantes analizados por IA</div></div>
+        <div class="flex gap-8">
+          <select class="form-input" style="width:160px" id="filter-level" onchange="renderHits()">
+            <option value="">Todos los niveles</option>
+            <option value="critical">Crítico</option>
+            <option value="warning">Alerta</option>
+            <option value="info">Info</option>
+          </select>
+          <select class="form-input" style="width:180px" id="filter-source" onchange="renderHits()">
+            <option value="">Todas las fuentes</option>
+          </select>
         </div>
       </div>
+      <div id="hits-list"></div>
+    </div>
 
-      <!-- ===== HITS ===== -->
-      <div class="view" id="view-hits">
-        <div class="flex items-center justify-between mb-16">
-          <div>
-            <div class="section-title">Hits Detectados</div>
-            <div class="section-sub">Eventos relevantes del mercado en tiempo real</div>
+    <!-- ANÁLISIS MANUAL -->
+    <div class="view" id="view-analisis">
+      <div class="sec-head"><div class="sec-title">Análisis IA Manual</div><div class="sec-sub">Analiza cualquier noticia o sentencia con el motor de IA</div></div>
+      <div class="grid-2" style="align-items:start;gap:18px">
+        <div class="card">
+          <div class="card-title">Consulta</div>
+          <div class="form-group">
+            <label class="form-label">Cliente (contexto)</label>
+            <select class="form-input" id="an-client"><option value="">Análisis genérico (sin cliente)</option></select>
           </div>
-          <div class="flex gap-8">
-            <select class="form-input" style="width:180px;" id="hits-filter-client" onchange="renderHits()">
-              <option value="">Todos los clientes</option>
+          <div class="form-group">
+            <label class="form-label">Noticia / sentencia / evento</label>
+            <textarea class="form-input" id="an-text" rows="6" placeholder="Pega aquí el texto de la noticia, sentencia o evento a analizar..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tipo de análisis</label>
+            <select class="form-input" id="an-type">
+              <option value="full">Análisis completo</option>
+              <option value="vulnerability">Vulnerabilidad vs. controles</option>
+              <option value="financial">Impacto financiero</option>
+              <option value="recommendation">Recomendaciones de mejora</option>
             </select>
-            <select class="form-input" style="width:140px;" id="hits-filter-level" onchange="renderHits()">
-              <option value="">Todos los niveles</option>
-              <option value="critical">Crítico</option>
-              <option value="warning">Alerta</option>
-              <option value="info">Info</option>
+          </div>
+          <button class="btn btn-primary" style="width:100%" onclick="runManual()" id="an-btn">Analizar con Mistral →</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Resultado</div>
+          <div id="an-result"><div class="empty"><div class="empty-icon">◉</div><div class="empty-title">Esperando análisis</div><div class="empty-desc">El resultado aparecerá aquí</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FUENTES & BÚSQUEDAS -->
+    <div class="view" id="view-fuentes">
+      <div class="sec-head"><div class="sec-title">Fuentes & Búsquedas</div><div class="sec-sub">Configura qué monitoriza el sistema cada 3 horas</div></div>
+      <div id="fuentes-alert"></div>
+
+      <div class="grid-2" style="align-items:start;gap:16px">
+
+        <!-- QUERIES NEWSAPI -->
+        <div class="card">
+          <div class="card-title">Queries NewsAPI <span class="text-muted" id="queries-count"></span></div>
+          <div class="form-hint" style="margin-bottom:12px">Cada query se lanza como búsqueda independiente. Usa OR, AND y comillas para frases exactas.</div>
+          <div id="queries-list"></div>
+          <div style="margin-top:10px">
+            <textarea class="form-input" id="new-query" rows="2" placeholder='Ej: ("fraude fiscal" OR "evasión") AND España'></textarea>
+            <button class="btn btn-ghost btn-sm" style="margin-top:6px;width:100%" onclick="addQuery()">+ Añadir query</button>
+          </div>
+
+          <hr class="div">
+
+          <div class="form-group">
+            <label class="form-label">Medios específicos (opcional)</label>
+            <input type="text" class="form-input" id="newsapi-sources" placeholder="el-mundo,expansion,cincodias (vacío = todos)">
+            <div class="form-hint">Nombres de fuentes NewsAPI separados por comas. Vacío = todos los medios en español.</div>
+          </div>
+        </div>
+
+        <!-- RSS + KEYWORDS -->
+        <div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-title">Fuentes RSS activas</div>
+            <div id="rss-list"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Keywords adicionales</div>
+            <div class="form-hint" style="margin-bottom:10px">Palabras clave para el filtro previo de artículos del BOE y otras fuentes RSS.</div>
+            <div class="kw-wrap" id="kw-list"></div>
+            <div class="kw-add-row">
+              <input type="text" class="form-input" id="new-kw" placeholder="Nueva keyword..." onkeydown="if(event.key==='Enter')addKw()">
+              <button class="btn btn-ghost btn-sm" onclick="addKw()">+ Añadir</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-8 mt-18" style="justify-content:flex-end">
+        <button class="btn btn-ghost" onclick="loadFuentesFromConfig()">Descartar cambios</button>
+        <button class="btn btn-primary" onclick="saveFuentes()" id="fuentes-save-btn">Guardar configuración</button>
+      </div>
+
+      <div class="card mt-18">
+        <div class="card-title">ℹ️ Cómo aplicar los cambios</div>
+        <div style="font-size:11px;color:var(--text-dim);line-height:1.8">
+          1. Guarda la configuración aquí → se actualiza <code style="color:var(--accent)">data/config.json</code> en tu repositorio GitHub.<br>
+          2. Ve a GitHub → Actions → <strong>CDT — Fetch & Analyze</strong> → <strong>Run workflow</strong> para aplicarlo inmediatamente.<br>
+          3. O espera hasta la próxima ejecución automática (cada 3 horas).
+        </div>
+      </div>
+    </div>
+
+    <!-- CONFIG APIs -->
+    <div class="view" id="view-config">
+      <div class="sec-head"><div class="sec-title">Configuración APIs</div><div class="sec-sub">Claves de acceso a los servicios externos</div></div>
+      <div id="config-alert"></div>
+      <div class="config-grid">
+        <div class="card">
+          <div class="card-title">🤖 Mistral AI</div>
+          <div class="form-group">
+            <label class="form-label">API Key <span class="api-badge pend" id="badge-mistral">● sin verificar</span></label>
+            <div class="key-wrap"><input type="password" class="form-input" id="mistral-key" placeholder="sk-..." oninput="markDirty('config')"><button class="key-eye" onclick="toggleEye('mistral-key')">👁</button></div>
+            <div class="form-hint"><a href="https://console.mistral.ai" target="_blank" style="color:var(--accent)">console.mistral.ai</a></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Modelo</label>
+            <select class="form-input" id="mistral-model" oninput="markDirty('config')">
+              <option value="mistral-small-latest">mistral-small (gratuito, rápido)</option>
+              <option value="mistral-medium-latest">mistral-medium</option>
+              <option value="mistral-large-latest">mistral-large (más preciso)</option>
             </select>
           </div>
+          <button class="btn btn-ghost" style="width:100%" onclick="testMistral()">Verificar conexión</button>
         </div>
-        <div id="hits-list">
-          <div class="empty-state">
-            <div class="empty-icon">⟁</div>
-            <div class="empty-title">Sin hits detectados</div>
-            <div class="empty-desc">Ejecuta un análisis para detectar eventos relevantes</div>
+
+        <div class="card">
+          <div class="card-title">📰 NewsAPI</div>
+          <div class="form-group">
+            <label class="form-label">API Key <span class="api-badge pend" id="badge-newsapi">● sin verificar</span></label>
+            <div class="key-wrap"><input type="password" class="form-input" id="newsapi-key" placeholder="..." oninput="markDirty('config')"><button class="key-eye" onclick="toggleEye('newsapi-key')">👁</button></div>
+            <div class="form-hint">Tier gratuito: 100 req/día — <a href="https://newsapi.org" target="_blank" style="color:var(--accent)">newsapi.org</a></div>
           </div>
         </div>
-      </div>
 
-      <!-- ===== ANÁLISIS ===== -->
-      <div class="view" id="view-analisis">
-        <div class="section-title">Análisis IA</div>
-        <div class="section-sub">Consulta manual al motor de inteligencia</div>
-
-        <div class="grid-2" style="gap:20px; align-items: start;">
-          <div>
-            <div class="card">
-              <div class="card-header"><div class="card-title">Consulta manual</div></div>
-
-              <div class="form-group">
-                <label class="form-label">Cliente / Contexto</label>
-                <select class="form-input" id="analysis-client">
-                  <option value="">Selecciona un cliente...</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Noticia o evento a analizar</label>
-                <textarea class="form-input" id="analysis-news" rows="5"
-                  placeholder="Pega aquí la noticia, sentencia o evento que quieres analizar..."></textarea>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Tipo de análisis</label>
-                <select class="form-input" id="analysis-type">
-                  <option value="vulnerability">Vulnerabilidad vs. controles</option>
-                  <option value="financial">Impacto financiero</option>
-                  <option value="recommendation">Recomendaciones de mejora</option>
-                  <option value="full">Análisis completo</option>
-                </select>
-              </div>
-
-              <button class="btn btn-primary" style="width:100%;" onclick="runManualAnalysis()" id="manual-analysis-btn">
-                Analizar con IA →
-              </button>
-            </div>
+        <div class="card">
+          <div class="card-title">🗃 Pinecone</div>
+          <div class="form-group">
+            <label class="form-label">API Key</label>
+            <div class="key-wrap"><input type="password" class="form-input" id="pinecone-key" placeholder="..." oninput="markDirty('config')"><button class="key-eye" onclick="toggleEye('pinecone-key')">👁</button></div>
           </div>
+          <div class="form-group">
+            <label class="form-label">Nombre del índice</label>
+            <input type="text" class="form-input" id="pinecone-index" placeholder="digitaltwin" oninput="markDirty('config')">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Region</label>
+            <input type="text" class="form-input" id="pinecone-env" placeholder="us-east-1" oninput="markDirty('config')">
+          </div>
+        </div>
 
-          <div>
-            <div class="card">
-              <div class="card-header"><div class="card-title">Resultado</div></div>
-              <div id="analysis-result">
-                <div class="empty-state" style="padding:32px 0;">
-                  <div class="empty-icon">◉</div>
-                  <div class="empty-title">Esperando análisis</div>
-                  <div class="empty-desc">El resultado aparecerá aquí</div>
-                </div>
-              </div>
-            </div>
+        <div class="card">
+          <div class="card-title">🔥 Firebase</div>
+          <div class="form-group">
+            <label class="form-label">Project ID</label>
+            <input type="text" class="form-input" id="fb-project" placeholder="digitaltwin-21a64" oninput="markDirty('config')">
+          </div>
+          <div class="form-group">
+            <label class="form-label">API Key</label>
+            <div class="key-wrap"><input type="password" class="form-input" id="fb-key" placeholder="AIza..." oninput="markDirty('config')"><button class="key-eye" onclick="toggleEye('fb-key')">👁</button></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Auth Domain</label>
+            <input type="text" class="form-input" id="fb-domain" placeholder="proyecto.firebaseapp.com" oninput="markDirty('config')">
           </div>
         </div>
       </div>
 
-      <!-- ===== CONFIG ===== -->
-      <div class="view" id="view-config">
-        <div class="section-title">Configuración</div>
-        <div class="section-sub">APIs, fuentes de datos y parámetros del sistema</div>
-
-        <div id="config-alert"></div>
-
-        <div class="config-grid">
-          <!-- API KEYS -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">🤖 APIs de Inteligencia Artificial</div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">
-                Mistral AI API Key
-                <span class="api-status pending" id="status-mistral">● sin verificar</span>
-              </label>
-              <div class="api-key-field">
-                <input type="password" class="form-input" id="mistral-key"
-                  placeholder="sk-..." oninput="markUnsaved()">
-                <button class="toggle-visibility" onclick="toggleVis('mistral-key')">👁</button>
-              </div>
-              <div class="form-hint">
-                Consíguela en <a href="https://console.mistral.ai" target="_blank" style="color:var(--accent)">console.mistral.ai</a>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Modelo Mistral</label>
-              <select class="form-input" id="mistral-model" oninput="markUnsaved()">
-                <option value="mistral-small-latest">mistral-small (rápido, gratuito)</option>
-                <option value="mistral-medium-latest">mistral-medium (equilibrado)</option>
-                <option value="mistral-large-latest">mistral-large (más preciso)</option>
-              </select>
-            </div>
-
-            <button class="btn btn-ghost" style="width:100%;margin-top:4px;" onclick="testMistral()">
-              Verificar conexión Mistral
-            </button>
+      <hr class="div">
+      <div class="card">
+        <div class="card-title">⚙ Parámetros del sistema</div>
+        <div class="grid-3">
+          <div class="form-group">
+            <label class="form-label">Umbral de relevancia (0-100)</label>
+            <input type="number" class="form-input" id="threshold" value="60" min="0" max="100" oninput="markDirty('config')">
+            <div class="form-hint">Mínimo score IA para publicar un hit</div>
           </div>
-
-          <!-- PINECONE -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">🗃 Pinecone (Memoria Vectorial)</div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">
-                Pinecone API Key
-                <span class="api-status pending" id="status-pinecone">● sin verificar</span>
-              </label>
-              <div class="api-key-field">
-                <input type="password" class="form-input" id="pinecone-key"
-                  placeholder="..." oninput="markUnsaved()">
-                <button class="toggle-visibility" onclick="toggleVis('pinecone-key')">👁</button>
-              </div>
-              <div class="form-hint">
-                Consíguela en <a href="https://app.pinecone.io" target="_blank" style="color:var(--accent)">app.pinecone.io</a>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Nombre del índice</label>
-              <input type="text" class="form-input" id="pinecone-index"
-                placeholder="compliance-index" oninput="markUnsaved()">
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Environment / Region</label>
-              <input type="text" class="form-input" id="pinecone-env"
-                placeholder="us-east-1" oninput="markUnsaved()">
-            </div>
+          <div class="form-group">
+            <label class="form-label">Modelo Mistral por defecto</label>
+            <select class="form-input" id="mistral-model2" oninput="markDirty('config')">
+              <option value="mistral-small-latest">mistral-small</option>
+              <option value="mistral-large-latest">mistral-large</option>
+            </select>
           </div>
-
-          <!-- NOTICIAS -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">📡 Fuentes de Noticias</div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">
-                NewsAPI Key
-                <span class="api-status pending" id="status-newsapi">● sin verificar</span>
-              </label>
-              <div class="api-key-field">
-                <input type="password" class="form-input" id="newsapi-key"
-                  placeholder="..." oninput="markUnsaved()">
-                <button class="toggle-visibility" onclick="toggleVis('newsapi-key')">👁</button>
-              </div>
-              <div class="form-hint">
-                Tier gratuito: 100 peticiones/día. <a href="https://newsapi.org" target="_blank" style="color:var(--accent)">newsapi.org</a>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Fuentes adicionales (activas)</label>
-              <div>
-                <label style="display:flex;align-items:center;gap:8px;font-size:11px;margin-bottom:6px;cursor:pointer;">
-                  <input type="checkbox" id="src-boe" checked> BOE (Boletín Oficial del Estado)
-                </label>
-                <label style="display:flex;align-items:center;gap:8px;font-size:11px;margin-bottom:6px;cursor:pointer;">
-                  <input type="checkbox" id="src-cendoj" checked> CENDOJ (Sentencias judiciales)
-                </label>
-                <label style="display:flex;align-items:center;gap:8px;font-size:11px;margin-bottom:6px;cursor:pointer;">
-                  <input type="checkbox" id="src-cnmv"> CNMV (Comisión Nacional del Mercado)
-                </label>
-                <label style="display:flex;align-items:center;gap:8px;font-size:11px;cursor:pointer;">
-                  <input type="checkbox" id="src-aepd"> AEPD (Protección de Datos)
-                </label>
-              </div>
-            </div>
+          <div class="form-group">
+            <label class="form-label">Repo GitHub</label>
+            <input type="text" class="form-input" id="gh-repo" placeholder="avespa/digitaltwin" oninput="markDirty('config');updateRepoUrl()">
+            <div class="form-hint">usuario/repositorio</div>
           </div>
-
-          <!-- FIREBASE -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">🔥 Firebase / Firestore</div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Project ID</label>
-              <input type="text" class="form-input" id="firebase-project"
-                placeholder="mi-proyecto-compliance" oninput="markUnsaved()">
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">API Key</label>
-              <div class="api-key-field">
-                <input type="password" class="form-input" id="firebase-key"
-                  placeholder="AIza..." oninput="markUnsaved()">
-                <button class="toggle-visibility" onclick="toggleVis('firebase-key')">👁</button>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Auth Domain</label>
-              <input type="text" class="form-input" id="firebase-domain"
-                placeholder="proyecto.firebaseapp.com" oninput="markUnsaved()">
-            </div>
-          </div>
-        </div>
-
-        <hr class="divider">
-
-        <!-- PARÁMETROS DEL SISTEMA -->
-        <div class="card mt-16">
-          <div class="card-header">
-            <div class="card-title">⚙ Parámetros del Sistema</div>
-          </div>
-          <div class="grid-3" style="gap:16px;">
-            <div class="form-group">
-              <label class="form-label">Frecuencia de análisis</label>
-              <select class="form-input" id="analysis-freq" oninput="markUnsaved()">
-                <option value="3">Cada 3 horas</option>
-                <option value="6">Cada 6 horas</option>
-                <option value="12">Cada 12 horas</option>
-                <option value="24">Una vez al día</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Umbral de relevancia (0-100)</label>
-              <input type="number" class="form-input" id="relevance-threshold"
-                value="65" min="0" max="100" oninput="markUnsaved()">
-              <div class="form-hint">Mínimo score para considerar un hit</div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Idioma principal</label>
-              <select class="form-input" id="main-language" oninput="markUnsaved()">
-                <option value="es">Español</option>
-                <option value="en">English</option>
-                <option value="es,en">Español + English</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex gap-8 mt-16" style="justify-content:flex-end;">
-          <button class="btn btn-ghost" onclick="loadConfig()">Cancelar</button>
-          <button class="btn btn-primary" onclick="saveConfig()" id="save-btn">
-            Guardar configuración
-          </button>
         </div>
       </div>
 
-    </div><!-- /content -->
-  </div><!-- /main -->
+      <div class="flex gap-8 mt-18" style="justify-content:flex-end">
+        <button class="btn btn-ghost" onclick="loadConfig()">Descartar</button>
+        <button class="btn btn-primary" onclick="saveConfig()" id="config-save-btn">Guardar configuración</button>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
 </div><!-- /app -->
 
 <!-- MODAL CLIENTE -->
-<div class="modal-overlay" id="client-modal">
+<div class="modal-bg" id="modal-client">
   <div class="modal">
-    <div class="modal-title" id="client-modal-title">Nuevo cliente</div>
-    <button class="modal-close" onclick="closeClientModal()">✕</button>
-
-    <div class="form-group">
-      <label class="form-label">Nombre de la empresa *</label>
-      <input type="text" class="form-input" id="client-name" placeholder="Ej: Empresa S.A.">
-    </div>
-
+    <div class="modal-title" id="modal-client-title">Nuevo cliente</div>
+    <button class="modal-x" onclick="closeModal('modal-client')">✕</button>
     <div class="grid-2">
       <div class="form-group">
+        <label class="form-label">Nombre *</label>
+        <input type="text" class="form-input" id="cl-name" placeholder="Empresa S.A.">
+      </div>
+      <div class="form-group">
         <label class="form-label">Sector *</label>
-        <select class="form-input" id="client-sector">
+        <select class="form-input" id="cl-sector">
           <option value="">Selecciona...</option>
           <option value="financiero">Financiero / Banca</option>
           <option value="seguros">Seguros</option>
-          <option value="construccion">Construcción / Inmobiliaria</option>
-          <option value="salud">Salud / Farmacia</option>
           <option value="tecnologia">Tecnología / Digital</option>
+          <option value="salud">Salud / Farmacia</option>
+          <option value="construccion">Construcción / Inmobiliaria</option>
           <option value="energia">Energía / Utilities</option>
           <option value="alimentacion">Alimentación / FMCG</option>
           <option value="transporte">Transporte / Logística</option>
           <option value="manufactura">Manufactura / Industrial</option>
           <option value="servicios">Servicios Profesionales</option>
-          <option value="retail">Retail / Distribución</option>
+          <option value="retail">Retail</option>
           <option value="otro">Otro</option>
         </select>
       </div>
-      <div class="form-group">
-        <label class="form-label">Tamaño</label>
-        <select class="form-input" id="client-size">
-          <option value="pyme">PYME (&lt;250 empleados)</option>
-          <option value="mediana">Mediana (250-1000)</option>
-          <option value="grande">Grande (&gt;1000)</option>
-          <option value="cotizada">Cotizada en bolsa</option>
-        </select>
-      </div>
     </div>
-
     <div class="grid-2">
       <div class="form-group">
-        <label class="form-label">País principal</label>
-        <select class="form-input" id="client-country">
+        <label class="form-label">País / Geografía</label>
+        <select class="form-input" id="cl-country">
           <option value="ES">España</option>
           <option value="ES,PT">España + Portugal</option>
           <option value="ES,LATAM">España + LATAM</option>
@@ -1206,961 +537,675 @@
       </div>
       <div class="form-group">
         <label class="form-label">Facturación anual</label>
-        <select class="form-input" id="client-revenue">
+        <select class="form-input" id="cl-revenue">
           <option value="<5M">Menos de 5M €</option>
-          <option value="5-50M">5M - 50M €</option>
-          <option value="50-250M">50M - 250M €</option>
+          <option value="5-50M">5M – 50M €</option>
+          <option value="50-250M">50M – 250M €</option>
           <option value=">250M">Más de 250M €</option>
         </select>
       </div>
     </div>
-
     <div class="form-group">
       <label class="form-label">Normas aplicables</label>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;">
-        <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;">
-          <input type="checkbox" class="client-norm" value="ISO37301" checked> ISO 37301
-        </label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;">
-          <input type="checkbox" class="client-norm" value="UNE19601"> UNE 19601
-        </label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;">
-          <input type="checkbox" class="client-norm" value="ISO37001"> ISO 37001
-        </label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;">
-          <input type="checkbox" class="client-norm" value="RGPD"> RGPD
-        </label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;">
-          <input type="checkbox" class="client-norm" value="PBC"> PBC / AML
-        </label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;">
-          <input type="checkbox" class="client-norm" value="DORA"> DORA
-        </label>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer"><input type="checkbox" class="cl-norm" value="ISO37301" checked> ISO 37301</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer"><input type="checkbox" class="cl-norm" value="UNE19601"> UNE 19601</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer"><input type="checkbox" class="cl-norm" value="ISO37001"> ISO 37001</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer"><input type="checkbox" class="cl-norm" value="RGPD"> RGPD</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer"><input type="checkbox" class="cl-norm" value="PBC"> PBC/AML</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer"><input type="checkbox" class="cl-norm" value="DORA"> DORA</label>
       </div>
     </div>
-
     <div class="form-group">
-      <label class="form-label">Descripción del modelo de compliance (contexto)</label>
-      <textarea class="form-input" id="client-compliance-desc" rows="4"
-        placeholder="Describe brevemente el modelo de compliance actual: controles existentes, áreas de riesgo conocidas, estado de certificaciones..."></textarea>
+      <label class="form-label">Descripción del modelo de compliance</label>
+      <textarea class="form-input" id="cl-compliance" rows="3" placeholder="Controles existentes, certificaciones, áreas de riesgo conocidas..."></textarea>
     </div>
-
     <div class="form-group">
       <label class="form-label">Áreas de riesgo prioritarias</label>
-      <textarea class="form-input" id="client-risks" rows="2"
-        placeholder="Ej: soborno en licitaciones, conflictos de interés, cadena de suministro..."></textarea>
+      <textarea class="form-input" id="cl-risks" rows="2" placeholder="Ej: soborno en licitaciones, conflictos de interés..."></textarea>
     </div>
-
-    <div class="flex gap-8" style="justify-content:flex-end; margin-top:8px;">
-      <button class="btn btn-ghost" onclick="closeClientModal()">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveClient()" id="client-save-btn">
-        Guardar cliente
-      </button>
+    <div class="flex gap-8" style="justify-content:flex-end;margin-top:6px">
+      <button class="btn btn-ghost" onclick="closeModal('modal-client')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveClient()">Guardar cliente</button>
     </div>
   </div>
 </div>
 
-<!-- MONITOR MODE -->
-<div class="monitor-mode" id="monitor-mode">
-  <div class="monitor-header">
-    <div class="logo-mark" style="font-family: var(--font-display); font-size:22px; font-weight:800; color:var(--accent); display:flex;align-items:center;gap:10px;">
-      <span style="width:10px;height:10px;background:var(--accent);border-radius:50%;box-shadow:0 0 16px var(--accent);animation:pulse 2s infinite;display:inline-block;"></span>
-      CDT — COMPLIANCE DIGITAL TWIN
-    </div>
-    <div id="monitor-time" style="font-size:13px;color:var(--text-muted);font-family:var(--font-mono);"></div>
+<!-- MONITOR -->
+<div class="monitor" id="monitor">
+  <div class="monitor-head">
+    <div class="monitor-logo"><span class="logo-dot"></span>CDT — COMPLIANCE DIGITAL TWIN</div>
+    <div id="monitor-clock" style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono)"></div>
     <button class="btn btn-ghost" onclick="toggleMonitor()">✕ Salir</button>
   </div>
-
   <div class="monitor-grid">
     <div class="monitor-card">
-      <div class="monitor-card-title">⚡ Nivel de riesgo global</div>
-      <div class="monitor-big-number" id="monitor-risk">72</div>
-      <div style="font-size:11px;color:var(--text-muted);margin-top:8px;">/ 100 — MEDIO-ALTO</div>
-      <div class="progress mt-16">
-        <div class="progress-bar" id="monitor-risk-bar"
-          style="width:72%;background:var(--warn);"></div>
-      </div>
-      <div style="margin-top:24px;">
-        <svg width="100%" height="120" viewBox="0 0 300 120" id="monitor-radar-small"></svg>
-      </div>
+      <div class="monitor-label">⚡ Nivel de riesgo global</div>
+      <div class="monitor-big text-accent" id="mon-risk">—</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:6px" id="mon-risk-label">calculando...</div>
+      <div style="height:3px;background:var(--border2);border-radius:2px;margin-top:14px"><div id="mon-risk-bar" style="height:100%;border-radius:2px;background:var(--accent);width:0;transition:width .8s"></div></div>
     </div>
-
     <div class="monitor-card">
-      <div class="monitor-card-title">⟁ Últimos hits detectados</div>
-      <div class="ticker" id="monitor-hits-ticker">
-        <div class="empty-state" style="padding:20px 0;">
-          <div class="empty-desc">Sin hits activos</div>
-        </div>
-      </div>
+      <div class="monitor-label">⟁ Últimos hits</div>
+      <div id="mon-hits" style="flex:1;overflow:hidden"></div>
     </div>
-
     <div class="monitor-card">
-      <div class="monitor-card-title">€ Ahorro acumulado por prevención</div>
-      <div class="monitor-big-number" style="font-size:52px;" id="monitor-savings">€0</div>
-      <div style="font-size:11px;color:var(--text-muted);margin-top:8px;">impacto evitado estimado</div>
-
-      <hr class="divider" style="margin:20px 0;">
-
-      <div class="monitor-card-title">◎ Clientes en seguimiento</div>
-      <div id="monitor-client-list" style="flex:1;">
-        <div class="empty-state" style="padding:16px 0;"><div class="empty-desc">Sin clientes</div></div>
-      </div>
+      <div class="monitor-label">◎ Clientes en seguimiento</div>
+      <div id="mon-clients" style="flex:1"></div>
     </div>
   </div>
 </div>
 
 <script>
-// ============================================================
+// ═══════════════════════════════════════════════════════
 // STATE
-// ============================================================
-let state = {
+// ═══════════════════════════════════════════════════════
+const GITHUB_REPO    = 'avespa/digitaltwin';
+const RAW_BASE       = `https://raw.githubusercontent.com/${GITHUB_REPO}/main/data`;
+const GITHUB_API     = `https://api.github.com/repos/${GITHUB_REPO}/contents/data`;
+
+let S = {
   clients: [],
-  hits: [],
-  config: {
-    mistralKey: '',
+  hits:    [],
+  stats:   {},
+  lastSync: null,
+  cfg: {
+    mistralKey:   '',
     mistralModel: 'mistral-small-latest',
-    pineconeKey: '',
-    pineconeIndex: 'compliance-index',
-    pineconeEnv: 'us-east-1',
-    newsapiKey: '',
-    firebaseProject: '',
-    firebaseKey: '',
-    firebaseDomain: '',
-    srcBoe: true,
-    srcCendoj: true,
-    srcCnmv: false,
-    srcAepd: false,
-    analysisFreq: '3',
-    relevanceThreshold: 65,
-    mainLanguage: 'es'
+    newsapiKey:   '',
+    pineconeKey:  '',
+    pineconeIndex:'digitaltwin',
+    pineconeEnv:  'us-east-1',
+    fbProject:    'digitaltwin-21a64',
+    fbKey:        '',
+    fbDomain:     'digitaltwin-21a64.firebaseapp.com',
+    threshold:    60,
+    ghRepo:       GITHUB_REPO,
+  },
+  remoteCfg: {
+    newsapi_queries: [],
+    newsapi_sources: '',
+    custom_keywords: [],
+    rss_enabled:     {},
   }
 };
 
-// ============================================================
-// PERSISTENCE (localStorage)
-// ============================================================
-function saveState() {
-  localStorage.setItem('cdt_state', JSON.stringify(state));
+const RSS_LABELS = {
+  BOE_disposiciones:           'BOE - Disposiciones generales',
+  BOE_justicia:                'BOE - Administración de Justicia',
+  BOE_anuncios:                'BOE - Anuncios oficiales',
+  BOE_derecho_penal:           'BOE - Derecho Penal',
+  BOE_derecho_mercantil:       'BOE - Derecho Mercantil',
+  BOE_sistema_financiero:      'BOE - Sistema Financiero',
+  BOE_tribunal_constitucional: 'BOE - Tribunal Constitucional',
+  BORME_general:               'BORME - Registro Mercantil',
+};
+
+// ═══════════════════════════════════════════════════════
+// PERSISTENCE
+// ═══════════════════════════════════════════════════════
+function persist() { localStorage.setItem('cdt_v2', JSON.stringify(S)); }
+
+function restore() {
+  try {
+    const d = localStorage.getItem('cdt_v2');
+    if (d) S = {...S, ...JSON.parse(d)};
+  } catch(e) {}
 }
 
-function loadStateFromStorage() {
-  const stored = localStorage.getItem('cdt_state');
-  if (stored) {
-    try {
-      const parsed = JSON.parse(stored);
-      state = { ...state, ...parsed };
-    } catch(e) {}
-  }
-}
-
-// ============================================================
+// ═══════════════════════════════════════════════════════
 // NAVIGATION
-// ============================================================
-function showView(name) {
+// ═══════════════════════════════════════════════════════
+function go(name) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-
-  document.getElementById('view-' + name).classList.add('active');
-
-  const titles = {
-    dashboard: 'Dashboard',
-    clientes: 'Clientes',
-    hits: 'Hits Detectados',
-    analisis: 'Análisis IA',
-    config: 'Configuración'
-  };
+  document.getElementById('view-'+name).classList.add('active');
+  const titles = {dashboard:'Dashboard',clientes:'Clientes',hits:'Hits Detectados',analisis:'Análisis IA Manual',fuentes:'Fuentes & Búsquedas',config:'Configuración APIs'};
   document.getElementById('topbar-title').textContent = titles[name] || name;
-
-  // Mark active nav
-  document.querySelectorAll('.nav-item').forEach(item => {
-    if (item.textContent.trim().toLowerCase().includes(name.toLowerCase().substring(0,4))) {
-      item.classList.add('active');
-    }
+  document.querySelectorAll('.nav-item').forEach(el => {
+    if(el.textContent.trim().toLowerCase().replace(/\s+/g,'').includes(name.replace(/\s+/g,'').toLowerCase().slice(0,5)))
+      el.classList.add('active');
   });
-
-  if (name === 'config') loadConfig();
-  if (name === 'hits') renderHits();
-  if (name === 'analisis') populateAnalysisClients();
+  if(name==='config') loadConfig();
+  if(name==='fuentes') loadFuentesFromConfig();
+  if(name==='hits') renderHits();
+  if(name==='analisis') populateAnClients();
+  if(name==='clientes') renderClients();
 }
 
-// ============================================================
-// CONFIG
-// ============================================================
-function loadConfig() {
-  const c = state.config;
-  document.getElementById('mistral-key').value = c.mistralKey || '';
-  document.getElementById('mistral-model').value = c.mistralModel || 'mistral-small-latest';
-  document.getElementById('pinecone-key').value = c.pineconeKey || '';
-  document.getElementById('pinecone-index').value = c.pineconeIndex || 'compliance-index';
-  document.getElementById('pinecone-env').value = c.pineconeEnv || 'us-east-1';
-  document.getElementById('newsapi-key').value = c.newsapiKey || '';
-  document.getElementById('firebase-project').value = c.firebaseProject || '';
-  document.getElementById('firebase-key').value = c.firebaseKey || '';
-  document.getElementById('firebase-domain').value = c.firebaseDomain || '';
-  document.getElementById('src-boe').checked = c.srcBoe !== false;
-  document.getElementById('src-cendoj').checked = c.srcCendoj !== false;
-  document.getElementById('src-cnmv').checked = c.srcCnmv || false;
-  document.getElementById('src-aepd').checked = c.srcAepd || false;
-  document.getElementById('analysis-freq').value = c.analysisFreq || '3';
-  document.getElementById('relevance-threshold').value = c.relevanceThreshold || 65;
-  document.getElementById('main-language').value = c.mainLanguage || 'es';
-}
-
-function saveConfig() {
-  state.config = {
-    mistralKey: document.getElementById('mistral-key').value.trim(),
-    mistralModel: document.getElementById('mistral-model').value,
-    pineconeKey: document.getElementById('pinecone-key').value.trim(),
-    pineconeIndex: document.getElementById('pinecone-index').value.trim(),
-    pineconeEnv: document.getElementById('pinecone-env').value.trim(),
-    newsapiKey: document.getElementById('newsapi-key').value.trim(),
-    firebaseProject: document.getElementById('firebase-project').value.trim(),
-    firebaseKey: document.getElementById('firebase-key').value.trim(),
-    firebaseDomain: document.getElementById('firebase-domain').value.trim(),
-    srcBoe: document.getElementById('src-boe').checked,
-    srcCendoj: document.getElementById('src-cendoj').checked,
-    srcCnmv: document.getElementById('src-cnmv').checked,
-    srcAepd: document.getElementById('src-aepd').checked,
-    analysisFreq: document.getElementById('analysis-freq').value,
-    relevanceThreshold: parseInt(document.getElementById('relevance-threshold').value),
-    mainLanguage: document.getElementById('main-language').value
-  };
-
-  saveState();
-  showAlert('config-alert', '✓ Configuración guardada correctamente', 'success');
-  document.getElementById('save-btn').textContent = 'Guardado ✓';
-  setTimeout(() => { document.getElementById('save-btn').textContent = 'Guardar configuración'; }, 2000);
-}
-
-function markUnsaved() {
-  document.getElementById('save-btn').textContent = 'Guardar configuración *';
-}
-
-function toggleVis(id) {
-  const el = document.getElementById(id);
-  el.type = el.type === 'password' ? 'text' : 'password';
-}
-
-// ============================================================
-// TEST APIs
-// ============================================================
-async function testMistral() {
-  const key = document.getElementById('mistral-key').value.trim();
-  if (!key) { showAlert('config-alert', 'Introduce primero la API Key de Mistral', 'error'); return; }
-
-  const statusEl = document.getElementById('status-mistral');
-  statusEl.className = 'api-status pending';
-  statusEl.textContent = '● probando...';
+// ═══════════════════════════════════════════════════════
+// SYNC FROM GITHUB
+// ═══════════════════════════════════════════════════════
+async function syncNow() {
+  const btn = document.getElementById('sync-btn');
+  btn.innerHTML = '<span class="spin"></span> Sincronizando...';
+  btn.disabled = true;
+  document.getElementById('foot-status').textContent = 'Sincronizando...';
 
   try {
-    const res = await fetch('https://api.mistral.ai/v1/models', {
-      headers: { 'Authorization': 'Bearer ' + key }
-    });
-
-    if (res.ok) {
-      statusEl.className = 'api-status ok';
-      statusEl.textContent = '● conectado';
-      showAlert('config-alert', '✓ Mistral AI conectado correctamente', 'success');
-    } else {
-      statusEl.className = 'api-status error';
-      statusEl.textContent = '● error';
-      showAlert('config-alert', '✗ API Key de Mistral inválida o sin permisos', 'error');
+    // Fetch hits.json
+    const r1 = await fetch(`${RAW_BASE}/hits.json?t=${Date.now()}`);
+    if (r1.ok) {
+      const data = await r1.json();
+      S.hits  = data.hits  || [];
+      S.stats = data.stats || {};
+      S.lastSync = data.last_updated || new Date().toISOString();
     }
+
+    // Fetch config.json
+    const r2 = await fetch(`${RAW_BASE}/config.json?t=${Date.now()}`);
+    if (r2.ok) {
+      S.remoteCfg = await r2.json();
+    }
+
+    persist();
+    renderAll();
+    document.getElementById('foot-status').textContent = 'Sincronizado ✓';
+    document.getElementById('topbar-sync').textContent = 'Sync: ' + fmtDate(S.lastSync);
   } catch(e) {
-    statusEl.className = 'api-status error';
-    statusEl.textContent = '● sin conexión';
-    showAlert('config-alert', '✗ Error de red. Comprueba tu conexión.', 'error');
+    document.getElementById('foot-status').textContent = 'Error de sync';
+    console.error(e);
+  }
+
+  btn.innerHTML = '⟳ Sincronizar';
+  btn.disabled  = false;
+}
+
+function updateRepoUrl() {
+  const repo = document.getElementById('gh-repo')?.value?.trim();
+  if (repo) {
+    window.GITHUB_REPO_OVERRIDE = repo;
   }
 }
 
-// ============================================================
-// CLIENTS
-// ============================================================
-let editingClientId = null;
-
-function openClientModal(clientId = null) {
-  editingClientId = clientId;
-
-  if (clientId) {
-    const client = state.clients.find(c => c.id === clientId);
-    document.getElementById('client-modal-title').textContent = 'Editar cliente';
-    document.getElementById('client-name').value = client.name;
-    document.getElementById('client-sector').value = client.sector;
-    document.getElementById('client-size').value = client.size;
-    document.getElementById('client-country').value = client.country;
-    document.getElementById('client-revenue').value = client.revenue;
-    document.getElementById('client-compliance-desc').value = client.complianceDesc || '';
-    document.getElementById('client-risks').value = client.risks || '';
-    document.querySelectorAll('.client-norm').forEach(cb => {
-      cb.checked = (client.norms || []).includes(cb.value);
-    });
-  } else {
-    document.getElementById('client-modal-title').textContent = 'Nuevo cliente';
-    document.getElementById('client-name').value = '';
-    document.getElementById('client-sector').value = '';
-    document.getElementById('client-size').value = 'pyme';
-    document.getElementById('client-country').value = 'ES';
-    document.getElementById('client-revenue').value = '5-50M';
-    document.getElementById('client-compliance-desc').value = '';
-    document.getElementById('client-risks').value = '';
-    document.querySelectorAll('.client-norm').forEach(cb => {
-      cb.checked = cb.value === 'ISO37301';
-    });
-  }
-
-  document.getElementById('client-modal').classList.add('open');
+// ═══════════════════════════════════════════════════════
+// RENDER ALL
+// ═══════════════════════════════════════════════════════
+function renderAll() {
+  renderDashboard();
+  renderClients();
+  renderHits();
+  renderMonitor();
+  // Update badge
+  const crits = S.hits.filter(h => h.level==='critical').length;
+  document.getElementById('badge-hits').textContent = crits;
 }
 
-function closeClientModal() {
-  document.getElementById('client-modal').classList.remove('open');
-  editingClientId = null;
+// ═══════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════
+function renderDashboard() {
+  document.getElementById('s-clientes').textContent = S.clients.length;
+  document.getElementById('s-hits').textContent     = S.hits.length;
+  document.getElementById('s-criticos').textContent = S.hits.filter(h=>h.level==='critical').length;
+  document.getElementById('s-sync').textContent     = S.lastSync ? fmtDate(S.lastSync) : '—';
+
+  // Recent hits
+  const hl = document.getElementById('dash-hits-list');
+  const recent = S.hits.slice(0,5);
+  document.getElementById('dash-hits-count').textContent = S.hits.length + ' totales';
+  hl.innerHTML = recent.length ? recent.map(h => hitCard(h, false)).join('') :
+    `<div class="empty"><div class="empty-icon">⟁</div><div class="empty-title">Sin hits aún</div><div class="empty-desc">Haz clic en Sincronizar o ejecuta el workflow en GitHub</div></div>`;
+
+  // Clients table
+  const tb = document.getElementById('dash-clients-body');
+  tb.innerHTML = S.clients.length ? S.clients.map(c => `
+    <tr>
+      <td><strong>${c.name}</strong></td>
+      <td style="color:var(--text-dim)">${sectorLabel(c.sector)}</td>
+      <td>${c.hits||0}</td>
+      <td><span class="risk ${c.riskLevel||'medio'}">${(c.riskLevel||'medio').toUpperCase()}</span></td>
+    </tr>`).join('') :
+    `<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:24px">Sin clientes — añade uno en la sección Clientes</td></tr>`;
+
+  // Active sources
+  const sl = document.getElementById('dash-sources-list');
+  const rss = S.remoteCfg.rss_enabled || {};
+  const activeSources = Object.entries(RSS_LABELS).filter(([k]) => rss[k] !== false).map(([,v]) => v);
+  const qCount = (S.remoteCfg.newsapi_queries||[]).length;
+  document.getElementById('dash-sources-count').textContent = `${activeSources.length} RSS + ${qCount} queries NewsAPI`;
+  sl.innerHTML = activeSources.map(s =>
+    `<span style="font-size:10px;padding:3px 9px;background:var(--surface2);border:1px solid var(--border);border-radius:3px;color:var(--text-dim)">${s}</span>`
+  ).join('') + (qCount ? `<span style="font-size:10px;padding:3px 9px;background:rgba(0,102,255,.1);border:1px solid rgba(0,102,255,.2);border-radius:3px;color:var(--accent2)">${qCount} queries NewsAPI</span>` : '');
+}
+
+// ═══════════════════════════════════════════════════════
+// HITS
+// ═══════════════════════════════════════════════════════
+function hitCard(h, expanded=false) {
+  const score = h.relevance_score || 0;
+  const hasDetail = h.summary || h.vulnerability || h.financial_impact || h.recommended_action;
+  return `
+    <div class="hit ${h.level||'info'}" id="hit-${h.id}">
+      <div class="hit-head">
+        <span class="level-tag ${h.level||'info'}">${levelLabel(h.level)}</span>
+        <span class="hit-source">${(h.source||'').split('·')[0].trim()}</span>
+        <span class="hit-date">${fmtDate(h.fetched_at||h.raw_date)}</span>
+      </div>
+      <div class="hit-title">${esc(h.title)}</div>
+      ${h.summary ? `<div class="hit-summary">${esc(h.summary)}</div>` : ''}
+      <div class="score-bar"><div class="score-fill" style="width:${score}%;background:${score>70?'var(--danger)':score>40?'var(--warn)':'var(--accent)'}"></div></div>
+      ${hasDetail ? `
+        <div style="margin-top:7px">
+          <button class="btn btn-ghost btn-sm" onclick="toggleHitDetail('${h.id}')">Ver análisis completo ↓</button>
+          ${h.link ? `<a href="${h.link}" target="_blank" class="btn btn-ghost btn-sm" style="margin-left:4px">Fuente ↗</a>` : ''}
+        </div>
+        <div class="hit-detail" id="hd-${h.id}">
+          ${h.risks?.length ? `<div class="hit-detail-item"><div class="hit-detail-label">Riesgos</div>${h.risks.join(' · ')}</div>` : ''}
+          ${h.norms_affected?.length ? `<div class="hit-detail-item"><div class="hit-detail-label">Normas afectadas</div>${h.norms_affected.join(' · ')}</div>` : ''}
+          ${h.vulnerability ? `<div class="hit-detail-item"><div class="hit-detail-label">Vulnerabilidad / Control</div>${esc(h.vulnerability)}</div>` : ''}
+          ${h.financial_impact ? `<div class="hit-detail-item"><div class="hit-detail-label">Impacto financiero estimado</div>${esc(h.financial_impact)}</div>` : ''}
+          ${h.recommended_action ? `<div class="hit-detail-item"><div class="hit-detail-label">Acción recomendada</div>${esc(h.recommended_action)}</div>` : ''}
+        </div>` : (h.link ? `<div style="margin-top:7px"><a href="${h.link}" target="_blank" class="btn btn-ghost btn-sm">Fuente ↗</a></div>` : '')}
+    </div>`;
+}
+
+function toggleHitDetail(id) {
+  const el = document.getElementById('hd-'+id);
+  if(el) el.classList.toggle('open');
+}
+
+function renderHits() {
+  const lv  = document.getElementById('filter-level')?.value || '';
+  const src = document.getElementById('filter-source')?.value || '';
+  let hits  = [...S.hits];
+  if(lv)  hits = hits.filter(h => h.level === lv);
+  if(src) hits = hits.filter(h => (h.source||'').includes(src));
+
+  const container = document.getElementById('hits-list');
+  container.innerHTML = hits.length ? hits.map(h => hitCard(h)).join('') :
+    `<div class="empty"><div class="empty-icon">⟁</div><div class="empty-title">Sin hits</div><div class="empty-desc">Sincroniza o ejecuta el workflow en GitHub Actions</div></div>`;
+
+  // Populate source filter
+  const srcSel = document.getElementById('filter-source');
+  if(srcSel) {
+    const sources = [...new Set(S.hits.map(h => (h.source||'').split('·')[0].trim()).filter(Boolean))];
+    const cur = srcSel.value;
+    srcSel.innerHTML = `<option value="">Todas las fuentes</option>` + sources.map(s => `<option value="${s}">${s}</option>`).join('');
+    srcSel.value = cur;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// CLIENTES
+// ═══════════════════════════════════════════════════════
+let editingClient = null;
+
+function renderClients() {
+  const c = document.getElementById('clients-list');
+  if(!S.clients.length) {
+    c.innerHTML = `<div class="empty"><div class="empty-icon">◎</div><div class="empty-title">Sin clientes aún</div><div class="empty-desc">Crea el primer perfil empresarial</div></div>`;
+    return;
+  }
+  c.innerHTML = S.clients.map(cl => `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px 18px;display:flex;align-items:center;gap:14px;margin-bottom:8px;cursor:pointer;transition:border-color .15s" onmouseenter="this.style.borderColor='var(--border2)'" onmouseleave="this.style.borderColor='var(--border)'" onclick="openClientModal('${cl.id}')">
+      <div style="width:38px;height:38px;background:var(--surface2);border:1px solid var(--border);border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:var(--font-ui);font-weight:800;font-size:13px;color:var(--accent);flex-shrink:0">${cl.name.slice(0,2).toUpperCase()}</div>
+      <div style="flex:1">
+        <div style="font-family:var(--font-ui);font-weight:700;font-size:13px;margin-bottom:2px">${cl.name}</div>
+        <div style="font-size:10px;color:var(--text-muted)">${sectorLabel(cl.sector)} · ${cl.country} · ${(cl.norms||[]).join(', ')}</div>
+      </div>
+      <span class="risk ${cl.riskLevel||'medio'}">${(cl.riskLevel||'medio').toUpperCase()}</span>
+      <div onclick="event.stopPropagation()" style="display:flex;gap:6px">
+        <button class="btn btn-ghost btn-sm" onclick="openClientModal('${cl.id}')">Editar</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteClient('${cl.id}')">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+function openClientModal(id=null) {
+  editingClient = id;
+  const cl = id ? S.clients.find(c=>c.id===id) : null;
+  document.getElementById('modal-client-title').textContent = id ? 'Editar cliente' : 'Nuevo cliente';
+  document.getElementById('cl-name').value      = cl?.name || '';
+  document.getElementById('cl-sector').value    = cl?.sector || '';
+  document.getElementById('cl-country').value   = cl?.country || 'ES';
+  document.getElementById('cl-revenue').value   = cl?.revenue || '5-50M';
+  document.getElementById('cl-compliance').value= cl?.complianceDesc || '';
+  document.getElementById('cl-risks').value     = cl?.risks || '';
+  document.querySelectorAll('.cl-norm').forEach(cb => {
+    cb.checked = cl ? (cl.norms||[]).includes(cb.value) : cb.value==='ISO37301';
+  });
+  document.getElementById('modal-client').classList.add('open');
 }
 
 function saveClient() {
-  const name = document.getElementById('client-name').value.trim();
-  const sector = document.getElementById('client-sector').value;
-
-  if (!name || !sector) {
-    alert('Nombre y sector son obligatorios');
-    return;
-  }
-
-  const norms = [];
-  document.querySelectorAll('.client-norm:checked').forEach(cb => norms.push(cb.value));
-
-  const client = {
-    id: editingClientId || 'c_' + Date.now(),
-    name,
-    sector,
-    size: document.getElementById('client-size').value,
-    country: document.getElementById('client-country').value,
-    revenue: document.getElementById('client-revenue').value,
+  const name   = document.getElementById('cl-name').value.trim();
+  const sector = document.getElementById('cl-sector').value;
+  if(!name||!sector) { alert('Nombre y sector obligatorios'); return; }
+  const norms = [...document.querySelectorAll('.cl-norm:checked')].map(c=>c.value);
+  const cl = {
+    id:            editingClient || 'c'+Date.now(),
+    name, sector,
+    country:       document.getElementById('cl-country').value,
+    revenue:       document.getElementById('cl-revenue').value,
     norms,
-    complianceDesc: document.getElementById('client-compliance-desc').value.trim(),
-    risks: document.getElementById('client-risks').value.trim(),
-    riskLevel: 'medio',
-    lastAnalysis: null,
-    hits: 0,
-    savings: 0,
-    createdAt: new Date().toISOString()
+    complianceDesc:document.getElementById('cl-compliance').value.trim(),
+    risks:         document.getElementById('cl-risks').value.trim(),
+    riskLevel:     'medio',
+    hits:          0,
+    createdAt:     new Date().toISOString(),
   };
-
-  if (editingClientId) {
-    const idx = state.clients.findIndex(c => c.id === editingClientId);
-    state.clients[idx] = { ...state.clients[idx], ...client };
+  if(editingClient) {
+    const i = S.clients.findIndex(c=>c.id===editingClient);
+    S.clients[i] = {...S.clients[i], ...cl};
   } else {
-    state.clients.push(client);
+    S.clients.push(cl);
   }
-
-  saveState();
-  closeClientModal();
+  persist();
+  closeModal('modal-client');
   renderClients();
-  updateDashboard();
+  renderDashboard();
 }
 
 function deleteClient(id) {
-  if (!confirm('¿Eliminar este cliente?')) return;
-  state.clients = state.clients.filter(c => c.id !== id);
-  saveState();
-  renderClients();
-  updateDashboard();
+  if(!confirm('¿Eliminar este cliente?')) return;
+  S.clients = S.clients.filter(c=>c.id!==id);
+  persist(); renderClients(); renderDashboard();
 }
 
-function renderClients() {
-  const container = document.getElementById('clients-list');
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-  if (state.clients.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">◎</div>
-        <div class="empty-title">Sin clientes aún</div>
-        <div class="empty-desc">Añade tu primer cliente para empezar el seguimiento</div>
+// ═══════════════════════════════════════════════════════
+// FUENTES & BÚSQUEDAS
+// ═══════════════════════════════════════════════════════
+function loadFuentesFromConfig() {
+  const rc = S.remoteCfg;
+
+  // Queries
+  renderQueryList(rc.newsapi_queries || []);
+  document.getElementById('newsapi-sources').value = rc.newsapi_sources || '';
+  document.getElementById('queries-count').textContent = (rc.newsapi_queries||[]).length + ' activas';
+
+  // RSS toggles
+  renderRssList(rc.rss_enabled || {});
+
+  // Keywords
+  renderKwList(rc.custom_keywords || []);
+}
+
+function renderQueryList(queries) {
+  document.getElementById('queries-list').innerHTML = queries.map((q,i) => `
+    <div class="query-item">
+      <span class="query-num">${i+1}</span>
+      <span class="query-text">${esc(q)}</span>
+      <button class="query-del" onclick="removeQuery(${i})" title="Eliminar">×</button>
+    </div>`).join('');
+  document.getElementById('queries-count').textContent = queries.length + ' activas';
+}
+
+function addQuery() {
+  const val = document.getElementById('new-query').value.trim();
+  if(!val) return;
+  const queries = [...(S.remoteCfg.newsapi_queries||[]), val];
+  S.remoteCfg.newsapi_queries = queries;
+  document.getElementById('new-query').value = '';
+  renderQueryList(queries);
+  markDirty('fuentes');
+}
+
+function removeQuery(i) {
+  S.remoteCfg.newsapi_queries.splice(i,1);
+  renderQueryList(S.remoteCfg.newsapi_queries);
+  markDirty('fuentes');
+}
+
+function renderRssList(enabled) {
+  document.getElementById('rss-list').innerHTML = Object.entries(RSS_LABELS).map(([k,label]) => {
+    const on = enabled[k] !== false;
+    return `
+      <div class="rss-item">
+        <button class="rss-toggle ${on?'on':''}" id="rss-${k}" onclick="toggleRss('${k}')"></button>
+        <span class="rss-name ${on?'on':''}" id="rss-label-${k}">${label}</span>
       </div>`;
-    return;
-  }
-
-  container.innerHTML = state.clients.map(c => `
-    <div class="client-card" onclick="openClientModal('${c.id}')">
-      <div class="client-avatar">${c.name.substring(0,2).toUpperCase()}</div>
-      <div class="client-info">
-        <div class="client-name">${c.name}</div>
-        <div class="client-meta">${sectorLabel(c.sector)} · ${c.country} · ${c.revenue} · ${(c.norms||[]).join(', ')}</div>
-      </div>
-      <div class="client-risk risk-${c.riskLevel}">${c.riskLevel.toUpperCase()}</div>
-      <div style="display:flex;gap:8px;margin-left:8px;" onclick="event.stopPropagation()">
-        <button class="btn btn-ghost" onclick="runClientAnalysis('${c.id}')">Analizar</button>
-        <button class="btn btn-danger" onclick="deleteClient('${c.id}')">✕</button>
-      </div>
-    </div>
-  `).join('');
-
-  // Update filter dropdowns
-  updateClientFilters();
+  }).join('');
 }
 
-function sectorLabel(s) {
-  const map = {
-    financiero: 'Financiero', seguros: 'Seguros', construccion: 'Construcción',
-    salud: 'Salud', tecnologia: 'Tecnología', energia: 'Energía',
-    alimentacion: 'Alimentación', transporte: 'Transporte', manufactura: 'Manufactura',
-    servicios: 'Servicios', retail: 'Retail', otro: 'Otro'
+function toggleRss(key) {
+  const btn = document.getElementById('rss-'+key);
+  const lbl = document.getElementById('rss-label-'+key);
+  const isOn = btn.classList.toggle('on');
+  lbl.classList.toggle('on', isOn);
+  if(!S.remoteCfg.rss_enabled) S.remoteCfg.rss_enabled = {};
+  S.remoteCfg.rss_enabled[key] = isOn;
+  markDirty('fuentes');
+}
+
+function renderKwList(keywords) {
+  document.getElementById('kw-list').innerHTML = keywords.map((kw,i) => `
+    <span class="kw-tag">${esc(kw)}<button onclick="removeKw(${i})" title="Eliminar">×</button></span>`
+  ).join('');
+}
+
+function addKw() {
+  const val = document.getElementById('new-kw').value.trim();
+  if(!val) return;
+  if(!(S.remoteCfg.custom_keywords||[]).includes(val)) {
+    S.remoteCfg.custom_keywords = [...(S.remoteCfg.custom_keywords||[]), val];
+    renderKwList(S.remoteCfg.custom_keywords);
+    markDirty('fuentes');
+  }
+  document.getElementById('new-kw').value = '';
+}
+
+function removeKw(i) {
+  S.remoteCfg.custom_keywords.splice(i,1);
+  renderKwList(S.remoteCfg.custom_keywords);
+  markDirty('fuentes');
+}
+
+async function saveFuentes() {
+  // Recoger sources input
+  S.remoteCfg.newsapi_sources = document.getElementById('newsapi-sources').value.trim();
+  persist();
+
+  // Intentar guardar en GitHub via API (requiere token)
+  // Sin token, mostramos instrucciones para hacerlo manualmente
+  showAlert('fuentes-alert',
+    '✓ Configuración guardada localmente. Para aplicarla: edita <code>data/config.json</code> en GitHub con este contenido y ejecuta el workflow.',
+    'ok');
+
+  // Mostrar el JSON para copiar
+  console.log('config.json actualizado:', JSON.stringify(S.remoteCfg, null, 2));
+
+  document.getElementById('fuentes-save-btn').textContent = 'Guardado ✓';
+  setTimeout(()=>{ document.getElementById('fuentes-save-btn').textContent = 'Guardar configuración'; }, 2500);
+}
+
+// ═══════════════════════════════════════════════════════
+// CONFIG APIs
+// ═══════════════════════════════════════════════════════
+function loadConfig() {
+  const c = S.cfg;
+  document.getElementById('mistral-key').value   = c.mistralKey   || '';
+  document.getElementById('mistral-model').value = c.mistralModel || 'mistral-small-latest';
+  document.getElementById('newsapi-key').value   = c.newsapiKey   || '';
+  document.getElementById('pinecone-key').value  = c.pineconeKey  || '';
+  document.getElementById('pinecone-index').value= c.pineconeIndex|| 'digitaltwin';
+  document.getElementById('pinecone-env').value  = c.pineconeEnv  || 'us-east-1';
+  document.getElementById('fb-project').value    = c.fbProject    || '';
+  document.getElementById('fb-key').value        = c.fbKey        || '';
+  document.getElementById('fb-domain').value     = c.fbDomain     || '';
+  document.getElementById('threshold').value     = c.threshold    || 60;
+  document.getElementById('gh-repo').value       = c.ghRepo       || GITHUB_REPO;
+}
+
+function saveConfig() {
+  S.cfg = {
+    mistralKey:   document.getElementById('mistral-key').value.trim(),
+    mistralModel: document.getElementById('mistral-model').value,
+    newsapiKey:   document.getElementById('newsapi-key').value.trim(),
+    pineconeKey:  document.getElementById('pinecone-key').value.trim(),
+    pineconeIndex:document.getElementById('pinecone-index').value.trim(),
+    pineconeEnv:  document.getElementById('pinecone-env').value.trim(),
+    fbProject:    document.getElementById('fb-project').value.trim(),
+    fbKey:        document.getElementById('fb-key').value.trim(),
+    fbDomain:     document.getElementById('fb-domain').value.trim(),
+    threshold:    parseInt(document.getElementById('threshold').value),
+    ghRepo:       document.getElementById('gh-repo').value.trim(),
   };
-  return map[s] || s;
+  persist();
+  showAlert('config-alert', '✓ Configuración guardada', 'ok');
+  document.getElementById('config-save-btn').textContent = 'Guardado ✓';
+  setTimeout(()=>{ document.getElementById('config-save-btn').textContent = 'Guardar configuración'; }, 2000);
 }
 
-function updateClientFilters() {
-  const selects = ['hits-filter-client', 'analysis-client'];
-  selects.forEach(id => {
-    const el = document.getElementById(id);
-    const current = el.value;
-    el.innerHTML = `<option value="">Todos los clientes</option>`;
-    state.clients.forEach(c => {
-      el.innerHTML += `<option value="${c.id}">${c.name}</option>`;
-    });
-    el.value = current;
-  });
+async function testMistral() {
+  const key = document.getElementById('mistral-key').value.trim();
+  if(!key) { showAlert('config-alert','Introduce la API key de Mistral primero','err'); return; }
+  const badge = document.getElementById('badge-mistral');
+  badge.className = 'api-badge pend'; badge.textContent = '● probando...';
+  try {
+    const r = await fetch('https://api.mistral.ai/v1/models', { headers:{'Authorization':'Bearer '+key} });
+    if(r.ok) { badge.className='api-badge ok'; badge.textContent='● conectado'; showAlert('config-alert','✓ Mistral AI conectado correctamente','ok'); }
+    else      { badge.className='api-badge err'; badge.textContent='● error'; showAlert('config-alert','✗ API Key inválida','err'); }
+  } catch(e) { badge.className='api-badge err'; badge.textContent='● sin conexión'; }
 }
 
-// ============================================================
-// HITS
-// ============================================================
-function renderHits() {
-  const container = document.getElementById('hits-list');
-  let hits = [...state.hits];
-
-  const clientFilter = document.getElementById('hits-filter-client')?.value;
-  const levelFilter = document.getElementById('hits-filter-level')?.value;
-
-  if (clientFilter) hits = hits.filter(h => h.clientId === clientFilter);
-  if (levelFilter) hits = hits.filter(h => h.level === levelFilter);
-
-  if (hits.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">⟁</div>
-        <div class="empty-title">Sin hits detectados</div>
-        <div class="empty-desc">Ejecuta un análisis para detectar eventos relevantes</div>
-      </div>`;
-    return;
-  }
-
-  container.innerHTML = hits.sort((a,b) => new Date(b.date) - new Date(a.date)).map(h => `
-    <div class="hit-item ${h.level}">
-      <div class="hit-header">
-        <span class="hit-tag ${h.level}">${levelLabel(h.level)}</span>
-        <span style="font-size:10px;color:var(--text-muted)">${h.clientName || 'Global'}</span>
-        <span class="hit-date">${formatDate(h.date)}</span>
-      </div>
-      <div class="hit-title">${h.title}</div>
-      <div class="hit-desc">${h.description}</div>
-      ${h.analysis ? `<div class="analysis-block" style="margin-top:8px;font-size:11px;">${h.analysis}</div>` : ''}
-    </div>
-  `).join('');
-
-  document.getElementById('hits-count').textContent = hits.length + ' eventos';
-  document.getElementById('hits-badge').textContent = state.hits.filter(h => h.level === 'critical').length;
+// ═══════════════════════════════════════════════════════
+// ANÁLISIS MANUAL
+// ═══════════════════════════════════════════════════════
+function populateAnClients() {
+  const sel = document.getElementById('an-client');
+  sel.innerHTML = `<option value="">Sin cliente (análisis genérico)</option>` +
+    S.clients.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
 }
 
-function levelLabel(l) {
-  return { critical: 'CRÍTICO', warning: 'ALERTA', info: 'INFO' }[l] || l;
-}
+async function runManual() {
+  const key  = S.cfg.mistralKey;
+  if(!key) { showAlert('','',''); go('config'); return; }
+  const text = document.getElementById('an-text').value.trim();
+  if(!text) { alert('Introduce texto para analizar'); return; }
 
-function formatDate(iso) {
-  if (!iso) return '';
-  const d = new Date(iso);
-  return d.toLocaleDateString('es-ES') + ' ' + d.toLocaleTimeString('es-ES', {hour:'2-digit',minute:'2-digit'});
-}
+  const clientId = document.getElementById('an-client').value;
+  const type     = document.getElementById('an-type').value;
+  const client   = S.clients.find(c=>c.id===clientId);
+  const btn      = document.getElementById('an-btn');
+  const result   = document.getElementById('an-result');
 
-// ============================================================
-// ANÁLISIS CON MISTRAL
-// ============================================================
-async function runManualAnalysis() {
-  const key = state.config.mistralKey;
-  if (!key) {
-    showAlert('', 'Configura tu API Key de Mistral primero', 'error');
-    showView('config');
-    return;
-  }
-
-  const clientId = document.getElementById('analysis-client').value;
-  const newsText = document.getElementById('analysis-news').value.trim();
-  const analysisType = document.getElementById('analysis-type').value;
-
-  if (!newsText) { alert('Introduce una noticia o evento para analizar'); return; }
-
-  const client = state.clients.find(c => c.id === clientId);
-  const resultEl = document.getElementById('analysis-result');
-  const btn = document.getElementById('manual-analysis-btn');
-
-  resultEl.innerHTML = `<div class="analysis-block loading"><span class="spinner"></span> Analizando con Mistral AI...</div>`;
+  result.innerHTML = `<div style="display:flex;align-items:center;gap:10px;color:var(--text-muted);padding:20px 0"><span class="spin"></span> Analizando con Mistral AI...</div>`;
   btn.disabled = true;
 
-  const systemPrompt = buildSystemPrompt(client, analysisType);
-
+  const sys = buildPrompt(client, type);
   try {
-    const res = await fetch('https://api.mistral.ai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + key
-      },
+    const r = await fetch('https://api.mistral.ai/v1/chat/completions', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
       body: JSON.stringify({
-        model: state.config.mistralModel || 'mistral-small-latest',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: 'Analiza el siguiente evento:\n\n' + newsText }
-        ],
-        temperature: 0.2,
-        max_tokens: 1500
+        model: S.cfg.mistralModel || 'mistral-small-latest',
+        messages:[{role:'system',content:sys},{role:'user',content:'Analiza:\n\n'+text}],
+        temperature:0.2, max_tokens:1200
       })
     });
-
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.message || 'Error API');
-    }
-
-    const data = await res.json();
-    const text = data.choices[0].message.content;
-
-    resultEl.innerHTML = `<div class="analysis-block">${escapeHtml(text)}</div>`;
-
-    // Save hit if client selected
-    if (client) {
-      const hit = {
-        id: 'h_' + Date.now(),
-        clientId: client.id,
-        clientName: client.name,
-        title: newsText.substring(0, 100) + (newsText.length > 100 ? '...' : ''),
-        description: newsText.substring(0, 200),
-        analysis: text,
-        level: guessLevel(text),
-        date: new Date().toISOString(),
-        source: 'manual'
-      };
-
-      state.hits.unshift(hit);
-      client.lastAnalysis = new Date().toISOString();
-      client.hits = (client.hits || 0) + 1;
-      saveState();
-      updateDashboard();
-    }
-
+    if(!r.ok) throw new Error((await r.json()).message||'Error API');
+    const data  = await r.json();
+    const reply = data.choices[0].message.content;
+    result.innerHTML = `<div style="font-size:11.5px;line-height:1.8;white-space:pre-wrap;color:var(--text-dim)">${esc(reply)}</div>`;
   } catch(e) {
-    resultEl.innerHTML = `<div class="analysis-block" style="color:var(--danger)">Error: ${escapeHtml(e.message)}</div>`;
+    result.innerHTML = `<div style="color:var(--danger);font-size:11px">Error: ${esc(e.message)}</div>`;
   }
-
   btn.disabled = false;
 }
 
-function buildSystemPrompt(client, type) {
-  const baseContext = client
-    ? `Eres un experto en compliance corporativo. Estás analizando la empresa "${client.name}" del sector ${sectorLabel(client.sector)}, con operaciones en ${client.country}, facturación ${client.revenue} y normativa aplicable: ${(client.norms||[]).join(', ')}.
-    
-Contexto del modelo de compliance: ${client.complianceDesc || 'No especificado'}
-Áreas de riesgo conocidas: ${client.risks || 'No especificadas'}`
-    : `Eres un experto en compliance corporativo basado en ISO 37301, UNE 19601 e ISO 37001. Analiza el evento desde una perspectiva general.`;
+function buildPrompt(client, type) {
+  const ctx = client
+    ? `Empresa: "${client.name}" | Sector: ${sectorLabel(client.sector)} | País: ${client.country} | Normas: ${(client.norms||[]).join(', ')}\nCompliance: ${client.complianceDesc||'No especificado'}\nRiesgos conocidos: ${client.risks||'No especificados'}`
+    : `Análisis genérico de compliance corporativo español (ISO 37301, UNE 19601, ISO 37001).`;
 
-  const typeInstructions = {
-    vulnerability: `
-Responde estructurando así:
-1. RELEVANCIA (0-100): Puntuación y justificación breve
-2. RIESGOS IDENTIFICADOS: Lista los riesgos compliance que activa este evento
-3. VULNERABILIDAD: ¿La empresa tiene controles para este riesgo? ¿Serían suficientes?
-4. EXPOSICIÓN ESTIMADA: Nivel de riesgo (CRÍTICO/ALTO/MEDIO/BAJO)
-5. ACCIÓN RECOMENDADA: Pasos inmediatos a tomar`,
-
-    financial: `
-Responde estructurando así:
-1. MULTAS POTENCIALES: Estimación según normativa española vigente
-2. DAÑO REPUTACIONAL: Valoración cualitativa del impacto mediático
-3. COSTE DE REMEDIACIÓN: Estimación de costes para subsanar la brecha
-4. IMPACTO TOTAL ESTIMADO: Rango de pérdida económica potencial`,
-
-    recommendation: `
-Responde estructurando así:
-1. GAP IDENTIFICADO: Brecha entre el evento y los controles actuales
-2. MEJORAS DE CONTROL: Controles nuevos o refuerzos necesarios
-3. PRIORIDAD DE IMPLEMENTACIÓN: Alta/Media/Baja con justificación
-4. DOCUMENTACIÓN NECESARIA: Políticas o procedimientos a crear/actualizar`,
-
-    full: `
-Haz un análisis completo estructurando así:
-1. RELEVANCIA (0-100) con justificación
-2. RIESGOS ACTIVADOS
-3. VULNERABILIDAD vs CONTROLES
-4. IMPACTO FINANCIERO ESTIMADO
-5. RECOMENDACIONES PRIORITARIAS
-6. NIVEL DE ALERTA: CRÍTICO / ALTO / MEDIO / BAJO`
+  const types = {
+    full:           'Análisis completo: relevancia, riesgos, vulnerabilidad vs. controles, impacto financiero y recomendaciones.',
+    vulnerability:  'Analiza la vulnerabilidad: ¿tiene la empresa controles para este riesgo? ¿Son suficientes? ¿Habría parado este evento?',
+    financial:      'Calcula el impacto financiero: multas potenciales según normativa española, daño reputacional y coste de remediación.',
+    recommendation: 'Dame recomendaciones concretas: gaps identificados, controles a implantar, prioridad y documentación necesaria.',
   };
 
-  return baseContext + '\n\n' + (typeInstructions[type] || typeInstructions.full);
+  return `${ctx}\n\n${types[type]||types.full}\n\nResponde en español, de forma estructurada y concisa.`;
 }
 
-function guessLevel(text) {
-  const upper = text.toUpperCase();
-  if (upper.includes('CRÍTICO') || upper.includes('CRITICO') || upper.includes('CRÍTICA')) return 'critical';
-  if (upper.includes('ALTO') || upper.includes('HIGH') || upper.includes('ALERTA')) return 'warning';
-  return 'info';
-}
-
-async function runClientAnalysis(clientId) {
-  const client = state.clients.find(c => c.id === clientId);
-  if (!client) return;
-  showView('analisis');
-  document.getElementById('analysis-client').value = clientId;
-}
-
-async function runAnalysis() {
-  const btn = document.getElementById('run-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Analizando...';
-
-  try {
-    await fetchNewsAndAnalyze();
-  } catch(e) {}
-
-  btn.disabled = false;
-  btn.innerHTML = '⟳ Ejecutar análisis';
-}
-
-async function fetchNewsAndAnalyze() {
-  const key = state.config.mistralKey;
-  if (!key || state.clients.length === 0) return;
-
-  // Fetch BOE RSS (public, no key needed)
-  if (state.config.srcBoe) {
-    try {
-      await fetchBOENews(key);
-    } catch(e) {}
-  }
-
-  // Fetch NewsAPI if key available
-  if (state.config.newsapiKey && state.config.newsapiKey.length > 5) {
-    try {
-      await fetchNewsAPI(key);
-    } catch(e) {}
-  }
-
-  renderHits();
-  updateDashboard();
-}
-
-async function fetchBOENews(mistralKey) {
-  // BOE RSS is public
-  const boeUrl = 'https://www.boe.es/rss/canal.php?s=boe';
-  // Note: Direct fetch may fail due to CORS in browser
-  // In production this runs via backend/GitHub Actions
-  // For demo, we'll show a simulated result
-  simulateNewsHit(mistralKey, 'BOE');
-}
-
-async function fetchNewsAPI(mistralKey) {
-  const q = state.clients.map(c => sectorLabel(c.sector)).join(' OR ') + ' multa compliance';
-  const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(q)}&language=es&sortBy=publishedAt&pageSize=5&apiKey=${state.config.newsapiKey}`;
-
-  const res = await fetch(url);
-  if (!res.ok) return;
-
-  const data = await res.json();
-  for (const article of (data.articles || []).slice(0, 3)) {
-    await analyzeNewsItem(mistralKey, article.title + '. ' + (article.description || ''), 'NewsAPI');
-  }
-}
-
-async function simulateNewsHit(mistralKey, source) {
-  // Demo hit for when APIs aren't set up yet
-  const demoNews = [
-    'La CNMC impone una multa de 2,5 millones a una empresa del sector energético por prácticas anticompetitivas en la contratación con proveedores.',
-    'El Tribunal Supremo confirma condena por corrupción en licitaciones públicas del sector construcción. Pena de inhabilitación de 8 años.',
-    'La AEPD sanciona con 300.000€ a empresa tecnológica por transferencia internacional de datos sin garantías adecuadas bajo el RGPD.'
-  ];
-
-  const news = demoNews[Math.floor(Math.random() * demoNews.length)];
-  await analyzeNewsItem(mistralKey, news, source);
-}
-
-async function analyzeNewsItem(mistralKey, newsText, source) {
-  for (const client of state.clients) {
-    const systemPrompt = buildSystemPrompt(client, 'full');
-
-    const res = await fetch('https://api.mistral.ai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + mistralKey
-      },
-      body: JSON.stringify({
-        model: state.config.mistralModel || 'mistral-small-latest',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: 'Analiza este evento y determina su relevancia y nivel de alerta:\n\n' + newsText }
-        ],
-        temperature: 0.1,
-        max_tokens: 800
-      })
-    });
-
-    if (!res.ok) continue;
-    const data = await res.json();
-    const analysis = data.choices[0].message.content;
-    const level = guessLevel(analysis);
-
-    // Only add if relevant
-    const hit = {
-      id: 'h_' + Date.now() + '_' + client.id,
-      clientId: client.id,
-      clientName: client.name,
-      title: newsText.substring(0, 120),
-      description: newsText,
-      analysis,
-      level,
-      date: new Date().toISOString(),
-      source
-    };
-
-    state.hits.unshift(hit);
-    client.lastAnalysis = new Date().toISOString();
-    client.hits = (client.hits || 0) + 1;
-    client.riskLevel = level === 'critical' ? 'alto' : level === 'warning' ? 'medio' : 'bajo';
-  }
-
-  saveState();
-}
-
-// ============================================================
-// DASHBOARD
-// ============================================================
-function updateDashboard() {
-  document.getElementById('stat-clientes').textContent = state.clients.length;
-  document.getElementById('stat-hits').textContent = state.hits.length;
-
-  const criticals = state.hits.filter(h => h.level === 'critical').length;
-  document.getElementById('stat-criticos').textContent = criticals;
-  document.getElementById('hits-badge').textContent = criticals;
-
-  const savings = state.clients.reduce((sum, c) => sum + (c.savings || 0), 0);
-  document.getElementById('stat-ahorro').textContent = '€' + formatNumber(savings);
-
-  // Table
-  const tbody = document.getElementById('dashboard-table-body');
-  if (state.clients.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:32px;">Sin clientes. Ve a <strong>Clientes</strong> para añadir el primero.</td></tr>`;
-  } else {
-    tbody.innerHTML = state.clients.map(c => `
-      <tr>
-        <td><strong>${c.name}</strong></td>
-        <td>${sectorLabel(c.sector)}</td>
-        <td>${c.lastAnalysis ? formatDate(c.lastAnalysis) : '—'}</td>
-        <td>${c.hits || 0}</td>
-        <td><span class="client-risk risk-${c.riskLevel || 'medio'}">${(c.riskLevel || 'medio').toUpperCase()}</span></td>
-        <td>€${formatNumber(c.savings || 0)}</td>
-      </tr>
-    `).join('');
-  }
-
-  // Dashboard hits preview
-  const dashHits = document.getElementById('dashboard-hits');
-  const recentHits = state.hits.slice(0, 4);
-  if (recentHits.length === 0) {
-    dashHits.innerHTML = `<div class="empty-state"><div class="empty-icon">⟁</div><div class="empty-title">Sin hits detectados</div><div class="empty-desc">Configura las APIs y ejecuta un análisis</div></div>`;
-  } else {
-    dashHits.innerHTML = recentHits.map(h => `
-      <div class="hit-item ${h.level}" style="margin-bottom:6px;">
-        <div class="hit-header">
-          <span class="hit-tag ${h.level}">${levelLabel(h.level)}</span>
-          <span class="hit-date">${formatDate(h.date)}</span>
-        </div>
-        <div class="hit-title">${h.title.substring(0,80)}${h.title.length>80?'...':''}</div>
-      </div>
-    `).join('');
-    document.getElementById('hits-count').textContent = state.hits.length + ' eventos';
-  }
-
-  drawRadar();
-  updateMonitor();
-}
-
-function formatNumber(n) {
-  return n.toLocaleString('es-ES');
-}
-
-// ============================================================
-// RADAR CHART
-// ============================================================
-function drawRadar() {
-  const svg = document.getElementById('radar-svg');
-  const cx = 120, cy = 120, r = 90;
-  const categories = ['Anticorrupción', 'PBC/AML', 'RGPD', 'Laboral', 'Medioamb.', 'Terceros'];
-  const n = categories.length;
-
-  // Generate scores based on clients
-  const scores = categories.map((_, i) => {
-    if (state.clients.length === 0) return 0.3 + Math.random() * 0.3;
-    const criticals = state.hits.filter(h => h.level === 'critical').length;
-    return Math.min(0.9, 0.2 + (criticals * 0.1) + Math.random() * 0.2);
-  });
-
-  const getPoint = (angle, radius) => {
-    const a = angle - Math.PI / 2;
-    return { x: cx + radius * Math.cos(a), y: cy + radius * Math.sin(a) };
-  };
-
-  let html = '';
-
-  // Grid
-  [0.25, 0.5, 0.75, 1].forEach(scale => {
-    const pts = categories.map((_, i) => getPoint(2 * Math.PI * i / n, r * scale));
-    html += `<polygon points="${pts.map(p => `${p.x},${p.y}`).join(' ')}" fill="none" stroke="var(--border)" stroke-width="1"/>`;
-  });
-
-  // Axes + labels
-  categories.forEach((cat, i) => {
-    const pt = getPoint(2 * Math.PI * i / n, r);
-    html += `<line x1="${cx}" y1="${cy}" x2="${pt.x}" y2="${pt.y}" stroke="var(--border)" stroke-width="1"/>`;
-    const lpt = getPoint(2 * Math.PI * i / n, r + 18);
-    html += `<text x="${lpt.x}" y="${lpt.y}" fill="var(--text-muted)" font-size="9" text-anchor="middle" dominant-baseline="middle" font-family="DM Mono">${cat}</text>`;
-  });
-
-  // Data polygon
-  const dataPts = scores.map((s, i) => getPoint(2 * Math.PI * i / n, r * s));
-  html += `<polygon points="${dataPts.map(p => `${p.x},${p.y}`).join(' ')}" fill="rgba(239,68,68,0.15)" stroke="var(--danger)" stroke-width="2"/>`;
-  dataPts.forEach(p => {
-    html += `<circle cx="${p.x}" cy="${p.y}" r="3" fill="var(--danger)"/>`;
-  });
-
-  svg.innerHTML = html;
-}
-
-// ============================================================
-// MONITOR MODE
-// ============================================================
+// ═══════════════════════════════════════════════════════
+// MONITOR
+// ═══════════════════════════════════════════════════════
+let monClock;
 function toggleMonitor() {
-  const m = document.getElementById('monitor-mode');
-  m.classList.toggle('active');
-  if (m.classList.contains('active')) {
-    updateMonitor();
-    startMonitorClock();
-  }
-}
-
-let monitorInterval;
-function startMonitorClock() {
-  clearInterval(monitorInterval);
-  monitorInterval = setInterval(() => {
-    document.getElementById('monitor-time').textContent = new Date().toLocaleString('es-ES');
-  }, 1000);
-}
-
-function updateMonitor() {
-  const criticals = state.hits.filter(h => h.level === 'critical').length;
-  const totalRisk = Math.min(100, 30 + criticals * 15 + state.hits.filter(h => h.level === 'warning').length * 5);
-
-  document.getElementById('monitor-risk').textContent = totalRisk;
-  document.getElementById('monitor-risk-bar').style.width = totalRisk + '%';
-  document.getElementById('monitor-risk-bar').style.background =
-    totalRisk > 70 ? 'var(--danger)' : totalRisk > 40 ? 'var(--warn)' : 'var(--accent)';
-
-  const savings = state.clients.reduce((sum, c) => sum + (c.savings || 0), 0);
-  document.getElementById('monitor-savings').textContent = '€' + formatNumber(savings);
-
-  // Ticker
-  const ticker = document.getElementById('monitor-hits-ticker');
-  if (state.hits.length === 0) {
-    ticker.innerHTML = `<div class="empty-state" style="padding:20px 0;"><div class="empty-desc">Sin hits activos</div></div>`;
+  const m = document.getElementById('monitor');
+  m.classList.toggle('on');
+  if(m.classList.contains('on')) {
+    renderMonitor();
+    monClock = setInterval(()=>{ document.getElementById('monitor-clock').textContent = new Date().toLocaleString('es-ES'); }, 1000);
   } else {
-    ticker.innerHTML = state.hits.slice(0, 8).map(h => `
-      <div class="ticker-item">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-          <span class="hit-tag ${h.level}" style="font-size:9px;">${levelLabel(h.level)}</span>
-          <span style="font-size:10px;color:var(--text-muted);">${h.clientName || ''}</span>
-        </div>
-        <div style="font-size:12px;">${h.title.substring(0, 90)}${h.title.length > 90 ? '...' : ''}</div>
-      </div>
-    `).join('');
-  }
-
-  // Client list in monitor
-  const clientList = document.getElementById('monitor-client-list');
-  if (state.clients.length === 0) {
-    clientList.innerHTML = `<div class="empty-state" style="padding:16px 0;"><div class="empty-desc">Sin clientes</div></div>`;
-  } else {
-    clientList.innerHTML = state.clients.map(c => `
-      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);">
-        <div style="width:30px;height:30px;background:var(--surface2);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:11px;color:var(--accent);">${c.name.substring(0,2).toUpperCase()}</div>
-        <div style="flex:1;">
-          <div style="font-size:12px;font-weight:500;">${c.name}</div>
-          <div style="font-size:10px;color:var(--text-muted);">${sectorLabel(c.sector)}</div>
-        </div>
-        <span class="client-risk risk-${c.riskLevel || 'medio'}" style="font-size:10px;">${(c.riskLevel||'MEDIO').toUpperCase()}</span>
-      </div>
-    `).join('');
+    clearInterval(monClock);
   }
 }
 
-// ============================================================
-// POPULATE ANALYSIS CLIENTS
-// ============================================================
-function populateAnalysisClients() {
-  const el = document.getElementById('analysis-client');
-  el.innerHTML = `<option value="">Sin cliente específico (análisis genérico)</option>`;
-  state.clients.forEach(c => {
-    el.innerHTML += `<option value="${c.id}">${c.name}</option>`;
-  });
+function renderMonitor() {
+  const crits = S.hits.filter(h=>h.level==='critical').length;
+  const warns = S.hits.filter(h=>h.level==='warning').length;
+  const risk  = Math.min(100, 20 + crits*15 + warns*5);
+  document.getElementById('mon-risk').textContent      = risk;
+  document.getElementById('mon-risk-label').textContent= risk>70?'ALTO':risk>40?'MEDIO':'BAJO';
+  document.getElementById('mon-risk-bar').style.width  = risk+'%';
+  document.getElementById('mon-risk-bar').style.background = risk>70?'var(--danger)':risk>40?'var(--warn)':'var(--accent)';
+  document.getElementById('mon-risk').style.color      = risk>70?'var(--danger)':risk>40?'var(--warn)':'var(--accent)';
+
+  const mh = document.getElementById('mon-hits');
+  mh.innerHTML = S.hits.slice(0,7).map(h=>`
+    <div class="ticker-item">
+      <div style="display:flex;gap:7px;align-items:center;margin-bottom:3px">
+        <span class="level-tag ${h.level||'info'}" style="font-size:8px">${levelLabel(h.level)}</span>
+        <span style="font-size:9.5px;color:var(--text-muted)">${fmtDate(h.fetched_at)}</span>
+      </div>
+      <div style="font-size:11.5px">${esc(h.title.slice(0,90))}${h.title.length>90?'...':''}</div>
+    </div>`).join('') || `<div class="empty" style="padding:16px 0"><div class="empty-desc">Sin hits</div></div>`;
+
+  const mc = document.getElementById('mon-clients');
+  mc.innerHTML = S.clients.map(c=>`
+    <div style="display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <div style="width:28px;height:28px;background:var(--surface2);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--font-ui);font-weight:800;font-size:10px;color:var(--accent)">${c.name.slice(0,2).toUpperCase()}</div>
+      <div style="flex:1"><div style="font-size:11.5px;font-weight:500">${c.name}</div><div style="font-size:9.5px;color:var(--text-muted)">${sectorLabel(c.sector)}</div></div>
+      <span class="risk ${c.riskLevel||'medio'}" style="font-size:9.5px">${(c.riskLevel||'medio').toUpperCase()}</span>
+    </div>`).join('') || `<div class="empty" style="padding:16px 0"><div class="empty-desc">Sin clientes</div></div>`;
 }
 
-// ============================================================
-// ALERTS
-// ============================================================
-function showAlert(containerId, message, type) {
-  const types = { success: 'alert-success', error: 'alert-error', warn: 'alert-warn' };
-  const html = `<div class="alert ${types[type]}">${message}</div>`;
-
-  if (containerId) {
+// ═══════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════
+function levelLabel(l) { return {critical:'CRÍTICO',warning:'ALERTA',info:'INFO'}[l]||l||'?'; }
+function sectorLabel(s) {
+  return {financiero:'Financiero',seguros:'Seguros',tecnologia:'Tecnología',salud:'Salud',
+    construccion:'Construcción',energia:'Energía',alimentacion:'Alimentación',
+    transporte:'Transporte',manufactura:'Manufactura',servicios:'Servicios',retail:'Retail',otro:'Otro'}[s]||s||'—';
+}
+function fmtDate(iso) {
+  if(!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit'}) + ' ' + d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+}
+function esc(s='') { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function toggleEye(id) { const e=document.getElementById(id); e.type=e.type==='password'?'text':'password'; }
+function markDirty(section) {
+  const btn = document.getElementById(section+'-save-btn');
+  if(btn && !btn.textContent.includes('*')) btn.textContent += ' *';
+}
+function showAlert(containerId, msg, type) {
+  const map = {ok:'ok',err:'err',warn:'warn'};
+  const html = `<div class="alert ${map[type]||'ok'}">${msg}</div>`;
+  if(containerId) {
     const el = document.getElementById(containerId);
-    if (el) {
-      el.innerHTML = html;
-      setTimeout(() => { el.innerHTML = ''; }, 4000);
-    }
+    if(el) { el.innerHTML=html; setTimeout(()=>{ el.innerHTML=''; },4000); }
   }
 }
 
-// ============================================================
-// UTILS
-// ============================================================
-function escapeHtml(str) {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/\n/g, '<br>');
-}
-
-// ============================================================
+// ═══════════════════════════════════════════════════════
 // INIT
-// ============================================================
-function init() {
-  loadStateFromStorage();
-  renderClients();
-  updateDashboard();
-  updateClientFilters();
+// ═══════════════════════════════════════════════════════
+restore();
+renderAll();
+loadConfig();
 
-  // Date in topbar
-  document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('es-ES', {
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-  });
+// Auto-sync al arrancar
+syncNow();
 
-  // Show config prompt if no API key
-  if (!state.config.mistralKey) {
-    setTimeout(() => {
-      document.getElementById('sidebar-status').textContent = 'API key pendiente';
-    }, 500);
-  }
-
-  drawRadar();
-}
-
-init();
+// Auto-sync cada 30 minutos
+setInterval(syncNow, 30 * 60 * 1000);
 </script>
 </body>
 </html>
