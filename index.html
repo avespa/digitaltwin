@@ -5,1207 +5,1789 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CDT — Compliance Digital Twin</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <style>
-:root {
-  --bg: #070b0f;
-  --surface: #0c1117;
-  --surface2: #111820;
-  --border: #1a2530;
-  --border2: #243040;
-  --accent: #00e5a0;
-  --accent2: #0066ff;
-  --warn: #f59e0b;
-  --danger: #ef4444;
-  --text: #dce8f0;
-  --text-muted: #3d5468;
-  --text-dim: #7a96aa;
-  --font-ui: 'Syne', sans-serif;
-  --font-mono: 'DM Mono', monospace;
+:root{
+  --bg:#070b0f;--surface:#0c1117;--surface2:#111820;--surface3:#161f28;
+  --border:#1a2530;--border2:#243040;
+  --accent:#00e5a0;--accent2:#0066ff;--warn:#f59e0b;--danger:#ef4444;--purple:#8b5cf6;
+  --text:#dce8f0;--text-muted:#3d5468;--text-dim:#7a96aa;
+  --font-ui:'Syne',sans-serif;--font-mono:'DM Mono',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:var(--font-mono);min-height:100vh;overflow-x:hidden}
-body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,229,160,.008) 3px,rgba(0,229,160,.008) 4px);pointer-events:none;z-index:9999}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--font-mono);overflow:hidden}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,229,160,.006) 3px,rgba(0,229,160,.006) 4px);pointer-events:none;z-index:9999}
 
 /* LAYOUT */
-.app{display:flex;min-height:100vh}
+.shell{display:flex;height:100vh;overflow:hidden}
 
 /* SIDEBAR */
-.sidebar{width:210px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100}
-.logo{padding:24px 18px 18px;border-bottom:1px solid var(--border)}
-.logo-name{font-family:var(--font-ui);font-weight:800;font-size:17px;color:var(--accent);display:flex;align-items:center;gap:8px}
-.logo-dot{width:7px;height:7px;background:var(--accent);border-radius:50%;box-shadow:0 0 10px var(--accent);animation:glow 2s infinite}
-@keyframes glow{0%,100%{box-shadow:0 0 6px var(--accent)}50%{box-shadow:0 0 18px var(--accent),0 0 30px rgba(0,229,160,.3)}}
+.sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.logo{padding:22px 18px 16px;border-bottom:1px solid var(--border)}
+.logo-mark{font-family:var(--font-ui);font-weight:800;font-size:18px;color:var(--accent);display:flex;align-items:center;gap:8px}
+.logo-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;box-shadow:0 0 12px var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 6px var(--accent)}50%{box-shadow:0 0 20px var(--accent),0 0 35px rgba(0,229,160,.25)}}
 .logo-sub{font-size:9px;color:var(--text-muted);letter-spacing:2.5px;text-transform:uppercase;margin-top:3px}
-.nav{padding:12px 0;flex:1}
-.nav-sec{padding:10px 18px 3px;font-size:8.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-muted)}
-.nav-item{display:flex;align-items:center;gap:9px;padding:9px 18px;cursor:pointer;font-size:11.5px;color:var(--text-dim);transition:all .15s;border-left:2px solid transparent;user-select:none}
-.nav-item:hover{color:var(--text);background:rgba(0,229,160,.03)}
-.nav-item.active{color:var(--accent);border-left-color:var(--accent);background:rgba(0,229,160,.05)}
-.nav-icon{width:14px;text-align:center;font-size:13px}
-.nav-badge{margin-left:auto;background:var(--danger);color:#fff;font-size:9px;padding:1px 5px;border-radius:8px;min-width:16px;text-align:center}
-.sidebar-foot{padding:14px 18px;border-top:1px solid var(--border);font-size:10px;color:var(--text-muted);display:flex;align-items:center;gap:6px}
-.status-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent);animation:glow 2s infinite;flex-shrink:0}
+.nav{padding:10px 0;flex:1}
+.nav-group{padding:12px 16px 4px;font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-muted)}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 16px;cursor:pointer;font-size:11px;color:var(--text-dim);transition:all .15s;border-left:2px solid transparent;user-select:none;position:relative}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,.02)}
+.nav-item.active{color:var(--accent);border-left-color:var(--accent);background:rgba(0,229,160,.04)}
+.nav-item .icon{width:15px;text-align:center;font-size:12px;flex-shrink:0}
+.nav-badge{margin-left:auto;font-size:9px;padding:1px 5px;border-radius:8px;min-width:16px;text-align:center}
+.nb-danger{background:rgba(239,68,68,.2);color:var(--danger)}
+.nb-warn{background:rgba(245,158,11,.2);color:var(--warn)}
+.nb-accent{background:rgba(0,229,160,.15);color:var(--accent)}
+.sidebar-foot{padding:12px 16px;border-top:1px solid var(--border);font-size:9.5px;color:var(--text-muted)}
+.sync-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:5px;animation:pulse 2s infinite}
 
 /* MAIN */
-.main{margin-left:210px;flex:1;display:flex;flex-direction:column}
-.topbar{height:54px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:12px;position:sticky;top:0;z-index:50}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:52px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 22px;gap:10px;flex-shrink:0}
 .topbar-title{font-family:var(--font-ui);font-weight:700;font-size:14px;flex:1}
-.topbar-sync{font-size:10px;color:var(--text-muted)}
-.content{padding:24px;flex:1}
+.topbar-meta{font-size:10px;color:var(--text-muted)}
+.page{flex:1;overflow-y:auto;padding:22px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:4px;font-family:var(--font-mono);font-size:11px;cursor:pointer;border:1px solid transparent;transition:all .15s;white-space:nowrap;text-decoration:none}
+.btn-primary{background:var(--accent);color:#000;font-weight:500}.btn-primary:hover{background:#00ffb3;box-shadow:0 0 20px rgba(0,229,160,.3)}
+.btn-ghost{background:transparent;color:var(--text-dim);border-color:var(--border)}.btn-ghost:hover{color:var(--text);border-color:var(--border2)}
+.btn-danger{background:transparent;color:var(--danger);border-color:rgba(239,68,68,.3)}.btn-danger:hover{background:rgba(239,68,68,.08)}
+.btn-purple{background:rgba(139,92,246,.15);color:var(--purple);border-color:rgba(139,92,246,.3)}.btn-purple:hover{background:rgba(139,92,246,.25)}
+.btn-warn{background:rgba(245,158,11,.1);color:var(--warn);border-color:rgba(245,158,11,.3)}
+.btn-sm{padding:4px 9px;font-size:10px}
+.btn-xs{padding:2px 7px;font-size:9px}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:18px}
+.card-sm{padding:13px}
+.card-title{font-family:var(--font-ui);font-size:11.5px;font-weight:700;letter-spacing:.3px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card-title-left{display:flex;align-items:center;gap:8px}
+
+/* STATS */
+.kri-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.kri{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px 16px;position:relative;overflow:hidden;cursor:default}
+.kri::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--c,var(--accent))}
+.kri-label{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px}
+.kri-val{font-family:var(--font-ui);font-size:24px;font-weight:800;color:var(--c,var(--accent));line-height:1}
+.kri-sub{font-size:9px;color:var(--text-muted);margin-top:4px}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
+/* FORM */
+.fg{margin-bottom:13px}
+.fl{display:block;font-size:8.5px;letter-spacing:1.8px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px}
+.fi{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:8px 10px;color:var(--text);font-family:var(--font-mono);font-size:11px;transition:border-color .15s;outline:none}
+.fi:focus{border-color:var(--accent)}
+.fi::placeholder{color:var(--text-muted)}
+textarea.fi{resize:vertical;line-height:1.6}
+select.fi{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%233d5468'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;cursor:pointer}
+.fhint{font-size:9px;color:var(--text-muted);margin-top:3px}
+.fsec{font-family:var(--font-ui);font-size:12px;font-weight:700;color:var(--text-dim);margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
 
 /* VIEWS */
 .view{display:none}.view.active{display:block}
 
-/* BTN */
-.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:4px;font-family:var(--font-mono);font-size:11px;cursor:pointer;border:1px solid transparent;transition:all .15s;text-decoration:none;white-space:nowrap}
-.btn-primary{background:var(--accent);color:#000;font-weight:500}.btn-primary:hover{background:#00ffb3;box-shadow:0 0 18px rgba(0,229,160,.35)}
-.btn-ghost{background:transparent;color:var(--text-dim);border-color:var(--border)}.btn-ghost:hover{color:var(--text);border-color:var(--border2)}
-.btn-danger{background:transparent;color:var(--danger);border-color:var(--danger)}.btn-danger:hover{background:rgba(239,68,68,.08)}
-.btn-sm{padding:4px 10px;font-size:10px}
-
-/* CARDS */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:18px}
-.card-title{font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.3px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
-
-/* STATS */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
-.stat{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px 18px;position:relative;overflow:hidden}
-.stat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--c,var(--accent))}
-.stat-label{font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:7px}
-.stat-value{font-family:var(--font-ui);font-size:26px;font-weight:800;color:var(--c,var(--accent));line-height:1}
-.stat-sub{font-size:9.5px;color:var(--text-muted);margin-top:5px}
-
-/* GRID */
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+/* PAGE HEADER */
+.ph{margin-bottom:20px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.ph-left .ph-title{font-family:var(--font-ui);font-size:19px;font-weight:800;margin-bottom:3px}
+.ph-left .ph-sub{font-size:11px;color:var(--text-muted)}
+.ph-actions{display:flex;gap:8px;flex-shrink:0;align-items:flex-start}
 
 /* HITS */
-.hit{border-left:3px solid var(--border);padding:11px 14px;margin-bottom:7px;background:var(--surface);border-radius:0 4px 4px 0;transition:border-color .15s}
-.hit:hover{border-left-color:var(--text-muted)}
+.hit{border-left:3px solid var(--border2);padding:11px 14px;margin-bottom:7px;background:var(--surface);border-radius:0 5px 5px 0;transition:border-color .15s}
 .hit.critical{border-left-color:var(--danger)}
 .hit.warning{border-left-color:var(--warn)}
 .hit.info{border-left-color:var(--accent2)}
-.hit-head{display:flex;align-items:center;gap:7px;margin-bottom:5px}
-.level-tag{font-size:8.5px;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;border-radius:3px;font-weight:600}
-.level-tag.critical{background:rgba(239,68,68,.15);color:var(--danger)}
-.level-tag.warning{background:rgba(245,158,11,.15);color:var(--warn)}
-.level-tag.info{background:rgba(0,102,255,.15);color:var(--accent2)}
-.hit-source{font-size:9.5px;color:var(--text-muted)}
-.hit-date{font-size:9.5px;color:var(--text-muted);margin-left:auto}
+.hit-head{display:flex;align-items:center;gap:7px;margin-bottom:4px;flex-wrap:wrap}
+.tag{font-size:8.5px;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;border-radius:3px;font-weight:600;flex-shrink:0}
+.tag-critical{background:rgba(239,68,68,.15);color:var(--danger)}
+.tag-warning{background:rgba(245,158,11,.15);color:var(--warn)}
+.tag-info{background:rgba(0,102,255,.15);color:var(--accent2)}
+.tag-open{background:rgba(245,158,11,.15);color:var(--warn)}
+.tag-progress{background:rgba(139,92,246,.15);color:var(--purple)}
+.tag-closed{background:rgba(0,229,160,.1);color:var(--accent)}
+.hit-source{font-size:9px;color:var(--text-muted)}
+.hit-date{font-size:9px;color:var(--text-muted);margin-left:auto}
 .hit-title{font-size:11.5px;font-weight:500;margin-bottom:3px;line-height:1.4}
 .hit-summary{font-size:10.5px;color:var(--text-dim);line-height:1.5}
-.hit-detail{margin-top:8px;display:none}
-.hit-detail.open{display:block}
-.hit-detail-item{font-size:10px;color:var(--text-dim);margin-bottom:5px;line-height:1.5}
-.hit-detail-label{font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:2px}
-.score-bar{height:3px;background:var(--border2);border-radius:2px;margin-top:4px}
-.score-fill{height:100%;border-radius:2px;background:var(--accent);transition:width .5s}
+.hit-extra{margin-top:8px;display:none}
+.hit-extra.open{display:block}
+.hit-twin-box{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:10px;margin-top:8px}
+.hit-twin-label{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.hit-detail-row{margin-bottom:6px}
+.hit-detail-label{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:2px}
+.hit-detail-val{font-size:10.5px;color:var(--text-dim);line-height:1.5}
+.score-bar{height:2px;background:var(--border2);border-radius:2px;margin-top:5px}
+.score-fill{height:100%;border-radius:2px;transition:width .5s}
 
-/* FORM */
-.form-group{margin-bottom:14px}
-.form-label{display:block;font-size:9px;letter-spacing:1.8px;text-transform:uppercase;color:var(--text-muted);margin-bottom:5px}
-.form-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:9px 11px;color:var(--text);font-family:var(--font-mono);font-size:11.5px;transition:border-color .15s;outline:none}
-.form-input:focus{border-color:var(--accent)}
-.form-input::placeholder{color:var(--text-muted)}
-select.form-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%233d5468'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;cursor:pointer}
-textarea.form-input{resize:vertical;line-height:1.6;min-height:70px}
-.form-hint{font-size:9.5px;color:var(--text-muted);margin-top:3px}
-input[type="password"].form-input{letter-spacing:3px}
+/* RADAR */
+.radar-wrap{display:flex;align-items:center;gap:24px}
+.radar-legend{flex:1}
+.dim-row{display:flex;align-items:center;gap:8px;margin-bottom:9px;cursor:pointer;padding:5px 8px;border-radius:4px;transition:background .15s}
+.dim-row:hover{background:rgba(255,255,255,.03)}
+.dim-label{flex:1;font-size:11px;color:var(--text-dim)}
+.dim-score{font-family:var(--font-ui);font-weight:700;font-size:12px;color:var(--accent);min-width:32px;text-align:right}
+.dim-bar{height:3px;background:var(--border2);border-radius:2px;margin-top:2px}
+.dim-fill{height:100%;border-radius:2px;background:var(--accent);transition:width .6s}
 
-/* API KEY FIELD */
-.key-wrap{position:relative}
-.key-wrap .form-input{padding-right:36px}
-.key-eye{position:absolute;right:9px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:13px;padding:2px}
-.key-eye:hover{color:var(--text)}
-.api-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;padding:2px 7px;border-radius:8px;margin-left:8px}
-.api-badge.ok{background:rgba(0,229,160,.1);color:var(--accent)}
-.api-badge.err{background:rgba(239,68,68,.1);color:var(--danger)}
-.api-badge.pend{background:rgba(245,158,11,.1);color:var(--warn)}
+/* MATURITY ELEMENT */
+.mel{background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:12px;margin-bottom:8px}
+.mel-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.mel-name{flex:1;font-size:11px;font-weight:500}
+.mel-score-wrap{display:flex;align-items:center;gap:6px}
+.score-btn{width:26px;height:26px;border-radius:4px;border:1px solid var(--border2);background:var(--surface2);color:var(--text-muted);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:var(--font-mono)}
+.score-btn:hover{border-color:var(--accent);color:var(--accent)}
+.score-btn.active{background:var(--accent);color:#000;border-color:var(--accent);font-weight:700}
+.mel-evidence{width:100%;margin-top:6px}
+.mel-actions{display:flex;gap:5px;margin-top:6px}
 
-/* CONFIG SECTIONS */
-.config-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+/* ACTION PLANS */
+.ap{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:13px;margin-bottom:8px}
+.ap-head{display:flex;align-items:flex-start;gap:8px;margin-bottom:7px}
+.ap-title{flex:1;font-size:11.5px;font-weight:500;line-height:1.4}
+.ap-meta{font-size:9.5px;color:var(--text-muted);display:flex;gap:10px;flex-wrap:wrap;margin-bottom:7px}
+.ap-progress{margin-top:8px}
+.ap-steps{margin-top:6px}
+.ap-step{display:flex;align-items:flex-start;gap:7px;padding:5px 0;border-bottom:1px solid var(--border);font-size:10.5px;color:var(--text-dim)}
+.ap-step:last-child{border-bottom:none}
+.ap-step-check{width:14px;height:14px;border:1px solid var(--border2);border-radius:3px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.ap-step-check.done{background:var(--accent);border-color:var(--accent);color:#000;font-size:9px}
 
-/* QUERY LIST */
-.query-item{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:4px;margin-bottom:6px;font-size:10.5px;line-height:1.5;color:var(--text-dim)}
-.query-num{color:var(--accent);font-weight:600;flex-shrink:0;font-size:10px;margin-top:1px}
-.query-text{flex:1;word-break:break-word}
-.query-del{flex-shrink:0;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:14px;padding:0 2px;line-height:1}
-.query-del:hover{color:var(--danger)}
+/* TWIN SUMMARY */
+.twin-summary-box{background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:14px;font-size:11px;color:var(--text-dim);line-height:1.8;white-space:pre-wrap;min-height:120px}
 
-/* KEYWORD TAGS */
-.kw-wrap{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
-.kw-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 8px;border-radius:3px;background:var(--surface2);border:1px solid var(--border);color:var(--text-dim)}
-.kw-tag button{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:12px;padding:0;line-height:1}.kw-tag button:hover{color:var(--danger)}
-.kw-add-row{display:flex;gap:6px}
-
-/* RSS SOURCE LIST */
-.rss-item{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--border);font-size:11px}
-.rss-item:last-child{border-bottom:none}
-.rss-toggle{width:32px;height:18px;background:var(--border2);border-radius:9px;cursor:pointer;position:relative;transition:background .2s;border:none;flex-shrink:0}
-.rss-toggle.on{background:var(--accent)}
-.rss-toggle::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;background:#fff;border-radius:50%;transition:left .2s}
-.rss-toggle.on::after{left:16px}
-.rss-name{flex:1;color:var(--text-dim)}
-.rss-name.on{color:var(--text)}
-
-/* SECTION HEADER */
-.sec-head{margin-bottom:20px}
-.sec-title{font-family:var(--font-ui);font-size:17px;font-weight:800;margin-bottom:3px}
-.sec-sub{font-size:11px;color:var(--text-muted)}
-
-/* TABLE */
-.tbl{width:100%;border-collapse:collapse;font-size:11px}
-.tbl th{text-align:left;padding:7px 11px;font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border)}
-.tbl td{padding:11px;border-bottom:1px solid rgba(26,37,48,.6)}
-.tbl tr:hover td{background:rgba(0,229,160,.015)}
-
-/* RISK BADGE */
-.risk{font-size:10px;font-weight:600;padding:2px 8px;border-radius:3px}
-.risk.alto{background:rgba(239,68,68,.15);color:var(--danger)}
-.risk.medio{background:rgba(245,158,11,.15);color:var(--warn)}
-.risk.bajo{background:rgba(0,229,160,.15);color:var(--accent)}
-
-/* EMPTY */
-.empty{text-align:center;padding:40px 20px;color:var(--text-muted)}
-.empty-icon{font-size:28px;margin-bottom:10px}
-.empty-title{font-family:var(--font-ui);font-size:13px;color:var(--text-dim);margin-bottom:5px}
-.empty-desc{font-size:10.5px}
+/* HISTORY */
+.hist-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:10.5px}
+.hist-item:last-child{border-bottom:none}
+.hist-date{color:var(--text-muted);flex-shrink:0;font-size:9.5px;min-width:100px}
+.hist-score{color:var(--accent);font-weight:600;min-width:40px}
+.hist-note{flex:1;color:var(--text-dim)}
 
 /* ALERT */
-.alert{padding:9px 13px;border-radius:4px;font-size:11px;margin-bottom:14px;display:flex;align-items:center;gap:7px}
-.alert.ok{background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.2);color:var(--accent)}
-.alert.err{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--danger)}
-.alert.warn{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);color:var(--warn)}
-
-/* DIVIDER */
-hr.div{border:none;border-top:1px solid var(--border);margin:18px 0}
-
-/* SPINNER */
-.spin{width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:rotate .6s linear infinite;display:inline-block}
-@keyframes rotate{to{transform:rotate(360deg)}}
+.alert{padding:9px 13px;border-radius:4px;font-size:11px;margin-bottom:13px;display:flex;align-items:flex-start;gap:7px;line-height:1.5}
+.alert-ok{background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.2);color:var(--accent)}
+.alert-err{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--danger)}
+.alert-warn{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);color:var(--warn)}
+.alert-info{background:rgba(0,102,255,.08);border:1px solid rgba(0,102,255,.2);color:var(--accent2)}
 
 /* MODAL */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(3px);z-index:1000;align-items:center;justify-content:center}
-.modal-bg.open{display:flex}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px;width:580px;max-height:88vh;overflow-y:auto;position:relative}
-.modal-title{font-family:var(--font-ui);font-size:15px;font-weight:700;margin-bottom:18px;padding-right:24px}
-.modal-x{position:absolute;top:18px;right:18px;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:17px}.modal-x:hover{color:var(--text)}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);z-index:500;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px;width:640px;max-height:90vh;overflow-y:auto;position:relative}
+.modal-lg{width:820px}
+.modal-title{font-family:var(--font-ui);font-size:15px;font-weight:700;margin-bottom:18px;padding-right:28px}
+.modal-x{position:absolute;top:18px;right:18px;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:17px;line-height:1}
+.modal-x:hover{color:var(--text)}
 
-/* MONITOR */
-.monitor{position:fixed;inset:0;background:var(--bg);z-index:2000;display:none;flex-direction:column;padding:28px}
-.monitor.on{display:flex}
-.monitor-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
-.monitor-logo{font-family:var(--font-ui);font-weight:800;font-size:20px;color:var(--accent);display:flex;align-items:center;gap:10px}
-.monitor-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;flex:1}
-.monitor-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:22px;display:flex;flex-direction:column}
-.monitor-label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px}
-.monitor-big{font-family:var(--font-ui);font-size:66px;font-weight:800;line-height:1}
-.ticker-item{padding:9px 0;border-bottom:1px solid var(--border);animation:fadein .3s}
-@keyframes fadein{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
-
-/* SCROLLBAR */
-::-webkit-scrollbar{width:3px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+/* BRIEF */
+.brief-page{background:#fff;color:#111;padding:40px;font-family:Georgia,serif;font-size:12px;line-height:1.6;max-width:780px;margin:0 auto}
+.brief-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;padding-bottom:16px;border-bottom:2px solid #000}
+.brief-logo{font-size:22px;font-weight:900;letter-spacing:-1px}
+.brief-date{font-size:10px;color:#666;text-align:right}
+.brief-h1{font-size:18px;font-weight:700;margin-bottom:6px}
+.brief-h2{font-size:13px;font-weight:700;margin:20px 0 8px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #ddd;padding-bottom:4px}
+.brief-kri-row{display:flex;gap:16px;margin-bottom:20px}
+.brief-kri{flex:1;border:1px solid #ddd;padding:12px;border-radius:4px;text-align:center}
+.brief-kri-val{font-size:28px;font-weight:900;margin-bottom:3px}
+.brief-kri-label{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#666}
 
 /* UTILS */
-.flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-8{gap:8px}.gap-12{gap:12px}.mt-8{margin-top:8px}.mt-14{margin-top:14px}.mt-18{margin-top:18px}.mb-14{margin-bottom:14px}.text-muted{color:var(--text-muted);font-size:10.5px}.text-accent{color:var(--accent)}
+.flex{display:flex}.ic{align-items:center}.jb{justify-content:space-between}.gap6{gap:6px}.gap8{gap:8px}.gap12{gap:12px}
+.mt6{margin-top:6px}.mt10{margin-top:10px}.mt14{margin-top:14px}.mt18{margin-top:18px}.mb8{margin-bottom:8px}.mb14{margin-bottom:14px}
+.text-muted{color:var(--text-muted)}.text-dim{color:var(--text-dim)}.text-accent{color:var(--accent)}.text-danger{color:var(--danger)}.text-warn{color:var(--warn)}
+.mono{font-family:var(--font-mono)}.ui{font-family:var(--font-ui)}
+.divider{border:none;border-top:1px solid var(--border);margin:16px 0}
+.empty{text-align:center;padding:36px 16px;color:var(--text-muted)}
+.empty-icon{font-size:26px;margin-bottom:8px}
+.empty-title{font-family:var(--font-ui);font-size:12px;color:var(--text-dim);margin-bottom:4px}
+.empty-sub{font-size:10px}
+.spin{width:13px;height:13px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:rotate .6s linear infinite;display:inline-block;flex-shrink:0}
+@keyframes rotate{to{transform:rotate(360deg)}}
+code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5px;color:var(--accent)}
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 </style>
 </head>
 <body>
-<div class="app">
+<div class="shell">
 
 <!-- SIDEBAR -->
 <nav class="sidebar">
   <div class="logo">
-    <div class="logo-name"><span class="logo-dot"></span>CDT</div>
+    <div class="logo-mark"><span class="logo-dot"></span>CDT</div>
     <div class="logo-sub">Compliance Digital Twin</div>
   </div>
   <div class="nav">
-    <div class="nav-sec">Principal</div>
-    <div class="nav-item active" onclick="go('dashboard')"><span class="nav-icon">◈</span>Dashboard</div>
-    <div class="nav-item" onclick="go('clientes')"><span class="nav-icon">◎</span>Clientes</div>
-    <div class="nav-sec" style="margin-top:10px">Monitor</div>
-    <div class="nav-item" onclick="go('hits')"><span class="nav-icon">⟁</span>Hits Detectados<span class="nav-badge" id="badge-hits">0</span></div>
-    <div class="nav-item" onclick="go('analisis')"><span class="nav-icon">◉</span>Análisis IA</div>
-    <div class="nav-sec" style="margin-top:10px">Sistema</div>
-    <div class="nav-item" onclick="go('fuentes')"><span class="nav-icon">📡</span>Fuentes & Búsquedas</div>
-    <div class="nav-item" onclick="go('config')"><span class="nav-icon">⚙</span>Configuración APIs</div>
-    <div class="nav-item" onclick="toggleMonitor()"><span class="nav-icon">▣</span>Modo Pantalla</div>
+    <div class="nav-group">◈ Mi Digital Twin</div>
+    <div class="nav-item active" data-view="dashboard" onclick="go('dashboard')"><span class="icon">◈</span>Dashboard & KRIs</div>
+    <div class="nav-item" data-view="contexto" onclick="go('contexto')"><span class="icon">⬡</span>Contexto Organizacional</div>
+    <div class="nav-item" data-view="madurez" onclick="go('madurez')"><span class="icon">◎</span>Assessment de Madurez</div>
+    <div class="nav-item" data-view="twin-summary" onclick="go('twin-summary')"><span class="icon">✦</span>Resumen Ejecutivo Twin</div>
+
+    <div class="nav-group" style="margin-top:10px">⟁ Monitor Activo</div>
+    <div class="nav-item" data-view="hits" onclick="go('hits')"><span class="icon">⚡</span>Hits Detectados<span class="nav-badge nb-danger" id="badge-hits">0</span></div>
+    <div class="nav-item" data-view="planes" onclick="go('planes')"><span class="icon">◉</span>Planes de Acción<span class="nav-badge nb-warn" id="badge-planes">0</span></div>
+    <div class="nav-item" data-view="brief" onclick="go('brief')"><span class="icon">▤</span>Brief Ejecutivo</div>
+    <div class="nav-item" data-view="fuentes" onclick="go('fuentes')"><span class="icon">📡</span>Fuentes & Búsquedas</div>
+
+    <div class="nav-group" style="margin-top:10px">⚙ Sistema</div>
+    <div class="nav-item" data-view="analisis" onclick="go('analisis')"><span class="icon">◉</span>Análisis Manual IA</div>
+    <div class="nav-item" data-view="config" onclick="go('config')"><span class="icon">⚙</span>Configuración APIs</div>
   </div>
-  <div class="sidebar-foot"><span class="status-dot"></span><span id="foot-status">Cargando...</span></div>
+  <div class="sidebar-foot">
+    <span class="sync-dot"></span><span id="foot-status">Iniciando...</span>
+  </div>
 </nav>
 
 <!-- MAIN -->
 <div class="main">
   <div class="topbar">
-    <div class="topbar-title" id="topbar-title">Dashboard</div>
-    <div class="topbar-sync" id="topbar-sync"></div>
-    <button class="btn btn-ghost" onclick="syncNow()" id="sync-btn">⟳ Sincronizar</button>
-    <button class="btn btn-primary" onclick="go('analisis')">+ Análisis manual</button>
+    <div class="topbar-title" id="tb-title">Dashboard & KRIs</div>
+    <div class="topbar-meta" id="tb-meta"></div>
+    <button class="btn btn-ghost" onclick="syncAll()" id="sync-btn">⟳ Sync</button>
+    <button class="btn btn-primary" onclick="go('analisis')">+ Análisis</button>
   </div>
 
-  <div class="content">
+  <div class="page">
 
-    <!-- DASHBOARD -->
-    <div class="view active" id="view-dashboard">
-      <div class="stats-grid">
-        <div class="stat" style="--c:var(--accent)"><div class="stat-label">Clientes activos</div><div class="stat-value" id="s-clientes">0</div><div class="stat-sub">en seguimiento</div></div>
-        <div class="stat" style="--c:var(--warn)"><div class="stat-label">Hits totales</div><div class="stat-value" id="s-hits">0</div><div class="stat-sub">eventos analizados</div></div>
-        <div class="stat" style="--c:var(--danger)"><div class="stat-label">Críticos</div><div class="stat-value" id="s-criticos">0</div><div class="stat-sub">alertas activas</div></div>
-        <div class="stat" style="--c:var(--accent2)"><div class="stat-label">Última sync</div><div class="stat-value" style="font-size:14px;margin-top:4px" id="s-sync">—</div><div class="stat-sub">actualización</div></div>
-      </div>
+  <!-- DASHBOARD -->
+  <div class="view active" id="view-dashboard">
+    <div id="twin-disclaimer"></div>
+    <div class="kri-grid">
+      <div class="kri" style="--c:var(--accent)"><div class="kri-label">Madurez Global</div><div class="kri-val" id="kri-madurez">—</div><div class="kri-sub">/5.0 puntos</div></div>
+      <div class="kri" style="--c:var(--danger)"><div class="kri-label">Hits Críticos</div><div class="kri-val" id="kri-criticos">0</div><div class="kri-sub">sin plan de acción</div></div>
+      <div class="kri" style="--c:var(--warn)"><div class="kri-label">Planes Abiertos</div><div class="kri-val" id="kri-planes">0</div><div class="kri-sub">requieren atención</div></div>
+      <div class="kri" style="--c:var(--accent2)"><div class="kri-label">Última Sync</div><div class="kri-val" style="font-size:14px;padding-top:4px" id="kri-sync">—</div><div class="kri-sub">actualización hits</div></div>
+    </div>
 
-      <div class="grid-2" style="gap:18px;margin-bottom:18px">
-        <div class="card">
-          <div class="card-title">Últimos Hits <span class="text-muted" id="dash-hits-count"></span></div>
-          <div id="dash-hits-list"></div>
-        </div>
-        <div class="card">
-          <div class="card-title">Estado por cliente</div>
-          <table class="tbl" id="dash-clients-tbl">
-            <thead><tr><th>Cliente</th><th>Sector</th><th>Hits</th><th>Riesgo</th></tr></thead>
-            <tbody id="dash-clients-body"></tbody>
-          </table>
-        </div>
-      </div>
-
+    <div class="g2" style="margin-bottom:16px">
       <div class="card">
-        <div class="card-title">Fuentes activas <span class="text-muted" id="dash-sources-count"></span></div>
-        <div id="dash-sources-list" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+        <div class="card-title"><span class="card-title-left">📡 Radar de Madurez</span><button class="btn btn-ghost btn-xs" onclick="go('madurez')">Ver detalle →</button></div>
+        <div class="radar-wrap">
+          <canvas id="radar-dash" width="200" height="200"></canvas>
+          <div class="radar-legend" id="radar-legend-dash"></div>
+        </div>
+        <div id="dash-narrative" style="margin-top:12px;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:4px;font-size:10.5px;color:var(--text-dim);line-height:1.6"></div>
       </div>
-    </div>
-
-    <!-- CLIENTES -->
-    <div class="view" id="view-clientes">
-      <div class="flex items-center justify-between mb-14">
-        <div class="sec-head" style="margin-bottom:0"><div class="sec-title">Clientes</div><div class="sec-sub">Perfiles empresariales en seguimiento</div></div>
-        <button class="btn btn-primary" onclick="openClientModal()">+ Nuevo cliente</button>
-      </div>
-      <div id="clients-list"></div>
-    </div>
-
-    <!-- HITS -->
-    <div class="view" id="view-hits">
-      <div class="flex items-center justify-between mb-14">
-        <div class="sec-head" style="margin-bottom:0"><div class="sec-title">Hits Detectados</div><div class="sec-sub">Eventos relevantes analizados por IA</div></div>
-        <div class="flex gap-8">
-          <select class="form-input" style="width:160px" id="filter-level" onchange="renderHits()">
-            <option value="">Todos los niveles</option>
-            <option value="critical">Crítico</option>
-            <option value="warning">Alerta</option>
-            <option value="info">Info</option>
-          </select>
-          <select class="form-input" style="width:180px" id="filter-source" onchange="renderHits()">
-            <option value="">Todas las fuentes</option>
-          </select>
-        </div>
-      </div>
-      <div id="hits-list"></div>
-    </div>
-
-    <!-- ANÁLISIS MANUAL -->
-    <div class="view" id="view-analisis">
-      <div class="sec-head"><div class="sec-title">Análisis IA Manual</div><div class="sec-sub">Analiza cualquier noticia o sentencia con el motor de IA</div></div>
-      <div class="grid-2" style="align-items:start;gap:18px">
-        <div class="card">
-          <div class="card-title">Consulta</div>
-          <div class="form-group">
-            <label class="form-label">Cliente (contexto)</label>
-            <select class="form-input" id="an-client"><option value="">Análisis genérico (sin cliente)</option></select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Noticia / sentencia / evento</label>
-            <textarea class="form-input" id="an-text" rows="6" placeholder="Pega aquí el texto de la noticia, sentencia o evento a analizar..."></textarea>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Tipo de análisis</label>
-            <select class="form-input" id="an-type">
-              <option value="full">Análisis completo</option>
-              <option value="vulnerability">Vulnerabilidad vs. controles</option>
-              <option value="financial">Impacto financiero</option>
-              <option value="recommendation">Recomendaciones de mejora</option>
-            </select>
-          </div>
-          <button class="btn btn-primary" style="width:100%" onclick="runManual()" id="an-btn">Analizar con Mistral →</button>
-        </div>
-        <div class="card">
-          <div class="card-title">Resultado</div>
-          <div id="an-result"><div class="empty"><div class="empty-icon">◉</div><div class="empty-title">Esperando análisis</div><div class="empty-desc">El resultado aparecerá aquí</div></div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- FUENTES & BÚSQUEDAS -->
-    <div class="view" id="view-fuentes">
-      <div class="sec-head"><div class="sec-title">Fuentes & Búsquedas</div><div class="sec-sub">Configura qué monitoriza el sistema cada 3 horas</div></div>
-      <div id="fuentes-alert"></div>
-
-      <div class="grid-2" style="align-items:start;gap:16px">
-
-        <!-- QUERIES NEWSAPI -->
-        <div class="card">
-          <div class="card-title">Queries NewsAPI <span class="text-muted" id="queries-count"></span></div>
-          <div class="form-hint" style="margin-bottom:12px">Cada query se lanza como búsqueda independiente. Usa OR, AND y comillas para frases exactas.</div>
-          <div id="queries-list"></div>
-          <div style="margin-top:10px">
-            <textarea class="form-input" id="new-query" rows="2" placeholder='Ej: ("fraude fiscal" OR "evasión") AND España'></textarea>
-            <button class="btn btn-ghost btn-sm" style="margin-top:6px;width:100%" onclick="addQuery()">+ Añadir query</button>
-          </div>
-
-          <hr class="div">
-
-          <div class="form-group">
-            <label class="form-label">Medios específicos (opcional)</label>
-            <input type="text" class="form-input" id="newsapi-sources" placeholder="el-mundo,expansion,cincodias (vacío = todos)">
-            <div class="form-hint">Nombres de fuentes NewsAPI separados por comas. Vacío = todos los medios en español.</div>
-          </div>
-        </div>
-
-        <!-- RSS + KEYWORDS -->
-        <div>
-          <div class="card" style="margin-bottom:16px">
-            <div class="card-title">Fuentes RSS activas</div>
-            <div id="rss-list"></div>
-          </div>
-
-          <div class="card">
-            <div class="card-title">Keywords adicionales</div>
-            <div class="form-hint" style="margin-bottom:10px">Palabras clave para el filtro previo de artículos del BOE y otras fuentes RSS.</div>
-            <div class="kw-wrap" id="kw-list"></div>
-            <div class="kw-add-row">
-              <input type="text" class="form-input" id="new-kw" placeholder="Nueva keyword..." onkeydown="if(event.key==='Enter')addKw()">
-              <button class="btn btn-ghost btn-sm" onclick="addKw()">+ Añadir</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex gap-8 mt-18" style="justify-content:flex-end">
-        <button class="btn btn-ghost" onclick="loadFuentesFromConfig()">Descartar cambios</button>
-        <button class="btn btn-primary" onclick="saveFuentes()" id="fuentes-save-btn">Guardar configuración</button>
-      </div>
-
-      <div class="card mt-18">
-        <div class="card-title">ℹ️ Cómo aplicar los cambios</div>
-        <div style="font-size:11px;color:var(--text-dim);line-height:1.8">
-          1. Guarda la configuración aquí → se actualiza <code style="color:var(--accent)">data/config.json</code> en tu repositorio GitHub.<br>
-          2. Ve a GitHub → Actions → <strong>CDT — Fetch & Analyze</strong> → <strong>Run workflow</strong> para aplicarlo inmediatamente.<br>
-          3. O espera hasta la próxima ejecución automática (cada 3 horas).
-        </div>
-      </div>
-    </div>
-
-    <!-- CONFIG APIs -->
-    <div class="view" id="view-config">
-      <div class="sec-head"><div class="sec-title">Configuración APIs</div><div class="sec-sub">Claves de acceso a los servicios externos</div></div>
-      <div id="config-alert"></div>
-      <div class="config-grid">
-        <div class="card">
-          <div class="card-title">🤖 Mistral AI</div>
-          <div class="form-group">
-            <label class="form-label">API Key <span class="api-badge pend" id="badge-mistral">● sin verificar</span></label>
-            <div class="key-wrap"><input type="password" class="form-input" id="mistral-key" placeholder="sk-..." oninput="markDirty('config')"><button class="key-eye" onclick="toggleEye('mistral-key')">👁</button></div>
-            <div class="form-hint"><a href="https://console.mistral.ai" target="_blank" style="color:var(--accent)">console.mistral.ai</a></div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Modelo</label>
-            <select class="form-input" id="mistral-model" oninput="markDirty('config')">
-              <option value="mistral-small-latest">mistral-small (gratuito, rápido)</option>
-              <option value="mistral-medium-latest">mistral-medium</option>
-              <option value="mistral-large-latest">mistral-large (más preciso)</option>
-            </select>
-          </div>
-          <button class="btn btn-ghost" style="width:100%" onclick="testMistral()">Verificar conexión</button>
-        </div>
-
-        <div class="card">
-          <div class="card-title">📰 NewsAPI</div>
-          <div class="form-group">
-            <label class="form-label">API Key <span class="api-badge pend" id="badge-newsapi">● sin verificar</span></label>
-            <div class="key-wrap"><input type="password" class="form-input" id="newsapi-key" placeholder="..." oninput="markDirty('config')"><button class="key-eye" onclick="toggleEye('newsapi-key')">👁</button></div>
-            <div class="form-hint">Tier gratuito: 100 req/día — <a href="https://newsapi.org" target="_blank" style="color:var(--accent)">newsapi.org</a></div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title">🗃 Pinecone</div>
-          <div class="form-group">
-            <label class="form-label">API Key</label>
-            <div class="key-wrap"><input type="password" class="form-input" id="pinecone-key" placeholder="..." oninput="markDirty('config')"><button class="key-eye" onclick="toggleEye('pinecone-key')">👁</button></div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Nombre del índice</label>
-            <input type="text" class="form-input" id="pinecone-index" placeholder="digitaltwin" oninput="markDirty('config')">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Region</label>
-            <input type="text" class="form-input" id="pinecone-env" placeholder="us-east-1" oninput="markDirty('config')">
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title">🔥 Firebase</div>
-          <div class="form-group">
-            <label class="form-label">Project ID</label>
-            <input type="text" class="form-input" id="fb-project" placeholder="digitaltwin-21a64" oninput="markDirty('config')">
-          </div>
-          <div class="form-group">
-            <label class="form-label">API Key</label>
-            <div class="key-wrap"><input type="password" class="form-input" id="fb-key" placeholder="AIza..." oninput="markDirty('config')"><button class="key-eye" onclick="toggleEye('fb-key')">👁</button></div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Auth Domain</label>
-            <input type="text" class="form-input" id="fb-domain" placeholder="proyecto.firebaseapp.com" oninput="markDirty('config')">
-          </div>
-        </div>
-      </div>
-
-      <hr class="div">
       <div class="card">
-        <div class="card-title">⚙ Parámetros del sistema</div>
-        <div class="grid-3">
-          <div class="form-group">
-            <label class="form-label">Umbral de relevancia (0-100)</label>
-            <input type="number" class="form-input" id="threshold" value="60" min="0" max="100" oninput="markDirty('config')">
-            <div class="form-hint">Mínimo score IA para publicar un hit</div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Modelo Mistral por defecto</label>
-            <select class="form-input" id="mistral-model2" oninput="markDirty('config')">
-              <option value="mistral-small-latest">mistral-small</option>
-              <option value="mistral-large-latest">mistral-large</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Repo GitHub</label>
-            <input type="text" class="form-input" id="gh-repo" placeholder="avespa/digitaltwin" oninput="markDirty('config');updateRepoUrl()">
-            <div class="form-hint">usuario/repositorio</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex gap-8 mt-18" style="justify-content:flex-end">
-        <button class="btn btn-ghost" onclick="loadConfig()">Descartar</button>
-        <button class="btn btn-primary" onclick="saveConfig()" id="config-save-btn">Guardar configuración</button>
+        <div class="card-title"><span class="card-title-left">⚡ Últimos Hits</span><button class="btn btn-ghost btn-xs" onclick="go('hits')">Ver todos →</button></div>
+        <div id="dash-hits"></div>
       </div>
     </div>
 
-  </div><!-- /content -->
+    <div class="card">
+      <div class="card-title"><span class="card-title-left">◉ Planes de Acción Activos</span><button class="btn btn-ghost btn-xs" onclick="go('planes')">Ver todos →</button></div>
+      <div id="dash-planes"></div>
+    </div>
+  </div>
+
+  <!-- CONTEXTO ORGANIZACIONAL -->
+  <div class="view" id="view-contexto">
+    <div class="ph">
+      <div class="ph-left"><div class="ph-title">Contexto Organizacional</div><div class="ph-sub">ISO 37301 §4.1-4.2 — Define el modelo base de tu Digital Twin</div></div>
+      <div class="ph-actions">
+        <button class="btn btn-purple" onclick="openDocAnalysis('contexto')">📄 Analizar documento</button>
+        <button class="btn btn-ghost" onclick="loadContexto()">Descartar</button>
+        <button class="btn btn-primary" onclick="saveContexto()">Guardar →</button>
+      </div>
+    </div>
+    <div id="ctx-alert"></div>
+
+    <div class="g2" style="align-items:start">
+      <div>
+        <div class="fsec">§4.1 Identificación de la Organización</div>
+        <div class="fg"><label class="fl">Nombre legal de la organización *</label><input type="text" class="fi" id="ctx-name" placeholder="Empresa S.A."></div>
+        <div class="g2">
+          <div class="fg"><label class="fl">Sector *</label>
+            <select class="fi" id="ctx-sector">
+              <option value="">Selecciona...</option>
+              <option>Financiero / Banca</option><option>Seguros</option><option>Tecnología / Digital</option>
+              <option>Salud / Farmacia</option><option>Energía / Utilities</option><option>Construcción / Real Estate</option>
+              <option>Alimentación / FMCG</option><option>Manufactura / Industrial</option>
+              <option>Transporte / Logística</option><option>Servicios Profesionales</option>
+              <option>Retail</option><option>Administración Pública</option><option>Otro</option>
+            </select>
+          </div>
+          <div class="fg"><label class="fl">Tamaño</label>
+            <select class="fi" id="ctx-size">
+              <option>Microempresa (&lt;10 empleados)</option><option>Pequeña (10-49)</option>
+              <option>Mediana (50-249)</option><option>Grande (250-999)</option><option>Corporación (1000+)</option>
+            </select>
+          </div>
+        </div>
+        <div class="g2">
+          <div class="fg"><label class="fl">Facturación anual</label>
+            <select class="fi" id="ctx-revenue">
+              <option>&lt; 2M €</option><option>2-10M €</option><option>10-50M €</option>
+              <option>50-250M €</option><option>250M-1B €</option><option>&gt; 1B €</option>
+            </select>
+          </div>
+          <div class="fg"><label class="fl">Ámbito geográfico</label>
+            <select class="fi" id="ctx-geo">
+              <option>Local / Regional</option><option>España</option><option>España + Portugal</option>
+              <option>España + LATAM</option><option>Unión Europea</option><option>Global</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg"><label class="fl">Descripción del modelo de negocio *</label>
+          <textarea class="fi" id="ctx-business" rows="3" placeholder="Qué hace la empresa, cómo genera valor, cadena de valor principal..."></textarea>
+        </div>
+        <div class="fg"><label class="fl">Estrategia y objetivos principales</label>
+          <textarea class="fi" id="ctx-strategy" rows="2" placeholder="Dirección estratégica, planes de expansión, digitalización..."></textarea>
+        </div>
+
+        <div class="fsec">§4.1 Contexto Externo</div>
+        <div class="fg"><label class="fl">Marco legal y regulatorio aplicable</label>
+          <textarea class="fi" id="ctx-legal" rows="3" placeholder="Normativa sectorial, licencias, supervisores regulatorios (CNMV, AEPD, Banco de España...), legislación penal relevante..."></textarea>
+        </div>
+        <div class="fg"><label class="fl">Contexto económico y de mercado</label>
+          <textarea class="fi" id="ctx-economic" rows="2" placeholder="Situación competitiva, presiones de mercado, ciclo económico..."></textarea>
+        </div>
+        <div class="fg"><label class="fl">Contexto social, cultural y medioambiental</label>
+          <textarea class="fi" id="ctx-social" rows="2" placeholder="Expectativas sociales, compromisos ESG, impacto ambiental..."></textarea>
+        </div>
+        <div class="fg"><label class="fl">Tendencias futuras con impacto en compliance</label>
+          <textarea class="fi" id="ctx-trends" rows="2" placeholder="Nuevas regulaciones esperadas, cambios tecnológicos, geopolítica..."></textarea>
+        </div>
+      </div>
+
+      <div>
+        <div class="fsec">§4.1 Contexto Interno</div>
+        <div class="fg"><label class="fl">Estructura organizativa</label>
+          <textarea class="fi" id="ctx-structure" rows="2" placeholder="Tipo de estructura, número de unidades, presencia internacional, subsidiarias..."></textarea>
+        </div>
+        <div class="fg"><label class="fl">Cultura de compliance actual</label>
+          <textarea class="fi" id="ctx-culture" rows="2" placeholder="Nivel de cultura ética, historial de incidentes, tono desde la cúpula..."></textarea>
+        </div>
+        <div class="fg"><label class="fl">Recursos tecnológicos relevantes</label>
+          <textarea class="fi" id="ctx-tech" rows="2" placeholder="Sistemas de información, herramientas de compliance, nivel de digitalización..."></textarea>
+        </div>
+        <div class="fg"><label class="fl">Relaciones con terceros (scope y naturaleza)</label>
+          <textarea class="fi" id="ctx-thirds" rows="2" placeholder="Proveedores críticos, distribuidores, agentes, intermediarios, joint ventures..."></textarea>
+        </div>
+
+        <div class="fsec">§4.2 Partes Interesadas</div>
+        <div class="fg"><label class="fl">Partes interesadas externas y sus expectativas</label>
+          <textarea class="fi" id="ctx-ext-parties" rows="3" placeholder="Reguladores (CNMV, AEPD, Banco de España...), clientes, inversores, proveedores, sociedad... y qué esperan de nosotros en términos de compliance."></textarea>
+        </div>
+        <div class="fg"><label class="fl">Partes interesadas internas y sus expectativas</label>
+          <textarea class="fi" id="ctx-int-parties" rows="2" placeholder="Consejo de administración, alta dirección, empleados, auditoría interna... y sus expectativas de compliance."></textarea>
+        </div>
+
+        <div class="fsec">Normas y Obligaciones Compliance</div>
+        <div class="fg"><label class="fl">Normas voluntarias adoptadas</label>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px" id="ctx-norms-checks">
+            <label class="flex ic gap6" style="font-size:11px;cursor:pointer"><input type="checkbox" class="ctx-norm" value="ISO 37301"> ISO 37301</label>
+            <label class="flex ic gap6" style="font-size:11px;cursor:pointer"><input type="checkbox" class="ctx-norm" value="UNE 19601"> UNE 19601</label>
+            <label class="flex ic gap6" style="font-size:11px;cursor:pointer"><input type="checkbox" class="ctx-norm" value="ISO 37001"> ISO 37001</label>
+            <label class="flex ic gap6" style="font-size:11px;cursor:pointer"><input type="checkbox" class="ctx-norm" value="RGPD"> RGPD</label>
+            <label class="flex ic gap6" style="font-size:11px;cursor:pointer"><input type="checkbox" class="ctx-norm" value="PBC/AML"> PBC/AML</label>
+            <label class="flex ic gap6" style="font-size:11px;cursor:pointer"><input type="checkbox" class="ctx-norm" value="DORA"> DORA</label>
+            <label class="flex ic gap6" style="font-size:11px;cursor:pointer"><input type="checkbox" class="ctx-norm" value="ESG/CSRD"> ESG/CSRD</label>
+            <label class="flex ic gap6" style="font-size:11px;cursor:pointer"><input type="checkbox" class="ctx-norm" value="NIS2"> NIS2</label>
+          </div>
+        </div>
+        <div class="fg"><label class="fl">Riesgos de compliance prioritarios identificados</label>
+          <textarea class="fi" id="ctx-risks" rows="3" placeholder="Top riesgos: corrupción, blanqueo, protección de datos, responsabilidad penal, conflictos de interés, conducta de mercado..."></textarea>
+        </div>
+        <div class="fg"><label class="fl">Historial de incidentes o sanciones relevantes</label>
+          <textarea class="fi" id="ctx-incidents" rows="2" placeholder="Expedientes previos, sanciones recibidas, investigaciones, noticias negativas..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASSESSMENT DE MADUREZ -->
+  <div class="view" id="view-madurez">
+    <div class="ph">
+      <div class="ph-left"><div class="ph-title">Assessment de Madurez</div><div class="ph-sub">ISO 37301 — 7 dimensiones · Escala 1-5</div></div>
+      <div class="ph-actions">
+        <button class="btn btn-ghost btn-sm" onclick="openHistory()">📋 Historial</button>
+        <button class="btn btn-purple" onclick="openDocAnalysis('madurez')">📄 Analizar doc</button>
+        <button class="btn btn-primary" onclick="saveMaturity()">Guardar versión →</button>
+      </div>
+    </div>
+    <div id="mat-alert"></div>
+
+    <div class="g2" style="align-items:start;margin-bottom:16px">
+      <div class="card">
+        <div class="card-title">Radar de Madurez</div>
+        <div class="radar-wrap">
+          <canvas id="radar-mat" width="200" height="200"></canvas>
+          <div class="radar-legend" id="radar-legend-mat"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Puntuaciones por dimensión</div>
+        <div id="mat-scores-summary"></div>
+      </div>
+    </div>
+
+    <div id="mat-dimensions"></div>
+  </div>
+
+  <!-- TWIN SUMMARY -->
+  <div class="view" id="view-twin-summary">
+    <div class="ph">
+      <div class="ph-left"><div class="ph-title">Resumen Ejecutivo del Twin</div><div class="ph-sub">500 palabras · Usado en todos los análisis de hits</div></div>
+      <div class="ph-actions">
+        <button class="btn btn-purple" id="gen-summary-btn" onclick="generateTwinSummary()">✦ Generar con IA</button>
+        <button class="btn btn-primary" onclick="saveTwinSummary()">Guardar →</button>
+      </div>
+    </div>
+    <div id="ts-alert"></div>
+    <div class="card">
+      <div class="card-title">Resumen ejecutivo <span class="text-muted" style="font-weight:400;font-size:10px">Editable — se usa como contexto en cada análisis de hit</span></div>
+      <textarea class="fi" id="twin-summary-text" rows="18" placeholder="Haz clic en 'Generar con IA' para crear el resumen automáticamente a partir del contexto organizacional y el assessment de madurez.\n\nO escribe manualmente el contexto que quieres que Mistral use al analizar cada hit."></textarea>
+    </div>
+    <div class="card mt14">
+      <div class="card-title">Información del Twin</div>
+      <div class="g3">
+        <div><div class="fl">Última actualización</div><div style="font-size:11px" id="ts-updated">—</div></div>
+        <div><div class="fl">Contexto organizacional</div><div style="font-size:11px" id="ts-ctx-status">—</div></div>
+        <div><div class="fl">Assessment madurez</div><div style="font-size:11px" id="ts-mat-status">—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HITS -->
+  <div class="view" id="view-hits">
+    <div class="ph">
+      <div class="ph-left"><div class="ph-title">Hits Detectados</div><div class="ph-sub">Analizados contra tu Digital Twin</div></div>
+      <div class="ph-actions">
+        <select class="fi" style="width:140px" id="hit-filter-level" onchange="renderHits()">
+          <option value="">Todos</option><option value="critical">Crítico</option><option value="warning">Alerta</option><option value="info">Info</option>
+        </select>
+        <button class="btn btn-ghost" onclick="syncHits()">⟳ Sync</button>
+      </div>
+    </div>
+    <div id="hits-list"></div>
+  </div>
+
+  <!-- PLANES DE ACCIÓN -->
+  <div class="view" id="view-planes">
+    <div class="ph">
+      <div class="ph-left"><div class="ph-title">Planes de Acción</div><div class="ph-sub">Seguimiento y cierre con mejora documentada</div></div>
+      <div class="ph-actions">
+        <select class="fi" style="width:140px" id="ap-filter" onchange="renderPlanes()">
+          <option value="">Todos</option><option value="open">Abiertos</option><option value="progress">En curso</option><option value="closed">Cerrados</option>
+        </select>
+      </div>
+    </div>
+    <div id="planes-list"></div>
+  </div>
+
+  <!-- BRIEF EJECUTIVO -->
+  <div class="view" id="view-brief">
+    <div class="ph">
+      <div class="ph-left"><div class="ph-title">Brief Ejecutivo</div><div class="ph-sub">Informe para Comité de Cumplimiento / Consejo</div></div>
+      <div class="ph-actions">
+        <button class="btn btn-purple" onclick="generateBrief()" id="brief-gen-btn">✦ Generar con IA</button>
+        <button class="btn btn-primary" onclick="printBrief()">⬇ Exportar PDF</button>
+      </div>
+    </div>
+    <div id="brief-alert"></div>
+    <div id="brief-content"></div>
+  </div>
+
+  <!-- FUENTES -->
+  <div class="view" id="view-fuentes">
+    <div class="ph">
+      <div class="ph-left"><div class="ph-title">Fuentes & Búsquedas</div><div class="ph-sub">Configura el monitor activo</div></div>
+      <div class="ph-actions"><button class="btn btn-primary" onclick="saveFuentes()">Guardar →</button></div>
+    </div>
+    <div id="fuentes-alert"></div>
+    <div class="g2" style="align-items:start">
+      <div class="card">
+        <div class="card-title">Queries NewsAPI</div>
+        <div id="queries-list"></div>
+        <textarea class="fi mt10" id="new-query" rows="2" placeholder='Ej: ("fraude fiscal" OR "evasión") AND España'></textarea>
+        <button class="btn btn-ghost btn-sm mt6" style="width:100%" onclick="addQuery()">+ Añadir query</button>
+      </div>
+      <div>
+        <div class="card mb14">
+          <div class="card-title">Fuentes RSS</div>
+          <div id="rss-list"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Keywords adicionales</div>
+          <div id="kw-list" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px"></div>
+          <div class="flex gap6">
+            <input type="text" class="fi" id="new-kw" placeholder="Nueva keyword..." onkeydown="if(event.key==='Enter')addKw()">
+            <button class="btn btn-ghost btn-sm" onclick="addKw()">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANÁLISIS MANUAL -->
+  <div class="view" id="view-analisis">
+    <div class="ph"><div class="ph-left"><div class="ph-title">Análisis Manual IA</div><div class="ph-sub">Analiza cualquier noticia contra tu Digital Twin</div></div></div>
+    <div class="g2" style="align-items:start">
+      <div class="card">
+        <div class="card-title">Consulta</div>
+        <div class="fg"><label class="fl">Tipo de análisis</label>
+          <select class="fi" id="an-type">
+            <option value="full">Análisis completo vs. Digital Twin</option>
+            <option value="vulnerability">Vulnerabilidad vs. controles</option>
+            <option value="financial">Impacto financiero</option>
+            <option value="action">Plan de acción recomendado</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Texto a analizar</label>
+          <textarea class="fi" id="an-text" rows="8" placeholder="Pega aquí noticia, sentencia, resolución..."></textarea>
+        </div>
+        <button class="btn btn-primary" style="width:100%" onclick="runManual()" id="an-btn">Analizar contra Digital Twin →</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Resultado</div>
+        <div id="an-result"><div class="empty"><div class="empty-icon">◉</div><div class="empty-title">Esperando análisis</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIG -->
+  <div class="view" id="view-config">
+    <div class="ph"><div class="ph-left"><div class="ph-title">Configuración APIs</div></div><div class="ph-actions"><button class="btn btn-primary" onclick="saveConfig()">Guardar</button></div></div>
+    <div id="config-alert"></div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-title">🤖 Mistral AI</div>
+        <div class="fg"><label class="fl">API Key</label><input type="password" class="fi" id="cfg-mistral-key" placeholder="sk-..."></div>
+        <div class="fg"><label class="fl">Modelo</label>
+          <select class="fi" id="cfg-mistral-model">
+            <option value="mistral-small-latest">mistral-small (rápido)</option>
+            <option value="mistral-medium-latest">mistral-medium</option>
+            <option value="mistral-large-latest">mistral-large (preciso)</option>
+          </select>
+        </div>
+        <button class="btn btn-ghost btn-sm" style="width:100%" onclick="testMistral()">Verificar conexión</button>
+      </div>
+      <div class="card">
+        <div class="card-title">📰 NewsAPI</div>
+        <div class="fg"><label class="fl">API Key</label><input type="password" class="fi" id="cfg-newsapi-key"></div>
+        <div class="fhint">100 req/día en tier gratuito</div>
+      </div>
+    </div>
+    <div class="card mt14">
+      <div class="card-title">⚙ Parámetros</div>
+      <div class="g3">
+        <div class="fg"><label class="fl">Umbral de relevancia (0-100)</label><input type="number" class="fi" id="cfg-threshold" value="60" min="0" max="100"><div class="fhint">Score mínimo para publicar hit</div></div>
+        <div class="fg"><label class="fl">Repo GitHub</label><input type="text" class="fi" id="cfg-repo" placeholder="avespa/digitaltwin"></div>
+        <div class="fg"><label class="fl">Días hasta aviso Twin obsoleto</label><input type="number" class="fi" id="cfg-twin-days" value="90" min="7"></div>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /page -->
 </div><!-- /main -->
-</div><!-- /app -->
+</div><!-- /shell -->
 
-<!-- MODAL CLIENTE -->
-<div class="modal-bg" id="modal-client">
+<!-- MODAL ANÁLISIS DOCUMENTO -->
+<div class="overlay" id="modal-doc">
   <div class="modal">
-    <div class="modal-title" id="modal-client-title">Nuevo cliente</div>
-    <button class="modal-x" onclick="closeModal('modal-client')">✕</button>
-    <div class="grid-2">
-      <div class="form-group">
-        <label class="form-label">Nombre *</label>
-        <input type="text" class="form-input" id="cl-name" placeholder="Empresa S.A.">
+    <div class="modal-title" id="doc-modal-title">Analizar documento con IA</div>
+    <button class="modal-x" onclick="closeModal('modal-doc')">✕</button>
+    <div class="fg">
+      <label class="fl">Selecciona un archivo (PDF, TXT, DOCX)</label>
+      <input type="file" class="fi" id="doc-file" accept=".pdf,.txt,.docx,.doc,.xlsx">
+    </div>
+    <div class="fg"><label class="fl">O pega el texto directamente</label><textarea class="fi" id="doc-text" rows="6" placeholder="Pega el texto del documento aquí..."></textarea></div>
+    <div class="fg"><label class="fl">Instrucción para la IA</label><input type="text" class="fi" id="doc-instruction" value="Extrae y estructura la información relevante para el contexto organizacional de compliance ISO 37301"></div>
+    <div id="doc-alert"></div>
+    <div class="flex gap8 mt14" style="justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('modal-doc')">Cancelar</button>
+      <button class="btn btn-primary" onclick="analyzeDoc()">Analizar →</button>
+    </div>
+    <div id="doc-result" style="margin-top:14px"></div>
+  </div>
+</div>
+
+<!-- MODAL PLAN DE ACCIÓN -->
+<div class="overlay" id="modal-ap">
+  <div class="modal modal-lg">
+    <div class="modal-title" id="ap-modal-title">Plan de Acción</div>
+    <button class="modal-x" onclick="closeModal('modal-ap')">✕</button>
+    <div class="g2">
+      <div>
+        <div class="fg"><label class="fl">Título del plan *</label><input type="text" class="fi" id="ap-title" placeholder="Ej: Reforzar control de terceros..."></div>
+        <div class="fg"><label class="fl">Control de madurez afectado</label><input type="text" class="fi" id="ap-control" placeholder="Ej: OPERACIÓN - Due diligence de terceros"></div>
+        <div class="fg"><label class="fl">Dimensión ISO 37301</label>
+          <select class="fi" id="ap-dim">
+            <option value="">Ninguna específica</option>
+            <option>1. Contexto</option><option>2. Liderazgo</option><option>3. Planificación</option>
+            <option>4. Soporte</option><option>5. Operación</option><option>6. Evaluación</option><option>7. Mejora</option>
+          </select>
+        </div>
+        <div class="g2">
+          <div class="fg"><label class="fl">Responsable</label><input type="text" class="fi" id="ap-owner" placeholder="Compliance Officer"></div>
+          <div class="fg"><label class="fl">Fecha límite</label><input type="date" class="fi" id="ap-deadline"></div>
+        </div>
+        <div class="fg"><label class="fl">Prioridad</label>
+          <select class="fi" id="ap-priority">
+            <option value="critical">🔴 Crítica</option><option value="high">🟠 Alta</option>
+            <option value="medium">🟡 Media</option><option value="low">🟢 Baja</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Descripción y objetivo</label><textarea class="fi" id="ap-desc" rows="3" placeholder="Qué se quiere conseguir y por qué..."></textarea></div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Sector *</label>
-        <select class="form-input" id="cl-sector">
-          <option value="">Selecciona...</option>
-          <option value="financiero">Financiero / Banca</option>
-          <option value="seguros">Seguros</option>
-          <option value="tecnologia">Tecnología / Digital</option>
-          <option value="salud">Salud / Farmacia</option>
-          <option value="construccion">Construcción / Inmobiliaria</option>
-          <option value="energia">Energía / Utilities</option>
-          <option value="alimentacion">Alimentación / FMCG</option>
-          <option value="transporte">Transporte / Logística</option>
-          <option value="manufactura">Manufactura / Industrial</option>
-          <option value="servicios">Servicios Profesionales</option>
-          <option value="retail">Retail</option>
-          <option value="otro">Otro</option>
-        </select>
+      <div>
+        <div class="fl" style="margin-bottom:8px">Pasos / Acciones</div>
+        <div id="ap-steps-list"></div>
+        <div class="flex gap6 mt6">
+          <input type="text" class="fi" id="ap-new-step" placeholder="Nueva acción..." onkeydown="if(event.key==='Enter')addApStep()">
+          <button class="btn btn-ghost btn-sm" onclick="addApStep()">+</button>
+        </div>
+        <div class="divider"></div>
+        <div class="fg"><label class="fl">Mejora documentada al cierre</label><textarea class="fi" id="ap-improvement" rows="3" placeholder="Al cerrar: qué mejoró, qué controles se actualizaron, qué evidencia se generó..."></textarea></div>
+        <div class="fg"><label class="fl">Estado</label>
+          <select class="fi" id="ap-status">
+            <option value="open">Abierto</option><option value="progress">En curso</option><option value="closed">Cerrado</option>
+          </select>
+        </div>
+        <div id="ap-close-note" style="display:none">
+          <div class="alert alert-warn mt6">Al cerrar el plan, se actualizará automáticamente el elemento de madurez asociado.</div>
+        </div>
       </div>
     </div>
-    <div class="grid-2">
-      <div class="form-group">
-        <label class="form-label">País / Geografía</label>
-        <select class="form-input" id="cl-country">
-          <option value="ES">España</option>
-          <option value="ES,PT">España + Portugal</option>
-          <option value="ES,LATAM">España + LATAM</option>
-          <option value="EU">Unión Europea</option>
-          <option value="GLOBAL">Global</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Facturación anual</label>
-        <select class="form-input" id="cl-revenue">
-          <option value="<5M">Menos de 5M €</option>
-          <option value="5-50M">5M – 50M €</option>
-          <option value="50-250M">50M – 250M €</option>
-          <option value=">250M">Más de 250M €</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Normas aplicables</label>
-      <div style="display:flex;flex-wrap:wrap;gap:10px">
-        <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer"><input type="checkbox" class="cl-norm" value="ISO37301" checked> ISO 37301</label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer"><input type="checkbox" class="cl-norm" value="UNE19601"> UNE 19601</label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer"><input type="checkbox" class="cl-norm" value="ISO37001"> ISO 37001</label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer"><input type="checkbox" class="cl-norm" value="RGPD"> RGPD</label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer"><input type="checkbox" class="cl-norm" value="PBC"> PBC/AML</label>
-        <label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer"><input type="checkbox" class="cl-norm" value="DORA"> DORA</label>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Descripción del modelo de compliance</label>
-      <textarea class="form-input" id="cl-compliance" rows="3" placeholder="Controles existentes, certificaciones, áreas de riesgo conocidas..."></textarea>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Áreas de riesgo prioritarias</label>
-      <textarea class="form-input" id="cl-risks" rows="2" placeholder="Ej: soborno en licitaciones, conflictos de interés..."></textarea>
-    </div>
-    <div class="flex gap-8" style="justify-content:flex-end;margin-top:6px">
-      <button class="btn btn-ghost" onclick="closeModal('modal-client')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveClient()">Guardar cliente</button>
+    <div class="flex gap8 mt14" style="justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('modal-ap')">Cancelar</button>
+      <button class="btn btn-danger btn-sm" id="ap-delete-btn" style="display:none" onclick="deleteAp()">Eliminar</button>
+      <button class="btn btn-primary" onclick="saveAp()">Guardar plan</button>
     </div>
   </div>
 </div>
 
-<!-- MONITOR -->
-<div class="monitor" id="monitor">
-  <div class="monitor-head">
-    <div class="monitor-logo"><span class="logo-dot"></span>CDT — COMPLIANCE DIGITAL TWIN</div>
-    <div id="monitor-clock" style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono)"></div>
-    <button class="btn btn-ghost" onclick="toggleMonitor()">✕ Salir</button>
-  </div>
-  <div class="monitor-grid">
-    <div class="monitor-card">
-      <div class="monitor-label">⚡ Nivel de riesgo global</div>
-      <div class="monitor-big text-accent" id="mon-risk">—</div>
-      <div style="font-size:11px;color:var(--text-muted);margin-top:6px" id="mon-risk-label">calculando...</div>
-      <div style="height:3px;background:var(--border2);border-radius:2px;margin-top:14px"><div id="mon-risk-bar" style="height:100%;border-radius:2px;background:var(--accent);width:0;transition:width .8s"></div></div>
-    </div>
-    <div class="monitor-card">
-      <div class="monitor-label">⟁ Últimos hits</div>
-      <div id="mon-hits" style="flex:1;overflow:hidden"></div>
-    </div>
-    <div class="monitor-card">
-      <div class="monitor-label">◎ Clientes en seguimiento</div>
-      <div id="mon-clients" style="flex:1"></div>
-    </div>
+<!-- MODAL HISTORIAL MADUREZ -->
+<div class="overlay" id="modal-history">
+  <div class="modal">
+    <div class="modal-title">Historial de Madurez</div>
+    <button class="modal-x" onclick="closeModal('modal-history')">✕</button>
+    <div id="history-list"></div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════
-const GITHUB_REPO    = 'avespa/digitaltwin';
-const RAW_BASE       = `https://raw.githubusercontent.com/${GITHUB_REPO}/main/data`;
-const GITHUB_API     = `https://api.github.com/repos/${GITHUB_REPO}/contents/data`;
+// ═══════════════════════════════════════════════════════════════
+// FIREBASE INIT
+// ═══════════════════════════════════════════════════════════════
+const FB_CFG = {
+  apiKey:            "AIzaSyDFcMb0QmLwCMSAu4LydryNvpAwoCHUQrY",
+  authDomain:        "digitaltwin-21a64.firebaseapp.com",
+  projectId:         "digitaltwin-21a64",
+  storageBucket:     "digitaltwin-21a64.appspot.com",
+  messagingSenderId: "placeholder",
+  appId:             "placeholder"
+};
+firebase.initializeApp(FB_CFG);
+const db = firebase.firestore();
 
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
 let S = {
-  clients: [],
-  hits:    [],
-  stats:   {},
+  cfg: { mistralKey:'', mistralModel:'mistral-small-latest', newsapiKey:'', threshold:60, repo:'avespa/digitaltwin', twinDays:90 },
+  ctx: {},       // organization context
+  maturity: {},  // maturity assessment
+  twinSummary: '',
+  hits: [],
+  actionPlans: [],
+  remoteCfg: { newsapi_queries:[], newsapi_sources:'', custom_keywords:[], rss_enabled:{} },
   lastSync: null,
-  cfg: {
-    mistralKey:   '',
-    mistralModel: 'mistral-small-latest',
-    newsapiKey:   '',
-    pineconeKey:  '',
-    pineconeIndex:'digitaltwin',
-    pineconeEnv:  'us-east-1',
-    fbProject:    'digitaltwin-21a64',
-    fbKey:        '',
-    fbDomain:     'digitaltwin-21a64.firebaseapp.com',
-    threshold:    60,
-    ghRepo:       GITHUB_REPO,
+};
+
+// Local cache
+function lsGet(k){ try{ return JSON.parse(localStorage.getItem('cdt_'+k)||'null'); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem('cdt_'+k, JSON.stringify(v)); }catch(e){} }
+
+// ═══════════════════════════════════════════════════════════════
+// MATURITY MODEL — ISO 37301
+// ═══════════════════════════════════════════════════════════════
+const DIMS = [
+  { id:'contexto', label:'Contexto', icon:'⬡', color:'#00e5a0',
+    elements:[
+      { id:'ctx1', label:'Comprensión del contexto organizacional (§4.1)' },
+      { id:'ctx2', label:'Identificación de partes interesadas (§4.2)' },
+      { id:'ctx3', label:'Obligaciones de compliance identificadas (§4.5)' },
+      { id:'ctx4', label:'Evaluación de riesgos de compliance (§4.6)' },
+    ]
   },
-  remoteCfg: {
-    newsapi_queries: [],
-    newsapi_sources: '',
-    custom_keywords: [],
-    rss_enabled:     {},
-  }
+  { id:'liderazgo', label:'Liderazgo', icon:'★', color:'#8b5cf6',
+    elements:[
+      { id:'lid1', label:'Compromiso del órgano de gobierno (§5.1.1)' },
+      { id:'lid2', label:'Cultura de compliance (§5.1.2)' },
+      { id:'lid3', label:'Gobernanza de compliance (§5.1.3)' },
+      { id:'lid4', label:'Política de compliance (§5.2)' },
+      { id:'lid5', label:'Función de compliance: independencia y autoridad (§5.3.2)' },
+    ]
+  },
+  { id:'planificacion', label:'Planificación', icon:'◎', color:'#0066ff',
+    elements:[
+      { id:'plan1', label:'Acciones para abordar riesgos (§6.1)' },
+      { id:'plan2', label:'Objetivos de compliance medibles (§6.2)' },
+      { id:'plan3', label:'Planificación de cambios (§6.3)' },
+    ]
+  },
+  { id:'soporte', label:'Soporte', icon:'⬟', color:'#f59e0b',
+    elements:[
+      { id:'sop1', label:'Recursos asignados al sistema (§7.1)' },
+      { id:'sop2', label:'Competencia y formación del personal (§7.2)' },
+      { id:'sop3', label:'Concienciación en compliance (§7.3)' },
+      { id:'sop4', label:'Comunicación interna y externa (§7.4)' },
+      { id:'sop5', label:'Información documentada (§7.5)' },
+    ]
+  },
+  { id:'operacion', label:'Operación', icon:'◈', color:'#ef4444',
+    elements:[
+      { id:'op1', label:'Controles operacionales implementados (§8.1-8.2)' },
+      { id:'op2', label:'Canal de denuncias / Whistleblowing (§8.3)' },
+      { id:'op3', label:'Procesos de investigación (§8.4)' },
+      { id:'op4', label:'Due diligence de terceros (§8.1)' },
+      { id:'op5', label:'Código de conducta y procedimientos (§8.1)' },
+    ]
+  },
+  { id:'evaluacion', label:'Evaluación', icon:'◉', color:'#06b6d4',
+    elements:[
+      { id:'ev1', label:'Monitorización y medición de compliance (§9.1)' },
+      { id:'ev2', label:'KPIs/KRIs de compliance definidos (§9.1.3)' },
+      { id:'ev3', label:'Reporting de compliance (§9.1.4)' },
+      { id:'ev4', label:'Auditoría interna del sistema (§9.2)' },
+      { id:'ev5', label:'Revisión por la dirección (§9.3)' },
+    ]
+  },
+  { id:'mejora', label:'Mejora', icon:'↑', color:'#10b981',
+    elements:[
+      { id:'mej1', label:'Mejora continua del sistema (§10.1)' },
+      { id:'mej2', label:'Gestión de no conformidades (§10.2)' },
+      { id:'mej3', label:'Acciones correctivas documentadas (§10.2)' },
+    ]
+  },
+];
+
+const SCORE_LABELS = {
+  1:'No existe / No implementado',
+  2:'Inicial / Ad hoc',
+  3:'Definido / Documentado',
+  4:'Gestionado / Medido',
+  5:'Optimizado / Mejora continua'
 };
 
 const RSS_LABELS = {
-  BOE_disposiciones:           'BOE - Disposiciones generales',
-  BOE_justicia:                'BOE - Administración de Justicia',
-  BOE_anuncios:                'BOE - Anuncios oficiales',
-  BOE_derecho_penal:           'BOE - Derecho Penal',
-  BOE_derecho_mercantil:       'BOE - Derecho Mercantil',
-  BOE_sistema_financiero:      'BOE - Sistema Financiero',
-  BOE_tribunal_constitucional: 'BOE - Tribunal Constitucional',
-  BORME_general:               'BORME - Registro Mercantil',
+  BOE_disposiciones:'BOE - Disposiciones generales',
+  BOE_justicia:'BOE - Administración de Justicia',
+  BOE_anuncios:'BOE - Anuncios oficiales',
+  BOE_derecho_penal:'BOE - Derecho Penal',
+  BOE_derecho_mercantil:'BOE - Derecho Mercantil',
+  BOE_sistema_financiero:'BOE - Sistema Financiero',
+  BOE_tribunal_constitucional:'BOE - Tribunal Constitucional',
+  BORME_general:'BORME - Registro Mercantil',
 };
 
-// ═══════════════════════════════════════════════════════
-// PERSISTENCE
-// ═══════════════════════════════════════════════════════
-function persist() { localStorage.setItem('cdt_v2', JSON.stringify(S)); }
-
-function restore() {
-  try {
-    const d = localStorage.getItem('cdt_v2');
-    if (d) S = {...S, ...JSON.parse(d)};
-  } catch(e) {}
-}
-
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // NAVIGATION
-// ═══════════════════════════════════════════════════════
-function go(name) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('view-'+name).classList.add('active');
-  const titles = {dashboard:'Dashboard',clientes:'Clientes',hits:'Hits Detectados',analisis:'Análisis IA Manual',fuentes:'Fuentes & Búsquedas',config:'Configuración APIs'};
-  document.getElementById('topbar-title').textContent = titles[name] || name;
-  document.querySelectorAll('.nav-item').forEach(el => {
-    if(el.textContent.trim().toLowerCase().replace(/\s+/g,'').includes(name.replace(/\s+/g,'').toLowerCase().slice(0,5)))
-      el.classList.add('active');
-  });
-  if(name==='config') loadConfig();
-  if(name==='fuentes') loadFuentesFromConfig();
+// ═══════════════════════════════════════════════════════════════
+const TITLES = {
+  dashboard:'Dashboard & KRIs', contexto:'Contexto Organizacional', madurez:'Assessment de Madurez',
+  'twin-summary':'Resumen Ejecutivo del Twin', hits:'Hits Detectados', planes:'Planes de Acción',
+  brief:'Brief Ejecutivo', fuentes:'Fuentes & Búsquedas', analisis:'Análisis Manual IA', config:'Configuración APIs'
+};
+
+function go(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('view-'+name)?.classList.add('active');
+  document.querySelector(`.nav-item[data-view="${name}"]`)?.classList.add('active');
+  document.getElementById('tb-title').textContent = TITLES[name]||name;
+  if(name==='madurez') renderMaturity();
   if(name==='hits') renderHits();
-  if(name==='analisis') populateAnClients();
-  if(name==='clientes') renderClients();
+  if(name==='planes') renderPlanes();
+  if(name==='dashboard') renderDashboard();
+  if(name==='fuentes') renderFuentes();
+  if(name==='twin-summary') renderTwinSummaryPage();
+  if(name==='config') loadConfig();
+  if(name==='contexto') loadContexto();
+  if(name==='brief') renderBriefPlaceholder();
 }
 
-// ═══════════════════════════════════════════════════════
-// SYNC FROM GITHUB
-// ═══════════════════════════════════════════════════════
-async function syncNow() {
-  const btn = document.getElementById('sync-btn');
-  btn.innerHTML = '<span class="spin"></span> Sincronizando...';
-  btn.disabled = true;
-  document.getElementById('foot-status').textContent = 'Sincronizando...';
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function openModal(id){ document.getElementById(id).classList.add('open'); }
 
-  try {
-    // Fetch hits.json
-    const r1 = await fetch(`${RAW_BASE}/hits.json?t=${Date.now()}`);
-    if (r1.ok) {
-      const data = await r1.json();
-      S.hits  = data.hits  || [];
-      S.stats = data.stats || {};
-      S.lastSync = data.last_updated || new Date().toISOString();
-    }
+// ═══════════════════════════════════════════════════════════════
+// FIRESTORE HELPERS
+// ═══════════════════════════════════════════════════════════════
+async function fsGet(col, doc){ try{ const s=await db.collection(col).doc(doc||'main').get(); return s.exists?s.data():null; }catch(e){ console.warn('fsGet',e); return null; } }
+async function fsSet(col, doc, data){ try{ await db.collection(col).doc(doc||'main').set({...data, _updated: new Date().toISOString()}, {merge:true}); return true; }catch(e){ console.error('fsSet',e); return false; } }
+async function fsAdd(col, data){ try{ const r=await db.collection(col).add({...data, _created: new Date().toISOString()}); return r.id; }catch(e){ console.error('fsAdd',e); return null; } }
+async function fsUpdate(col, id, data){ try{ await db.collection(col).doc(id).update({...data, _updated: new Date().toISOString()}); return true; }catch(e){ console.error('fsUpdate',e); return false; } }
+async function fsDelete(col, id){ try{ await db.collection(col).doc(id).delete(); return true; }catch(e){ return false; } }
+async function fsList(col, orderBy='_created', dir='desc'){ try{ const s=await db.collection(col).orderBy(orderBy,dir).limit(200).get(); return s.docs.map(d=>({id:d.id,...d.data()})); }catch(e){ console.warn('fsList',e); return []; } }
 
-    // Fetch config.json
-    const r2 = await fetch(`${RAW_BASE}/config.json?t=${Date.now()}`);
-    if (r2.ok) {
-      S.remoteCfg = await r2.json();
-    }
-
-    persist();
+// ═══════════════════════════════════════════════════════════════
+// SYNC ALL
+// ═══════════════════════════════════════════════════════════════
+async function syncAll(){
+  setStatus('Sincronizando...');
+  document.getElementById('sync-btn').innerHTML='<span class="spin"></span>';
+  try{
+    const [ctx, mat, ts, hits, plans, cfg] = await Promise.all([
+      fsGet('organization','main'),
+      fsGet('maturity','current'),
+      fsGet('twin_summary','main'),
+      fsList('hits'),
+      fsList('action_plans'),
+      fsGet('config','main'),
+    ]);
+    if(ctx){ S.ctx = ctx; lsSet('ctx', ctx); }
+    if(mat){ S.maturity = mat; lsSet('mat', mat); }
+    if(ts){ S.twinSummary = ts.text||''; lsSet('ts', ts.text||''); }
+    S.hits = hits || [];
+    S.actionPlans = plans || [];
+    if(cfg){ S.remoteCfg = {...S.remoteCfg,...cfg}; }
+    S.lastSync = new Date().toISOString();
+    lsSet('hits', S.hits);
+    lsSet('plans', S.actionPlans);
     renderAll();
-    document.getElementById('foot-status').textContent = 'Sincronizado ✓';
-    document.getElementById('topbar-sync').textContent = 'Sync: ' + fmtDate(S.lastSync);
-  } catch(e) {
-    document.getElementById('foot-status').textContent = 'Error de sync';
+    setStatus('Sync ✓ '+fmtTime(S.lastSync));
+    document.getElementById('tb-meta').textContent = 'Sync: '+fmtTime(S.lastSync);
+  }catch(e){
+    setStatus('Error sync');
     console.error(e);
   }
-
-  btn.innerHTML = '⟳ Sincronizar';
-  btn.disabled  = false;
+  document.getElementById('sync-btn').textContent='⟳ Sync';
 }
 
-function updateRepoUrl() {
-  const repo = document.getElementById('gh-repo')?.value?.trim();
-  if (repo) {
-    window.GITHUB_REPO_OVERRIDE = repo;
-  }
-}
-
-// ═══════════════════════════════════════════════════════
-// RENDER ALL
-// ═══════════════════════════════════════════════════════
-function renderAll() {
-  renderDashboard();
-  renderClients();
+async function syncHits(){
+  S.hits = await fsList('hits');
+  lsSet('hits', S.hits);
   renderHits();
-  renderMonitor();
-  // Update badge
-  const crits = S.hits.filter(h => h.level==='critical').length;
-  document.getElementById('badge-hits').textContent = crits;
 }
 
-// ═══════════════════════════════════════════════════════
+function restoreLocal(){
+  const ctx  = lsGet('ctx');  if(ctx)  S.ctx     = ctx;
+  const mat  = lsGet('mat');  if(mat)  S.maturity = mat;
+  const ts   = lsGet('ts');   if(ts)   S.twinSummary = ts;
+  const hits = lsGet('hits'); if(hits) S.hits = hits;
+  const plans= lsGet('plans');if(plans)S.actionPlans = plans;
+  const cfg  = lsGet('cfg');  if(cfg)  S.cfg = {...S.cfg,...cfg};
+}
+
+// ═══════════════════════════════════════════════════════════════
 // DASHBOARD
-// ═══════════════════════════════════════════════════════
-function renderDashboard() {
-  document.getElementById('s-clientes').textContent = S.clients.length;
-  document.getElementById('s-hits').textContent     = S.hits.length;
-  document.getElementById('s-criticos').textContent = S.hits.filter(h=>h.level==='critical').length;
-  document.getElementById('s-sync').textContent     = S.lastSync ? fmtDate(S.lastSync) : '—';
+// ═══════════════════════════════════════════════════════════════
+function renderAll(){
+  renderDashboard();
+  renderHits();
+  renderPlanes();
+  updateBadges();
+}
+
+function renderDashboard(){
+  // Twin disclaimer
+  const lastCtxUpdate = S.ctx?._updated;
+  const daysSince = lastCtxUpdate ? Math.floor((Date.now()-new Date(lastCtxUpdate))/86400000) : null;
+  const disc = document.getElementById('twin-disclaimer');
+  if(!S.twinSummary){
+    disc.innerHTML=`<div class="alert alert-warn mb14">⚠ El Resumen del Digital Twin está vacío. <button class="btn btn-ghost btn-xs" onclick="go('twin-summary')">Configurar →</button></div>`;
+  } else if(daysSince !== null && daysSince > (S.cfg.twinDays||90)){
+    disc.innerHTML=`<div class="alert alert-warn mb14">⚠ El Digital Twin no se actualiza hace <strong>${daysSince} días</strong>. Considera revisar el contexto y la madurez. <button class="btn btn-ghost btn-xs" onclick="go('contexto')">Revisar →</button></div>`;
+  } else {
+    disc.innerHTML='';
+  }
+
+  // KRIs
+  const globalScore = calcGlobalScore();
+  document.getElementById('kri-madurez').textContent = globalScore>0 ? globalScore.toFixed(1) : '—';
+  const crits = S.hits.filter(h=>h.level==='critical' && !S.actionPlans.find(p=>p.hit_id===h.id && p.status!=='open')).length;
+  document.getElementById('kri-criticos').textContent = crits;
+  document.getElementById('kri-planes').textContent = S.actionPlans.filter(p=>p.status!=='closed').length;
+  document.getElementById('kri-sync').textContent = S.lastSync ? fmtTime(S.lastSync) : '—';
+
+  // Radar
+  drawRadar('radar-dash', getDimScores());
+  renderRadarLegend('radar-legend-dash', true);
+
+  // Narrative
+  const narrative = S.twinSummary ?
+    `<em>Twin activo.</em> Madurez global: ${globalScore.toFixed(1)}/5. ${S.hits.filter(h=>h.level==='critical').length} hits críticos · ${S.actionPlans.filter(p=>p.status!=='closed').length} planes abiertos.` :
+    'Configura el Digital Twin para ver el análisis contextualizado.';
+  document.getElementById('dash-narrative').innerHTML = narrative;
 
   // Recent hits
-  const hl = document.getElementById('dash-hits-list');
-  const recent = S.hits.slice(0,5);
-  document.getElementById('dash-hits-count').textContent = S.hits.length + ' totales';
-  hl.innerHTML = recent.length ? recent.map(h => hitCard(h, false)).join('') :
-    `<div class="empty"><div class="empty-icon">⟁</div><div class="empty-title">Sin hits aún</div><div class="empty-desc">Haz clic en Sincronizar o ejecuta el workflow en GitHub</div></div>`;
+  const dh = document.getElementById('dash-hits');
+  const recent = S.hits.slice(0,4);
+  dh.innerHTML = recent.length ? recent.map(h=>miniHit(h)).join('') :
+    `<div class="empty"><div class="empty-icon">⟁</div><div class="empty-sub">Sin hits · ejecuta el workflow en GitHub</div></div>`;
 
-  // Clients table
-  const tb = document.getElementById('dash-clients-body');
-  tb.innerHTML = S.clients.length ? S.clients.map(c => `
-    <tr>
-      <td><strong>${c.name}</strong></td>
-      <td style="color:var(--text-dim)">${sectorLabel(c.sector)}</td>
-      <td>${c.hits||0}</td>
-      <td><span class="risk ${c.riskLevel||'medio'}">${(c.riskLevel||'medio').toUpperCase()}</span></td>
-    </tr>`).join('') :
-    `<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:24px">Sin clientes — añade uno en la sección Clientes</td></tr>`;
-
-  // Active sources
-  const sl = document.getElementById('dash-sources-list');
-  const rss = S.remoteCfg.rss_enabled || {};
-  const activeSources = Object.entries(RSS_LABELS).filter(([k]) => rss[k] !== false).map(([,v]) => v);
-  const qCount = (S.remoteCfg.newsapi_queries||[]).length;
-  document.getElementById('dash-sources-count').textContent = `${activeSources.length} RSS + ${qCount} queries NewsAPI`;
-  sl.innerHTML = activeSources.map(s =>
-    `<span style="font-size:10px;padding:3px 9px;background:var(--surface2);border:1px solid var(--border);border-radius:3px;color:var(--text-dim)">${s}</span>`
-  ).join('') + (qCount ? `<span style="font-size:10px;padding:3px 9px;background:rgba(0,102,255,.1);border:1px solid rgba(0,102,255,.2);border-radius:3px;color:var(--accent2)">${qCount} queries NewsAPI</span>` : '');
+  // Planes
+  const dp = document.getElementById('dash-planes');
+  const open = S.actionPlans.filter(p=>p.status!=='closed').slice(0,4);
+  dp.innerHTML = open.length ? open.map(p=>miniPlan(p)).join('') :
+    `<div class="empty"><div class="empty-sub">Sin planes abiertos</div></div>`;
 }
 
-// ═══════════════════════════════════════════════════════
-// HITS
-// ═══════════════════════════════════════════════════════
-function hitCard(h, expanded=false) {
-  const score = h.relevance_score || 0;
-  const hasDetail = h.summary || h.vulnerability || h.financial_impact || h.recommended_action;
-  return `
-    <div class="hit ${h.level||'info'}" id="hit-${h.id}">
-      <div class="hit-head">
-        <span class="level-tag ${h.level||'info'}">${levelLabel(h.level)}</span>
-        <span class="hit-source">${(h.source||'').split('·')[0].trim()}</span>
-        <span class="hit-date">${fmtDate(h.fetched_at||h.raw_date)}</span>
-      </div>
-      <div class="hit-title">${esc(h.title)}</div>
-      ${h.summary ? `<div class="hit-summary">${esc(h.summary)}</div>` : ''}
-      <div class="score-bar"><div class="score-fill" style="width:${score}%;background:${score>70?'var(--danger)':score>40?'var(--warn)':'var(--accent)'}"></div></div>
-      ${hasDetail ? `
-        <div style="margin-top:7px">
-          <button class="btn btn-ghost btn-sm" onclick="toggleHitDetail('${h.id}')">Ver análisis completo ↓</button>
-          ${h.link ? `<a href="${h.link}" target="_blank" class="btn btn-ghost btn-sm" style="margin-left:4px">Fuente ↗</a>` : ''}
-        </div>
-        <div class="hit-detail" id="hd-${h.id}">
-          ${h.risks?.length ? `<div class="hit-detail-item"><div class="hit-detail-label">Riesgos</div>${h.risks.join(' · ')}</div>` : ''}
-          ${h.norms_affected?.length ? `<div class="hit-detail-item"><div class="hit-detail-label">Normas afectadas</div>${h.norms_affected.join(' · ')}</div>` : ''}
-          ${h.vulnerability ? `<div class="hit-detail-item"><div class="hit-detail-label">Vulnerabilidad / Control</div>${esc(h.vulnerability)}</div>` : ''}
-          ${h.financial_impact ? `<div class="hit-detail-item"><div class="hit-detail-label">Impacto financiero estimado</div>${esc(h.financial_impact)}</div>` : ''}
-          ${h.recommended_action ? `<div class="hit-detail-item"><div class="hit-detail-label">Acción recomendada</div>${esc(h.recommended_action)}</div>` : ''}
-        </div>` : (h.link ? `<div style="margin-top:7px"><a href="${h.link}" target="_blank" class="btn btn-ghost btn-sm">Fuente ↗</a></div>` : '')}
-    </div>`;
+function miniHit(h){
+  return `<div class="flex ic gap8 mb8" style="padding:7px;background:var(--bg);border-radius:4px;border-left:2px solid ${levelColor(h.level)}">
+    <span class="tag tag-${h.level||'info'}" style="flex-shrink:0">${levelLabel(h.level)}</span>
+    <span style="font-size:10.5px;flex:1;line-height:1.3">${esc(h.title?.slice(0,70))}${h.title?.length>70?'...':''}</span>
+    <span style="font-size:9px;color:var(--text-muted);flex-shrink:0">${fmtDate(h.fetched_at)}</span>
+  </div>`;
 }
 
-function toggleHitDetail(id) {
-  const el = document.getElementById('hd-'+id);
-  if(el) el.classList.toggle('open');
+function miniPlan(p){
+  const priority = {critical:'🔴',high:'🟠',medium:'🟡',low:'🟢'}[p.priority]||'⚪';
+  return `<div class="flex ic gap8 mb8" style="padding:7px;background:var(--bg);border-radius:4px;cursor:pointer" onclick="openApModal('${p.id}')">
+    <span>${priority}</span>
+    <span class="tag tag-${p.status||'open'}" style="flex-shrink:0">${p.status||'open'}</span>
+    <span style="font-size:10.5px;flex:1">${esc(p.title?.slice(0,65))}${p.title?.length>65?'...':''}</span>
+    <span style="font-size:9px;color:var(--text-muted)">${p.deadline||''}</span>
+  </div>`;
 }
 
-function renderHits() {
-  const lv  = document.getElementById('filter-level')?.value || '';
-  const src = document.getElementById('filter-source')?.value || '';
-  let hits  = [...S.hits];
-  if(lv)  hits = hits.filter(h => h.level === lv);
-  if(src) hits = hits.filter(h => (h.source||'').includes(src));
-
-  const container = document.getElementById('hits-list');
-  container.innerHTML = hits.length ? hits.map(h => hitCard(h)).join('') :
-    `<div class="empty"><div class="empty-icon">⟁</div><div class="empty-title">Sin hits</div><div class="empty-desc">Sincroniza o ejecuta el workflow en GitHub Actions</div></div>`;
-
-  // Populate source filter
-  const srcSel = document.getElementById('filter-source');
-  if(srcSel) {
-    const sources = [...new Set(S.hits.map(h => (h.source||'').split('·')[0].trim()).filter(Boolean))];
-    const cur = srcSel.value;
-    srcSel.innerHTML = `<option value="">Todas las fuentes</option>` + sources.map(s => `<option value="${s}">${s}</option>`).join('');
-    srcSel.value = cur;
-  }
+function updateBadges(){
+  const crits = S.hits.filter(h=>h.level==='critical').length;
+  document.getElementById('badge-hits').textContent = crits;
+  const openPlans = S.actionPlans.filter(p=>p.status!=='closed').length;
+  document.getElementById('badge-planes').textContent = openPlans;
 }
 
-// ═══════════════════════════════════════════════════════
-// CLIENTES
-// ═══════════════════════════════════════════════════════
-let editingClient = null;
-
-function renderClients() {
-  const c = document.getElementById('clients-list');
-  if(!S.clients.length) {
-    c.innerHTML = `<div class="empty"><div class="empty-icon">◎</div><div class="empty-title">Sin clientes aún</div><div class="empty-desc">Crea el primer perfil empresarial</div></div>`;
-    return;
-  }
-  c.innerHTML = S.clients.map(cl => `
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px 18px;display:flex;align-items:center;gap:14px;margin-bottom:8px;cursor:pointer;transition:border-color .15s" onmouseenter="this.style.borderColor='var(--border2)'" onmouseleave="this.style.borderColor='var(--border)'" onclick="openClientModal('${cl.id}')">
-      <div style="width:38px;height:38px;background:var(--surface2);border:1px solid var(--border);border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:var(--font-ui);font-weight:800;font-size:13px;color:var(--accent);flex-shrink:0">${cl.name.slice(0,2).toUpperCase()}</div>
-      <div style="flex:1">
-        <div style="font-family:var(--font-ui);font-weight:700;font-size:13px;margin-bottom:2px">${cl.name}</div>
-        <div style="font-size:10px;color:var(--text-muted)">${sectorLabel(cl.sector)} · ${cl.country} · ${(cl.norms||[]).join(', ')}</div>
-      </div>
-      <span class="risk ${cl.riskLevel||'medio'}">${(cl.riskLevel||'medio').toUpperCase()}</span>
-      <div onclick="event.stopPropagation()" style="display:flex;gap:6px">
-        <button class="btn btn-ghost btn-sm" onclick="openClientModal('${cl.id}')">Editar</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteClient('${cl.id}')">✕</button>
-      </div>
-    </div>`).join('');
+// ═══════════════════════════════════════════════════════════════
+// CONTEXTO ORGANIZACIONAL
+// ═══════════════════════════════════════════════════════════════
+function loadContexto(){
+  const c = S.ctx||{};
+  const fields = ['name','sector','size','revenue','geo','business','strategy','legal','economic','social','trends','structure','culture','tech','thirds','ext-parties','int-parties','risks','incidents'];
+  fields.forEach(f=>{ const el=document.getElementById('ctx-'+f); if(el&&c[f]) el.value=c[f]; });
+  document.querySelectorAll('.ctx-norm').forEach(cb=>{ cb.checked=!!(c.norms||[]).includes(cb.value); });
 }
 
-function openClientModal(id=null) {
-  editingClient = id;
-  const cl = id ? S.clients.find(c=>c.id===id) : null;
-  document.getElementById('modal-client-title').textContent = id ? 'Editar cliente' : 'Nuevo cliente';
-  document.getElementById('cl-name').value      = cl?.name || '';
-  document.getElementById('cl-sector').value    = cl?.sector || '';
-  document.getElementById('cl-country').value   = cl?.country || 'ES';
-  document.getElementById('cl-revenue').value   = cl?.revenue || '5-50M';
-  document.getElementById('cl-compliance').value= cl?.complianceDesc || '';
-  document.getElementById('cl-risks').value     = cl?.risks || '';
-  document.querySelectorAll('.cl-norm').forEach(cb => {
-    cb.checked = cl ? (cl.norms||[]).includes(cb.value) : cb.value==='ISO37301';
-  });
-  document.getElementById('modal-client').classList.add('open');
-}
-
-function saveClient() {
-  const name   = document.getElementById('cl-name').value.trim();
-  const sector = document.getElementById('cl-sector').value;
-  if(!name||!sector) { alert('Nombre y sector obligatorios'); return; }
-  const norms = [...document.querySelectorAll('.cl-norm:checked')].map(c=>c.value);
-  const cl = {
-    id:            editingClient || 'c'+Date.now(),
-    name, sector,
-    country:       document.getElementById('cl-country').value,
-    revenue:       document.getElementById('cl-revenue').value,
-    norms,
-    complianceDesc:document.getElementById('cl-compliance').value.trim(),
-    risks:         document.getElementById('cl-risks').value.trim(),
-    riskLevel:     'medio',
-    hits:          0,
-    createdAt:     new Date().toISOString(),
+async function saveContexto(){
+  const ctx = {
+    name:       val('ctx-name'),   sector:     val('ctx-sector'),
+    size:       val('ctx-size'),   revenue:    val('ctx-revenue'),
+    geo:        val('ctx-geo'),    business:   val('ctx-business'),
+    strategy:   val('ctx-strategy'),legal:     val('ctx-legal'),
+    economic:   val('ctx-economic'),social:    val('ctx-social'),
+    trends:     val('ctx-trends'), structure:  val('ctx-structure'),
+    culture:    val('ctx-culture'),tech:       val('ctx-tech'),
+    thirds:     val('ctx-thirds'),
+    'ext-parties': val('ctx-ext-parties'),
+    'int-parties': val('ctx-int-parties'),
+    risks:      val('ctx-risks'),  incidents:  val('ctx-incidents'),
+    norms:      [...document.querySelectorAll('.ctx-norm:checked')].map(c=>c.value),
   };
-  if(editingClient) {
-    const i = S.clients.findIndex(c=>c.id===editingClient);
-    S.clients[i] = {...S.clients[i], ...cl};
-  } else {
-    S.clients.push(cl);
-  }
-  persist();
-  closeModal('modal-client');
-  renderClients();
-  renderDashboard();
+  if(!ctx.name||!ctx.sector){ showAlert('ctx-alert','Nombre y sector son obligatorios','err'); return; }
+  S.ctx = ctx;
+  const ok = await fsSet('organization','main', ctx);
+  lsSet('ctx', ctx);
+  showAlert('ctx-alert', ok?'✓ Contexto guardado en Firestore':'Error al guardar','ok');
 }
 
-function deleteClient(id) {
-  if(!confirm('¿Eliminar este cliente?')) return;
-  S.clients = S.clients.filter(c=>c.id!==id);
-  persist(); renderClients(); renderDashboard();
+// ═══════════════════════════════════════════════════════════════
+// MATURITY ASSESSMENT
+// ═══════════════════════════════════════════════════════════════
+function getDimScores(){
+  const mat = S.maturity||{};
+  return DIMS.map(d=>{
+    const scores = d.elements.map(e=>parseInt(mat[e.id])||0).filter(s=>s>0);
+    return scores.length ? scores.reduce((a,b)=>a+b,0)/scores.length : 0;
+  });
 }
 
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
-// ═══════════════════════════════════════════════════════
-// FUENTES & BÚSQUEDAS
-// ═══════════════════════════════════════════════════════
-function loadFuentesFromConfig() {
-  const rc = S.remoteCfg;
-
-  // Queries
-  renderQueryList(rc.newsapi_queries || []);
-  document.getElementById('newsapi-sources').value = rc.newsapi_sources || '';
-  document.getElementById('queries-count').textContent = (rc.newsapi_queries||[]).length + ' activas';
-
-  // RSS toggles
-  renderRssList(rc.rss_enabled || {});
-
-  // Keywords
-  renderKwList(rc.custom_keywords || []);
+function calcGlobalScore(){
+  const scores = getDimScores().filter(s=>s>0);
+  return scores.length ? scores.reduce((a,b)=>a+b,0)/scores.length : 0;
 }
 
-function renderQueryList(queries) {
-  document.getElementById('queries-list').innerHTML = queries.map((q,i) => `
-    <div class="query-item">
-      <span class="query-num">${i+1}</span>
-      <span class="query-text">${esc(q)}</span>
-      <button class="query-del" onclick="removeQuery(${i})" title="Eliminar">×</button>
-    </div>`).join('');
-  document.getElementById('queries-count').textContent = queries.length + ' activas';
-}
+function renderMaturity(){
+  const mat = S.maturity||{};
+  drawRadar('radar-mat', getDimScores());
+  renderRadarLegend('radar-legend-mat', false);
+  renderMatScoresSummary();
 
-function addQuery() {
-  const val = document.getElementById('new-query').value.trim();
-  if(!val) return;
-  const queries = [...(S.remoteCfg.newsapi_queries||[]), val];
-  S.remoteCfg.newsapi_queries = queries;
-  document.getElementById('new-query').value = '';
-  renderQueryList(queries);
-  markDirty('fuentes');
-}
-
-function removeQuery(i) {
-  S.remoteCfg.newsapi_queries.splice(i,1);
-  renderQueryList(S.remoteCfg.newsapi_queries);
-  markDirty('fuentes');
-}
-
-function renderRssList(enabled) {
-  document.getElementById('rss-list').innerHTML = Object.entries(RSS_LABELS).map(([k,label]) => {
-    const on = enabled[k] !== false;
+  const container = document.getElementById('mat-dimensions');
+  container.innerHTML = DIMS.map(d=>{
+    const dimScore = getDimScores()[DIMS.indexOf(d)];
     return `
-      <div class="rss-item">
-        <button class="rss-toggle ${on?'on':''}" id="rss-${k}" onclick="toggleRss('${k}')"></button>
-        <span class="rss-name ${on?'on':''}" id="rss-label-${k}">${label}</span>
-      </div>`;
+    <div class="card mb14">
+      <div class="card-title" style="cursor:pointer" onclick="toggleDim('dim-body-${d.id}')">
+        <span class="card-title-left">
+          <span style="color:${d.color};font-size:14px">${d.icon}</span>
+          ${d.label}
+          <span style="font-size:10px;color:var(--text-muted);font-weight:400">§ ISO 37301</span>
+        </span>
+        <div class="flex ic gap8">
+          <span style="font-family:var(--font-ui);font-weight:800;color:${d.color};font-size:14px">${dimScore>0?dimScore.toFixed(1):'—'}/5</span>
+          <span style="color:var(--text-muted);font-size:12px">▾</span>
+        </div>
+      </div>
+      <div id="dim-body-${d.id}">
+        ${d.elements.map(e=>`
+          <div class="mel">
+            <div class="mel-head">
+              <span class="mel-name">${e.label}</span>
+              <div class="mel-score-wrap">
+                ${[1,2,3,4,5].map(s=>`<button class="score-btn ${parseInt(mat[e.id])===s?'active':''}" onclick="setScore('${e.id}',${s},'${d.id}')" title="${SCORE_LABELS[s]}">${s}</button>`).join('')}
+              </div>
+            </div>
+            <div class="mel-score-desc" id="sdesc-${e.id}" style="font-size:9.5px;color:var(--text-muted);margin-bottom:4px">${mat[e.id]?SCORE_LABELS[parseInt(mat[e.id])]||'':''}</div>
+            <textarea class="fi mel-evidence" id="ev-${e.id}" rows="2" placeholder="Evidencias, documentos, notas..." onchange="saveMatQuick('${e.id}','ev')">${mat['ev_'+e.id]||''}</textarea>
+            <div class="mel-actions">
+              <button class="btn btn-ghost btn-xs" onclick="openDocAnalysis('element','${e.id}','${e.label}')">📄 Analizar doc</button>
+              <button class="btn btn-ghost btn-xs" onclick="openApFromElement('${d.label}','${e.label}')">+ Plan de acción</button>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`;
   }).join('');
 }
 
-function toggleRss(key) {
-  const btn = document.getElementById('rss-'+key);
-  const lbl = document.getElementById('rss-label-'+key);
-  const isOn = btn.classList.toggle('on');
-  lbl.classList.toggle('on', isOn);
-  if(!S.remoteCfg.rss_enabled) S.remoteCfg.rss_enabled = {};
-  S.remoteCfg.rss_enabled[key] = isOn;
-  markDirty('fuentes');
+function toggleDim(id){
+  const el = document.getElementById(id);
+  if(el) el.style.display = el.style.display==='none'?'':'none';
 }
 
-function renderKwList(keywords) {
-  document.getElementById('kw-list').innerHTML = keywords.map((kw,i) => `
-    <span class="kw-tag">${esc(kw)}<button onclick="removeKw(${i})" title="Eliminar">×</button></span>`
-  ).join('');
+function setScore(elemId, score, dimId){
+  if(!S.maturity) S.maturity={};
+  S.maturity[elemId] = score;
+  document.querySelectorAll(`[onclick*="'${elemId}'"]`).forEach(btn=>{
+    btn.classList.toggle('active', parseInt(btn.textContent)===score);
+  });
+  const desc = document.getElementById('sdesc-'+elemId);
+  if(desc) desc.textContent = SCORE_LABELS[score]||'';
+  renderMatScoresSummary();
+  drawRadar('radar-mat', getDimScores());
+  renderRadarLegend('radar-legend-mat', false);
+  drawRadar('radar-dash', getDimScores());
 }
 
-function addKw() {
-  const val = document.getElementById('new-kw').value.trim();
-  if(!val) return;
-  if(!(S.remoteCfg.custom_keywords||[]).includes(val)) {
-    S.remoteCfg.custom_keywords = [...(S.remoteCfg.custom_keywords||[]), val];
-    renderKwList(S.remoteCfg.custom_keywords);
-    markDirty('fuentes');
+function saveMatQuick(elemId, type){
+  if(!S.maturity) S.maturity={};
+  const ev = document.getElementById('ev-'+elemId);
+  if(ev) S.maturity['ev_'+elemId] = ev.value;
+}
+
+async function saveMaturity(){
+  const mat = S.maturity||{};
+  // Collect all textarea evidences
+  document.querySelectorAll('[id^="ev-"]').forEach(ta=>{
+    const key = 'ev_'+ta.id.replace('ev-','');
+    mat[key] = ta.value;
+  });
+  S.maturity = mat;
+
+  // Save current
+  const ok = await fsSet('maturity','current', mat);
+
+  // Save to history
+  const globalScore = calcGlobalScore();
+  await fsAdd('maturity_history',{
+    scores: getDimScores(),
+    globalScore,
+    snapshot: mat,
+    note: `Madurez global: ${globalScore.toFixed(1)}/5`,
+  });
+
+  lsSet('mat', mat);
+  showAlert('mat-alert', ok?`✓ Assessment guardado. Madurez global: ${globalScore.toFixed(1)}/5`:'Error','ok');
+  renderDashboard();
+}
+
+function renderMatScoresSummary(){
+  const scores = getDimScores();
+  document.getElementById('mat-scores-summary').innerHTML = DIMS.map((d,i)=>`
+    <div class="dim-row" onclick="go('madurez')">
+      <span style="color:${d.color};font-size:12px">${d.icon}</span>
+      <span class="dim-label">${d.label}</span>
+      <span class="dim-score" style="color:${d.color}">${scores[i]>0?scores[i].toFixed(1):'—'}</span>
+      <div style="width:60px"><div class="dim-bar"><div class="dim-fill" style="width:${scores[i]/5*100}%;background:${d.color}"></div></div></div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RADAR CANVAS
+// ═══════════════════════════════════════════════════════════════
+function drawRadar(canvasId, scores){
+  const canvas = document.getElementById(canvasId);
+  if(!canvas) return;
+  const ctx2 = canvas.getContext('2d');
+  const W=canvas.width, H=canvas.height, cx=W/2, cy=H/2, r=Math.min(W,H)/2-22;
+  const N=DIMS.length;
+  ctx2.clearRect(0,0,W,H);
+
+  // Grid
+  for(let ring=1;ring<=5;ring++){
+    ctx2.beginPath();
+    for(let i=0;i<N;i++){
+      const angle = (i/N)*Math.PI*2 - Math.PI/2;
+      const pr = r*ring/5;
+      const x = cx+pr*Math.cos(angle), y = cy+pr*Math.sin(angle);
+      i===0?ctx2.moveTo(x,y):ctx2.lineTo(x,y);
+    }
+    ctx2.closePath();
+    ctx2.strokeStyle = 'rgba(255,255,255,0.05)';
+    ctx2.lineWidth=1; ctx2.stroke();
   }
-  document.getElementById('new-kw').value = '';
-}
 
-function removeKw(i) {
-  S.remoteCfg.custom_keywords.splice(i,1);
-  renderKwList(S.remoteCfg.custom_keywords);
-  markDirty('fuentes');
-}
-
-async function saveFuentes() {
-  // Recoger sources input
-  S.remoteCfg.newsapi_sources = document.getElementById('newsapi-sources').value.trim();
-  persist();
-
-  // Intentar guardar en GitHub via API (requiere token)
-  // Sin token, mostramos instrucciones para hacerlo manualmente
-  showAlert('fuentes-alert',
-    '✓ Configuración guardada localmente. Para aplicarla: edita <code>data/config.json</code> en GitHub con este contenido y ejecuta el workflow.',
-    'ok');
-
-  // Mostrar el JSON para copiar
-  console.log('config.json actualizado:', JSON.stringify(S.remoteCfg, null, 2));
-
-  document.getElementById('fuentes-save-btn').textContent = 'Guardado ✓';
-  setTimeout(()=>{ document.getElementById('fuentes-save-btn').textContent = 'Guardar configuración'; }, 2500);
-}
-
-// ═══════════════════════════════════════════════════════
-// CONFIG APIs
-// ═══════════════════════════════════════════════════════
-function loadConfig() {
-  const c = S.cfg;
-  document.getElementById('mistral-key').value   = c.mistralKey   || '';
-  document.getElementById('mistral-model').value = c.mistralModel || 'mistral-small-latest';
-  document.getElementById('newsapi-key').value   = c.newsapiKey   || '';
-  document.getElementById('pinecone-key').value  = c.pineconeKey  || '';
-  document.getElementById('pinecone-index').value= c.pineconeIndex|| 'digitaltwin';
-  document.getElementById('pinecone-env').value  = c.pineconeEnv  || 'us-east-1';
-  document.getElementById('fb-project').value    = c.fbProject    || '';
-  document.getElementById('fb-key').value        = c.fbKey        || '';
-  document.getElementById('fb-domain').value     = c.fbDomain     || '';
-  document.getElementById('threshold').value     = c.threshold    || 60;
-  document.getElementById('gh-repo').value       = c.ghRepo       || GITHUB_REPO;
-}
-
-function saveConfig() {
-  S.cfg = {
-    mistralKey:   document.getElementById('mistral-key').value.trim(),
-    mistralModel: document.getElementById('mistral-model').value,
-    newsapiKey:   document.getElementById('newsapi-key').value.trim(),
-    pineconeKey:  document.getElementById('pinecone-key').value.trim(),
-    pineconeIndex:document.getElementById('pinecone-index').value.trim(),
-    pineconeEnv:  document.getElementById('pinecone-env').value.trim(),
-    fbProject:    document.getElementById('fb-project').value.trim(),
-    fbKey:        document.getElementById('fb-key').value.trim(),
-    fbDomain:     document.getElementById('fb-domain').value.trim(),
-    threshold:    parseInt(document.getElementById('threshold').value),
-    ghRepo:       document.getElementById('gh-repo').value.trim(),
-  };
-  persist();
-  showAlert('config-alert', '✓ Configuración guardada', 'ok');
-  document.getElementById('config-save-btn').textContent = 'Guardado ✓';
-  setTimeout(()=>{ document.getElementById('config-save-btn').textContent = 'Guardar configuración'; }, 2000);
-}
-
-async function testMistral() {
-  const key = document.getElementById('mistral-key').value.trim();
-  if(!key) { showAlert('config-alert','Introduce la API key de Mistral primero','err'); return; }
-  const badge = document.getElementById('badge-mistral');
-  badge.className = 'api-badge pend'; badge.textContent = '● probando...';
-  try {
-    const r = await fetch('https://api.mistral.ai/v1/models', { headers:{'Authorization':'Bearer '+key} });
-    if(r.ok) { badge.className='api-badge ok'; badge.textContent='● conectado'; showAlert('config-alert','✓ Mistral AI conectado correctamente','ok'); }
-    else      { badge.className='api-badge err'; badge.textContent='● error'; showAlert('config-alert','✗ API Key inválida','err'); }
-  } catch(e) { badge.className='api-badge err'; badge.textContent='● sin conexión'; }
-}
-
-// ═══════════════════════════════════════════════════════
-// ANÁLISIS MANUAL
-// ═══════════════════════════════════════════════════════
-function populateAnClients() {
-  const sel = document.getElementById('an-client');
-  sel.innerHTML = `<option value="">Sin cliente (análisis genérico)</option>` +
-    S.clients.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-}
-
-async function runManual() {
-  const key  = S.cfg.mistralKey;
-  if(!key) { showAlert('','',''); go('config'); return; }
-  const text = document.getElementById('an-text').value.trim();
-  if(!text) { alert('Introduce texto para analizar'); return; }
-
-  const clientId = document.getElementById('an-client').value;
-  const type     = document.getElementById('an-type').value;
-  const client   = S.clients.find(c=>c.id===clientId);
-  const btn      = document.getElementById('an-btn');
-  const result   = document.getElementById('an-result');
-
-  result.innerHTML = `<div style="display:flex;align-items:center;gap:10px;color:var(--text-muted);padding:20px 0"><span class="spin"></span> Analizando con Mistral AI...</div>`;
-  btn.disabled = true;
-
-  const sys = buildPrompt(client, type);
-  try {
-    const r = await fetch('https://api.mistral.ai/v1/chat/completions', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
-      body: JSON.stringify({
-        model: S.cfg.mistralModel || 'mistral-small-latest',
-        messages:[{role:'system',content:sys},{role:'user',content:'Analiza:\n\n'+text}],
-        temperature:0.2, max_tokens:1200
-      })
-    });
-    if(!r.ok) throw new Error((await r.json()).message||'Error API');
-    const data  = await r.json();
-    const reply = data.choices[0].message.content;
-    result.innerHTML = `<div style="font-size:11.5px;line-height:1.8;white-space:pre-wrap;color:var(--text-dim)">${esc(reply)}</div>`;
-  } catch(e) {
-    result.innerHTML = `<div style="color:var(--danger);font-size:11px">Error: ${esc(e.message)}</div>`;
+  // Axes
+  for(let i=0;i<N;i++){
+    const angle=(i/N)*Math.PI*2-Math.PI/2;
+    ctx2.beginPath();
+    ctx2.moveTo(cx,cy);
+    ctx2.lineTo(cx+r*Math.cos(angle),cy+r*Math.sin(angle));
+    ctx2.strokeStyle='rgba(255,255,255,0.08)';
+    ctx2.lineWidth=1; ctx2.stroke();
   }
-  btn.disabled = false;
+
+  // Data
+  ctx2.beginPath();
+  scores.forEach((s,i)=>{
+    const angle=(i/N)*Math.PI*2-Math.PI/2;
+    const pr = r*(s||0)/5;
+    const x=cx+pr*Math.cos(angle), y=cy+pr*Math.sin(angle);
+    i===0?ctx2.moveTo(x,y):ctx2.lineTo(x,y);
+  });
+  ctx2.closePath();
+  ctx2.fillStyle='rgba(0,229,160,0.1)';
+  ctx2.strokeStyle='rgba(0,229,160,0.7)';
+  ctx2.lineWidth=2; ctx2.fill(); ctx2.stroke();
+
+  // Points
+  scores.forEach((s,i)=>{
+    const angle=(i/N)*Math.PI*2-Math.PI/2;
+    const pr=r*(s||0)/5;
+    ctx2.beginPath();
+    ctx2.arc(cx+pr*Math.cos(angle),cy+pr*Math.sin(angle),3,0,Math.PI*2);
+    ctx2.fillStyle=DIMS[i].color; ctx2.fill();
+  });
+
+  // Labels
+  ctx2.font='9px DM Mono, monospace';
+  ctx2.fillStyle='rgba(220,232,240,0.6)';
+  ctx2.textAlign='center'; ctx2.textBaseline='middle';
+  DIMS.forEach((d,i)=>{
+    const angle=(i/N)*Math.PI*2-Math.PI/2;
+    const lr=r+14;
+    ctx2.fillText(d.label,cx+lr*Math.cos(angle),cy+lr*Math.sin(angle));
+  });
 }
 
-function buildPrompt(client, type) {
-  const ctx = client
-    ? `Empresa: "${client.name}" | Sector: ${sectorLabel(client.sector)} | País: ${client.country} | Normas: ${(client.norms||[]).join(', ')}\nCompliance: ${client.complianceDesc||'No especificado'}\nRiesgos conocidos: ${client.risks||'No especificados'}`
-    : `Análisis genérico de compliance corporativo español (ISO 37301, UNE 19601, ISO 37001).`;
+function renderRadarLegend(containerId, compact){
+  const scores = getDimScores();
+  document.getElementById(containerId).innerHTML = DIMS.map((d,i)=>`
+    <div class="dim-row" onclick="go('madurez')" style="margin-bottom:${compact?6:9}px">
+      <span style="color:${d.color};font-size:${compact?10:12}px">${d.icon}</span>
+      <span class="dim-label" style="font-size:${compact?9.5:11}px">${d.label}</span>
+      <span class="dim-score" style="color:${d.color};font-size:${compact?11:12}px">${scores[i]>0?scores[i].toFixed(1):'—'}</span>
+    </div>`).join('');
+}
 
-  const types = {
-    full:           'Análisis completo: relevancia, riesgos, vulnerabilidad vs. controles, impacto financiero y recomendaciones.',
-    vulnerability:  'Analiza la vulnerabilidad: ¿tiene la empresa controles para este riesgo? ¿Son suficientes? ¿Habría parado este evento?',
-    financial:      'Calcula el impacto financiero: multas potenciales según normativa española, daño reputacional y coste de remediación.',
-    recommendation: 'Dame recomendaciones concretas: gaps identificados, controles a implantar, prioridad y documentación necesaria.',
+// ═══════════════════════════════════════════════════════════════
+// TWIN SUMMARY
+// ═══════════════════════════════════════════════════════════════
+function renderTwinSummaryPage(){
+  document.getElementById('twin-summary-text').value = S.twinSummary||'';
+  document.getElementById('ts-updated').textContent = S.ctx?._updated ? fmtDate(S.ctx._updated) : '—';
+  document.getElementById('ts-ctx-status').textContent = S.ctx?.name ? `✓ ${S.ctx.name}` : '✗ Sin configurar';
+  document.getElementById('ts-mat-status').textContent = calcGlobalScore()>0 ? `✓ ${calcGlobalScore().toFixed(1)}/5` : '✗ Sin datos';
+}
+
+async function generateTwinSummary(){
+  const key = S.cfg.mistralKey;
+  if(!key){ showAlert('ts-alert','Configura la API key de Mistral primero','err'); return; }
+  if(!S.ctx?.name){ showAlert('ts-alert','Completa primero el Contexto Organizacional','err'); return; }
+
+  const btn = document.getElementById('gen-summary-btn');
+  btn.innerHTML='<span class="spin"></span> Generando...'; btn.disabled=true;
+
+  const scores = getDimScores();
+  const matSummary = DIMS.map((d,i)=>`${d.label}: ${scores[i]>0?scores[i].toFixed(1)+'/5':'Sin datos'}`).join(' | ');
+  const ctx = S.ctx;
+
+  const prompt = `Eres el experto en compliance de la empresa "${ctx.name}" (sector: ${ctx.sector}, tamaño: ${ctx.size}, ámbito: ${ctx.geo}).
+
+Genera un RESUMEN EJECUTIVO CONCISO (máximo 500 palabras) del Digital Twin de compliance de esta organización, que se usará como contexto para analizar noticias y eventos regulatorios.
+
+CONTEXTO ORGANIZACIONAL:
+- Negocio: ${ctx.business||'No especificado'}
+- Marco legal: ${ctx.legal||'No especificado'}
+- Riesgos compliance prioritarios: ${ctx.risks||'No especificado'}
+- Normas adoptadas: ${(ctx.norms||[]).join(', ')||'No especificado'}
+- Terceros: ${ctx.thirds||'No especificado'}
+- Cultura compliance: ${ctx.culture||'No especificado'}
+
+ASSESSMENT DE MADUREZ:
+${matSummary}
+
+El resumen debe incluir: (1) perfil de la empresa en 2-3 frases, (2) principales riesgos de compliance con sus normas aplicables, (3) fortalezas y gaps del modelo de compliance (según madurez), (4) áreas críticas que deben monitorizarse.
+
+Escribe en español. Sé concreto y actionable. Este texto se usará en cada análisis de hit para dar contexto específico de esta empresa.`;
+
+  try{
+    const r = await callMistral(prompt, 800);
+    document.getElementById('twin-summary-text').value = r;
+    S.twinSummary = r;
+    showAlert('ts-alert','✓ Resumen generado — revísalo y guarda cuando estés conforme','ok');
+  }catch(e){
+    showAlert('ts-alert','Error: '+e.message,'err');
+  }
+  btn.textContent='✦ Generar con IA'; btn.disabled=false;
+}
+
+async function saveTwinSummary(){
+  const text = document.getElementById('twin-summary-text').value.trim();
+  S.twinSummary = text;
+  const ok = await fsSet('twin_summary','main',{text});
+  lsSet('ts', text);
+  showAlert('ts-alert', ok?'✓ Resumen guardado en Firestore':'Error al guardar','ok');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// HITS
+// ═══════════════════════════════════════════════════════════════
+function renderHits(){
+  const lv  = document.getElementById('hit-filter-level')?.value||'';
+  let hits  = S.hits.filter(h=>!lv||h.level===lv);
+  const container = document.getElementById('hits-list');
+  container.innerHTML = hits.length ? hits.map(h=>hitCard(h)).join('') :
+    `<div class="empty"><div class="empty-icon">⟁</div><div class="empty-title">Sin hits</div><div class="empty-sub">Ejecuta el workflow en GitHub Actions</div></div>`;
+}
+
+function hitCard(h){
+  const hasDetail = h.summary||h.twin_analysis||h.recommended_action;
+  const hasAp = S.actionPlans.find(p=>p.hit_id===h.id);
+  return `
+  <div class="hit ${h.level||'info'}">
+    <div class="hit-head">
+      <span class="tag tag-${h.level||'info'}">${levelLabel(h.level)}</span>
+      <span class="hit-source">${esc((h.source||'').split('·')[0].trim())}</span>
+      <span class="hit-date">${fmtDate(h.fetched_at||h.raw_date)}</span>
+    </div>
+    <div class="hit-title">${esc(h.title)}</div>
+    ${h.summary?`<div class="hit-summary">${esc(h.summary)}</div>`:''}
+    <div class="score-bar mt6"><div class="score-fill" style="width:${h.relevance_score||0}%;background:${levelColor(h.level)}"></div></div>
+    <div class="flex gap6 mt6">
+      ${hasDetail?`<button class="btn btn-ghost btn-xs" onclick="toggleHitDetail('hd-${h.id}')">Ver análisis ↓</button>`:''}
+      ${h.link?`<a href="${h.link}" target="_blank" class="btn btn-ghost btn-xs">Fuente ↗</a>`:''}
+      ${hasAp?`<span class="btn btn-warn btn-xs">◉ Plan abierto</span>`:
+        `<button class="btn btn-ghost btn-xs" onclick="openApFromHit('${h.id}','${esc(h.title).replace(/'/g,"\\'")}')">+ Plan de acción</button>`}
+    </div>
+    ${hasDetail?`
+    <div class="hit-extra" id="hd-${h.id}">
+      ${h.twin_analysis?`<div class="hit-twin-box"><div class="hit-twin-label">⬡ Análisis vs. Digital Twin</div><div style="font-size:10.5px;color:var(--text-dim);line-height:1.6">${esc(h.twin_analysis)}</div></div>`:''}
+      ${h.risks?.length?`<div class="hit-detail-row mt8"><div class="hit-detail-label">Riesgos</div><div class="hit-detail-val">${h.risks.join(' · ')}</div></div>`:''}
+      ${h.norms_affected?.length?`<div class="hit-detail-row"><div class="hit-detail-label">Normas afectadas</div><div class="hit-detail-val">${h.norms_affected.join(' · ')}</div></div>`:''}
+      ${h.vulnerability?`<div class="hit-detail-row"><div class="hit-detail-label">Vulnerabilidad / Control</div><div class="hit-detail-val">${esc(h.vulnerability)}</div></div>`:''}
+      ${h.financial_impact?`<div class="hit-detail-row"><div class="hit-detail-label">Impacto financiero</div><div class="hit-detail-val">${esc(h.financial_impact)}</div></div>`:''}
+      ${h.recommended_action?`<div class="hit-detail-row"><div class="hit-detail-label">Acción recomendada</div><div class="hit-detail-val">${esc(h.recommended_action)}</div></div>`:''}
+    </div>`:''}
+  </div>`;
+}
+
+function toggleHitDetail(id){
+  const el=document.getElementById(id);
+  if(el)el.classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PLANES DE ACCIÓN
+// ═══════════════════════════════════════════════════════════════
+let currentApId = null;
+let apSteps = [];
+
+function renderPlanes(){
+  const filter = document.getElementById('ap-filter')?.value||'';
+  let plans = S.actionPlans.filter(p=>!filter||p.status===filter);
+  const container = document.getElementById('planes-list');
+  container.innerHTML = plans.length ? plans.map(p=>planCard(p)).join('') :
+    `<div class="empty"><div class="empty-icon">◉</div><div class="empty-title">Sin planes de acción</div><div class="empty-sub">Abre un plan desde un hit crítico</div></div>`;
+}
+
+function planCard(p){
+  const pIcon = {critical:'🔴',high:'🟠',medium:'🟡',low:'🟢'}[p.priority]||'⚪';
+  const done  = (p.steps||[]).filter(s=>s.done).length;
+  const total = (p.steps||[]).length;
+  const pct   = total>0?Math.round(done/total*100):0;
+  return `
+  <div class="ap" onclick="openApModal('${p.id}')">
+    <div class="ap-head">
+      <span class="tag tag-${p.status||'open'}">${p.status||'open'}</span>
+      <div class="ap-title">${pIcon} ${esc(p.title)}</div>
+    </div>
+    <div class="ap-meta">
+      ${p.control?`<span>◎ ${esc(p.control)}</span>`:''}
+      ${p.owner?`<span>👤 ${esc(p.owner)}</span>`:''}
+      ${p.deadline?`<span>📅 ${p.deadline}</span>`:''}
+      ${p.dim?`<span>§ ${esc(p.dim)}</span>`:''}
+    </div>
+    ${total>0?`<div class="ap-progress">
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-muted);margin-bottom:3px"><span>Progreso</span><span>${done}/${total} · ${pct}%</span></div>
+      <div class="score-bar"><div class="score-fill" style="width:${pct}%;background:var(--accent)"></div></div>
+    </div>`:''}
+  </div>`;
+}
+
+function openApFromHit(hitId, hitTitle){
+  currentApId = null; apSteps=[];
+  document.getElementById('ap-title').value = 'Plan: '+hitTitle.slice(0,60);
+  document.getElementById('ap-control').value='';
+  document.getElementById('ap-dim').value='';
+  document.getElementById('ap-owner').value='Compliance Officer';
+  document.getElementById('ap-deadline').value='';
+  document.getElementById('ap-priority').value='high';
+  document.getElementById('ap-desc').value='Hit origen: '+hitTitle;
+  document.getElementById('ap-improvement').value='';
+  document.getElementById('ap-status').value='open';
+  document.getElementById('ap-delete-btn').style.display='none';
+  document.getElementById('ap-modal-title').textContent='Nuevo Plan de Acción';
+  window._apHitId = hitId;
+  apSteps=[]; renderApSteps();
+  openModal('modal-ap');
+}
+
+function openApFromElement(dimLabel, elemLabel){
+  currentApId=null; apSteps=[];
+  document.getElementById('ap-title').value=`Mejora: ${elemLabel.slice(0,50)}`;
+  document.getElementById('ap-control').value=elemLabel;
+  document.getElementById('ap-dim').value=dimLabel;
+  document.getElementById('ap-owner').value='Compliance Officer';
+  document.getElementById('ap-deadline').value='';
+  document.getElementById('ap-priority').value='medium';
+  document.getElementById('ap-desc').value='';
+  document.getElementById('ap-improvement').value='';
+  document.getElementById('ap-status').value='open';
+  document.getElementById('ap-delete-btn').style.display='none';
+  document.getElementById('ap-modal-title').textContent='Nuevo Plan de Acción';
+  window._apHitId=null; renderApSteps();
+  openModal('modal-ap');
+}
+
+function openApModal(id){
+  const p = S.actionPlans.find(a=>a.id===id);
+  if(!p) return;
+  currentApId=id; apSteps=[...(p.steps||[])];
+  document.getElementById('ap-title').value=p.title||'';
+  document.getElementById('ap-control').value=p.control||'';
+  document.getElementById('ap-dim').value=p.dim||'';
+  document.getElementById('ap-owner').value=p.owner||'';
+  document.getElementById('ap-deadline').value=p.deadline||'';
+  document.getElementById('ap-priority').value=p.priority||'medium';
+  document.getElementById('ap-desc').value=p.desc||'';
+  document.getElementById('ap-improvement').value=p.improvement||'';
+  document.getElementById('ap-status').value=p.status||'open';
+  document.getElementById('ap-delete-btn').style.display='';
+  document.getElementById('ap-modal-title').textContent='Plan de Acción';
+  window._apHitId=p.hit_id||null;
+  renderApSteps();
+  document.getElementById('ap-close-note').style.display=p.status==='closed'?'':'none';
+  openModal('modal-ap');
+}
+
+function addApStep(){
+  const v=document.getElementById('ap-new-step').value.trim();
+  if(!v)return;
+  apSteps.push({text:v,done:false,id:Date.now()});
+  document.getElementById('ap-new-step').value='';
+  renderApSteps();
+}
+
+function toggleApStep(i){
+  apSteps[i].done=!apSteps[i].done;
+  renderApSteps();
+}
+
+function renderApSteps(){
+  document.getElementById('ap-steps-list').innerHTML=apSteps.map((s,i)=>`
+    <div class="ap-step">
+      <div class="ap-step-check ${s.done?'done':''}" onclick="toggleApStep(${i})">${s.done?'✓':''}</div>
+      <span style="${s.done?'text-decoration:line-through;opacity:.5':''}">${esc(s.text)}</span>
+    </div>`).join('');
+  document.getElementById('ap-status').dispatchEvent(new Event('change'));
+}
+
+async function saveAp(){
+  const title=val('ap-title');
+  if(!title){alert('Título obligatorio');return;}
+  const data={
+    title, control:val('ap-control'), dim:val('ap-dim'),
+    owner:val('ap-owner'), deadline:val('ap-deadline'),
+    priority:val('ap-priority'), desc:val('ap-desc'),
+    improvement:val('ap-improvement'), status:val('ap-status'),
+    steps:apSteps, hit_id:window._apHitId||null,
   };
 
-  return `${ctx}\n\n${types[type]||types.full}\n\nResponde en español, de forma estructurada y concisa.`;
-}
+  // If closing plan, update maturity element if control is linked
+  if(data.status==='closed' && data.control){
+    const matched = findMaturityElement(data.control);
+    if(matched && data.improvement){
+      // Bump score by 0.5 conceptually — just note it
+      console.log('Plan cerrado, vinculado a elemento:', matched);
+    }
+  }
 
-// ═══════════════════════════════════════════════════════
-// MONITOR
-// ═══════════════════════════════════════════════════════
-let monClock;
-function toggleMonitor() {
-  const m = document.getElementById('monitor');
-  m.classList.toggle('on');
-  if(m.classList.contains('on')) {
-    renderMonitor();
-    monClock = setInterval(()=>{ document.getElementById('monitor-clock').textContent = new Date().toLocaleString('es-ES'); }, 1000);
+  if(currentApId){
+    await fsUpdate('action_plans', currentApId, data);
+    const i=S.actionPlans.findIndex(a=>a.id===currentApId);
+    if(i>=0) S.actionPlans[i]={...S.actionPlans[i],...data};
   } else {
-    clearInterval(monClock);
+    const newId = await fsAdd('action_plans', data);
+    if(newId) S.actionPlans.push({id:newId,...data});
+  }
+
+  lsSet('plans', S.actionPlans);
+  closeModal('modal-ap');
+  renderPlanes(); renderDashboard(); updateBadges();
+}
+
+async function deleteAp(){
+  if(!currentApId||!confirm('¿Eliminar este plan?'))return;
+  await fsDelete('action_plans', currentApId);
+  S.actionPlans=S.actionPlans.filter(a=>a.id!==currentApId);
+  lsSet('plans',S.actionPlans);
+  closeModal('modal-ap'); renderPlanes(); updateBadges();
+}
+
+function findMaturityElement(controlText){
+  const ct=controlText.toLowerCase();
+  for(const d of DIMS){ for(const e of d.elements){ if(e.label.toLowerCase().includes(ct.slice(0,15))) return e.id; } }
+  return null;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DOCUMENTO ANALYSIS
+// ═══════════════════════════════════════════════════════════════
+let docAnalysisTarget = 'contexto';
+let docAnalysisElementId = null;
+let docAnalysisElementLabel = null;
+
+function openDocAnalysis(target, elemId=null, elemLabel=null){
+  docAnalysisTarget=target; docAnalysisElementId=elemId; docAnalysisElementLabel=elemLabel;
+  const title = target==='element'?`Analizar documento para: ${elemLabel}` :
+    target==='madurez'?'Analizar documento — Assessment de Madurez':'Analizar documento — Contexto Organizacional';
+  document.getElementById('doc-modal-title').textContent=title;
+  document.getElementById('doc-file').value='';
+  document.getElementById('doc-text').value='';
+  document.getElementById('doc-instruction').value = target==='element'?
+    `Evalúa el nivel de madurez (1-5) del elemento de compliance: "${elemLabel}". Justifica la puntuación con evidencias del documento.`:
+    target==='madurez'?'Analiza el nivel de madurez del sistema de compliance y propón puntuaciones para cada dimensión ISO 37301':
+    'Extrae y estructura la información relevante para el contexto organizacional de compliance ISO 37301';
+  document.getElementById('doc-result').innerHTML='';
+  openModal('modal-doc');
+}
+
+async function analyzeDoc(){
+  const key=S.cfg.mistralKey;
+  if(!key){showAlert('doc-alert','Configura la API key de Mistral','err');return;}
+  const file=document.getElementById('doc-file').files[0];
+  const pastedText=document.getElementById('doc-text').value.trim();
+  const instruction=document.getElementById('doc-instruction').value.trim();
+
+  let docText='';
+  if(file){
+    docText=await readFileAsText(file);
+  } else if(pastedText){
+    docText=pastedText;
+  } else {
+    showAlert('doc-alert','Adjunta un archivo o pega texto','err'); return;
+  }
+
+  document.getElementById('doc-result').innerHTML='<div class="flex ic gap8" style="color:var(--text-muted);padding:12px 0"><span class="spin"></span> Analizando con Mistral...</div>';
+
+  const prompt=`${instruction}\n\nDOCUMENTO:\n${docText.slice(0,8000)}`;
+  try{
+    const result=await callMistral(prompt, 1200);
+    document.getElementById('doc-result').innerHTML=`
+      <div class="alert alert-info">✓ Análisis completado</div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:12px;font-size:10.5px;color:var(--text-dim);line-height:1.7;white-space:pre-wrap;max-height:280px;overflow-y:auto">${esc(result)}</div>
+      <div class="flex gap6 mt10">
+        <button class="btn btn-primary btn-sm" onclick="applyDocResult(${JSON.stringify(result).replace(/</g,'&lt;')})">Aplicar al Twin →</button>
+        <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-doc')">Cerrar</button>
+      </div>`;
+  }catch(e){
+    document.getElementById('doc-result').innerHTML=`<div class="alert alert-err">Error: ${esc(e.message)}</div>`;
   }
 }
 
-function renderMonitor() {
-  const crits = S.hits.filter(h=>h.level==='critical').length;
-  const warns = S.hits.filter(h=>h.level==='warning').length;
-  const risk  = Math.min(100, 20 + crits*15 + warns*5);
-  document.getElementById('mon-risk').textContent      = risk;
-  document.getElementById('mon-risk-label').textContent= risk>70?'ALTO':risk>40?'MEDIO':'BAJO';
-  document.getElementById('mon-risk-bar').style.width  = risk+'%';
-  document.getElementById('mon-risk-bar').style.background = risk>70?'var(--danger)':risk>40?'var(--warn)':'var(--accent)';
-  document.getElementById('mon-risk').style.color      = risk>70?'var(--danger)':risk>40?'var(--warn)':'var(--accent)';
-
-  const mh = document.getElementById('mon-hits');
-  mh.innerHTML = S.hits.slice(0,7).map(h=>`
-    <div class="ticker-item">
-      <div style="display:flex;gap:7px;align-items:center;margin-bottom:3px">
-        <span class="level-tag ${h.level||'info'}" style="font-size:8px">${levelLabel(h.level)}</span>
-        <span style="font-size:9.5px;color:var(--text-muted)">${fmtDate(h.fetched_at)}</span>
-      </div>
-      <div style="font-size:11.5px">${esc(h.title.slice(0,90))}${h.title.length>90?'...':''}</div>
-    </div>`).join('') || `<div class="empty" style="padding:16px 0"><div class="empty-desc">Sin hits</div></div>`;
-
-  const mc = document.getElementById('mon-clients');
-  mc.innerHTML = S.clients.map(c=>`
-    <div style="display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--border)">
-      <div style="width:28px;height:28px;background:var(--surface2);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--font-ui);font-weight:800;font-size:10px;color:var(--accent)">${c.name.slice(0,2).toUpperCase()}</div>
-      <div style="flex:1"><div style="font-size:11.5px;font-weight:500">${c.name}</div><div style="font-size:9.5px;color:var(--text-muted)">${sectorLabel(c.sector)}</div></div>
-      <span class="risk ${c.riskLevel||'medio'}" style="font-size:9.5px">${(c.riskLevel||'medio').toUpperCase()}</span>
-    </div>`).join('') || `<div class="empty" style="padding:16px 0"><div class="empty-desc">Sin clientes</div></div>`;
+function applyDocResult(result){
+  if(docAnalysisTarget==='contexto'){
+    const ta=document.getElementById('ctx-risks');
+    if(ta) ta.value=(ta.value?ta.value+'\n\n':'')+result.slice(0,600);
+    showAlert('ctx-alert','Análisis aplicado al contexto — revisa y guarda','ok');
+    closeModal('modal-doc'); go('contexto');
+  } else if(docAnalysisTarget==='madurez'||docAnalysisTarget==='element'){
+    const ta=docAnalysisElementId?document.getElementById('ev-'+docAnalysisElementId):null;
+    if(ta) ta.value=(ta.value?ta.value+'\n\n':'')+result.slice(0,400);
+    showAlert('mat-alert','Análisis aplicado — revisa puntuaciones y guarda','ok');
+    closeModal('modal-doc'); go('madurez');
+  }
 }
 
-// ═══════════════════════════════════════════════════════
+async function readFileAsText(file){
+  return new Promise((res,rej)=>{
+    const reader=new FileReader();
+    reader.onload=e=>res(e.target.result);
+    reader.onerror=rej;
+    if(file.type==='application/pdf'){
+      // For PDF we read as text (works for text-based PDFs)
+      reader.readAsText(file);
+    } else {
+      reader.readAsText(file);
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BRIEF EJECUTIVO
+// ═══════════════════════════════════════════════════════════════
+function renderBriefPlaceholder(){
+  if(!document.getElementById('brief-content').innerHTML){
+    document.getElementById('brief-content').innerHTML=`<div class="empty"><div class="empty-icon">▤</div><div class="empty-title">Sin brief generado</div><div class="empty-sub">Haz clic en "Generar con IA" para crear el informe ejecutivo</div></div>`;
+  }
+}
+
+async function generateBrief(){
+  const key=S.cfg.mistralKey;
+  if(!key){showAlert('brief-alert','Configura la API key de Mistral','err');return;}
+  const btn=document.getElementById('brief-gen-btn');
+  btn.innerHTML='<span class="spin"></span> Generando...'; btn.disabled=true;
+
+  const globalScore=calcGlobalScore();
+  const scores=getDimScores();
+  const topHits=S.hits.filter(h=>h.level==='critical'||h.level==='warning').slice(0,3);
+  const openPlans=S.actionPlans.filter(p=>p.status!=='closed');
+
+  const prompt=`Eres el Compliance Officer de "${S.ctx?.name||'la organización'}". Genera un BRIEF EJECUTIVO en español para presentar al Comité de Cumplimiento o Consejo de Administración.
+
+DATOS DEL TWIN:
+- Organización: ${S.ctx?.name} · ${S.ctx?.sector} · ${S.ctx?.size}
+- Madurez global: ${globalScore.toFixed(1)}/5
+- Por dimensión: ${DIMS.map((d,i)=>`${d.label}: ${scores[i].toFixed(1)}`).join(', ')}
+- Hits críticos/alertas recientes: ${topHits.map(h=>h.title).join(' | ')||'Ninguno'}
+- Planes abiertos: ${openPlans.length}
+
+RESUMEN DEL TWIN:
+${S.twinSummary?.slice(0,500)||'No disponible'}
+
+El brief debe incluir:
+1. Estado actual del modelo de compliance (2-3 frases)
+2. Top 3 eventos regulatorios de este período y su impacto
+3. Gaps prioritarios del modelo (dimensiones con menor madurez)
+4. Planes de acción en curso
+5. Recomendación clave para el próximo período
+
+Formato: claro, ejecutivo, con datos concretos. Máximo 400 palabras.`;
+
+  try{
+    const result=await callMistral(prompt, 800);
+    const now=new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'long',year:'numeric'});
+    document.getElementById('brief-content').innerHTML=`
+      <div class="brief-page" id="brief-printable">
+        <div class="brief-header">
+          <div>
+            <div class="brief-logo">CDT · Compliance Digital Twin</div>
+            <div style="font-size:11px;color:#666;margin-top:3px">${S.ctx?.name||'Organización'} · ${S.ctx?.sector||''}</div>
+          </div>
+          <div class="brief-date"><div style="font-size:11px;color:#666">Brief Ejecutivo</div><div style="font-weight:700;margin-top:2px">${now}</div></div>
+        </div>
+        <div class="brief-kri-row">
+          <div class="brief-kri"><div class="brief-kri-val" style="color:#16a34a">${globalScore.toFixed(1)}</div><div class="brief-kri-label">Madurez /5.0</div></div>
+          <div class="brief-kri"><div class="brief-kri-val" style="color:#dc2626">${S.hits.filter(h=>h.level==='critical').length}</div><div class="brief-kri-label">Hits Críticos</div></div>
+          <div class="brief-kri"><div class="brief-kri-val" style="color:#d97706">${openPlans.length}</div><div class="brief-kri-label">Planes Abiertos</div></div>
+          <div class="brief-kri"><div class="brief-kri-val" style="color:#2563eb">${S.hits.length}</div><div class="brief-kri-label">Hits Monitorizados</div></div>
+        </div>
+        <div style="white-space:pre-wrap;font-size:12px;line-height:1.7;color:#222">${result}</div>
+        <div style="margin-top:24px;padding-top:12px;border-top:1px solid #ddd;font-size:10px;color:#999">Generado automáticamente por CDT — Compliance Digital Twin · ${now}</div>
+      </div>`;
+  }catch(e){showAlert('brief-alert','Error: '+e.message,'err');}
+  btn.textContent='✦ Generar con IA'; btn.disabled=false;
+}
+
+function printBrief(){
+  const content=document.getElementById('brief-printable');
+  if(!content){alert('Genera el brief primero');return;}
+  const w=window.open('','_blank');
+  w.document.write(`<html><head><title>Brief Ejecutivo CDT</title><style>body{font-family:Georgia,serif;padding:40px;max-width:780px;margin:0 auto}@media print{body{padding:20px}}</style></head><body>${content.outerHTML}</body></html>`);
+  w.document.close(); w.print();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// HISTORIAL MADUREZ
+// ═══════════════════════════════════════════════════════════════
+async function openHistory(){
+  const history=await fsList('maturity_history','_created','desc');
+  document.getElementById('history-list').innerHTML=history.length?
+    history.map(h=>`
+      <div class="hist-item">
+        <span class="hist-date">${fmtDate(h._created)}</span>
+        <span class="hist-score">${h.globalScore?.toFixed(1)||'—'}/5</span>
+        <span class="hist-note">${h.note||''}</span>
+      </div>`).join(''):
+    '<div class="empty"><div class="empty-sub">Sin historial aún</div></div>';
+  openModal('modal-history');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FUENTES
+// ═══════════════════════════════════════════════════════════════
+function renderFuentes(){
+  const rc=S.remoteCfg;
+  const ql=document.getElementById('queries-list');
+  ql.innerHTML=(rc.newsapi_queries||[]).map((q,i)=>`
+    <div class="flex ic gap8 mb6" style="background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:7px 10px">
+      <span style="color:var(--accent);font-size:10px;flex-shrink:0">${i+1}</span>
+      <span style="font-size:10px;flex:1;color:var(--text-dim)">${esc(q)}</span>
+      <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:14px" onclick="removeQuery(${i})">×</button>
+    </div>`).join('');
+
+  const rss=document.getElementById('rss-list');
+  rss.innerHTML=Object.entries(RSS_LABELS).map(([k,label])=>{
+    const on=(rc.rss_enabled||{})[k]!==false;
+    return `<div class="flex ic gap8" style="padding:7px 0;border-bottom:1px solid var(--border)">
+      <button class="rss-btn ${on?'on':''}" id="rss-${k}" onclick="toggleRss('${k}')" style="width:32px;height:18px;background:${on?'var(--accent)':'var(--border2)'};border:none;border-radius:9px;cursor:pointer;position:relative;transition:background .2s">
+        <span style="position:absolute;top:2px;left:${on?'16':'2'}px;width:14px;height:14px;background:#fff;border-radius:50%;transition:left .2s;display:block"></span>
+      </button>
+      <span style="font-size:11px;color:${on?'var(--text)':'var(--text-dim)'}">${label}</span>
+    </div>`;
+  }).join('');
+
+  const kw=document.getElementById('kw-list');
+  kw.innerHTML=(rc.custom_keywords||[]).map((k,i)=>`
+    <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 8px;border-radius:3px;background:var(--surface2);border:1px solid var(--border);color:var(--text-dim)">${esc(k)}<button style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:12px" onclick="removeKw(${i})">×</button></span>`).join('');
+}
+
+function addQuery(){
+  const v=document.getElementById('new-query').value.trim();
+  if(!v)return;
+  S.remoteCfg.newsapi_queries=[...(S.remoteCfg.newsapi_queries||[]),v];
+  document.getElementById('new-query').value='';
+  renderFuentes();
+}
+function removeQuery(i){ S.remoteCfg.newsapi_queries.splice(i,1); renderFuentes(); }
+function toggleRss(k){ S.remoteCfg.rss_enabled=S.remoteCfg.rss_enabled||{}; S.remoteCfg.rss_enabled[k]=!S.remoteCfg.rss_enabled[k]; renderFuentes(); }
+function addKw(){ const v=document.getElementById('new-kw').value.trim(); if(!v)return; S.remoteCfg.custom_keywords=[...(S.remoteCfg.custom_keywords||[]),v]; document.getElementById('new-kw').value=''; renderFuentes(); }
+function removeKw(i){ S.remoteCfg.custom_keywords.splice(i,1); renderFuentes(); }
+async function saveFuentes(){
+  await fsSet('config','main',S.remoteCfg);
+  showAlert('fuentes-alert','✓ Configuración guardada en Firestore','ok');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ANÁLISIS MANUAL
+// ═══════════════════════════════════════════════════════════════
+async function runManual(){
+  const key=S.cfg.mistralKey;
+  if(!key){showAlert('','','');go('config');return;}
+  const text=document.getElementById('an-text').value.trim();
+  if(!text){alert('Introduce texto para analizar');return;}
+  const type=document.getElementById('an-type').value;
+  const btn=document.getElementById('an-btn');
+  document.getElementById('an-result').innerHTML='<div class="flex ic gap8" style="color:var(--text-muted);padding:16px 0"><span class="spin"></span> Analizando contra Digital Twin...</div>';
+  btn.disabled=true;
+
+  const twinCtx=S.twinSummary?`CONTEXTO DE LA ORGANIZACIÓN (Digital Twin):\n${S.twinSummary}\n\n`:'';
+  const typeInstructions={
+    full:'Realiza un análisis completo: relevancia para la organización, riesgos identificados, normas afectadas, control de madurez más expuesto, impacto financiero estimado y acción recomendada.',
+    vulnerability:'Analiza la vulnerabilidad específica: ¿tiene la organización controles para este riesgo según su modelo de compliance? ¿Qué gap existe?',
+    financial:'Estima el impacto financiero: multas potenciales según normativa española, daño reputacional y coste de remediación.',
+    action:'Genera un plan de acción concreto con pasos específicos, responsables y plazos recomendados.',
+  };
+
+  const prompt=`${twinCtx}${typeInstructions[type]||typeInstructions.full}\n\nEVENTO A ANALIZAR:\n${text}`;
+  try{
+    const result=await callMistral(prompt,1200);
+    document.getElementById('an-result').innerHTML=`<div style="font-size:11px;line-height:1.8;white-space:pre-wrap;color:var(--text-dim)">${esc(result)}</div>`;
+  }catch(e){
+    document.getElementById('an-result').innerHTML=`<div class="alert alert-err">Error: ${esc(e.message)}</div>`;
+  }
+  btn.disabled=false;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════════════════════
+function loadConfig(){
+  document.getElementById('cfg-mistral-key').value=S.cfg.mistralKey||'';
+  document.getElementById('cfg-mistral-model').value=S.cfg.mistralModel||'mistral-small-latest';
+  document.getElementById('cfg-newsapi-key').value=S.cfg.newsapiKey||'';
+  document.getElementById('cfg-threshold').value=S.cfg.threshold||60;
+  document.getElementById('cfg-repo').value=S.cfg.repo||'avespa/digitaltwin';
+  document.getElementById('cfg-twin-days').value=S.cfg.twinDays||90;
+}
+
+function saveConfig(){
+  S.cfg={
+    mistralKey: document.getElementById('cfg-mistral-key').value.trim(),
+    mistralModel: document.getElementById('cfg-mistral-model').value,
+    newsapiKey: document.getElementById('cfg-newsapi-key').value.trim(),
+    threshold: parseInt(document.getElementById('cfg-threshold').value),
+    repo: document.getElementById('cfg-repo').value.trim(),
+    twinDays: parseInt(document.getElementById('cfg-twin-days').value),
+  };
+  lsSet('cfg',S.cfg);
+  showAlert('config-alert','✓ Configuración guardada localmente','ok');
+}
+
+async function testMistral(){
+  const key=document.getElementById('cfg-mistral-key').value.trim();
+  if(!key){showAlert('config-alert','Introduce la API key primero','err');return;}
+  try{
+    const r=await fetch('https://api.mistral.ai/v1/models',{headers:{'Authorization':'Bearer '+key}});
+    showAlert('config-alert',r.ok?'✓ Mistral conectado correctamente':'✗ API Key inválida',r.ok?'ok':'err');
+  }catch(e){ showAlert('config-alert','Error de conexión','err'); }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MISTRAL
+// ═══════════════════════════════════════════════════════════════
+async function callMistral(prompt, maxTokens=800){
+  const key=S.cfg.mistralKey;
+  if(!key) throw new Error('API key de Mistral no configurada');
+  const r=await fetch('https://api.mistral.ai/v1/chat/completions',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+    body:JSON.stringify({
+      model:S.cfg.mistralModel||'mistral-small-latest',
+      messages:[{role:'user',content:prompt}],
+      temperature:0.2, max_tokens:maxTokens,
+    })
+  });
+  if(!r.ok){ const err=await r.json(); throw new Error(err.message||'Error Mistral'); }
+  const data=await r.json();
+  return data.choices[0].message.content;
+}
+
+// ═══════════════════════════════════════════════════════════════
 // HELPERS
-// ═══════════════════════════════════════════════════════
-function levelLabel(l) { return {critical:'CRÍTICO',warning:'ALERTA',info:'INFO'}[l]||l||'?'; }
-function sectorLabel(s) {
-  return {financiero:'Financiero',seguros:'Seguros',tecnologia:'Tecnología',salud:'Salud',
-    construccion:'Construcción',energia:'Energía',alimentacion:'Alimentación',
-    transporte:'Transporte',manufactura:'Manufactura',servicios:'Servicios',retail:'Retail',otro:'Otro'}[s]||s||'—';
-}
-function fmtDate(iso) {
-  if(!iso) return '—';
-  const d = new Date(iso);
-  return d.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit'}) + ' ' + d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
-}
-function esc(s='') { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function toggleEye(id) { const e=document.getElementById(id); e.type=e.type==='password'?'text':'password'; }
-function markDirty(section) {
-  const btn = document.getElementById(section+'-save-btn');
-  if(btn && !btn.textContent.includes('*')) btn.textContent += ' *';
-}
-function showAlert(containerId, msg, type) {
-  const map = {ok:'ok',err:'err',warn:'warn'};
-  const html = `<div class="alert ${map[type]||'ok'}">${msg}</div>`;
-  if(containerId) {
-    const el = document.getElementById(containerId);
-    if(el) { el.innerHTML=html; setTimeout(()=>{ el.innerHTML=''; },4000); }
-  }
+// ═══════════════════════════════════════════════════════════════
+function val(id){ const el=document.getElementById(id); return el?el.value.trim():''; }
+function esc(s=''){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtDate(iso){ if(!iso)return'—'; const d=new Date(iso); return d.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'2-digit'}); }
+function fmtTime(iso){ if(!iso)return'—'; const d=new Date(iso); return d.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}); }
+function levelLabel(l){ return {critical:'CRÍTICO',warning:'ALERTA',info:'INFO'}[l]||l||'?'; }
+function levelColor(l){ return {critical:'var(--danger)',warning:'var(--warn)',info:'var(--accent2)'}[l]||'var(--border2)'; }
+function setStatus(t){ document.getElementById('foot-status').textContent=t; }
+function showAlert(containerId, msg, type){
+  const cls={ok:'alert-ok',err:'alert-err',warn:'alert-warn',info:'alert-info'}[type]||'alert-info';
+  const html=`<div class="alert ${cls}">${msg}</div>`;
+  if(containerId){ const el=document.getElementById(containerId); if(el){ el.innerHTML=html; setTimeout(()=>el.innerHTML='',5000); } }
 }
 
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // INIT
-// ═══════════════════════════════════════════════════════
-restore();
+// ═══════════════════════════════════════════════════════════════
+restoreLocal();
 renderAll();
-loadConfig();
-
-// Auto-sync al arrancar
-syncNow();
-
-// Auto-sync cada 30 minutos
-setInterval(syncNow, 30 * 60 * 1000);
+drawRadar('radar-dash', getDimScores());
+renderRadarLegend('radar-legend-dash', true);
+syncAll();
+setInterval(syncAll, 15*60*1000); // auto-sync cada 15 min
 </script>
 </body>
 </html>
