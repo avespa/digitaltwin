@@ -1,14 +1,6 @@
 """
 CDT - Compliance Digital Twin
-Fetcher: Lee fuentes de noticias y jurisprudencia, analiza con Mistral IA
-y guarda los resultados en /data/hits.json
-
-Fuentes:
-- BOE (Boletín Oficial del Estado) - RSS gratuito
-- CENDOJ (jurisprudencia) - RSS gratuito
-- CNMV (sanciones mercado valores) - RSS gratuito
-- AEPD (sanciones protección de datos) - RSS gratuito
-- NewsAPI - API gratuita (100 req/día)
+Fetcher v2 — URLs verificadas y corregidas
 """
 
 import os
@@ -21,11 +13,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 # ─────────────────────────────────────────────
-# CONFIGURACIÓN (desde variables de entorno GitHub)
+# CONFIGURACIÓN
 # ─────────────────────────────────────────────
-MISTRAL_API_KEY = os.environ.get("MISTRAL_API_KEY", "")
-MISTRAL_MODEL   = os.environ.get("MISTRAL_MODEL", "mistral-small-latest")
-NEWSAPI_KEY     = os.environ.get("NEWSAPI_KEY", "")
+MISTRAL_API_KEY     = os.environ.get("MISTRAL_API_KEY", "")
+MISTRAL_MODEL       = os.environ.get("MISTRAL_MODEL", "mistral-small-latest")
+NEWSAPI_KEY         = os.environ.get("NEWSAPI_KEY", "")
 RELEVANCE_THRESHOLD = int(os.environ.get("RELEVANCE_THRESHOLD", "60"))
 
 DATA_DIR  = Path(__file__).parent.parent / "data"
@@ -33,245 +25,199 @@ HITS_FILE = DATA_DIR / "hits.json"
 DATA_DIR.mkdir(exist_ok=True)
 
 # ─────────────────────────────────────────────
-# FUENTES RSS
+# FUENTES RSS — URLs verificadas febrero 2026
 # ─────────────────────────────────────────────
 RSS_SOURCES = {
-    "BOE_general": {
-        "url": "https://www.boe.es/rss/canal.php?s=boe",
-        "name": "BOE - Disposiciones generales",
+    # BOE — URLs correctas según boe.es/rss/
+    "BOE_disposiciones": {
+        "url": "https://www.boe.es/rss/boe.php?s=1",
+        "name": "BOE - Sección I (Disposiciones generales)",
         "enabled": True,
     },
-    "BOE_sanciones": {
-        "url": "https://www.boe.es/rss/canal.php?s=boe&tipo=A",
-        "name": "BOE - Anuncios y sanciones",
+    "BOE_justicia": {
+        "url": "https://www.boe.es/rss/boe.php?s=4",
+        "name": "BOE - Sección IV (Administración de Justicia)",
         "enabled": True,
     },
-    "CENDOJ_penal": {
-        "url": "https://www.poderjudicial.es/search/rss.jsp?tipo_resolucion=&organo=&inicio=0&num_resolucion=&cendoj=&query=compliance+corrupcion+blanqueo+anticorrupcion&country=ES",
-        "name": "CENDOJ - Sentencias compliance/corrupción",
+    "BOE_anuncios": {
+        "url": "https://www.boe.es/rss/boe.php?s=5B",
+        "name": "BOE - Sección V.B (Anuncios oficiales)",
         "enabled": True,
     },
-    "CENDOJ_admin": {
-        "url": "https://www.poderjudicial.es/search/rss.jsp?tipo_resolucion=&organo=&inicio=0&num_resolucion=&cendoj=&query=sancion+empresa+multa+infraccion&country=ES",
-        "name": "CENDOJ - Sentencias sanciones empresariales",
+    "BOE_derecho_penal": {
+        "url": "https://www.boe.es/rss/canal_leg.php?l=l&c=113",
+        "name": "BOE - Legislación Derecho Penal",
         "enabled": True,
     },
-    "CNMV_sanciones": {
-        "url": "https://www.cnmv.es/portal/alfresco/d/d/workspace/SpacesStore/cnmv-rss-sanciones.xml",
-        "name": "CNMV - Sanciones mercado de valores",
+    "BOE_derecho_mercantil": {
+        "url": "https://www.boe.es/rss/canal_leg.php?l=l&c=112",
+        "name": "BOE - Legislación Derecho Mercantil",
         "enabled": True,
     },
-    "AEPD_resoluciones": {
-        "url": "https://www.aepd.es/es/rss/resoluciones",
-        "name": "AEPD - Resoluciones protección de datos",
+    "BOE_sistema_financiero": {
+        "url": "https://www.boe.es/rss/canal_leg.php?l=l&c=127",
+        "name": "BOE - Legislación Sistema Financiero",
         "enabled": True,
     },
-    "AEPD_noticias": {
-        "url": "https://www.aepd.es/es/rss/noticias",
-        "name": "AEPD - Noticias",
+    "BOE_tribunal_constitucional": {
+        "url": "https://www.boe.es/rss/canal.php?c=tc",
+        "name": "BOE - Sentencias Tribunal Constitucional",
+        "enabled": True,
+    },
+    # BORME — Registro Mercantil
+    "BORME_general": {
+        "url": "https://www.boe.es/rss/borme.php",
+        "name": "BORME - Registro Mercantil",
         "enabled": True,
     },
 }
 
 # ─────────────────────────────────────────────
-# KEYWORDS DE COMPLIANCE (para filtro previo)
+# KEYWORDS DE COMPLIANCE
 # ─────────────────────────────────────────────
 COMPLIANCE_KEYWORDS = [
-    # Anticorrupción
     "corrupción", "soborno", "cohecho", "comisión ilícita", "tráfico de influencias",
-    "enriquecimiento ilícito", "malversación", "prevaricación",
-    # Blanqueo
-    "blanqueo", "lavado de dinero", "financiación del terrorismo", "PBC", "AML",
-    # Sanciones empresariales
-    "multa", "sanción", "expediente sancionador", "infracción grave", "infracción muy grave",
-    "resolución sancionadora",
-    # Compliance corporativo
-    "compliance", "cumplimiento normativo", "programa de cumplimiento", "canal de denuncias",
-    "whistleblowing", "due diligence", "diligencia debida",
-    # RGPD / datos
-    "protección de datos", "RGPD", "LOPD", "brecha de seguridad", "transferencia internacional",
-    "consentimiento", "datos personales",
-    # Competencia
-    "prácticas anticompetitivas", "cártel", "abuso de posición", "CNMC", "competencia desleal",
-    # Laboral / igualdad
-    "acoso laboral", "acoso sexual", "discriminación", "desigualdad retributiva", "brecha salarial",
-    "plan de igualdad",
-    # Medio ambiente / ESG
-    "medioambiente", "ESG", "sostenibilidad", "greenwashing", "emisiones", "vertido",
-    # Mercado de valores
-    "insider trading", "información privilegiada", "manipulación de mercado", "abuso de mercado",
-    # Penal empresarial
-    "responsabilidad penal", "persona jurídica", "delito empresarial", "administrador concursal",
+    "malversación", "prevaricación", "blanqueo", "lavado de dinero",
+    "financiación del terrorismo", "multa", "sanción", "expediente sancionador",
+    "infracción grave", "infracción muy grave", "resolución sancionadora",
+    "compliance", "cumplimiento normativo", "programa de cumplimiento",
+    "canal de denuncias", "whistleblowing", "due diligence", "diligencia debida",
+    "protección de datos", "RGPD", "LOPD", "brecha de seguridad",
+    "datos personales", "prácticas anticompetitivas", "cártel", "abuso de posición",
+    "competencia desleal", "acoso laboral", "acoso sexual", "discriminación",
+    "insider trading", "información privilegiada", "manipulación de mercado",
+    "responsabilidad penal", "persona jurídica", "delito empresarial",
+    "medioambiente", "ESG", "greenwashing", "vertido ilegal",
+    "contratación pública", "licitación", "fraude", "falsedad documental",
+    "administrador", "consejero", "directivo", "órgano de cumplimiento",
 ]
 
 
 # ─────────────────────────────────────────────
-# FUNCIONES DE INGESTA
+# INGESTA RSS
 # ─────────────────────────────────────────────
-
 def fetch_rss(url: str, source_name: str) -> list[dict]:
-    """Descarga y parsea un feed RSS. Devuelve lista de artículos."""
     articles = []
     try:
         headers = {
-            "User-Agent": "CDT-ComplianceTwin/1.0 (compliance monitoring tool)",
-            "Accept": "application/rss+xml, application/xml, text/xml"
+            "User-Agent": "Mozilla/5.0 (compatible; CDT-ComplianceBot/1.0)",
+            "Accept": "application/rss+xml, application/xml, text/xml, */*",
         }
-        resp = requests.get(url, headers=headers, timeout=15)
+        resp = requests.get(url, headers=headers, timeout=20)
         resp.raise_for_status()
 
+        # El BOE devuelve HTML cuando hay error — detectarlo
+        content_type = resp.headers.get("Content-Type", "")
+        if "html" in content_type and b"<rss" not in resp.content[:200]:
+            print(f"  [{source_name}] Respuesta HTML inesperada (posible bloqueo)")
+            return []
+
         root = ET.fromstring(resp.content)
-
-        # Namespaces habituales en RSS
-        ns = {
-            "dc": "http://purl.org/dc/elements/1.1/",
-            "content": "http://purl.org/rss/1.0/modules/content/",
-        }
-
         items = root.findall(".//item")
-        print(f"  [{source_name}] {len(items)} artículos encontrados")
+        print(f"  [{source_name}] {len(items)} artículos")
 
-        for item in items[:20]:  # Máximo 20 por fuente
-            title       = item.findtext("title", "").strip()
-            link        = item.findtext("link", "").strip()
-            description = item.findtext("description", "").strip()
-            pub_date    = item.findtext("pubDate", "").strip()
-            dc_date     = item.findtext("dc:date", "", ns).strip()
+        for item in items[:25]:
+            title       = (item.findtext("title") or "").strip()
+            link        = (item.findtext("link") or "").strip()
+            description = (item.findtext("description") or "").strip()
+            pub_date    = (item.findtext("pubDate") or "").strip()
 
-            # Limpiar HTML del description
             description = clean_html(description)
-
             if title:
                 articles.append({
                     "title":       title,
                     "link":        link,
-                    "description": description[:500],
-                    "date":        pub_date or dc_date or datetime.now(timezone.utc).isoformat(),
+                    "description": description[:600],
+                    "date":        pub_date or datetime.now(timezone.utc).isoformat(),
                     "source":      source_name,
                 })
 
     except requests.RequestException as e:
-        print(f"  [{source_name}] Error de red: {e}")
+        print(f"  [{source_name}] Error red: {e}")
     except ET.ParseError as e:
         print(f"  [{source_name}] Error XML: {e}")
+    except Exception as e:
+        print(f"  [{source_name}] Error inesperado: {e}")
 
     return articles
 
 
-def fetch_newsapi(query: str) -> list[dict]:
-    """Busca noticias en NewsAPI (100 req/día en tier gratuito)."""
+def fetch_newsapi(query: str, label: str = "NewsAPI") -> list[dict]:
     if not NEWSAPI_KEY:
-        print("  [NewsAPI] Sin API key, saltando...")
         return []
-
     articles = []
     try:
-        url = "https://newsapi.org/v2/everything"
-        params = {
-            "q":        query,
-            "language": "es",
-            "sortBy":   "publishedAt",
-            "pageSize": 10,
-            "apiKey":   NEWSAPI_KEY,
-        }
-        resp = requests.get(url, params=params, timeout=15)
+        resp = requests.get(
+            "https://newsapi.org/v2/everything",
+            params={
+                "q":        query,
+                "language": "es",
+                "sortBy":   "publishedAt",
+                "pageSize": 10,
+                "apiKey":   NEWSAPI_KEY,
+            },
+            timeout=15,
+        )
         resp.raise_for_status()
         data = resp.json()
-
         for art in data.get("articles", []):
-            title       = art.get("title", "")
-            description = art.get("description", "") or ""
+            title = art.get("title", "")
+            desc  = art.get("description", "") or ""
             if title and title != "[Removed]":
                 articles.append({
                     "title":       title,
                     "link":        art.get("url", ""),
-                    "description": description[:500],
+                    "description": desc[:600],
                     "date":        art.get("publishedAt", datetime.now(timezone.utc).isoformat()),
-                    "source":      f"NewsAPI - {art.get('source', {}).get('name', 'Desconocido')}",
+                    "source":      f"{label} - {art.get('source', {}).get('name', '?')}",
                 })
-
-        print(f"  [NewsAPI] {len(articles)} artículos encontrados")
-
+        print(f"  [{label}] {len(articles)} artículos")
     except Exception as e:
-        print(f"  [NewsAPI] Error: {e}")
-
+        print(f"  [{label}] Error: {e}")
     return articles
 
 
 def clean_html(text: str) -> str:
-    """Elimina tags HTML básicos de un texto."""
     import re
     text = re.sub(r"<[^>]+>", " ", text)
-    text = re.sub(r"&amp;",  "&",  text)
-    text = re.sub(r"&lt;",   "<",  text)
-    text = re.sub(r"&gt;",   ">",  text)
-    text = re.sub(r"&nbsp;", " ",  text)
-    text = re.sub(r"\s+",    " ",  text)
-    return text.strip()
+    for ent, rep in [("&amp;","&"),("&lt;","<"),("&gt;",">"),("&nbsp;"," "),("&#39;","'")]:
+        text = text.replace(ent, rep)
+    return re.sub(r"\s+", " ", text).strip()
 
 
 def is_relevant(article: dict) -> bool:
-    """Filtro rápido: descarta artículos sin keywords de compliance."""
     text = (article["title"] + " " + article["description"]).lower()
     return any(kw.lower() in text for kw in COMPLIANCE_KEYWORDS)
 
 
 def article_id(article: dict) -> str:
-    """Genera un ID único por artículo basado en título + link."""
-    raw = (article.get("title", "") + article.get("link", "")).encode()
+    raw = (article.get("title","") + article.get("link","")).encode()
     return hashlib.md5(raw).hexdigest()[:12]
 
 
 # ─────────────────────────────────────────────
-# ANÁLISIS CON MISTRAL
+# ANÁLISIS MISTRAL
 # ─────────────────────────────────────────────
+SYSTEM_PROMPT = """Eres un experto en compliance corporativo español (ISO 37301, UNE 19601, ISO 37001, RGPD, normativa CNMV/AEPD/CNMC).
 
-SYSTEM_PROMPT = """Eres un experto en compliance corporativo español especializado en:
-- ISO 37301 (Sistemas de gestión de compliance)
-- UNE 19601 (Compliance penal)
-- ISO 37001 (Antisoborno)
-- RGPD y LOPD-GDD
-- Normativa CNMV, AEPD, CNMC
-- Derecho penal empresarial español
-
-Tu tarea es analizar noticias, resoluciones o sentencias y determinar su relevancia e impacto para empresas españolas.
-
-Responde SIEMPRE en este formato JSON exacto (sin markdown, sin explicaciones fuera del JSON):
+Analiza el evento y responde SOLO con este JSON exacto (sin markdown):
 {
-  "relevance_score": <número 0-100>,
+  "relevance_score": <0-100>,
   "level": "<critical|warning|info|irrelevant>",
   "risks": ["<riesgo1>", "<riesgo2>"],
-  "norms_affected": ["<norma1>", "<norma2>"],
-  "summary": "<resumen del evento en 2-3 frases>",
-  "vulnerability": "<qué control de compliance debería existir para mitigar este riesgo>",
-  "financial_impact": "<estimación del impacto económico potencial en empresa española media>",
-  "recommended_action": "<acción inmediata que debería tomar un Compliance Officer>"
+  "norms_affected": ["<norma1>"],
+  "summary": "<resumen en 2-3 frases>",
+  "vulnerability": "<control que debería existir>",
+  "financial_impact": "<estimación impacto económico en empresa española>",
+  "recommended_action": "<acción inmediata para el Compliance Officer>"
 }
 
-Criterios de nivel:
-- critical: Multa >500K€, condena penal, escándalo reputacional grave, nueva obligación legal urgente
-- warning: Multa 50K-500K€, expediente sancionador, riesgo alto identificado, sentencia relevante
-- info: Multa <50K€, nueva guía/recomendación, jurisprudencia de interés moderado
-- irrelevant: No relacionado con compliance corporativo
-"""
+Niveles: critical=multa>500K€/condena penal | warning=multa 50-500K€/expediente | info=guía/jurisprudencia moderada | irrelevant=no relacionado"""
+
 
 def analyze_with_mistral(article: dict) -> dict | None:
-    """Envía un artículo a Mistral y devuelve el análisis estructurado."""
     if not MISTRAL_API_KEY:
-        print("  Sin API key de Mistral")
         return None
-
-    prompt = f"""Título: {article['title']}
-
-Fuente: {article['source']}
-Fecha: {article['date']}
-
-Descripción: {article['description']}
-
-Enlace: {article['link']}
-
-Analiza este evento desde la perspectiva del compliance corporativo español."""
-
     try:
         resp = requests.post(
             "https://api.mistral.ai/v1/chat/completions",
@@ -283,189 +229,151 @@ Analiza este evento desde la perspectiva del compliance corporativo español."""
                 "model":       MISTRAL_MODEL,
                 "messages":    [
                     {"role": "system", "content": SYSTEM_PROMPT},
-                    {"role": "user",   "content": prompt},
+                    {"role": "user",   "content": f"Título: {article['title']}\nFuente: {article['source']}\nFecha: {article['date']}\n\nDescripción: {article['description']}\n\nEnlace: {article['link']}"},
                 ],
-                "temperature": 0.1,
-                "max_tokens":  600,
+                "temperature":   0.1,
+                "max_tokens":    600,
                 "response_format": {"type": "json_object"},
             },
             timeout=30,
         )
         resp.raise_for_status()
-        content = resp.json()["choices"][0]["message"]["content"]
+        content  = resp.json()["choices"][0]["message"]["content"]
         analysis = json.loads(content)
-
-        # Validar que tiene los campos mínimos
         if "relevance_score" not in analysis or "level" not in analysis:
             return None
-
         return analysis
-
-    except requests.RequestException as e:
-        print(f"    Error Mistral API: {e}")
-    except json.JSONDecodeError as e:
-        print(f"    Error JSON Mistral: {e}")
     except Exception as e:
-        print(f"    Error inesperado: {e}")
-
-    return None
+        print(f"    Mistral error: {e}")
+        return None
 
 
 # ─────────────────────────────────────────────
-# GESTIÓN DE HITS (persistencia)
+# PERSISTENCIA
 # ─────────────────────────────────────────────
-
 def load_existing_hits() -> dict:
-    """Carga los hits existentes del archivo JSON."""
     if HITS_FILE.exists():
         try:
             with open(HITS_FILE, "r", encoding="utf-8") as f:
                 return json.load(f)
-        except (json.JSONDecodeError, IOError):
+        except Exception:
             pass
     return {"hits": [], "last_updated": None, "stats": {}}
 
 
 def save_hits(data: dict):
-    """Guarda los hits en el archivo JSON."""
     data["last_updated"] = datetime.now(timezone.utc).isoformat()
     with open(HITS_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-    print(f"\n✓ Guardado: {HITS_FILE}")
-
-
-def hits_to_id_set(hits: list) -> set:
-    """Devuelve el conjunto de IDs ya procesados."""
-    return {h.get("id") for h in hits}
+    print(f"✓ Guardado: {HITS_FILE}")
 
 
 # ─────────────────────────────────────────────
 # MAIN
 # ─────────────────────────────────────────────
-
 def main():
     print("=" * 60)
-    print(f"CDT Fetcher — {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
+    print(f"CDT Fetcher v2 — {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
     print("=" * 60)
 
-    # Cargar hits previos
-    stored = load_existing_hits()
-    existing_ids = hits_to_id_set(stored.get("hits", []))
-    new_hits = []
-    processed = 0
+    stored       = load_existing_hits()
+    existing_ids = {h.get("id") for h in stored.get("hits", [])}
+    new_hits     = []
+    processed    = 0
 
-    # ── 1. RSS FEEDS ──────────────────────────────────────────
+    # ── RSS FEEDS ─────────────────────────────
     print("\n📡 Descargando RSS feeds...")
     all_articles = []
+    for key, cfg in RSS_SOURCES.items():
+        if cfg.get("enabled", True):
+            all_articles.extend(fetch_rss(cfg["url"], cfg["name"]))
+            time.sleep(1.5)  # Educado con los servidores
 
-    for source_key, source_cfg in RSS_SOURCES.items():
-        if not source_cfg.get("enabled", True):
-            continue
-        articles = fetch_rss(source_cfg["url"], source_cfg["name"])
-        all_articles.extend(articles)
-        time.sleep(1)  # Educado con los servidores
+    # ── NEWSAPI ───────────────────────────────
+    if NEWSAPI_KEY:
+        print("\n📰 Descargando NewsAPI...")
+        all_articles.extend(fetch_newsapi("multa sanción compliance empresa España", "NewsAPI-Compliance"))
+        time.sleep(1)
+        all_articles.extend(fetch_newsapi("CNMC AEPD CNMV resolución sanción", "NewsAPI-Reguladores"))
 
-    # ── 2. NEWSAPI ────────────────────────────────────────────
-    print("\n📰 Descargando NewsAPI...")
-    newsapi_query = "multa compliance corrupción sanción empresa España"
-    all_articles.extend(fetch_newsapi(newsapi_query))
-
-    time.sleep(1)
-
-    newsapi_query2 = "CNMC AEPD CNMV resolución sanción empresa"
-    all_articles.extend(fetch_newsapi(newsapi_query2))
-
-    # ── 3. FILTRO DE RELEVANCIA RÁPIDO ───────────────────────
-    print(f"\n🔍 Filtrando {len(all_articles)} artículos por keywords...")
-    relevant = [a for a in all_articles if is_relevant(a)]
-    print(f"   → {len(relevant)} artículos relevantes")
-
-    # Eliminar duplicados por ID
+    # ── FILTRO ────────────────────────────────
+    print(f"\n🔍 Filtrando {len(all_articles)} artículos...")
+    relevant     = [a for a in all_articles if is_relevant(a)]
     new_articles = []
     for art in relevant:
-        art_id = article_id(art)
-        if art_id not in existing_ids:
-            art["id"] = art_id
+        aid = article_id(art)
+        if aid not in existing_ids:
+            art["id"] = aid
             new_articles.append(art)
 
-    print(f"   → {len(new_articles)} artículos nuevos (no procesados antes)")
+    print(f"   → {len(relevant)} relevantes | {len(new_articles)} nuevos")
 
-    # ── 4. ANÁLISIS CON MISTRAL ───────────────────────────────
+    # ── ANÁLISIS MISTRAL ──────────────────────
     if new_articles and MISTRAL_API_KEY:
-        print(f"\n🤖 Analizando con Mistral AI ({len(new_articles)} artículos)...")
-
-        for i, article in enumerate(new_articles[:30]):  # Max 30 por ejecución
-            print(f"  [{i+1}/{min(len(new_articles),30)}] {article['title'][:70]}...")
-
+        print(f"\n🤖 Analizando {min(len(new_articles),30)} artículos con Mistral...")
+        for i, article in enumerate(new_articles[:30]):
+            print(f"  [{i+1}] {article['title'][:70]}...")
             analysis = analyze_with_mistral(article)
             processed += 1
 
-            if analysis is None:
-                continue
-
-            # Descartar si no es relevante según la IA
-            if analysis.get("level") == "irrelevant":
-                print(f"    → Descartado por IA (irrelevante)")
+            if not analysis or analysis.get("level") == "irrelevant":
+                print(f"    → Descartado")
                 continue
 
             score = analysis.get("relevance_score", 0)
             if score < RELEVANCE_THRESHOLD:
-                print(f"    → Score {score} < umbral {RELEVANCE_THRESHOLD}, descartado")
+                print(f"    → Score {score} < {RELEVANCE_THRESHOLD}, descartado")
                 continue
 
-            hit = {
-                "id":                  article["id"],
-                "title":               article["title"],
-                "link":                article["link"],
-                "source":              article["source"],
-                "raw_date":            article["date"],
-                "fetched_at":          datetime.now(timezone.utc).isoformat(),
-                "level":               analysis.get("level", "info"),
-                "relevance_score":     analysis.get("relevance_score", 0),
-                "risks":               analysis.get("risks", []),
-                "norms_affected":      analysis.get("norms_affected", []),
-                "summary":             analysis.get("summary", ""),
-                "vulnerability":       analysis.get("vulnerability", ""),
-                "financial_impact":    analysis.get("financial_impact", ""),
-                "recommended_action":  analysis.get("recommended_action", ""),
-            }
-
-            new_hits.append(hit)
+            new_hits.append({
+                "id":                 article["id"],
+                "title":              article["title"],
+                "link":               article["link"],
+                "source":             article["source"],
+                "raw_date":           article["date"],
+                "fetched_at":         datetime.now(timezone.utc).isoformat(),
+                "level":              analysis.get("level", "info"),
+                "relevance_score":    analysis.get("relevance_score", 0),
+                "risks":              analysis.get("risks", []),
+                "norms_affected":     analysis.get("norms_affected", []),
+                "summary":            analysis.get("summary", ""),
+                "vulnerability":      analysis.get("vulnerability", ""),
+                "financial_impact":   analysis.get("financial_impact", ""),
+                "recommended_action": analysis.get("recommended_action", ""),
+            })
             print(f"    ✓ [{analysis.get('level','?').upper()}] Score: {score}")
-
-            # Respetar rate limit de Mistral (free tier: ~1 req/seg)
             time.sleep(1.2)
 
     elif not MISTRAL_API_KEY:
-        print("\n⚠️  Sin API key de Mistral — los artículos no serán analizados")
-    else:
-        print("\n✓ Sin artículos nuevos que analizar")
+        # Sin Mistral: guardar artículos relevantes sin análisis IA
+        print("\n⚠️  Sin API Mistral — guardando artículos sin análisis IA")
+        for art in new_articles[:30]:
+            new_hits.append({
+                "id":              art["id"],
+                "title":           art["title"],
+                "link":            art["link"],
+                "source":          art["source"],
+                "raw_date":        art["date"],
+                "fetched_at":      datetime.now(timezone.utc).isoformat(),
+                "level":           "info",
+                "relevance_score": 50,
+                "summary":         art["description"][:300],
+            })
 
-    # ── 5. GUARDAR ────────────────────────────────────────────
-    print(f"\n💾 Guardando resultados...")
-
-    # Combinar hits nuevos con existentes (los nuevos primero)
-    all_hits = new_hits + stored.get("hits", [])
-
-    # Mantener máximo 200 hits (los más recientes)
-    all_hits = all_hits[:200]
-
+    # ── GUARDAR ───────────────────────────────
+    all_hits = (new_hits + stored.get("hits", []))[:200]
     stats = {
         "total_hits":       len(all_hits),
         "critical_count":   sum(1 for h in all_hits if h.get("level") == "critical"),
         "warning_count":    sum(1 for h in all_hits if h.get("level") == "warning"),
         "info_count":       sum(1 for h in all_hits if h.get("level") == "info"),
         "new_this_run":     len(new_hits),
-        "articles_checked": processed,
+        "articles_checked": processed or len(new_articles),
     }
-
     save_hits({"hits": all_hits, "stats": stats, "last_updated": None})
 
     print(f"\n{'='*60}")
-    print(f"✅ Completado:")
-    print(f"   Artículos revisados: {processed}")
-    print(f"   Hits nuevos añadidos: {len(new_hits)}")
-    print(f"   Total hits en base: {len(all_hits)}")
+    print(f"✅ Resultado: {len(new_hits)} hits nuevos | Total: {len(all_hits)}")
     print(f"   Críticos: {stats['critical_count']} | Alertas: {stats['warning_count']} | Info: {stats['info_count']}")
     print(f"{'='*60}")
 
