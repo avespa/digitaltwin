@@ -1,0 +1,61 @@
+name: CDT — Fetch & Analyze
+
+on:
+  # Ejecutar cada 3 horas
+  schedule:
+    - cron: "0 */3 * * *"
+
+  # Permitir ejecución manual desde GitHub
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Motivo de ejecución manual"
+        required: false
+        default: "Análisis manual"
+
+jobs:
+  fetch-and-analyze:
+    name: Fetch noticias y analizar con IA
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    permissions:
+      contents: write  # Necesario para hacer commit de hits.json
+
+    steps:
+      # 1. Descargar el código del repositorio
+      - name: Checkout repositorio
+        uses: actions/checkout@v4
+
+      # 2. Configurar Python
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      # 3. Instalar dependencias
+      - name: Instalar dependencias
+        run: |
+          pip install requests
+
+      # 4. Ejecutar el fetcher
+      - name: Ejecutar CDT Fetcher
+        env:
+          MISTRAL_API_KEY:        ${{ secrets.MISTRAL_API_KEY }}
+          MISTRAL_MODEL:          ${{ vars.MISTRAL_MODEL || 'mistral-small-latest' }}
+          NEWSAPI_KEY:            ${{ secrets.NEWSAPI_KEY }}
+          RELEVANCE_THRESHOLD:    ${{ vars.RELEVANCE_THRESHOLD || '60' }}
+        run: |
+          python scripts/fetcher.py
+
+      # 5. Guardar hits.json en el repositorio (commit automático)
+      - name: Guardar resultados
+        run: |
+          git config --local user.email "cdt-bot@noreply.github.com"
+          git config --local user.name  "CDT Bot"
+          git add data/hits.json
+          git diff --staged --quiet || git commit -m "🤖 CDT: Actualización automática $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
