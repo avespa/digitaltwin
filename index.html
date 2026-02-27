@@ -219,7 +219,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
 <body>
 <div class="shell">
 
-<!-- SIDEBAR -->
 <nav class="sidebar">
   <div class="logo">
     <div class="logo-mark"><span class="logo-dot"></span>CDT</div>
@@ -247,7 +246,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   </div>
 </nav>
 
-<!-- MAIN -->
 <div class="main">
   <div class="topbar">
     <div class="topbar-title" id="tb-title">Dashboard & KRIs</div>
@@ -258,7 +256,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
 
   <div class="page">
 
-  <!-- DASHBOARD -->
   <div class="view active" id="view-dashboard">
     <div id="twin-disclaimer"></div>
     <div class="kri-grid">
@@ -289,7 +286,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     </div>
   </div>
 
-  <!-- CONTEXTO ORGANIZACIONAL -->
   <div class="view" id="view-contexto">
     <div class="ph">
       <div class="ph-left"><div class="ph-title">Contexto Organizacional</div><div class="ph-sub">ISO 37301 §4.1-4.2 — Define el modelo base de tu Digital Twin</div></div>
@@ -405,7 +401,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     </div>
   </div>
 
-  <!-- ASSESSMENT DE MADUREZ -->
   <div class="view" id="view-madurez">
     <div class="ph">
       <div class="ph-left"><div class="ph-title">Assessment de Madurez</div><div class="ph-sub">ISO 37301 — 7 dimensiones · Escala 1-5</div></div>
@@ -434,7 +429,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     <div id="mat-dimensions"></div>
   </div>
 
-  <!-- TWIN SUMMARY -->
   <div class="view" id="view-twin-summary">
     <div class="ph">
       <div class="ph-left"><div class="ph-title">Resumen Ejecutivo del Twin</div><div class="ph-sub">500 palabras · Usado en todos los análisis de hits</div></div>
@@ -458,7 +452,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     </div>
   </div>
 
-  <!-- HITS -->
   <div class="view" id="view-hits">
     <div class="ph">
       <div class="ph-left"><div class="ph-title">Hits Detectados</div><div class="ph-sub">Analizados contra tu Digital Twin</div></div>
@@ -472,7 +465,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     <div id="hits-list"></div>
   </div>
 
-  <!-- PLANES DE ACCIÓN -->
   <div class="view" id="view-planes">
     <div class="ph">
       <div class="ph-left"><div class="ph-title">Planes de Acción</div><div class="ph-sub">Seguimiento y cierre con mejora documentada</div></div>
@@ -485,7 +477,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     <div id="planes-list"></div>
   </div>
 
-  <!-- BRIEF EJECUTIVO -->
   <div class="view" id="view-brief">
     <div class="ph">
       <div class="ph-left"><div class="ph-title">Brief Ejecutivo</div><div class="ph-sub">Informe para Comité de Cumplimiento / Consejo</div></div>
@@ -498,7 +489,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     <div id="brief-content"></div>
   </div>
 
-  <!-- FUENTES -->
   <div class="view" id="view-fuentes">
     <div class="ph">
       <div class="ph-left"><div class="ph-title">Fuentes & Búsquedas</div><div class="ph-sub">Configura el monitor activo</div></div>
@@ -529,7 +519,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     </div>
   </div>
 
-  <!-- ANÁLISIS MANUAL -->
   <div class="view" id="view-analisis">
     <div class="ph"><div class="ph-left"><div class="ph-title">Análisis Manual IA</div><div class="ph-sub">Analiza cualquier noticia contra tu Digital Twin</div></div></div>
     <div class="g2" style="align-items:start">
@@ -555,7 +544,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     </div>
   </div>
 
-  <!-- CONFIG -->
   <div class="view" id="view-config">
     <div class="ph"><div class="ph-left"><div class="ph-title">Configuración APIs</div></div><div class="ph-actions"><button class="btn btn-primary" onclick="saveConfig()">Guardar</button></div></div>
     <div id="config-alert"></div>
@@ -588,12 +576,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     </div>
   </div>
 
-  </div><!-- /page -->
-</div><!-- /main -->
-</div><!-- /shell -->
-
-<!-- MODAL ANÁLISIS DOCUMENTO -->
-<div class="overlay" id="modal-doc">
+  </div></div></div><div class="overlay" id="modal-doc">
   <div class="modal">
     <div class="modal-title" id="doc-modal-title">Analizar documento con IA</div>
     <button class="modal-x" onclick="closeModal('modal-doc')">✕</button>
@@ -601,10 +584,10 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
       <label class="fl">Selecciona un archivo</label>
       <input type="file" class="fi" id="doc-file" accept=".pdf,.txt,.docx,.doc,.xlsx">
       <div class="fhint" style="margin-top:4px">
-        ✓ <strong>.docx</strong> — extracción perfecta &nbsp;·&nbsp;
+        <p>✓ <strong>.docx</strong> — extracción perfecta &nbsp;·&nbsp;
         ✓ <strong>.txt</strong> — texto plano &nbsp;·&nbsp;
         ⚠ <strong>.pdf</strong> — solo si no está escaneado &nbsp;·&nbsp;
-        ⚠ <strong>.xlsx</strong> — pega el contenido manualmente
+        ⚠ <strong>.xlsx</strong> — pega el contenido manualmente</p>
       </div>
     </div>
     <div class="fg"><label class="fl">O pega el texto directamente</label><textarea class="fi" id="doc-text" rows="6" placeholder="Pega el texto del documento aquí..."></textarea></div>
@@ -618,7 +601,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   </div>
 </div>
 
-<!-- MODAL PLAN DE ACCIÓN -->
 <div class="overlay" id="modal-ap">
   <div class="modal modal-lg">
     <div class="modal-title" id="ap-modal-title">Plan de Acción</div>
@@ -673,7 +655,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   </div>
 </div>
 
-<!-- MODAL HISTORIAL MADUREZ -->
 <div class="overlay" id="modal-history">
   <div class="modal">
     <div class="modal-title">Historial de Madurez</div>
@@ -700,6 +681,9 @@ const db = firebase.firestore();
 // ═══════════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════════
+let lastAnalysisResult = ""; // Variable para guardar el resultado temporalmente
+let docAnalysisTargetGlobal = 'contexto'; 
+
 let S = {
   cfg: { mistralKey:'', mistralModel:'mistral-small-latest', newsapiKey:'', threshold:60, repo:'avespa/digitaltwin', twinDays:90 },
   ctx: {},       // organization context
@@ -977,17 +961,17 @@ function loadContexto(){
 
 async function saveContexto(){
   const ctx = {
-    name:       val('ctx-name'),   sector:     val('ctx-sector'),
-    size:       val('ctx-size'),   revenue:    val('ctx-revenue'),
-    geo:        val('ctx-geo'),    business:   val('ctx-business'),
-    strategy:   val('ctx-strategy'),legal:     val('ctx-legal'),
-    economic:   val('ctx-economic'),social:    val('ctx-social'),
-    trends:     val('ctx-trends'), structure:  val('ctx-structure'),
-    culture:    val('ctx-culture'),tech:       val('ctx-tech'),
+    name:       val('ctx-name'),   sector:      val('ctx-sector'),
+    size:       val('ctx-size'),   revenue:     val('ctx-revenue'),
+    geo:        val('ctx-geo'),    business:    val('ctx-business'),
+    strategy:   val('ctx-strategy'),legal:      val('ctx-legal'),
+    economic:   val('ctx-economic'),social:     val('ctx-social'),
+    trends:     val('ctx-trends'), structure:   val('ctx-structure'),
+    culture:    val('ctx-culture'),tech:        val('ctx-tech'),
     thirds:     val('ctx-thirds'),
     'ext-parties': val('ctx-ext-parties'),
     'int-parties': val('ctx-int-parties'),
-    risks:      val('ctx-risks'),  incidents:  val('ctx-incidents'),
+    risks:      val('ctx-risks'),  incidents:   val('ctx-incidents'),
     norms:      [...document.querySelectorAll('.ctx-norm:checked')].map(c=>c.value),
   };
   if(!ctx.name||!ctx.sector){ showAlert('ctx-alert','Nombre y sector son obligatorios','err'); return; }
@@ -1528,11 +1512,14 @@ async function analyzeDoc(){
   const prompt=`${instruction}\n\nDOCUMENTO (${file?.name||'texto pegado'}):\n${docText.slice(0,10000)}`;
   try{
     const result=await callMistral(prompt, 1500);
+    lastAnalysisResult = result; // Guardamos el texto aquí
+    docAnalysisTargetGlobal = docAnalysisTarget;
+
     document.getElementById('doc-result').innerHTML=`
       <div class="alert alert-ok">✓ Análisis completado — ${docText.length} caracteres procesados</div>
       <div style="background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:12px;font-size:10.5px;color:var(--text-dim);line-height:1.7;white-space:pre-wrap;max-height:320px;overflow-y:auto">${esc(result)}</div>
       <div class="flex gap6 mt10">
-        <button class="btn btn-primary btn-sm" onclick="applyDocResult(${JSON.stringify(result)})">Aplicar al Twin →</button>
+        <button class="btn btn-primary btn-sm" onclick="applyDocResult(lastAnalysisResult)">Aplicar al Twin →</button>
         <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-doc')">Cerrar</button>
       </div>`;
   }catch(e){
@@ -1541,12 +1528,12 @@ async function analyzeDoc(){
 }
 
 function applyDocResult(result){
-  if(docAnalysisTarget==='contexto'){
+  if(docAnalysisTargetGlobal==='contexto'){
     const ta=document.getElementById('ctx-risks');
     if(ta) ta.value=(ta.value?ta.value+'\n\n':'')+result.slice(0,600);
     showAlert('ctx-alert','Análisis aplicado al contexto — revisa y guarda','ok');
     closeModal('modal-doc'); go('contexto');
-  } else if(docAnalysisTarget==='madurez'||docAnalysisTarget==='element'){
+  } else if(docAnalysisTargetGlobal==='madurez'||docAnalysisTargetGlobal==='element'){
     const ta=docAnalysisElementId?document.getElementById('ev-'+docAnalysisElementId):null;
     if(ta) ta.value=(ta.value?ta.value+'\n\n':'')+result.slice(0,400);
     showAlert('mat-alert','Análisis aplicado — revisa puntuaciones y guarda','ok');
@@ -1647,7 +1634,7 @@ async function generateBrief(){
   const topHits=S.hits.filter(h=>h.level==='critical'||h.level==='warning').slice(0,3);
   const openPlans=S.actionPlans.filter(p=>p.status!=='closed');
 
-  const prompt=`Eres el Compliance Officer de "${S.ctx?.name||'la organización'}". Genera un BRIEF EJECUTIVO en español para presentar al Comité de Cumplimiento o Consejo de Administración.
+  const prompt = `Eres el Compliance Officer de "${S.ctx?.name||'la organización'}". Genera un BRIEF EJECUTIVO en español para presentar al Comité de Cumplimiento o Consejo de Administración.
 
 DATOS DEL TWIN:
 - Organización: ${S.ctx?.name} · ${S.ctx?.sector} · ${S.ctx?.size}
