@@ -1,0 +1,24 @@
+{
+  "newsapi_queries": [
+    "(multa OR sanción OR \"expediente sancionador\") AND (empresa OR sociedad) AND España",
+    "(CNMC OR AEPD OR CNMV OR \"Banco de España\") AND (resolución OR sanción OR investigación)",
+    "(\"compliance\" OR \"cumplimiento normativo\" OR \"blanqueo de capitales\" OR \"corrupción empresarial\") AND España",
+    "(\"responsabilidad penal\" OR \"persona jurídica\" OR \"fraude empresarial\") AND (sentencia OR condena)",
+    "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
+  ],
+  "newsapi_sources": "",
+  "custom_keywords": [
+    "compliance", "multa", "sanción", "corrupción", "blanqueo",
+    "RGPD", "CNMC", "AEPD", "CNMV", "fraude", "soborno"
+  ],
+  "rss_enabled": {
+    "BOE_disposiciones": true,
+    "BOE_justicia": true,
+    "BOE_anuncios": true,
+    "BOE_derecho_penal": true,
+    "BOE_derecho_mercantil": true,
+    "BOE_sistema_financiero": true,
+    "BOE_tribunal_constitucional": true,
+    "BORME_general": true
+  }
+}
