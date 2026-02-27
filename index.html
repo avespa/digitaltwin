@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 <style>
 :root{
   --bg:#070b0f;--surface:#0c1117;--surface2:#111820;--surface3:#161f28;
@@ -597,8 +598,14 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     <div class="modal-title" id="doc-modal-title">Analizar documento con IA</div>
     <button class="modal-x" onclick="closeModal('modal-doc')">✕</button>
     <div class="fg">
-      <label class="fl">Selecciona un archivo (PDF, TXT, DOCX)</label>
+      <label class="fl">Selecciona un archivo</label>
       <input type="file" class="fi" id="doc-file" accept=".pdf,.txt,.docx,.doc,.xlsx">
+      <div class="fhint" style="margin-top:4px">
+        ✓ <strong>.docx</strong> — extracción perfecta &nbsp;·&nbsp;
+        ✓ <strong>.txt</strong> — texto plano &nbsp;·&nbsp;
+        ⚠ <strong>.pdf</strong> — solo si no está escaneado &nbsp;·&nbsp;
+        ⚠ <strong>.xlsx</strong> — pega el contenido manualmente
+      </div>
     </div>
     <div class="fg"><label class="fl">O pega el texto directamente</label><textarea class="fi" id="doc-text" rows="6" placeholder="Pega el texto del documento aquí..."></textarea></div>
     <div class="fg"><label class="fl">Instrucción para la IA</label><input type="text" class="fi" id="doc-instruction" value="Extrae y estructura la información relevante para el contexto organizacional de compliance ISO 37301"></div>
@@ -1484,34 +1491,52 @@ function openDocAnalysis(target, elemId=null, elemLabel=null){
 
 async function analyzeDoc(){
   const key=S.cfg.mistralKey;
-  if(!key){showAlert('doc-alert','Configura la API key de Mistral','err');return;}
+  if(!key){showAlert('doc-alert','Configura la API key de Mistral en ⚙ Configuración','err');return;}
   const file=document.getElementById('doc-file').files[0];
   const pastedText=document.getElementById('doc-text').value.trim();
   const instruction=document.getElementById('doc-instruction').value.trim();
 
   let docText='';
+  document.getElementById('doc-result').innerHTML='<div class="flex ic gap8" style="color:var(--text-muted);padding:8px 0"><span class="spin"></span> Leyendo archivo...</div>';
+
   if(file){
-    docText=await readFileAsText(file);
+    try{
+      docText = await readFileAsText(file);
+    }catch(e){
+      document.getElementById('doc-result').innerHTML=`<div class="alert alert-err">Error leyendo el archivo: ${esc(e.message)}<br><br>Prueba a copiar el texto y pegarlo en el campo de texto de abajo.</div>`;
+      return;
+    }
   } else if(pastedText){
     docText=pastedText;
   } else {
-    showAlert('doc-alert','Adjunta un archivo o pega texto','err'); return;
+    showAlert('doc-alert','Adjunta un archivo o pega texto en el campo de abajo','err');
+    document.getElementById('doc-result').innerHTML='';
+    return;
   }
 
-  document.getElementById('doc-result').innerHTML='<div class="flex ic gap8" style="color:var(--text-muted);padding:12px 0"><span class="spin"></span> Analizando con Mistral...</div>';
+  if(!docText || docText.trim().length < 20){
+    document.getElementById('doc-result').innerHTML=`<div class="alert alert-err">No se pudo extraer texto del archivo. Por favor copia el contenido y pégalo en el campo de texto.</div>`;
+    return;
+  }
 
-  const prompt=`${instruction}\n\nDOCUMENTO:\n${docText.slice(0,8000)}`;
+  const preview = docText.slice(0,200).replace(/\n/g,' ');
+  document.getElementById('doc-result').innerHTML=`
+    <div class="alert alert-info">✓ Texto extraído (${docText.length} caracteres) — Enviando a Mistral...</div>
+    <div style="font-size:9px;color:var(--text-muted);padding:4px 0;font-style:italic">Preview: "${esc(preview)}..."</div>
+    <div class="flex ic gap8 mt6" style="color:var(--text-muted)"><span class="spin"></span> Analizando con Mistral AI...</div>`;
+
+  const prompt=`${instruction}\n\nDOCUMENTO (${file?.name||'texto pegado'}):\n${docText.slice(0,10000)}`;
   try{
-    const result=await callMistral(prompt, 1200);
+    const result=await callMistral(prompt, 1500);
     document.getElementById('doc-result').innerHTML=`
-      <div class="alert alert-info">✓ Análisis completado</div>
-      <div style="background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:12px;font-size:10.5px;color:var(--text-dim);line-height:1.7;white-space:pre-wrap;max-height:280px;overflow-y:auto">${esc(result)}</div>
+      <div class="alert alert-ok">✓ Análisis completado — ${docText.length} caracteres procesados</div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:12px;font-size:10.5px;color:var(--text-dim);line-height:1.7;white-space:pre-wrap;max-height:320px;overflow-y:auto">${esc(result)}</div>
       <div class="flex gap6 mt10">
-        <button class="btn btn-primary btn-sm" onclick="applyDocResult(${JSON.stringify(result).replace(/</g,'&lt;')})">Aplicar al Twin →</button>
+        <button class="btn btn-primary btn-sm" onclick="applyDocResult(${JSON.stringify(result)})">Aplicar al Twin →</button>
         <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-doc')">Cerrar</button>
       </div>`;
   }catch(e){
-    document.getElementById('doc-result').innerHTML=`<div class="alert alert-err">Error: ${esc(e.message)}</div>`;
+    document.getElementById('doc-result').innerHTML=`<div class="alert alert-err">Error Mistral: ${esc(e.message)}</div>`;
   }
 }
 
@@ -1530,16 +1555,75 @@ function applyDocResult(result){
 }
 
 async function readFileAsText(file){
-  return new Promise((res,rej)=>{
-    const reader=new FileReader();
-    reader.onload=e=>res(e.target.result);
-    reader.onerror=rej;
-    if(file.type==='application/pdf'){
-      // For PDF we read as text (works for text-based PDFs)
-      reader.readAsText(file);
-    } else {
-      reader.readAsText(file);
-    }
+  const name = file.name.toLowerCase();
+
+  // DOCX → mammoth extrae texto limpio
+  if(name.endsWith('.docx') || name.endsWith('.doc')){
+    return new Promise((res, rej) => {
+      const reader = new FileReader();
+      reader.onload = async e => {
+        try {
+          const arrayBuffer = e.target.result;
+          const result = await mammoth.extractRawText({ arrayBuffer });
+          if(!result.value || result.value.trim().length < 10){
+            rej(new Error('El documento parece estar vacío o no se pudo extraer texto.'));
+          } else {
+            res(result.value);
+          }
+        } catch(err) {
+          rej(new Error('Error leyendo DOCX: ' + err.message));
+        }
+      };
+      reader.onerror = rej;
+      reader.readAsArrayBuffer(file);
+    });
+  }
+
+  // TXT / CSV / XML → texto plano directo
+  if(name.endsWith('.txt') || name.endsWith('.csv') || name.endsWith('.xml')){
+    return new Promise((res, rej) => {
+      const reader = new FileReader();
+      reader.onload = e => res(e.target.result);
+      reader.onerror = rej;
+      reader.readAsText(file, 'UTF-8');
+    });
+  }
+
+  // PDF → intentar leer como texto (solo funciona en PDFs no escaneados)
+  if(name.endsWith('.pdf')){
+    return new Promise((res, rej) => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        // Extraer texto legible del PDF binario (heurística básica)
+        const raw = new Uint8Array(e.target.result);
+        let text = '';
+        for(let i = 0; i < raw.length - 1; i++){
+          const c = raw[i];
+          if(c >= 32 && c < 127) text += String.fromCharCode(c);
+          else if(c === 10 || c === 13) text += '\n';
+        }
+        // Limpiar secuencias no legibles
+        text = text.replace(/[^\x20-\x7E\n\r\t\u00C0-\u024F]/g, ' ')
+                   .replace(/\s{3,}/g, '\n')
+                   .replace(/(.)\1{4,}/g, '$1') // quitar repeticiones
+                   .trim();
+        if(text.length < 50){
+          res('[PDF escaneado o protegido — por favor pega el texto manualmente en el campo de texto]');
+        } else {
+          res(text.slice(0, 12000));
+        }
+      };
+      reader.onerror = rej;
+      reader.readAsArrayBuffer(file);
+    });
+  }
+
+  // Fallback genérico
+  return new Promise((res, rej) => {
+    const reader = new FileReader();
+    reader.onload = e => res(e.target.result);
+    reader.onerror = rej;
+    reader.readAsText(file, 'UTF-8');
   });
 }
 
