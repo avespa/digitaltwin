@@ -1,12 +1,453 @@
 {
-  "hits": [],
+  "hits": [
+    {
+      "id": "665ffa2b6cad",
+      "title": "Sala Segunda. Sentencia 187/2025, de 15 de diciembre de 2025. Recurso de amparo 285-2023. Promovido por don Nikita Bakutin en relación con las resoluciones dictadas por las salas de lo contencioso-administrativo del Tribunal Supremo y del Tribunal Superior de Justicia de Cataluña y un juzgado de lo contencioso-administrativo de Barcelona, que desestimaron su impugnación de la resolución administrativa sancionadora que decretó su expulsión del territorio nacional. Vulneración de los derechos a la tutela judicial efectiva y a la legalidad sancionadora: aplicación irrazonable de la norma sancionadora que, anteponiendo la expulsión a la multa, infringió la garantía material del derecho (STC 47/2023).",
+      "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-1753",
+      "source": "BOE - Tribunal Constitucional",
+      "raw_date": "Sat, 24 Jan 2026 00:00:00 +0100",
+      "fetched_at": "2026-02-27T22:02:20.426822+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Vulneración de derechos fundamentales",
+        "Inconsistencia en la aplicación de sanciones administrativas"
+      ],
+      "norms_affected": [
+        "Constitución Española",
+        "Ley 39/2015 de Procedimiento Administrativo Común"
+      ],
+      "summary": "El Tribunal Constitucional anula una resolución administrativa que impuso una sanción de expulsión del territorio nacional, considerando que vulnera los derechos a la tutela judicial efectiva y a la legalidad sancionadora. La sentencia destaca la aplicación irrazonable de la norma sancionadora.",
+      "vulnerability": "Falta de proporcionalidad en la aplicación de sanciones administrativas",
+      "financial_impact": "Multa de hasta 500K€ por vulneración de derechos fundamentales",
+      "recommended_action": "Revisar los procedimientos de sanción administrativa para garantizar la proporcionalidad y el respeto a los derechos fundamentales."
+    },
+    {
+      "id": "d34fabfb112c",
+      "title": "La CNMC acusa a Apple y Amazon de incumplir la sanción por cláusulas anticompetitivas",
+      "link": "https://www.actualidadiphone.com/la-cnmc-acusa-a-apple-y-amazon-de-incumplir-la-sancion-por-clausulas-anticompetitivas/",
+      "source": "NewsAPI-Q1 · Actualidadiphone.com",
+      "raw_date": "2026-02-26T08:03:47Z",
+      "fetched_at": "2026-02-27T22:02:23.542983+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Expediente sancionador abierto",
+        "Multa potencial por incumplimiento"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 2019/1"
+      ],
+      "summary": "La CNMC acusa a Apple y Amazon de incumplir la sanción de 2023 por cláusulas anticompetitivas, abriendo la puerta a un nuevo expediente sancionador.",
+      "vulnerability": "Falta de cumplimiento de sanciones previas y controles de compliance en prácticas anticompetitivas",
+      "financial_impact": "Multa potencial de entre 50K€ y 500K€ para empresas españolas en sectores similares",
+      "recommended_action": "Revisar y actualizar los programas de compliance para asegurar el cumplimiento de sanciones y evitar prácticas anticompetitivas"
+    },
+    {
+      "id": "5404c3f2b6ac",
+      "title": "Investigan a Ibai Llanos por una infracción grave que puede acarrearle 750.000 euros de multa",
+      "link": "https://www.abc.es/gente/cnmc-investiga-ibai-llanos-infraccion-grave-puede-20260226223441-nt.html",
+      "source": "NewsAPI-Q2 · Www.abc.es",
+      "raw_date": "2026-02-26T21:34:43Z",
+      "fetched_at": "2026-02-27T22:02:29.711293+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Multa de hasta 750.000€",
+        "Daño reputacional",
+        "Posible impacto en regulación de contenidos digitales"
+      ],
+      "norms_affected": [
+        "Ley General de Comunicación Audiovisual",
+        "Reglamento de la CNMC"
+      ],
+      "summary": "La CNMC investiga a Ibai Llanos por posible infracción grave de la Ley General de Comunicación Audiovisual, con multa de hasta 750.000€. El caso podría tener impacto en la regulación de contenidos digitales.",
+      "vulnerability": "Falta de cumplimiento de normativa audiovisual y de transparencia en contenidos digitales.",
+      "financial_impact": "Entre 30.000€ y 750.000€ para una empresa española media en sector digital.",
+      "recommended_action": "Revisar y actualizar políticas de cumplimiento de normativa audiovisual y digital, y realizar auditoría interna de contenidos."
+    },
+    {
+      "id": "8a2bb8dac440",
+      "title": "Vocento deja atrás los 'números rojos' y gana 6,7 millones en 2025",
+      "link": "https://www.expansion.com/empresas/2026/02/26/69a0a109e5fdeaba4d8b45ad.html",
+      "source": "NewsAPI-Q2 · Expansion.com",
+      "raw_date": "2026-02-26T19:37:52Z",
+      "fetched_at": "2026-02-27T22:02:34.325099+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Fraude interno",
+        "Incongruencias en inventarios",
+        "Riesgo reputacional"
+      ],
+      "norms_affected": [
+        "ISO 37001",
+        "UNE 19601",
+        "Código Penal español"
+      ],
+      "summary": "Vocento detectó un fraude de 6 millones de euros en áreas clave y discrepancias en inventarios, lo que podría indicar fallos en controles internos y gestión de riesgos.",
+      "vulnerability": "Falta de controles efectivos en procesos de compras, impresión y distribución, así como en la gestión de inventarios.",
+      "financial_impact": "Multa potencial de 100K€ a 500K€ por incumplimiento de normativas de prevención de fraude y gestión de riesgos.",
+      "recommended_action": "Realizar una auditoría forense inmediata, implementar controles internos robustos y revisar los protocolos de gestión de inventarios y compras."
+    },
+    {
+      "id": "32dce1c73422",
+      "title": "Vocento descubre un fraude de casi seis millones en su área de compras, impresión y distribución",
+      "link": "https://www.elmundo.es/economia/empresas/2026/02/26/69a097d6fc6c83dd248b45a2.html",
+      "source": "NewsAPI-Q2 · El Mundo",
+      "raw_date": "2026-02-26T18:59:41Z",
+      "fetched_at": "2026-02-27T22:02:37.873333+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "fraude contable",
+        "pérdida financiera significativa",
+        "daño reputacional"
+      ],
+      "norms_affected": [
+        "ISO 37001",
+        "Código Penal español (Art. 257-261)",
+        "Plan General Contable"
+      ],
+      "summary": "Vocento ha detectado un fraude de casi seis millones de euros en su área de compras, impresión y distribución, relacionado con la contabilización de materias primas. Este incidente puede tener graves implicaciones legales y financieras.",
+      "vulnerability": "Falta de controles internos efectivos en la gestión de compras y contabilidad de materias primas.",
+      "financial_impact": "Pérdida directa de 6M€ + posibles multas y costes legales que podrían superar los 2M€.",
+      "recommended_action": "Iniciar una auditoría forense inmediata, notificar a las autoridades competentes y revisar los controles internos de compras y contabilidad."
+    },
+    {
+      "id": "bfe5cd69f89b",
+      "title": "La CNMC estudia sancionar a Ibai Llanos por publicidad no etiquetada en La Velada",
+      "link": "https://www.lavozdegalicia.es/noticia/sociedad/2026/02/26/cnmc-estudia-sancionar-ibai-llanos-publicidad-etiquetada-velada/00031772130486036637241.htm",
+      "source": "NewsAPI-Q2 · Lavozdegalicia.es",
+      "raw_date": "2026-02-26T18:32:00Z",
+      "fetched_at": "2026-02-27T22:02:43.507996+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Sanción económica",
+        "Daño reputacional"
+      ],
+      "norms_affected": [
+        "Ley General de Publicidad",
+        "Normativa CNMC sobre publicidad"
+      ],
+      "summary": "La CNMC estudia sancionar a Ibai Llanos por no incluir el hashtag obligatorio #publi en un contenido publicitario durante La Velada, lo que podría suponer una infracción de la normativa de publicidad.",
+      "vulnerability": "Falta de control en la identificación y etiquetado de contenido publicitario en eventos y redes sociales.",
+      "financial_impact": "Multa estimada entre 50.000€ y 500.000€ para una empresa española media.",
+      "recommended_action": "Revisar y actualizar los protocolos de publicidad en redes sociales y eventos, asegurando el cumplimiento de la normativa CNMC y la correcta identificación de contenido publicitario."
+    },
+    {
+      "id": "a7ec45cc43fd",
+      "title": "Ibai Llanos podría ser multado con 750.000 € por una posible infracción de la ley audiovisual en un anuncio de bebida",
+      "link": "https://www.elespanol.com/reportajes/20260226/ibai-llanos-podria-multado-eur-posible-infraccion-ley-audiovisual-anuncio-bebida/1003744147665_0.html",
+      "source": "NewsAPI-Q2 · Elespanol.com",
+      "raw_date": "2026-02-26T17:17:36Z",
+      "fetched_at": "2026-02-27T22:02:46.436389+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Multa económica significativa",
+        "Daño reputacional",
+        "Posible impacto en patrocinadores"
+      ],
+      "norms_affected": [
+        "Ley General de Comunicación Audiovisual"
+      ],
+      "summary": "La CNMC investiga a Ibai Llanos por una posible infracción de la ley audiovisual en un anuncio de bebida, con una posible multa de 750.000 €. El proceso podría durar hasta un año.",
+      "vulnerability": "Falta de supervisión y cumplimiento de normativas publicitarias en contenidos audiovisuales",
+      "financial_impact": "750.000 € en multa, más posibles pérdidas de patrocinios y daños reputacionales",
+      "recommended_action": "Revisar y ajustar todas las campañas publicitarias a la normativa audiovisual vigente, y realizar auditorías internas de compliance en publicidad."
+    },
+    {
+      "id": "c4c0ef4c57d5",
+      "title": "La CNMC sanciona a Ibai Llanos por una infracción grave: ¿cuál es la multa y por qué?",
+      "link": "https://hipertextual.com/actualidad/la-cnmc-sanciona-a-ibai-llanos-por-una-infraccion-grave-cual-es-la-multa-y-por-que/",
+      "source": "NewsAPI-Q2 · Hipertextual",
+      "raw_date": "2026-02-26T14:54:27Z",
+      "fetched_at": "2026-02-27T22:02:49.430245+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Multa económica",
+        "Daño reputacional",
+        "Expediente sancionador abierto"
+      ],
+      "norms_affected": [
+        "Ley General de Comunicación Audiovisual"
+      ],
+      "summary": "La CNMC ha sancionado a Ibai Llanos por una infracción grave relacionada con la Ley General de Comunicación Audiovisual. El expediente sancionador está abierto y se desconoce la cuantía exacta de la multa.",
+      "vulnerability": "Falta de cumplimiento de la normativa de comunicación audiovisual",
+      "financial_impact": "Entre 50.000€ y 500.000€",
+      "recommended_action": "Revisar y asegurar el cumplimiento de la Ley General de Comunicación Audiovisual en todas las actividades de la empresa, especialmente en contenidos digitales y audiovisuales."
+    },
+    {
+      "id": "7c04aeb1e9d5",
+      "title": "Ibai Llanos, expedientado por la CNMC: podría enfrentarse a una sanción de 750.000 euros",
+      "link": "https://www.marca.com/videojuegos/streamers/2026/02/26/ibai-llanos-expedientado-cnmc-podria-enfrentarse-sancion-750-000-euros.html",
+      "source": "NewsAPI-Q2 · Marca",
+      "raw_date": "2026-02-26T14:24:18Z",
+      "fetched_at": "2026-02-27T22:02:52.383955+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Multa económica significativa",
+        "Daño reputacional",
+        "Posible impacto en patrocinadores"
+      ],
+      "norms_affected": [
+        "Ley General de Comunicación Audiovisual (Artículo 94)",
+        "Normativa CNMC"
+      ],
+      "summary": "Ibai Llanos, streamer, ha sido expedientado por la CNMC por incumplimiento del artículo 94 de la Ley General de Comunicación Audiovisual, enfrentándose a una posible sanción de 750.000 euros.",
+      "vulnerability": "Falta de cumplimiento normativo en contenidos audiovisuales y publicitarios",
+      "financial_impact": "750.000 euros en multa, más posibles pérdidas por patrocinios y reputación",
+      "recommended_action": "Revisar y ajustar los contenidos y prácticas publicitarias a la normativa vigente, y realizar una auditoría interna para prevenir futuros incumplimientos."
+    },
+    {
+      "id": "35dd1b0757d4",
+      "title": "La CNMC contra Ibai Llanos y el influencer escribe a Pedro Sánchez: “Cómo le haces esto a un hermano?”",
+      "link": "https://www.adslzone.net/noticias/internet/cnmc-contra-ibai-llanos-enfrentamiento-expediente-respuesta/",
+      "source": "NewsAPI-Q2 · Adslzone.net",
+      "raw_date": "2026-02-26T14:16:21Z",
+      "fetched_at": "2026-02-27T22:02:56.021345+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Expediente sancionador abierto por la CNMC",
+        "Posible multa económica"
+      ],
+      "norms_affected": [
+        "Ley 3/2018 de Competencia Desleal",
+        "Reglamento de la CNMC"
+      ],
+      "summary": "La CNMC ha abierto un expediente a Ibai Llanos, influencer y youtuber, por posibles prácticas contrarias a la competencia desleal. El afectado ha respondido públicamente, lo que podría agravar la situación.",
+      "vulnerability": "Falta de protocolo de compliance en la gestión de relaciones con influencers y publicidad en redes sociales",
+      "financial_impact": "Multa estimada entre 50.000€ y 500.000€ para una empresa española media",
+      "recommended_action": "Revisar y actualizar los protocolos de compliance en publicidad y relaciones con influencers, y asesorar al influencer sobre las posibles implicaciones legales."
+    },
+    {
+      "id": "be1db13be2f6",
+      "title": "La CNMC abre un expediente a Ibai Llanos por una infracción grave que podría sancionarse con una multa de hasta 750.000 euros",
+      "link": "https://www.meneame.net/m/actualidad/cnmc-abre-expediente-ibai-llanos-infraccion-grave-podria-multa",
+      "source": "NewsAPI-Q2 · Meneame.net",
+      "raw_date": "2026-02-26T13:52:33Z",
+      "fetched_at": "2026-02-27T22:02:58.726400+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Multa de hasta 750.000 euros",
+        "Daño reputacional",
+        "Posible impacto en la industria de creadores de contenido"
+      ],
+      "norms_affected": [
+        "Ley General de Comunicación Audiovisual"
+      ],
+      "summary": "La CNMC ha abierto un expediente a Ibai Llanos por una infracción grave de la Ley General de Comunicación Audiovisual, con una posible multa de hasta 750.000 euros. Este caso podría tener un impacto significativo en la industria de creadores de contenido.",
+      "vulnerability": "Falta de cumplimiento de la normativa de comunicación audiovisual por parte de creadores de contenido",
+      "financial_impact": "750.000 euros",
+      "recommended_action": "Revisar y asegurar el cumplimiento de la Ley General de Comunicación Audiovisual en todas las actividades de creación de contenido, así como implementar un programa de formación y auditoría continua."
+    },
+    {
+      "id": "9a51cb4e936a",
+      "title": "La CNMC abre un expediente a Ibai Llanos por una infracción grave que podría sancionarse con una multa de hasta 750.000 euros",
+      "link": "https://www.elmundo.es/cultura/2026/02/26/69a040adfc6c83603b8b458a.html",
+      "source": "NewsAPI-Q2 · El Mundo",
+      "raw_date": "2026-02-26T12:52:00Z",
+      "fetched_at": "2026-02-27T22:03:01.969915+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Multa de hasta 750.000 euros",
+        "Daño reputacional",
+        "Posible impacto en la industria de los creadores de contenido"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia"
+      ],
+      "summary": "La CNMC ha abierto un expediente a Ibai Llanos por una infracción grave que podría ser sancionada con una multa de hasta 750.000 euros. Este caso podría tener un impacto significativo en la industria de los creadores de contenido.",
+      "vulnerability": "Falta de cumplimiento de las normas de competencia en la actividad de creación de contenido",
+      "financial_impact": "750.000 euros",
+      "recommended_action": "Revisar y asegurar el cumplimiento de las normas de competencia en todas las actividades de la empresa, especialmente en aquellas relacionadas con la creación de contenido y la publicidad."
+    },
+    {
+      "id": "f28b67ff68f1",
+      "title": "El juez Pedraz pregunta a la fiscalía si admite o no la denuncia contra Laporta por presunto blanqueo de capitales",
+      "link": "https://www.elperiodico.com/es/deportes/20260225/juez-santiago-pedraz-audiencia-nacional-fiscalia-denuncia-laporta-fc-barcelona-127248547",
+      "source": "NewsAPI-Q3 · Elperiodico.com",
+      "raw_date": "2026-02-25T10:42:19Z",
+      "fetched_at": "2026-02-27T22:03:06.257672+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Riesgo reputacional",
+        "Riesgo legal y penal"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales"
+      ],
+      "summary": "El juez Pedraz ha trasladado a la fiscalía una denuncia contra Joan Laporta por presunto blanqueo de capitales, lo que podría afectar a la reputación del FC Barcelona y generar riesgos legales.",
+      "vulnerability": "Falta de controles internos efectivos para prevenir y detectar actividades de blanqueo de capitales.",
+      "financial_impact": "Multa de hasta 500.000€ y posibles costes legales adicionales.",
+      "recommended_action": "Revisar y fortalecer el sistema de compliance del club para prevenir blanqueo de capitales, asegurando la implementación de la ISO 37001."
+    },
+    {
+      "id": "08416e05ffb4",
+      "title": "Una cámara instalada en la cafetería del Hospital de Bellvitge pone en alerta a los trabajadores: “Nos sentimos controlados”",
+      "link": "https://www.eldiario.es/catalunya/camara-instalada-cafeteria-hospital-bellvitge-pone-alerta-trabajadores-sentimos-controlados_1_13017723.html",
+      "source": "NewsAPI-Q5 · Eldiario.es",
+      "raw_date": "2026-02-26T21:13:09Z",
+      "fetched_at": "2026-02-27T22:03:10.801562+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Vigilancia no autorizada de trabajadores",
+        "Incumplimiento de normativa de protección de datos"
+      ],
+      "norms_affected": [
+        "RGPD",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales"
+      ],
+      "summary": "La instalación de una cámara en la cafetería del Hospital de Bellvitge ha generado alerta entre los trabajadores. La Autoridad Catalana de Protección de Datos ha abierto un expediente sancionador, con una posible multa de hasta 20.000 euros.",
+      "vulnerability": "Falta de evaluación de impacto y consentimiento informado para la instalación de sistemas de vigilancia en áreas comunes.",
+      "financial_impact": "Multa de hasta 20.000 euros para una empresa española media.",
+      "recommended_action": "Realizar una auditoría de sistemas de vigilancia y garantizar el cumplimiento del RGPD y la normativa de protección de datos."
+    },
+    {
+      "id": "070ed7260d15",
+      "title": "El Tribunal Supremo rechaza anular la condena a García Ortiz: el exfiscal general ya puede acudir al Constitucional",
+      "link": "https://www.elespanol.com/espana/tribunales/20260226/tribunal-supremo-rechaza-anular-condena-garcia-ortiz-exfiscal-general-puede-acudir-constitucional/1003744147061_0.html",
+      "source": "NewsAPI-Q5 · Elespanol.com",
+      "raw_date": "2026-02-26T12:59:24Z",
+      "fetched_at": "2026-02-27T22:03:13.341486+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Reputacional",
+        "Legal"
+      ],
+      "norms_affected": [
+        "Código Penal",
+        "Ley de Enjuiciamiento Criminal"
+      ],
+      "summary": "El Tribunal Supremo confirma la condena a García Ortiz, exfiscal general, descartando vulneración de derechos fundamentales. La pareja de Ayuso usa este caso para defenderse de acusaciones de fraude fiscal.",
+      "vulnerability": "Falta de protocolos de transparencia y ética en procesos judiciales",
+      "financial_impact": "Multa de 200K€ a 500K€ por posibles responsabilidades civiles",
+      "recommended_action": "Revisar protocolos de compliance penal y ética corporativa, asegurando transparencia en procesos judiciales internos."
+    },
+    {
+      "id": "23cc44b47fbb",
+      "title": "Reino Unido multa a Reddit con casi $20 millones por uso de datos de menores",
+      "link": "https://www.nacion.com/economia/reino-unido-multa-a-reddit-con-casi-20-millones/J5Q2VWPZIRCHDDMHK73IXKCM74/story/",
+      "source": "NewsAPI-Q5 · Nacion.com",
+      "raw_date": "2026-02-24T18:21:40Z",
+      "fetched_at": "2026-02-27T22:03:16.429424+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Exposición de menores a contenidos inapropiados",
+        "Fallo en verificación de edad",
+        "Posible impacto reputacional"
+      ],
+      "norms_affected": [
+        "RGPD"
+      ],
+      "summary": "El regulador británico multó a Reddit por fallos en la verificación de edad, exponiendo a menores a contenidos inapropiados. La multa asciende a casi 20 millones de dólares.",
+      "vulnerability": "Falta de controles robustos de verificación de edad y protección de datos de menores",
+      "financial_impact": "Multa de hasta 500.000€ para una empresa española media por incumplimiento similar",
+      "recommended_action": "Implementar sistemas de verificación de edad robustos y auditorías periódicas de cumplimiento RGPD"
+    },
+    {
+      "id": "732cbf7ba84a",
+      "title": "El Reino Unido multa a Reddit con 14,5 millones de libras por tratar indebidamente los datos de menores [eng]",
+      "link": "https://www.meneame.net/m/actualidad/reino-unido-multa-reddit-14-5-millones-libras-tratar-datos-eng",
+      "source": "NewsAPI-Q5 · Meneame.net",
+      "raw_date": "2026-02-24T18:04:59Z",
+      "fetched_at": "2026-02-27T22:03:23.027621+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Tratamiento de datos de menores sin consentimiento",
+        "Posible sanción similar en España por incumplimiento RGPD"
+      ],
+      "norms_affected": [
+        "RGPD",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales"
+      ],
+      "summary": "Reddit multada en Reino Unido por tratar datos de menores sin consentimiento paterno. La normativa española exige requisitos similares, lo que podría derivar en sanciones equivalentes.",
+      "vulnerability": "Falta de controles para verificar la edad y obtener consentimiento paterno en el tratamiento de datos de menores.",
+      "financial_impact": "Multa estimada entre 100K€ y 500K€ para una empresa española media por incumplimiento similar.",
+      "recommended_action": "Revisar y actualizar los procesos de consentimiento y verificación de edad en el tratamiento de datos de menores, asegurando el cumplimiento del RGPD y la normativa española."
+    },
+    {
+      "id": "02eb79d52156",
+      "title": "Golpe financiero al chavismo: Suiza congela fortuna de 880mdd a Nicolás Maduro y su entorno",
+      "link": "https://www.tribuna.com.mx/mundo/2026/2/23/golpe-financiero-al-chavismo-suiza-congela-fortuna-de-880mdd-nicolas-maduro-su-entorno-430354.html",
+      "source": "NewsAPI-Q5 · Tribuna.com.mx",
+      "raw_date": "2026-02-23T12:00:00Z",
+      "fetched_at": "2026-02-27T22:03:26.125221+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Sanciones internacionales",
+        "Blanqueo de capitales"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Reglamento UE 2021/821"
+      ],
+      "summary": "Suiza congela 880 millones de dólares vinculados a Nicolás Maduro y su entorno por sospechas de blanqueo de capitales. La medida se basa en legislaciones internacionales contra el blanqueo.",
+      "vulnerability": "Falta de diligencia debida en transacciones internacionales con países bajo sanciones",
+      "financial_impact": "Multa de hasta 300.000€ por incumplimiento de normativa anti-blanqueo en empresa española media",
+      "recommended_action": "Revisar y actualizar los protocolos de diligencia debida y monitorizar transacciones con países bajo sanciones"
+    },
+    {
+      "id": "53f88167f58f",
+      "title": "Golpe financiero al chavismo: Suiza congela fortuna de 880mdd de Nicolás Maduro y su entorno",
+      "link": "https://www.tribuna.com.mx/mundo/2026/2/23/golpe-financiero-al-chavismo-suiza-congela-fortuna-de-880mdd-de-nicolas-maduro-su-entorno-430354.html",
+      "source": "NewsAPI-Q5 · Tribuna.com.mx",
+      "raw_date": "2026-02-23T12:00:00Z",
+      "fetched_at": "2026-02-27T22:03:29.228130+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Sanciones internacionales",
+        "Blanqueo de capitales"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Reglamento (UE) 2021/821"
+      ],
+      "summary": "Suiza congela 880 millones de dólares vinculados a Nicolás Maduro y su entorno por sospechas de blanqueo de capitales. La medida se basa en legislaciones internacionales contra el blanqueo de capitales y tiene implicaciones para las entidades financieras españolas con operaciones en Suiza.",
+      "vulnerability": "Falta de diligencia debida en transacciones internacionales con países de alto riesgo.",
+      "financial_impact": "Multas de hasta 500.000€ por incumplimiento de la normativa de prevención de blanqueo de capitales.",
+      "recommended_action": "Revisar y actualizar los procedimientos de diligencia debida y monitorización de transacciones con países y entidades sancionadas."
+    }
+  ],
   "stats": {
-    "total_hits": 0,
-    "critical_count": 0,
-    "warning_count": 0,
+    "total_hits": 19,
+    "critical_count": 6,
+    "warning_count": 13,
     "info_count": 0,
-    "new_this_run": 0,
-    "articles_checked": 0
+    "new_this_run": 19,
+    "articles_checked": 24,
+    "sources_active": [
+      "BOE - Disposiciones generales",
+      "BOE - Administración de Justicia",
+      "BOE - Anuncios oficiales",
+      "BOE - Legislación Derecho Penal",
+      "BOE - Legislación Derecho Mercantil",
+      "BOE - Sistema Financiero",
+      "BOE - Tribunal Constitucional",
+      "BORME - Registro Mercantil"
+    ],
+    "queries_active": [
+      "(multa OR sanción OR \"expediente sancionador\") AND (empresa OR sociedad) AND España",
+      "(CNMC OR AEPD OR CNMV OR \"Banco de España\" OR SEPI) AND (resolución OR sanción OR investigación)",
+      "(\"compliance\" OR \"cumplimiento normativo\" OR \"canal de denuncias\" OR \"blanqueo de capitales\" OR \"corrupción empresarial\") AND España",
+      "(\"responsabilidad penal\" OR \"persona jurídica\" OR \"delito corporativo\" OR \"fraude empresarial\") AND (sentencia OR condena OR imputado)",
+      "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
+    ]
   },
-  "last_updated": "2026-02-27T21:31:39.331379+00:00"
+  "last_updated": "2026-02-27T22:03:30.428290+00:00"
 }
