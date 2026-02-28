@@ -8,6 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root{
   --bg:#070b0f;--surface:#0c1117;--surface2:#111820;--surface3:#161f28;
@@ -214,6 +215,46 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
 ::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* TABS */
+.tab-bar{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px}
+.tab{padding:9px 18px;font-size:11px;cursor:pointer;color:var(--text-dim);border-bottom:2px solid transparent;transition:all .15s;font-family:var(--font-mono)}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-pane{display:none}.tab-pane.active{display:block}
+
+/* CONTROLS TABLE */
+.ctrl-table{width:100%;border-collapse:collapse;font-size:10.5px}
+.ctrl-table th{background:var(--surface2);padding:7px 10px;text-align:left;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border);white-space:nowrap;position:sticky;top:0}
+.ctrl-table td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--text-dim);vertical-align:middle;line-height:1.4}
+.ctrl-table tr:hover td{background:rgba(255,255,255,.02);color:var(--text)}
+.ctrl-table tr.dup-warn td{background:rgba(245,158,11,.04);border-left:2px solid var(--warn)}
+.ctrl-wrap{overflow-x:auto;max-height:calc(100vh - 340px);border:1px solid var(--border);border-radius:6px}
+.freq-tag{font-size:8px;padding:2px 6px;border-radius:10px;background:rgba(0,102,255,.12);color:var(--accent2);letter-spacing:.5px}
+.nat-prev{color:var(--accent);font-size:9px;font-weight:600}
+.nat-det{color:var(--purple);font-size:9px;font-weight:600}
+.exec-yes{color:var(--accent);font-size:9px;font-weight:600}
+.exec-no{color:var(--warn);font-size:9px}
+
+/* FUNNEL */
+.funnel-bar{display:flex;align-items:stretch;gap:0;margin-bottom:16px;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.funnel-step{flex:1;padding:12px 16px;text-align:center;cursor:pointer;border-right:1px solid var(--border);transition:background .15s}
+.funnel-step:last-child{border-right:none}
+.funnel-step:hover{background:rgba(255,255,255,.02)}
+.funnel-step.active{background:rgba(0,229,160,.04);border-bottom:2px solid var(--accent)}
+.funnel-count{font-family:var(--font-ui);font-size:24px;font-weight:800;line-height:1}
+.funnel-label{font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-top:3px}
+.funnel-arrow{display:flex;align-items:center;padding:0 6px;color:var(--text-muted);font-size:16px;flex-shrink:0}
+
+/* SENTENCIAS */
+.sent-card{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:13px;margin-bottom:8px;border-left:3px solid var(--purple)}
+.sent-tag{background:rgba(139,92,246,.15);color:var(--purple);font-size:8.5px;padding:2px 7px;border-radius:3px;font-weight:600;letter-spacing:.5px}
+
+/* EXEC HISTORY */
+.exec-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:10px}
+.exec-row:last-child{border-bottom:none}
+.exec-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
 </style>
 </head>
 <body>
@@ -230,12 +271,14 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     <div class="nav-item active" data-view="dashboard" onclick="go('dashboard')"><span class="icon">◈</span>Dashboard & KRIs</div>
     <div class="nav-item" data-view="contexto" onclick="go('contexto')"><span class="icon">⬡</span>Contexto Organizacional</div>
     <div class="nav-item" data-view="madurez" onclick="go('madurez')"><span class="icon">◎</span>Assessment de Madurez</div>
+    <div class="nav-item" data-view="controles" onclick="go('controles')"><span class="icon">⬟</span>Controles de Compliance</div>
     <div class="nav-item" data-view="twin-summary" onclick="go('twin-summary')"><span class="icon">✦</span>Resumen Ejecutivo Twin</div>
 
     <div class="nav-group" style="margin-top:10px">⟁ Monitor Activo</div>
     <div class="nav-item" data-view="hits" onclick="go('hits')"><span class="icon">⚡</span>Hits Detectados<span class="nav-badge nb-danger" id="badge-hits">0</span></div>
     <div class="nav-item" data-view="planes" onclick="go('planes')"><span class="icon">◉</span>Planes de Acción<span class="nav-badge nb-warn" id="badge-planes">0</span></div>
     <div class="nav-item" data-view="brief" onclick="go('brief')"><span class="icon">▤</span>Brief Ejecutivo</div>
+    <div class="nav-item" data-view="sentencias" onclick="go('sentencias')"><span class="icon">⚖</span>Sentencias<span class="nav-badge nb-accent" id="badge-sent">0</span></div>
     <div class="nav-item" data-view="fuentes" onclick="go('fuentes')"><span class="icon">📡</span>Fuentes & Búsquedas</div>
 
     <div class="nav-group" style="margin-top:10px">⚙ Sistema</div>
@@ -478,14 +521,39 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   <!-- HITS -->
   <div class="view" id="view-hits">
     <div class="ph">
-      <div class="ph-left"><div class="ph-title">Hits Detectados</div><div class="ph-sub">Analizados contra tu Digital Twin</div></div>
+      <div class="ph-left"><div class="ph-title">Monitor de Hits</div><div class="ph-sub">Funnel de relevancia · Filtrado por keywords → Impacto en tu empresa</div></div>
       <div class="ph-actions">
-        <select class="fi" style="width:140px" id="hit-filter-level" onchange="renderHits()">
-          <option value="">Todos</option><option value="critical">Crítico</option><option value="warning">Alerta</option><option value="info">Info</option>
-        </select>
         <button class="btn btn-ghost" onclick="syncHits()">⟳ Sync</button>
       </div>
     </div>
+
+    <!-- Funnel -->
+    <div class="funnel-bar mb14">
+      <div class="funnel-step active" id="funnel-all" onclick="setHitFunnel('all')">
+        <div class="funnel-count text-accent" id="funnel-count-all">0</div>
+        <div class="funnel-label">Recibidos</div>
+        <div style="font-size:9px;color:var(--text-muted);margin-top:2px">keywords match</div>
+      </div>
+      <div class="funnel-arrow">→</div>
+      <div class="funnel-step" id="funnel-company" onclick="setHitFunnel('company')">
+        <div class="funnel-count" id="funnel-count-company" style="color:var(--danger)">0</div>
+        <div class="funnel-label">Tu empresa</div>
+        <div style="font-size:9px;color:var(--text-muted);margin-top:2px">impacto confirmado IA</div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="flex ic gap8 mb14 flex-wrap">
+      <select class="fi" style="width:130px" id="hit-filter-level" onchange="renderHits()">
+        <option value="">Nivel</option><option value="critical">Crítico</option><option value="warning">Alerta</option><option value="info">Info</option>
+      </select>
+      <select class="fi" style="width:140px" id="hit-filter-source" onchange="renderHits()">
+        <option value="">Fuente</option><option value="BOE">BOE</option><option value="BORME">BORME</option><option value="NewsAPI">NewsAPI</option><option value="Sentencia">Sentencia</option>
+      </select>
+      <input type="text" class="fi" id="hit-search" placeholder="Buscar en hits..." style="max-width:220px" oninput="renderHits()">
+      <span id="hit-count" style="font-size:10px;color:var(--text-muted);margin-left:auto"></span>
+    </div>
+
     <div id="hits-list"></div>
   </div>
 
@@ -595,14 +663,98 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
         <div class="fhint">100 req/día en tier gratuito</div>
       </div>
     </div>
-    <div class="card mt14">
-      <div class="card-title">⚙ Parámetros</div>
-      <div class="g3">
-        <div class="fg"><label class="fl">Umbral de relevancia (0-100)</label><input type="number" class="fi" id="cfg-threshold" value="60" min="0" max="100"><div class="fhint">Score mínimo para publicar hit</div></div>
-        <div class="fg"><label class="fl">Repo GitHub</label><input type="text" class="fi" id="cfg-repo" placeholder="avespa/digitaltwin"></div>
-        <div class="fg"><label class="fl">Días hasta aviso Twin obsoleto</label><input type="number" class="fi" id="cfg-twin-days" value="90" min="7"></div>
+    <div class="g2 mt14">
+      <div class="card">
+        <div class="card-title">🌲 Pinecone</div>
+        <div class="fg"><label class="fl">API Key</label><input type="password" class="fi" id="cfg-pinecone-key" placeholder="pc-..."></div>
+        <div class="fg"><label class="fl">Índice</label><input type="text" class="fi" id="cfg-pinecone-index" placeholder="digitaltwin"></div>
+        <div class="fg"><label class="fl">Host / Endpoint</label><input type="text" class="fi" id="cfg-pinecone-host" placeholder="https://digitaltwin-xxx.svc.us-east1-gcp.pinecone.io"><div class="fhint">Visible en la consola de Pinecone al crear el índice</div></div>
+        <button class="btn btn-ghost btn-sm" style="width:100%" onclick="testPinecone()">Verificar conexión</button>
+      </div>
+      <div class="card">
+        <div class="card-title">🔥 Firebase / Firestore</div>
+        <div class="fg"><label class="fl">Project ID</label><input type="text" class="fi" id="cfg-fb-project" placeholder="digitaltwin-21a64" value="digitaltwin-21a64"></div>
+        <div class="fg"><label class="fl">API Key</label><input type="password" class="fi" id="cfg-fb-key"><div class="fhint">Guardada solo en localStorage — nunca en GitHub</div></div>
+        <div class="alert alert-info" style="margin-top:8px">La Firebase key es pública por diseño. La seguridad está en las Reglas de Firestore.</div>
       </div>
     </div>
+    <div class="card mt14">
+      <div class="card-title">⚙ Parámetros del funnel</div>
+      <div class="g4">
+        <div class="fg"><label class="fl">Umbral keywords (%)</label><input type="number" class="fi" id="cfg-threshold" value="60" min="0" max="100"><div class="fhint">Score mínimo para pasar al funnel</div></div>
+        <div class="fg"><label class="fl">Umbral impacto empresa (%)</label><input type="number" class="fi" id="cfg-impact-threshold" value="50" min="0" max="100"><div class="fhint">Score para marcar como "Tu empresa"</div></div>
+        <div class="fg"><label class="fl">Repo GitHub</label><input type="text" class="fi" id="cfg-repo" placeholder="avespa/digitaltwin"></div>
+        <div class="fg"><label class="fl">Días aviso Twin obsoleto</label><input type="number" class="fi" id="cfg-twin-days" value="90" min="7"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- CONTROLES DE COMPLIANCE -->
+  <div class="view" id="view-controles">
+    <div class="ph">
+      <div class="ph-left"><div class="ph-title">Controles de Compliance</div><div class="ph-sub">Registro completo · Import/Export Excel</div></div>
+      <div class="ph-actions">
+        <button class="btn btn-ghost btn-sm" onclick="downloadCtrlTemplate()">⬇ Plantilla Excel</button>
+        <label class="btn btn-ghost btn-sm" style="cursor:pointer">⬆ Importar Excel<input type="file" id="ctrl-import-file" accept=".xlsx,.xls" style="display:none" onchange="importControls(this)"></label>
+        <button class="btn btn-purple btn-sm" onclick="openCtrlModal(null)">+ Nuevo control</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportControls()">⬇ Exportar</button>
+        <button class="btn btn-primary" onclick="saveControls()">Guardar →</button>
+      </div>
+    </div>
+    <div id="ctrl-alert"></div>
+
+    <!-- Stats bar -->
+    <div class="g4 mb14">
+      <div class="kri" style="--c:var(--accent)"><div class="kri-label">Total Controles</div><div class="kri-val" id="ctrl-total">0</div></div>
+      <div class="kri" style="--c:var(--accent2)"><div class="kri-label">Preventivos</div><div class="kri-val" id="ctrl-prev">0</div></div>
+      <div class="kri" style="--c:var(--purple)"><div class="kri-label">Detectivos</div><div class="kri-val" id="ctrl-det">0</div></div>
+      <div class="kri" style="--c:var(--warn)"><div class="kri-label">No ejecutados</div><div class="kri-val" id="ctrl-noexec">0</div></div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="card mb10" style="padding:10px 14px">
+      <div class="flex ic gap8 flex-wrap">
+        <input type="text" class="fi" id="ctrl-search" placeholder="Buscar por título, riesgo, responsable..." style="max-width:280px" oninput="renderControls()">
+        <select class="fi" id="ctrl-filter-nat" style="width:140px" onchange="renderControls()">
+          <option value="">Naturaleza</option><option>Preventivo</option><option>Detectivo</option>
+        </select>
+        <select class="fi" id="ctrl-filter-exec" style="width:130px" onchange="renderControls()">
+          <option value="">Ejecutado</option><option value="Sí">Sí</option><option value="No">No</option>
+        </select>
+        <select class="fi" id="ctrl-filter-freq" style="width:140px" onchange="renderControls()">
+          <option value="">Frecuencia</option>
+          <option>diario</option><option>semanal</option><option>mensual</option>
+          <option>trimestral</option><option>semestral</option><option>anual</option><option>ad-hoc</option>
+        </select>
+        <span id="ctrl-count" style="font-size:10px;color:var(--text-muted);margin-left:auto"></span>
+      </div>
+    </div>
+
+    <div class="ctrl-wrap">
+      <table class="ctrl-table">
+        <thead>
+          <tr>
+            <th>ID</th><th>Título</th><th>Responsable</th><th>Riesgo</th>
+            <th>Frecuencia</th><th>Naturaleza</th><th>Tipo</th>
+            <th>Elemento ISO</th><th>Ejecutado</th><th>Última Ejec.</th><th>Estado</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="ctrl-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SENTENCIAS -->
+  <div class="view" id="view-sentencias">
+    <div class="ph">
+      <div class="ph-left"><div class="ph-title">Sentencias & Jurisprudencia</div><div class="ph-sub">Análisis manual de sentencias relevantes → publicación al feed</div></div>
+      <div class="ph-actions">
+        <button class="btn btn-primary" onclick="openSentModal(null)">+ Nueva sentencia</button>
+      </div>
+    </div>
+    <div id="sent-alert"></div>
+    <div id="sent-list"><div class="empty"><div class="empty-icon">⚖</div><div class="empty-title">Sin sentencias publicadas</div><div class="empty-sub">Añade sentencias del CENDOJ para análisis IA</div></div></div>
   </div>
 
   </div><!-- /page -->
@@ -732,12 +884,14 @@ const db = firebase.firestore();
 // STATE
 // ═══════════════════════════════════════════════════════════════
 let S = {
-  cfg: { mistralKey:'', mistralModel:'mistral-small-latest', newsapiKey:'', threshold:60, repo:'avespa/digitaltwin', twinDays:90 },
+  cfg: { mistralKey:'', mistralModel:'mistral-small-latest', newsapiKey:'', threshold:60, impactThreshold:50, repo:'avespa/digitaltwin', twinDays:90, pineconeKey:'', pineconeHost:'', pineconeIndex:'digitaltwin' },
   ctx: {},       // organization context
   maturity: {},  // maturity assessment
   twinSummary: '',
   hits: [],
   actionPlans: [],
+  controls: [],
+  sentences: [],
   remoteCfg: { newsapi_queries:[], newsapi_sources:'', custom_keywords:[], rss_enabled:{} },
   lastSync: null,
 };
@@ -834,7 +988,8 @@ const RSS_LABELS = {
 // ═══════════════════════════════════════════════════════════════
 const TITLES = {
   dashboard:'Dashboard & KRIs', contexto:'Contexto Organizacional', madurez:'Assessment de Madurez',
-  'twin-summary':'Resumen Ejecutivo del Twin', hits:'Hits Detectados', planes:'Planes de Acción',
+  controles:'Controles de Compliance', sentencias:'Sentencias & Jurisprudencia',
+  'twin-summary':'Resumen Ejecutivo del Twin', hits:'Monitor de Hits', planes:'Planes de Acción',
   brief:'Brief Ejecutivo', fuentes:'Fuentes & Búsquedas', analisis:'Análisis Manual IA', config:'Configuración APIs'
 };
 
@@ -853,6 +1008,8 @@ function go(name){
   if(name==='config') loadConfig();
   if(name==='contexto') loadContexto();
   if(name==='brief') renderBriefPlaceholder();
+  if(name==='controles'){ renderControls(); renderCtrlStats(); }
+  if(name==='sentencias') renderSentencias();
 }
 
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
@@ -875,17 +1032,19 @@ async function syncAll(){
   setStatus('Sincronizando...');
   document.getElementById('sync-btn').innerHTML='<span class="spin"></span>';
   try{
-    const [ctx, mat, ts, plans, cfg] = await Promise.all([
+    const [ctx, mat, ts, plans, cfg, ctrls] = await Promise.all([
       fsGet('organization','main'),
       fsGet('maturity','current'),
       fsGet('twin_summary','main'),
       fsList('action_plans'),
       fsGet('config','main'),
+      fsList('controls','_created','asc'),
     ]);
     if(ctx){ S.ctx = ctx; lsSet('ctx', ctx); }
     if(mat){ S.maturity = mat; lsSet('mat', mat); }
     if(ts){ S.twinSummary = ts.text||''; lsSet('ts', ts.text||''); }
     S.actionPlans = plans || [];
+    if(ctrls && ctrls.length) S.controls = ctrls;
     if(cfg){ S.remoteCfg = {...S.remoteCfg,...cfg}; }
 
     // Hits: try Firestore first, fallback to GitHub raw JSON
@@ -958,6 +1117,8 @@ function restoreLocal(){
   const hits = lsGet('hits'); if(hits) S.hits = hits;
   const plans= lsGet('plans');if(plans)S.actionPlans = plans;
   const cfg  = lsGet('cfg');  if(cfg)  S.cfg = {...S.cfg,...cfg};
+  const ctrls= lsGet('controls'); if(ctrls) S.controls = ctrls;
+  const sents= lsGet('sentences'); if(sents) S.sentences = sents;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1037,6 +1198,9 @@ function updateBadges(){
   document.getElementById('badge-hits').textContent = crits;
   const openPlans = S.actionPlans.filter(p=>p.status!=='closed').length;
   document.getElementById('badge-planes').textContent = openPlans;
+  const sents = (S.sentences||[]).length;
+  const badgeSent=document.getElementById('badge-sent'); if(badgeSent) badgeSent.textContent=sents;
+  updateFunnelCounts();
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1069,6 +1233,11 @@ async function saveContexto(){
   const ok = await fsSet('organization','main', ctx);
   lsSet('ctx', ctx);
   showAlert('ctx-alert', ok?'✓ Contexto guardado en Firestore':'Error al guardar','ok');
+  // Vectorize in Pinecone if configured
+  if(S.cfg.pineconeKey && S.cfg.pineconeHost){
+    const text = [ctx.name,ctx.business,ctx.legal,ctx.risks,ctx.structure].filter(Boolean).join('\n');
+    vectorizeAndStore(text, {type:'organization',id:'org-main',name:ctx.name||'org'}).then(ok2=>{ if(ok2) console.log('Contexto vectorizado en Pinecone'); });
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1437,11 +1606,25 @@ async function saveTwinSummary(){
 // HITS
 // ═══════════════════════════════════════════════════════════════
 function renderHits(){
-  const lv  = document.getElementById('hit-filter-level')?.value||'';
-  let hits  = S.hits.filter(h=>!lv||h.level===lv);
+  const lv     = document.getElementById('hit-filter-level')?.value||'';
+  const src    = document.getElementById('hit-filter-source')?.value||'';
+  const search = (document.getElementById('hit-search')?.value||'').toLowerCase();
+
+  let hits = S.hits;
+  // Funnel filter
+  if(hitFunnel==='company') hits=hits.filter(h=>h.company_impact||h.is_sentencia||h.level==='critical');
+  // Additional filters
+  if(lv) hits=hits.filter(h=>h.level===lv);
+  if(src) hits=hits.filter(h=>(h.source||'').includes(src)||(h.is_sentencia&&src==='Sentencia'));
+  if(search) hits=hits.filter(h=>((h.title||'')+(h.summary||'')+(h.twin_analysis||'')).toLowerCase().includes(search));
+
+  updateFunnelCounts();
+  const el=document.getElementById('hit-count');
+  if(el) el.textContent=`${hits.length} hits`;
   const container = document.getElementById('hits-list');
+  if(!container) return;
   container.innerHTML = hits.length ? hits.map(h=>hitCard(h)).join('') :
-    `<div class="empty"><div class="empty-icon">⟁</div><div class="empty-title">Sin hits</div><div class="empty-sub">Ejecuta el workflow en GitHub Actions</div></div>`;
+    `<div class="empty"><div class="empty-icon">⟁</div><div class="empty-title">Sin hits${hitFunnel==='company'?' con impacto en tu empresa':''}</div><div class="empty-sub">${hitFunnel==='company'?'Los hits analizados por IA aparecerán aquí':'Ejecuta el workflow en GitHub Actions o añade sentencias'}</div></div>`;
 }
 
 function hitCard(h){
@@ -1451,7 +1634,7 @@ function hitCard(h){
   <div class="hit ${h.level||'info'}">
     <div class="hit-head">
       <span class="tag tag-${h.level||'info'}">${levelLabel(h.level)}</span>
-      <span class="hit-source">${esc((h.source||'').split('·')[0].trim())}</span>
+      ${h.is_sentencia?'<span class="sent-tag">SENTENCIA</span>':''}<span class="hit-source">${esc((h.source||'').split('·')[0].trim())}</span>
       <span class="hit-date">${fmtDate(h.fetched_at||h.raw_date)}</span>
     </div>
     <div class="hit-title">${esc(h.title)}</div>
@@ -1471,6 +1654,8 @@ function hitCard(h){
       ${h.vulnerability?`<div class="hit-detail-row"><div class="hit-detail-label">Vulnerabilidad / Control</div><div class="hit-detail-val">${esc(h.vulnerability)}</div></div>`:''}
       ${h.financial_impact?`<div class="hit-detail-row"><div class="hit-detail-label">Impacto financiero</div><div class="hit-detail-val">${esc(h.financial_impact)}</div></div>`:''}
       ${h.recommended_action?`<div class="hit-detail-row"><div class="hit-detail-label">Acción recomendada</div><div class="hit-detail-val">${esc(h.recommended_action)}</div></div>`:''}
+      ${h.ctrl_proposal?`<div class="hit-detail-row"><div class="hit-detail-label" style="color:var(--purple)">◎ Propuesta de control</div><div class="hit-detail-val" style="color:var(--text-dim)">${esc(h.ctrl_proposal)}</div></div>`:''}
+      ${h.is_sentencia?`<div class="hit-detail-row"><div class="hit-detail-label" style="color:var(--purple)">ECLI / Referencia</div><div class="hit-detail-val">${esc(h.ecli||'')}</div></div>`:''}`
     </div>`:''}
   </div>`;
 }
@@ -2171,7 +2356,131 @@ function printBrief(){
   const content=document.getElementById('brief-printable');
   if(!content){alert('Genera el brief primero');return;}
   const w=window.open('','_blank');
-  w.document.write(`<html><head><title>Brief Ejecutivo CDT</title><style>body{font-family:Georgia,serif;padding:40px;max-width:780px;margin:0 auto}@media print{body{padding:20px}}</style></head><body>${content.outerHTML}</body></html>`);
+  w.document.write(`<html><head><title>Brief Ejecutivo CDT</title><style>body{font-family:Georgia,serif;padding:40px;max-width:780px;margin:0 auto}@media print{body{padding:20px}}</style></head><body>${content.outerHTML}
+<!-- MODAL CONTROL -->
+<div class="overlay" id="modal-ctrl">
+  <div class="modal modal-lg">
+    <div class="modal-title" id="ctrl-modal-title">Control de Compliance</div>
+    <button class="modal-x" onclick="closeModal('modal-ctrl')">✕</button>
+    <div class="g2">
+      <div>
+        <div class="fg"><label class="fl">ID *</label><input type="text" class="fi" id="ctrl-id" placeholder="C-001"></div>
+        <div class="fg"><label class="fl">Título *</label><input type="text" class="fi" id="ctrl-title" placeholder="Revisión contratos proveedores..."></div>
+        <div class="fg"><label class="fl">Descripción</label><textarea class="fi" id="ctrl-desc" rows="3" placeholder="Descripción detallada del control..."></textarea></div>
+        <div class="g2">
+          <div class="fg"><label class="fl">Responsable *</label><input type="text" class="fi" id="ctrl-owner" placeholder="CCO / Dpto. Legal"></div>
+          <div class="fg"><label class="fl">Estado</label>
+            <select class="fi" id="ctrl-status"><option>Activo</option><option>Inactivo</option><option>En revisión</option></select>
+          </div>
+        </div>
+        <div class="fg"><label class="fl">Riesgo asociado *</label><input type="text" class="fi" id="ctrl-risk" placeholder="Riesgo de terceros / Due diligence..."></div>
+        <div class="fg"><label class="fl">Evidencia requerida</label><textarea class="fi" id="ctrl-evidence" rows="2" placeholder="Qué documentos o registros prueban la ejecución..."></textarea></div>
+        <div class="fg"><label class="fl">Comentarios</label><textarea class="fi" id="ctrl-comments" rows="2" placeholder="Notas adicionales..."></textarea></div>
+      </div>
+      <div>
+        <div class="g2">
+          <div class="fg"><label class="fl">Frecuencia *</label>
+            <select class="fi" id="ctrl-freq">
+              <option>diario</option><option>semanal</option><option>mensual</option>
+              <option>trimestral</option><option>semestral</option><option>anual</option><option>ad-hoc</option>
+            </select>
+          </div>
+          <div class="fg"><label class="fl">Naturaleza *</label>
+            <select class="fi" id="ctrl-nature"><option>Preventivo</option><option>Detectivo</option></select>
+          </div>
+        </div>
+        <div class="fg"><label class="fl">Tipo *</label>
+          <select class="fi" id="ctrl-type"><option>Manual</option><option>Automático</option></select>
+        </div>
+        <div class="fg"><label class="fl">Elementos ISO 37301 vinculados</label>
+          <div id="ctrl-iso-checks" style="display:flex;flex-direction:column;gap:4px;max-height:180px;overflow-y:auto;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:8px"></div>
+          <div class="fhint">Selección múltiple — vinculado automáticamente por IA al guardar</div>
+        </div>
+        <div class="divider"></div>
+        <div class="fg">
+          <label class="fl">Ejecutado</label>
+          <div class="flex ic gap12">
+            <label class="flex ic gap6" style="cursor:pointer;font-size:11px"><input type="radio" name="ctrl-exec" value="Sí" id="ctrl-exec-yes"> Sí</label>
+            <label class="flex ic gap6" style="cursor:pointer;font-size:11px"><input type="radio" name="ctrl-exec" value="No" id="ctrl-exec-no" checked> No</label>
+          </div>
+        </div>
+        <div class="fg"><label class="fl">Fecha última ejecución</label><input type="date" class="fi" id="ctrl-exec-date"></div>
+        <div class="divider"></div>
+        <div id="ctrl-exec-history-wrap">
+          <div class="fl mb8">Historial de ejecuciones</div>
+          <div id="ctrl-exec-history"></div>
+          <div class="flex gap6 mt6">
+            <input type="date" class="fi" id="new-exec-date" style="flex:1">
+            <input type="text" class="fi" id="new-exec-by" placeholder="Ejecutado por" style="flex:1">
+            <select class="fi" id="new-exec-result" style="width:100px"><option>OK</option><option>Con observaciones</option><option>Fallido</option></select>
+            <button class="btn btn-ghost btn-xs" onclick="addExecRecord()">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap8 mt14" style="justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('modal-ctrl')">Cancelar</button>
+      <button class="btn btn-danger btn-xs" id="ctrl-delete-btn" style="display:none" onclick="deleteControl()">Eliminar</button>
+      <button class="btn btn-purple btn-sm" onclick="suggestIsoLinks()">✦ Sugerir vínculos ISO</button>
+      <button class="btn btn-primary" onclick="saveControl()">Guardar control</button>
+    </div>
+    <div id="ctrl-modal-alert" style="margin-top:8px"></div>
+  </div>
+</div>
+
+<!-- MODAL SENTENCIA -->
+<div class="overlay" id="modal-sent">
+  <div class="modal modal-lg">
+    <div class="modal-title" id="sent-modal-title">Nueva Sentencia / Jurisprudencia</div>
+    <button class="modal-x" onclick="closeModal('modal-sent')">✕</button>
+    <div class="g2">
+      <div>
+        <div class="fg"><label class="fl">Referencia ECLI / Número</label><input type="text" class="fi" id="sent-ref" placeholder="ECLI:ES:TS:2024:1234"></div>
+        <div class="fg"><label class="fl">Tribunal</label><input type="text" class="fi" id="sent-court" placeholder="Tribunal Supremo — Sala de lo Penal"></div>
+        <div class="g2">
+          <div class="fg"><label class="fl">Fecha</label><input type="date" class="fi" id="sent-date"></div>
+          <div class="fg"><label class="fl">Sala / Materia</label>
+            <select class="fi" id="sent-sala">
+              <option>Civil</option><option>Penal</option><option>Contencioso-Administrativo</option>
+              <option>Social</option><option>Mercantil</option><option>Otro</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg"><label class="fl">Partes (demandante vs. demandado)</label><input type="text" class="fi" id="sent-parties" placeholder="Ministerio Fiscal vs. Empresa X"></div>
+        <div class="fg"><label class="fl">Texto / Resumen de la sentencia *</label>
+          <textarea class="fi" id="sent-text" rows="10" placeholder="Pega aquí el texto de la sentencia o su resumen. La IA lo analizará para extraer implicaciones de compliance..."></textarea>
+        </div>
+      </div>
+      <div>
+        <div class="fg"><label class="fl">Análisis IA</label></div>
+        <div id="sent-analysis-box" style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:12px;min-height:200px;font-size:10.5px;color:var(--text-muted);line-height:1.7">
+          Haz clic en "Analizar con IA" para obtener el análisis de compliance.
+        </div>
+        <button class="btn btn-purple btn-sm mt10" style="width:100%" onclick="analyzeSentencia()" id="sent-analyze-btn">✦ Analizar con IA</button>
+        <div id="sent-analysis-fields" style="display:none;margin-top:12px">
+          <div class="fg"><label class="fl">Nivel de impacto (IA)</label>
+            <select class="fi" id="sent-impact"><option value="critical">Alto — Crítico</option><option value="warning">Medio — Alerta</option><option value="info">Bajo — Informativo</option></select>
+          </div>
+          <div class="fg"><label class="fl">Resumen ejecutivo (editable)</label>
+            <textarea class="fi" id="sent-summary" rows="3"></textarea>
+          </div>
+          <div class="fg"><label class="fl">Implicaciones para empresas españolas</label>
+            <textarea class="fi" id="sent-implications" rows="3"></textarea>
+          </div>
+          <div class="fg"><label class="fl">Propuesta de control sugerida</label>
+            <textarea class="fi" id="sent-ctrl-proposal" rows="2" placeholder="Control propuesto para mitigar el riesgo identificado..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="sent-alert"></div>
+    <div class="flex gap8 mt14" style="justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('modal-sent')">Cancelar</button>
+      <button class="btn btn-primary" id="sent-publish-btn" onclick="publishSentencia()" style="display:none">Publicar al feed →</button>
+    </div>
+  </div>
+</div>
+</body></html>`);
   w.document.close(); w.print();
 }
 
@@ -2277,6 +2586,10 @@ function loadConfig(){
   document.getElementById('cfg-threshold').value=S.cfg.threshold||60;
   document.getElementById('cfg-repo').value=S.cfg.repo||'avespa/digitaltwin';
   document.getElementById('cfg-twin-days').value=S.cfg.twinDays||90;
+  if(document.getElementById('cfg-pinecone-key')) document.getElementById('cfg-pinecone-key').value=S.cfg.pineconeKey||'';
+  if(document.getElementById('cfg-pinecone-host')) document.getElementById('cfg-pinecone-host').value=S.cfg.pineconeHost||'';
+  if(document.getElementById('cfg-pinecone-index')) document.getElementById('cfg-pinecone-index').value=S.cfg.pineconeIndex||'digitaltwin';
+  if(document.getElementById('cfg-impact-threshold')) document.getElementById('cfg-impact-threshold').value=S.cfg.impactThreshold||50;
 }
 
 function saveConfig(){
@@ -2284,12 +2597,16 @@ function saveConfig(){
     mistralKey: document.getElementById('cfg-mistral-key').value.trim(),
     mistralModel: document.getElementById('cfg-mistral-model').value,
     newsapiKey: document.getElementById('cfg-newsapi-key').value.trim(),
-    threshold: parseInt(document.getElementById('cfg-threshold').value),
+    threshold: parseInt(document.getElementById('cfg-threshold').value)||60,
+    impactThreshold: parseInt(document.getElementById('cfg-impact-threshold')?.value)||50,
     repo: document.getElementById('cfg-repo').value.trim(),
-    twinDays: parseInt(document.getElementById('cfg-twin-days').value),
+    twinDays: parseInt(document.getElementById('cfg-twin-days').value)||90,
+    pineconeKey: document.getElementById('cfg-pinecone-key')?.value?.trim()||'',
+    pineconeHost: document.getElementById('cfg-pinecone-host')?.value?.trim()||'',
+    pineconeIndex: document.getElementById('cfg-pinecone-index')?.value?.trim()||'digitaltwin',
   };
   lsSet('cfg',S.cfg);
-  showAlert('config-alert','✓ Configuración guardada localmente','ok');
+  showAlert('config-alert','✓ Configuración guardada localmente (nunca en GitHub ni Firestore)','ok');
 }
 
 async function testMistral(){
@@ -2346,6 +2663,533 @@ drawRadar('radar-dash', getDimScores());
 renderRadarLegend('radar-legend-dash', true);
 syncAll();
 setInterval(syncAll, 15*60*1000); // auto-sync cada 15 min
+
+// ═══════════════════════════════════════════════════════════════
+// CONTROLES DE COMPLIANCE
+// ═══════════════════════════════════════════════════════════════
+let currentCtrlId = null;
+let ctrlExecHistory = [];
+
+// Levenshtein distance for fuzzy duplicate detection
+function levenshtein(a, b){
+  const m=a.length,n=b.length,dp=Array.from({length:m+1},(_,i)=>Array.from({length:n+1},(_,j)=>i?j?0:i:j));
+  for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
+  return dp[m][n];
+}
+function normalizeTitle(s){ return (s||'').toLowerCase().replace(/[áàä]/g,'a').replace(/[éèë]/g,'e').replace(/[íìï]/g,'i').replace(/[óòö]/g,'o').replace(/[úùü]/g,'u').replace(/ñ/g,'n').replace(/[^a-z0-9 ]/g,'').replace(/(el|la|los|las|de|del|en|y|a|con|por|para|un|una)/g,'').replace(/\s+/g,' ').trim(); }
+function similarityPct(a,b){ const na=normalizeTitle(a),nb=normalizeTitle(b),maxL=Math.max(na.length,nb.length,1); return Math.round((1-levenshtein(na,nb)/maxL)*100); }
+
+function openCtrlModal(id){
+  currentCtrlId = id;
+  ctrlExecHistory = [];
+  const c = id ? S.controls.find(x=>x.id===id) : null;
+  document.getElementById('ctrl-modal-title').textContent = c ? 'Editar Control' : 'Nuevo Control';
+  document.getElementById('ctrl-delete-btn').style.display = c ? '' : 'none';
+
+  // Auto-generate ID
+  if(!c){
+    const maxN = S.controls.reduce((m,x)=>{ const n=parseInt((x.id||'').replace(/\D/g,'')||0); return n>m?n:m; },0);
+    document.getElementById('ctrl-id').value = 'C-'+String(maxN+1).padStart(3,'0');
+  } else {
+    document.getElementById('ctrl-id').value = c.id||'';
+  }
+
+  const fields = ['title','desc','owner','risk','evidence','comments','freq','nature','type','status','exec-date'];
+  fields.forEach(f=>{ const el=document.getElementById('ctrl-'+f); if(el) el.value=c?.[f.replace('-','_')]||c?.[f]||''; });
+  document.getElementById('ctrl-freq').value = c?.freq||'mensual';
+  document.getElementById('ctrl-nature').value = c?.nature||'Preventivo';
+  document.getElementById('ctrl-type').value = c?.type||'Manual';
+  document.getElementById('ctrl-status').value = c?.status||'Activo';
+
+  // Executed radio
+  const execVal = c?.executed||'No';
+  document.getElementById('ctrl-exec-yes').checked = execVal==='Sí';
+  document.getElementById('ctrl-exec-no').checked  = execVal!=='Sí';
+  document.getElementById('ctrl-exec-date').value = c?.exec_date||'';
+
+  // ISO checkboxes
+  const isoBox = document.getElementById('ctrl-iso-checks');
+  const linked = c?.iso_elements||[];
+  isoBox.innerHTML = DIMS.map(d=>d.elements.map(e=>`
+    <label class="flex ic gap6" style="font-size:10px;cursor:pointer;padding:2px 0">
+      <input type="checkbox" class="ctrl-iso-cb" value="${e.id}" ${linked.includes(e.id)?'checked':''}> 
+      <span style="color:var(--text-muted)">[${d.label.slice(0,3)}]</span> ${e.label.slice(0,55)}
+    </label>`).join('')).join('');
+
+  // Exec history
+  ctrlExecHistory = c?.exec_history||[];
+  renderExecHistory();
+
+  openModal('modal-ctrl');
+}
+
+function renderExecHistory(){
+  const el = document.getElementById('ctrl-exec-history');
+  el.innerHTML = ctrlExecHistory.length ? ctrlExecHistory.map((e,i)=>`
+    <div class="exec-row">
+      <span class="exec-dot" style="background:${e.result==='OK'?'var(--accent)':e.result==='Fallido'?'var(--danger)':'var(--warn)'}"></span>
+      <span style="color:var(--text-dim)">${e.date||''}</span>
+      <span style="flex:1;color:var(--text-muted)">${esc(e.by||'')}</span>
+      <span class="tag" style="background:rgba(0,0,0,.2);color:var(--text-dim)">${e.result||'OK'}</span>
+      <button style="background:none;border:none;color:var(--text-muted);cursor:pointer" onclick="removeExecRecord(${i})">×</button>
+    </div>`).join('') :
+    '<div style="font-size:10px;color:var(--text-muted);padding:6px 0">Sin ejecuciones registradas</div>';
+}
+
+function addExecRecord(){
+  const date=document.getElementById('new-exec-date').value;
+  const by=document.getElementById('new-exec-by').value.trim();
+  const result=document.getElementById('new-exec-result').value;
+  if(!date){alert('Indica la fecha de ejecución');return;}
+  ctrlExecHistory.unshift({date,by,result,_created:new Date().toISOString()});
+  document.getElementById('new-exec-date').value='';
+  document.getElementById('new-exec-by').value='';
+  renderExecHistory();
+}
+function removeExecRecord(i){ ctrlExecHistory.splice(i,1); renderExecHistory(); }
+
+async function suggestIsoLinks(){
+  const key=S.cfg.mistralKey;
+  if(!key){showAlert('ctrl-modal-alert','Configura la API key de Mistral','err');return;}
+  const title=document.getElementById('ctrl-title').value;
+  const desc=document.getElementById('ctrl-desc').value;
+  const risk=document.getElementById('ctrl-risk').value;
+  if(!title){showAlert('ctrl-modal-alert','Introduce el título primero','err');return;}
+
+  showAlert('ctrl-modal-alert','Analizando vínculos ISO...','info');
+  const dimsDesc = DIMS.map(d=>d.elements.map(e=>`${e.id}: ${e.label}`).join('\n')).join('\n');
+  const prompt = `Dado este control de compliance:
+Título: ${title}
+Descripción: ${desc}
+Riesgo: ${risk}
+
+¿A qué elementos del framework ISO 37301 corresponde? Responde SOLO con un JSON array de IDs:
+${dimsDesc}
+
+Ejemplo de respuesta: ["op1","op4","ev1"]
+Responde SOLO el array JSON, sin texto adicional.`;
+
+  try{
+    const raw = await callMistral(prompt, 200);
+    const clean = raw.replace(/\`\`\`json|\`\`\`/g,'').trim();
+    const ids = JSON.parse(clean.match(/\[.*\]/s)?.[0]||'[]');
+    document.querySelectorAll('.ctrl-iso-cb').forEach(cb=>{
+      if(ids.includes(cb.value)) cb.checked=true;
+    });
+    showAlert('ctrl-modal-alert',`✓ ${ids.length} vínculos sugeridos — revisa y confirma`,'ok');
+  }catch(e){ showAlert('ctrl-modal-alert','Error: '+e.message,'err'); }
+}
+
+async function saveControl(){
+  const id=val('ctrl-id'), title=val('ctrl-title');
+  if(!id||!title){showAlert('ctrl-modal-alert','ID y título son obligatorios','err');return;}
+
+  // Duplicate check
+  const existing = S.controls.filter(c=>c.id!==currentCtrlId);
+  const dupById = existing.find(c=>c.id===id);
+  if(dupById){showAlert('ctrl-modal-alert','Ya existe un control con ese ID','err');return;}
+  const dupTitle = existing.find(c=>similarityPct(c.title,title)>=80);
+  if(dupTitle && !currentCtrlId){
+    if(!confirm(`Posible duplicado detectado (${similarityPct(dupTitle.title,title)}% similar): "${dupTitle.title}"\n\n¿Continuar guardando de todas formas?`)) return;
+  }
+
+  const iso_elements = [...document.querySelectorAll('.ctrl-iso-cb:checked')].map(cb=>cb.value);
+  const ctrl = {
+    id, title,
+    desc: val('ctrl-desc'), owner: val('ctrl-owner'), risk: val('ctrl-risk'),
+    evidence: val('ctrl-evidence'), comments: val('ctrl-comments'),
+    freq: val('ctrl-freq'), nature: val('ctrl-nature'), type: val('ctrl-type'),
+    status: val('ctrl-status'),
+    executed: document.getElementById('ctrl-exec-yes').checked?'Sí':'No',
+    exec_date: val('ctrl-exec-date'),
+    iso_elements,
+    exec_history: ctrlExecHistory,
+    _updated: new Date().toISOString(),
+  };
+
+  if(currentCtrlId){
+    const i=S.controls.findIndex(c=>c.id===currentCtrlId);
+    if(i>=0) S.controls[i]={...S.controls[i],...ctrl};
+    await fsUpdate('controls',currentCtrlId,ctrl);
+  } else {
+    const docId = await fsAdd('controls',ctrl);
+    if(docId) S.controls.push({...ctrl,_fsId:docId});
+    // Vectorize
+    if(S.cfg.pineconeKey && S.cfg.pineconeHost){
+      const text = [ctrl.title,ctrl.desc,ctrl.risk,ctrl.evidence].filter(Boolean).join('\n');
+      vectorizeAndStore(text, {type:'control',id:ctrl.id,title:ctrl.title,risk:ctrl.risk,nature:ctrl.nature});
+    }
+  }
+  lsSet('controls',S.controls);
+  closeModal('modal-ctrl');
+  renderControls();
+  renderCtrlStats();
+}
+
+async function deleteControl(){
+  if(!currentCtrlId||!confirm('¿Eliminar este control?'))return;
+  const i=S.controls.findIndex(c=>c.id===currentCtrlId);
+  if(i>=0){
+    if(S.controls[i]._fsId) await fsDelete('controls',S.controls[i]._fsId);
+    S.controls.splice(i,1);
+  }
+  lsSet('controls',S.controls);
+  closeModal('modal-ctrl');
+  renderControls();
+  renderCtrlStats();
+}
+
+async function saveControls(){
+  // Batch save all controls to Firestore
+  showAlert('ctrl-alert','Guardando en Firestore...','info');
+  let ok=true;
+  for(const c of S.controls){
+    if(!c._fsId){ const id=await fsAdd('controls',c); if(id) c._fsId=id; }
+    else await fsUpdate('controls',c._fsId,c);
+  }
+  lsSet('controls',S.controls);
+  showAlert('ctrl-alert',ok?`✓ ${S.controls.length} controles guardados`:'Error parcial','ok');
+}
+
+function renderControls(){
+  const search=(document.getElementById('ctrl-search')?.value||'').toLowerCase();
+  const nat=document.getElementById('ctrl-filter-nat')?.value||'';
+  const exec=document.getElementById('ctrl-filter-exec')?.value||'';
+  const freq=document.getElementById('ctrl-filter-freq')?.value||'';
+
+  let list=S.controls.filter(c=>{
+    if(nat && c.nature!==nat) return false;
+    if(exec && c.executed!==exec) return false;
+    if(freq && c.freq!==freq) return false;
+    if(search && !((c.title||'').toLowerCase().includes(search)||(c.risk||'').toLowerCase().includes(search)||(c.owner||'').toLowerCase().includes(search))) return false;
+    return true;
+  });
+
+  document.getElementById('ctrl-count').textContent = `${list.length} de ${S.controls.length} controles`;
+  const tbody=document.getElementById('ctrl-tbody');
+  if(!tbody) return;
+
+  tbody.innerHTML = list.length ? list.map(c=>`
+    <tr onclick="openCtrlModal('${c.id}')" style="cursor:pointer">
+      <td><code>${esc(c.id)}</code></td>
+      <td style="font-weight:500;max-width:200px">${esc(c.title)}</td>
+      <td>${esc(c.owner)}</td>
+      <td style="max-width:160px;color:var(--text-muted)">${esc((c.risk||'').slice(0,50))}${(c.risk||'').length>50?'...':''}</td>
+      <td><span class="freq-tag">${esc(c.freq)}</span></td>
+      <td><span class="${c.nature==='Preventivo'?'nat-prev':'nat-det'}">${esc(c.nature)}</span></td>
+      <td style="color:var(--text-muted)">${esc(c.type)}</td>
+      <td style="font-size:9px;color:var(--text-muted);max-width:140px">${(c.iso_elements||[]).length>0?c.iso_elements.slice(0,3).join(', ')+(c.iso_elements.length>3?'...':''):'—'}</td>
+      <td><span class="${c.executed==='Sí'?'exec-yes':'exec-no'}">${esc(c.executed||'No')}</span></td>
+      <td style="font-size:9px;color:var(--text-muted)">${c.exec_date||'—'}</td>
+      <td><span class="tag ${c.status==='Activo'?'tag-closed':c.status==='Inactivo'?'tag-critical':'tag-warning'}">${esc(c.status||'Activo')}</span></td>
+      <td><button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();openCtrlModal('${c.id}')">✏</button></td>
+    </tr>`).join('') :
+    `<tr><td colspan="12"><div class="empty"><div class="empty-sub">Sin controles${search?' que coincidan con "'+esc(search)+'"':''}</div></div></td></tr>`;
+}
+
+function renderCtrlStats(){
+  const total=S.controls.length;
+  document.getElementById('ctrl-total').textContent=total;
+  document.getElementById('ctrl-prev').textContent=S.controls.filter(c=>c.nature==='Preventivo').length;
+  document.getElementById('ctrl-det').textContent=S.controls.filter(c=>c.nature==='Detectivo').length;
+  document.getElementById('ctrl-noexec').textContent=S.controls.filter(c=>c.executed!=='Sí').length;
+}
+
+// ── Excel Import/Export ──────────────────────────────────────────────────────
+function downloadCtrlTemplate(){
+  // Download the pre-built template — redirect to outputs
+  const a=document.createElement('a');
+  a.href='controles_template.xlsx';
+  a.download='CDT_Controles_Template.xlsx';
+  a.click();
+}
+
+async function importControls(input){
+  const file=input.files[0];
+  if(!file){return;}
+  showAlert('ctrl-alert','Leyendo Excel...','info');
+  try{
+    const data = await file.arrayBuffer();
+    // Parse using SheetJS if available, otherwise show instructions
+    if(typeof XLSX !== 'undefined'){
+      const wb = XLSX.read(data,{type:'array'});
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+      // Find header row (row 3 in template = index 2)
+      const headerRow = rows.findIndex(r=>r.some(c=>String(c).toLowerCase().includes('título')));
+      if(headerRow<0){showAlert('ctrl-alert','No se encontró la fila de cabeceras. Usa la plantilla descargable.','err');return;}
+      const headers=rows[headerRow].map(h=>String(h).toLowerCase().trim());
+      const getCol=(name)=>headers.findIndex(h=>h.includes(name));
+      const colMap={
+        id:getCol('id'), title:getCol('título')||getCol('titulo'),
+        desc:getCol('descripción')||getCol('descripcion'), owner:getCol('responsable'),
+        risk:getCol('riesgo'), freq:getCol('frecuencia'), nature:getCol('naturaleza'),
+        type:getCol('tipo'), iso:getCol('iso'), evidence:getCol('evidencia'),
+        comments:getCol('comentarios'), executed:getCol('ejecutado'),
+        exec_date:getCol('fecha'), status:getCol('estado'),
+      };
+      const newControls=[]; const dups=[];
+      for(let i=headerRow+1;i<rows.length;i++){
+        const r=rows[i];
+        const id=String(r[colMap.id]||'').trim();
+        const title=String(r[colMap.title]||'').trim();
+        if(!id&&!title) continue;
+        // Duplicate check
+        const existing=S.controls.find(c=>c.id===id||(title&&similarityPct(c.title,title)>=80));
+        if(existing){ dups.push({id,title,match:existing.title}); continue; }
+        newControls.push({
+          id:id||'C-'+Date.now(), title, desc:String(r[colMap.desc]||''),
+          owner:String(r[colMap.owner]||''), risk:String(r[colMap.risk]||''),
+          freq:String(r[colMap.freq]||'mensual'), nature:String(r[colMap.nature]||'Preventivo'),
+          type:String(r[colMap.type]||'Manual'), iso_elements:String(r[colMap.iso]||'').split(',').map(s=>s.trim()).filter(Boolean),
+          evidence:String(r[colMap.evidence]||''), comments:String(r[colMap.comments]||''),
+          executed:String(r[colMap.executed]||'No'), exec_date:String(r[colMap.exec_date]||''),
+          status:String(r[colMap.status]||'Activo'), exec_history:[],
+        });
+      }
+      S.controls.push(...newControls);
+      lsSet('controls',S.controls);
+      renderControls(); renderCtrlStats();
+      const msg=`✓ ${newControls.length} controles importados${dups.length?` · ${dups.length} duplicados omitidos`:''}`;
+      showAlert('ctrl-alert',msg,dups.length?'warn':'ok');
+      if(dups.length) console.table(dups);
+    } else {
+      showAlert('ctrl-alert','Librería SheetJS no disponible. Recarga la página e intenta de nuevo.','err');
+    }
+  }catch(e){
+    showAlert('ctrl-alert','Error importando: '+e.message,'err');
+  }
+  input.value='';
+}
+
+function exportControls(){
+  if(typeof XLSX==='undefined'){showAlert('ctrl-alert','SheetJS no disponible','err');return;}
+  const headers=['ID','Título','Descripción','Responsable','Riesgo Asociado','Frecuencia','Naturaleza','Tipo','Elemento ISO 37301','Evidencia','Comentarios','Ejecutado','Fecha Última Ejecución','Estado'];
+  const rows=S.controls.map(c=>[
+    c.id,c.title,c.desc,c.owner,c.risk,c.freq,c.nature,c.type,
+    (c.iso_elements||[]).join(', '),c.evidence,c.comments,
+    c.executed,c.exec_date,c.status||'Activo'
+  ]);
+  const wb=XLSX.utils.book_new();
+  const ws=XLSX.utils.aoa_to_sheet([headers,...rows]);
+  ws['!cols']=headers.map((_,i)=>({wch:[8,32,40,18,28,14,14,14,26,30,30,12,22,12][i]||15}));
+  XLSX.utils.book_append_sheet(wb,ws,'Controles');
+  // Historial
+  const hHeaders=['ID Control','Título','Fecha','Ejecutado por','Resultado','Notas'];
+  const hRows=S.controls.flatMap(c=>(c.exec_history||[]).map(h=>[c.id,c.title,h.date,h.by,h.result,'']));
+  const ws2=XLSX.utils.aoa_to_sheet([hHeaders,...hRows]);
+  XLSX.utils.book_append_sheet(wb,ws2,'Historial');
+  XLSX.writeFile(wb,'CDT_Controles_'+new Date().toISOString().slice(0,10)+'.xlsx');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SENTENCIAS / JURISPRUDENCIA
+// ═══════════════════════════════════════════════════════════════
+let currentSentId = null;
+let lastSentAnalysis = null;
+
+function openSentModal(id){
+  currentSentId=id;
+  lastSentAnalysis=null;
+  const s=id?S.sentences.find(x=>x.id===id):null;
+  document.getElementById('sent-modal-title').textContent=s?'Ver Sentencia':'Nueva Sentencia';
+  document.getElementById('sent-ref').value=s?.ref||'';
+  document.getElementById('sent-court').value=s?.court||'';
+  document.getElementById('sent-date').value=s?.date||'';
+  document.getElementById('sent-sala').value=s?.sala||'Civil';
+  document.getElementById('sent-parties').value=s?.parties||'';
+  document.getElementById('sent-text').value=s?.text||'';
+  document.getElementById('sent-summary').value=s?.summary||'';
+  document.getElementById('sent-implications').value=s?.implications||'';
+  document.getElementById('sent-ctrl-proposal').value=s?.ctrl_proposal||'';
+  document.getElementById('sent-impact').value=s?.level||'warning';
+  document.getElementById('sent-analysis-box').innerHTML=s?.ai_analysis||'Haz clic en "Analizar con IA" para obtener el análisis de compliance.';
+  document.getElementById('sent-analysis-fields').style.display=s?'block':'none';
+  document.getElementById('sent-publish-btn').style.display=s?'none':'none';
+  openModal('modal-sent');
+}
+
+async function analyzeSentencia(){
+  const key=S.cfg.mistralKey;
+  if(!key){showAlert('sent-alert','Configura la API key de Mistral','err');return;}
+  const text=document.getElementById('sent-text').value.trim();
+  if(!text){showAlert('sent-alert','Introduce el texto de la sentencia','err');return;}
+
+  const btn=document.getElementById('sent-analyze-btn');
+  btn.innerHTML='<span class="spin"></span> Analizando...'; btn.disabled=true;
+  document.getElementById('sent-analysis-box').innerHTML='<div class="flex ic gap8" style="color:var(--text-muted)"><span class="spin"></span> Analizando con Mistral...</div>';
+
+  const prompt=`Eres un experto en compliance y derecho corporativo español. Analiza la siguiente sentencia/resolución y extrae información relevante para el sistema de compliance de una empresa española.
+
+CONTEXTO DE LA EMPRESA (Digital Twin):
+${S.twinSummary||'No disponible'}
+
+SENTENCIA A ANALIZAR:
+${text.slice(0,10000)}
+
+Responde ÚNICAMENTE con un JSON válido:
+{
+  "summary": "Resumen ejecutivo de 3-4 frases de qué trata la sentencia",
+  "implications": "Implicaciones generales para empresas españolas: qué deben hacer o evitar",
+  "sectors_affected": ["sectores afectados"],
+  "norms_referenced": ["normas, leyes, artículos referenciados"],
+  "company_relevance": "Por qué esta sentencia es o no relevante para esta empresa específica, basándote en el Digital Twin",
+  "company_impact": true,
+  "impact_level": "critical|warning|info",
+  "controls_needed": "Qué controles deberían existir para mitigar el riesgo que evidencia esta sentencia",
+  "ctrl_proposal": "Propuesta concreta de un control de compliance para añadir al registro",
+  "coverage_assessment": "¿Esta empresa tiene cobertura suficiente para este riesgo según el twin?"
+}
+
+Responde SOLO el JSON, sin texto adicional.`;
+
+  try{
+    const raw=await callMistral(prompt,2000);
+    const clean=raw.replace(/\`\`\`json|\`\`\`/g,'').trim();
+    const data=JSON.parse(clean.match(/\{[\s\S]*\}/)?.[0]||'{}');
+    lastSentAnalysis=data;
+
+    const html=`<div class="hit-detail-row"><div class="hit-detail-label">Resumen</div><div class="hit-detail-val">${esc(data.summary||'')}</div></div>
+<div class="hit-detail-row mt8"><div class="hit-detail-label">Implicaciones generales</div><div class="hit-detail-val">${esc(data.implications||'')}</div></div>
+<div class="hit-detail-row mt8"><div class="hit-detail-label">Relevancia para tu empresa</div><div class="hit-detail-val">${esc(data.company_relevance||'')}</div></div>
+<div class="hit-detail-row mt8"><div class="hit-detail-label">Controles necesarios</div><div class="hit-detail-val">${esc(data.controls_needed||'')}</div></div>
+<div class="hit-detail-row mt8"><div class="hit-detail-label">Cobertura actual</div><div class="hit-detail-val">${esc(data.coverage_assessment||'')}</div></div>
+${(data.norms_referenced||[]).length?`<div class="hit-detail-row mt8"><div class="hit-detail-label">Normas referenciadas</div><div class="hit-detail-val">${data.norms_referenced.join(' · ')}</div></div>`:''}`;
+
+    document.getElementById('sent-analysis-box').innerHTML=html;
+    document.getElementById('sent-summary').value=data.summary||'';
+    document.getElementById('sent-implications').value=data.implications||'';
+    document.getElementById('sent-ctrl-proposal').value=data.ctrl_proposal||'';
+    document.getElementById('sent-impact').value=data.impact_level||'warning';
+    document.getElementById('sent-analysis-fields').style.display='block';
+    document.getElementById('sent-publish-btn').style.display='';
+  }catch(e){
+    document.getElementById('sent-analysis-box').innerHTML=`<div class="alert alert-err">Error: ${esc(e.message)}</div>`;
+  }
+  btn.textContent='✦ Analizar con IA'; btn.disabled=false;
+}
+
+async function publishSentencia(){
+  if(!lastSentAnalysis){showAlert('sent-alert','Analiza la sentencia primero','err');return;}
+  const ref=val('sent-ref')||'SIN-REF-'+Date.now();
+  const hit={
+    id:'sent-'+Date.now(),
+    title:`[SENTENCIA] ${val('sent-ref')||val('sent-court')||'Sentencia CENDOJ'}`,
+    summary:document.getElementById('sent-summary').value,
+    source:'Sentencia · '+val('sent-court'),
+    level:document.getElementById('sent-impact').value,
+    relevance_score:document.getElementById('sent-impact').value==='critical'?90:document.getElementById('sent-impact').value==='warning'?70:50,
+    company_impact:true,
+    twin_analysis:lastSentAnalysis.company_relevance||'',
+    recommended_action:lastSentAnalysis.controls_needed||'',
+    vulnerability:lastSentAnalysis.coverage_assessment||'',
+    ctrl_proposal:document.getElementById('sent-ctrl-proposal').value,
+    norms_affected:lastSentAnalysis.norms_referenced||[],
+    risks:lastSentAnalysis.sectors_affected||[],
+    link:'',
+    fetched_at:new Date().toISOString(),
+    raw_date:val('sent-date'),
+    is_sentencia:true,
+    ecli:ref,
+    full_analysis:lastSentAnalysis,
+    raw_text:document.getElementById('sent-text').value.slice(0,2000),
+  };
+
+  // Save to Firestore
+  const fsId=await fsAdd('hits',hit);
+  if(fsId) hit._fsId=fsId;
+  S.hits.unshift(hit);
+
+  // Save to sentences list
+  const sent={id:'sent-'+Date.now(),ref,court:val('sent-court'),date:val('sent-date'),sala:val('sent-sala'),parties:val('sent-parties'),text:document.getElementById('sent-text').value,summary:document.getElementById('sent-summary').value,implications:document.getElementById('sent-implications').value,ctrl_proposal:document.getElementById('sent-ctrl-proposal').value,level:document.getElementById('sent-impact').value,ai_analysis:document.getElementById('sent-analysis-box').innerHTML,hit_id:hit.id};
+  if(!S.sentences) S.sentences=[];
+  S.sentences.unshift(sent);
+  lsSet('sentences',S.sentences);
+  lsSet('hits',S.hits);
+
+  closeModal('modal-sent');
+  renderSentencias();
+  renderHits();
+  updateBadges();
+  showAlert('sent-alert','✓ Sentencia publicada al feed de hits','ok');
+  setTimeout(()=>go('hits'),1000);
+}
+
+function renderSentencias(){
+  if(!S.sentences) S.sentences=[];
+  const el=document.getElementById('sent-list');
+  if(!el) return;
+  el.innerHTML=S.sentences.length?S.sentences.map(s=>`
+    <div class="sent-card" onclick="openSentModal('${s.id}')" style="cursor:pointer">
+      <div class="flex ic gap8 mb6">
+        <span class="sent-tag">SENTENCIA</span>
+        <span class="tag tag-${s.level||'warning'}">${levelLabel(s.level)}</span>
+        <span style="font-size:9px;color:var(--text-muted);margin-left:auto">${s.date||''}</span>
+      </div>
+      <div style="font-size:11.5px;font-weight:500;margin-bottom:3px">${esc(s.ref||s.court||'Sin referencia')}</div>
+      <div style="font-size:10.5px;color:var(--text-dim)">${esc(s.court||'')} ${s.sala?'· '+s.sala:''}</div>
+      ${s.summary?`<div style="font-size:10px;color:var(--text-muted);margin-top:5px;line-height:1.5">${esc(s.summary.slice(0,150))}...</div>`:''}
+    </div>`).join('') :
+    '<div class="empty"><div class="empty-icon">⚖</div><div class="empty-title">Sin sentencias</div><div class="empty-sub">Añade sentencias del CENDOJ para análisis IA</div></div>';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FUNNEL DE HITS
+// ═══════════════════════════════════════════════════════════════
+let hitFunnel = 'all';
+
+function setHitFunnel(level){
+  hitFunnel=level;
+  document.querySelectorAll('.funnel-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('funnel-'+level)?.classList.add('active');
+  renderHits();
+}
+
+function updateFunnelCounts(){
+  const all=S.hits.length;
+  const company=S.hits.filter(h=>h.company_impact||h.is_sentencia||h.level==='critical').length;
+  document.getElementById('funnel-count-all').textContent=all;
+  document.getElementById('funnel-count-company').textContent=company;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PINECONE
+// ═══════════════════════════════════════════════════════════════
+async function testPinecone(){
+  const key=document.getElementById('cfg-pinecone-key')?.value?.trim();
+  const host=document.getElementById('cfg-pinecone-host')?.value?.trim();
+  if(!key||!host){showAlert('config-alert','Introduce API key y host de Pinecone','err');return;}
+  try{
+    const r=await fetch(host+'/describe_index_stats',{headers:{'Api-Key':key,'Content-Type':'application/json'}});
+    showAlert('config-alert',r.ok?'✓ Pinecone conectado correctamente':'✗ Error: '+r.status,r.ok?'ok':'err');
+  }catch(e){showAlert('config-alert','Error de conexión Pinecone: '+e.message,'err');}
+}
+
+async function vectorizeAndStore(text, metadata){
+  const mistralKey=S.cfg.mistralKey;
+  const pineconeKey=document.getElementById('cfg-pinecone-key')?.value||S.cfg.pineconeKey||'';
+  const pineconeHost=document.getElementById('cfg-pinecone-host')?.value||S.cfg.pineconeHost||'';
+  if(!mistralKey||!pineconeKey||!pineconeHost) return false;
+  try{
+    // Get embedding from Mistral
+    const embR=await fetch('https://api.mistral.ai/v1/embeddings',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+mistralKey},
+      body:JSON.stringify({model:'mistral-embed',inputs:[text.slice(0,8000)]})
+    });
+    if(!embR.ok) return false;
+    const embData=await embR.json();
+    const vector=embData.data[0].embedding;
+    // Upsert to Pinecone
+    const pcR=await fetch(pineconeHost+'/vectors/upsert',{
+      method:'POST',
+      headers:{'Api-Key':pineconeKey,'Content-Type':'application/json'},
+      body:JSON.stringify({vectors:[{id:metadata.id||'vec-'+Date.now(),values:vector,metadata}]})
+    });
+    return pcR.ok;
+  }catch(e){console.warn('Pinecone vectorize error:',e); return false;}
+}
+
 </script>
 </body>
 </html>
