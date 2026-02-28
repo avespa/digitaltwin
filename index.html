@@ -3537,7 +3537,386 @@ async function pcQuery(queryText, topK=8){
 // ── vectorizeAndStore: unified entry point ───────────────────────────────────
 function toAsciiId(str){
   // Pinecone requires ASCII-only vector IDs
-  return (str||'')
-    .normalize('NFD')               // é → e + combining accent
-    .replace(/[̀-ͯ]/g,'') // strip combining accents
-    .replace(/[^
+  if(!str) return 'vec-'+Date.now();
+  let s = str;
+  // Manual accent removal for Spanish chars
+  s = s.replace(/[\xC0-\xC5\xE0-\xE5]/g,'a'); // à á â ã ä å
+  s = s.replace(/[\xC8-\xCB\xE8-\xEB]/g,'e'); // è é ê ë
+  s = s.replace(/[\xCC-\xCF\xEC-\xEF]/g,'i'); // ì í î ï
+  s = s.replace(/[\xD2-\xD6\xF2-\xF6]/g,'o'); // ò ó ô õ ö
+  s = s.replace(/[\xD9-\xDC\xF9-\xFC]/g,'u'); // ù ú û ü
+  s = s.replace(/[\xD1\xF1]/g,'n');            // Ñ ñ
+  s = s.replace(/[\xC7\xE7]/g,'c');            // Ç ç
+  // Replace anything non-ASCII with underscore
+  s = s.replace(/[^\x20-\x7E]/g,'_');
+  // Replace spaces and unsafe chars
+  s = s.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_\-.]/g,'_');
+  return s.slice(0,400) || 'vec-x';
+}
+async function vectorizeAndStore(text, metadata){
+  const rawId = metadata.id || 'vec-'+Date.now();
+  const id = toAsciiId(rawId);
+  const { id: _removed, ...meta } = metadata;
+  return pcUpsert(id, text, meta);
+}
+
+// ── pcEmbedQuery alias (not needed with proxy — kept for compatibility) ───────
+async function pcEmbedQuery(text){ return text; }
+
+// ── TEST connection ──────────────────────────────────────────────────────────
+async function testPinecone(){
+  showAlert('config-alert', 'Verificando conexión...', 'info');
+  try{
+    const r = await pcCall('/describe_index_stats', 'GET');
+    if(r && r.ok){
+      const d = await r.json();
+      const count = d.totalVectorCount || d.namespaces?.['']?.vectorCount || 0;
+      showAlert('config-alert', `✓ Pinecone conectado — ${count} vectores en el índice`, 'ok');
+    } else {
+      showAlert('config-alert', '✗ Error ' + (r?.status||'') + ': verifica PINECONE_API_KEY en Vercel', 'err');
+    }
+  }catch(e){ showAlert('config-alert', 'Error: ' + e.message, 'err'); }
+}
+
+// ════════════════════════════════════════════════════════════════
+// TWIN SYNC → PINECONE
+// Vectorizes all Twin data: org context, controls, maturity elements, summary
+// ════════════════════════════════════════════════════════════════
+
+async function syncTwinToPinecone(){
+  if(!pcKey()){ showAlert('config-alert', 'Configura la API key de Pinecone primero', 'err'); return; }
+
+  const btn = document.getElementById('btn-sync-pinecone');
+  if(btn){ btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Sincronizando...'; }
+  showAlert('config-alert', 'Vectorizando Twin...', 'info');
+
+  let done = 0, errors = 0;
+  const log = [];
+  let progressMsg = '';
+  const updateProgress = (msg) => { progressMsg = msg; showAlert('config-alert', msg, 'info'); };
+
+  // 1. Organization context
+  const ctx = S.ctx || {};
+  if(ctx.name || ctx.business){
+    const text = [
+      ctx.name       ? 'Empresa: ' + ctx.name : '',
+      ctx.sector     ? 'Sector: ' + ctx.sector : '',
+      ctx.business   ? 'Actividad: ' + ctx.business : '',
+      ctx.legal      ? 'Forma jurídica: ' + ctx.legal : '',
+      ctx.size       ? 'Tamaño: ' + ctx.size : '',
+      ctx.geography  ? 'Geografía: ' + ctx.geography : '',
+      ctx.certifications ? 'Normativa aplicable: ' + ctx.certifications : '',
+      ctx.structure  ? 'Estructura: ' + ctx.structure : '',
+      ctx.risks      ? 'Riesgos declarados: ' + ctx.risks : '',
+      ctx.incidents  ? 'Incidencias históricas: ' + ctx.incidents : '',
+    ].filter(Boolean).join('\n');
+    const ok = await vectorizeAndStore(text, { id: 'org-context', type: 'org', name: ctx.name || '', sector: ctx.sector || '' });
+    if(!ok){ console.error('Failed to sync: org-context'); }
+    ok ? done++ : errors++;
+    log.push({ label: 'Contexto organizacional', ok });
+  }
+
+  // 2. Twin summary
+  if(S.twinSummary){
+    const ok = await vectorizeAndStore(S.twinSummary, { id: 'org-summary', type: 'summary' });
+    ok ? done++ : errors++;
+    log.push({ label: 'Resumen ejecutivo Twin', ok });
+  }
+
+  // 3. Controls
+  updateProgress(`Vectorizando controles (${S.controls.length})...`);
+  for(const ctrl of S.controls){
+    const text = [
+      'Control: ' + ctrl.title,
+      ctrl.desc    ? 'Descripción: ' + ctrl.desc : '',
+      ctrl.risk    ? 'Riesgo: ' + ctrl.risk : '',
+      ctrl.nature  ? 'Naturaleza: ' + ctrl.nature : '',
+      ctrl.freq    ? 'Frecuencia: ' + ctrl.freq : '',
+      ctrl.evidence? 'Evidencia: ' + ctrl.evidence : '',
+      (ctrl.iso_elements||[]).length ? 'Elementos ISO: ' + ctrl.iso_elements.join(', ') : '',
+    ].filter(Boolean).join('\n');
+    const ok = await vectorizeAndStore(text, {
+      id: 'ctrl-' + ctrl.id,
+      type: 'control',
+      ctrl_id: ctrl.id,
+      title: ctrl.title,
+      nature: ctrl.nature || '',
+      freq: ctrl.freq || '',
+      executed: ctrl.executed || 'No',
+      status: ctrl.status || 'Activo',
+      iso_elements: (ctrl.iso_elements || []).join(','),
+    });
+    ok ? done++ : errors++;
+    await new Promise(r => setTimeout(r, 120)); // rate limit
+  }
+  log.push({ label: `Controles (${S.controls.length})`, ok: errors === 0 });
+
+  // 4. Maturity elements
+  updateProgress(`Vectorizando elementos de madurez...`);
+  for(const dim of DIMS){
+    for(const elem of dim.elements){
+      const mat = S.maturity?.[elem.id] || {};
+      const score = mat.score || 0;
+      const justification = mat.justification || '';
+      const evidence = mat.evidence || '';
+      const text = [
+        'Dimensión: ' + dim.label,
+        'Elemento: ' + elem.label,
+        'Puntuación: ' + score + '/5 — ' + (SCORE_LABELS[score] || 'Sin evaluar'),
+        justification ? 'Justificación: ' + justification : '',
+        evidence      ? 'Evidencia: ' + evidence : '',
+      ].filter(Boolean).join('\n');
+      const ok = await vectorizeAndStore(text, {
+        id: 'elem-' + elem.id,
+        type: 'element',
+        elem_id: elem.id,
+        dim_id: dim.id,
+        dim_label: dim.label,
+        elem_label: elem.label,
+        score: score,
+        score_label: SCORE_LABELS[score] || 'Sin evaluar',
+      });
+      ok ? done++ : errors++;
+      await new Promise(r => setTimeout(r, 80));
+    }
+  }
+  log.push({ label: 'Elementos madurez ('+DIMS.reduce((s,d)=>s+d.elements.length,0)+')', ok: errors===0 });
+
+  const msg = `✓ ${done} vectores sincronizados${errors > 0 ? ' · ' + errors + ' errores' : ''}`;
+  showAlert('config-alert', msg, errors > 0 ? 'warn' : 'ok');
+  if(btn){ btn.innerHTML = '✓ Twin sincronizado'; setTimeout(()=>{ btn.innerHTML = '⬆ Sincronizar Twin → Pinecone'; btn.disabled = false; }, 3000); }
+
+  console.log('Pinecone sync log:', log);
+  return { done, errors, log };
+}
+
+// ════════════════════════════════════════════════════════════════
+// RAG HIT ANALYSIS — Inherent + Residual Risk
+// ════════════════════════════════════════════════════════════════
+
+async function reAnalyzeHit(hitId){
+  if(!S.cfg.mistralKey){ showAlert('hits-alert','Configura la API key de Mistral','err'); return; }
+  if(!S.ctx?.name && !S.twinSummary){ showAlert('hits-alert','Primero completa el Contexto Organizacional del Twin','err'); return; }
+
+  const hit = S.hits.find(h=>h.id===hitId);
+  if(!hit) return;
+
+  const btn = document.getElementById('reanalyze-'+hitId);
+  if(btn){ btn.innerHTML='<span class="spin"></span>'; btn.disabled=true; }
+
+  // ── STEP 1: Retrieve relevant Twin fragments via RAG ────────────────────
+  let ragContext = '';
+  let retrievedFragments = [];
+
+  if(pcKey()){
+    try{
+      // Embed the hit text as a query
+      const hitText = [hit.title, hit.summary, hit.twin_analysis].filter(Boolean).join(' ');
+      // Integrated index: pcQuery takes text directly, no pre-embedding needed
+      const matches = await pcQuery(hitText, 8);
+      if(true){
+
+        retrievedFragments = matches.filter(m => m.score > 0.3).map(m => {
+          const meta = m.metadata || {};
+          let fragment = '';
+          if(meta.type === 'control'){
+            fragment = `CONTROL [${meta.ctrl_id}] "${meta.title}" — ${meta.nature}, ${meta.freq}, ejecutado: ${meta.executed}, ISO: ${meta.iso_elements||''}`;
+          } else if(meta.type === 'element'){
+            fragment = `ELEMENTO MADUREZ [${meta.elem_id}] "${meta.elem_label}" — Score: ${meta.score}/5 (${meta.score_label}) — Dimensión: ${meta.dim_label}`;
+          } else if(meta.type === 'org'){
+            fragment = `CONTEXTO: sector ${meta.sector}, empresa: ${meta.name}`;
+          } else if(meta.type === 'summary'){
+            fragment = 'RESUMEN TWIN: (incluido abajo)';
+          }
+          return { fragment, score: m.score, type: meta.type, meta };
+        }).filter(f => f.fragment);
+
+        if(retrievedFragments.length > 0){
+          ragContext = '\n\n═══ FRAGMENTOS MÁS RELEVANTES DEL TWIN (recuperados por RAG) ═══\n' +
+            retrievedFragments.map((f,i) => `[${i+1}] (relevancia: ${Math.round(f.score*100)}%) ${f.fragment}`).join('\n');
+        }
+      }
+    }catch(e){ console.warn('RAG retrieval failed, proceeding without:', e); }
+  }
+
+  // ── STEP 2: Build context ────────────────────────────────────────────────
+  const ctx = S.ctx || {};
+  const orgCtx = [
+    ctx.name     ? 'Empresa: ' + ctx.name : '',
+    ctx.sector   ? 'Sector: ' + ctx.sector : '',
+    ctx.business ? 'Actividad: ' + ctx.business : '',
+    ctx.geography? 'Geografía: ' + ctx.geography : '',
+    ctx.certifications ? 'Normativa vigente: ' + ctx.certifications : '',
+  ].filter(Boolean).join('\n');
+
+  const twinSummaryCtx = S.twinSummary ? '\n\nRESUMEN DEL TWIN:\n' + S.twinSummary.slice(0,600) : '';
+
+  // ── STEP 3: Single Mistral call with RAG context ─────────────────────────
+  const prompt = `Eres experto en compliance corporativo español. Evalúa este evento usando la metodología de RIESGO INHERENTE y RIESGO RESIDUAL.
+
+═══ ORGANIZACIÓN ═══
+${orgCtx}${twinSummaryCtx}${ragContext}
+
+═══ EVENTO A EVALUAR ═══
+Título: ${hit.title}
+Fuente: ${hit.source||''}
+Fecha: ${hit.raw_date||''}
+Resumen: ${hit.summary||''}
+${hit.norms_affected?.length ? 'Normativas mencionadas: ' + hit.norms_affected.join(', ') : ''}
+
+═══ INSTRUCCIONES ═══
+RIESGO INHERENTE: evalúa si este tipo de riesgo existe para esta empresa por su sector/actividad/normativa aplicable, IGNORANDO sus controles actuales.
+RIESGO RESIDUAL: evalúa el riesgo REAL considerando los controles y nivel de madurez del Twin mostrado arriba.
+
+Sé muy específico: si la empresa es agrícola y el evento es sobre regulación audiovisual, el inherente es BAJO porque esa normativa no aplica a su sector.
+
+Devuelve SOLO este JSON:
+{
+  "inherent_score": 0-100,
+  "inherent_level": "critical|warning|info|irrelevant",
+  "inherent_rationale": "1-2 frases: por qué este riesgo existe o no para esta empresa específica por su sector/actividad",
+  "residual_score": 0-100,
+  "residual_level": "critical|warning|info|irrelevant",
+  "residual_rationale": "1-2 frases: qué cobertura tiene el Twin y qué gap queda",
+  "company_impact": true|false,
+  "controls_activated": ["IDs de controles del Twin que cubrirían este riesgo, si los hay"],
+  "weakest_element": "ID del elemento de madurez más expuesto a este riesgo, si aplica",
+  "coverage_quality": "alta|media|baja|sin_cobertura",
+  "gaps_identified": "Qué control o política concreta falta o es insuficiente, si aplica",
+  "ctrl_proposal": "Propuesta breve de 1 control nuevo si hay gap significativo, vacío si no aplica",
+  "false_positive_reason": "Si inherent=irrelevant, explica en 1 frase por qué no aplica a esta empresa"
+}`;
+
+  try{
+    const raw = await callMistral(prompt, 1200);
+    const clean = raw.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+    const analysis = JSON.parse(clean.match(/\{[\s\S]*\}/)?.[0]||'{}');
+
+    // Map residual level to display level
+    const finalLevel = analysis.residual_level || 'info';
+    const company_impact = analysis.inherent_level !== 'irrelevant' && analysis.inherent_score > 15;
+
+    // Update hit in state
+    const idx = S.hits.findIndex(h=>h.id===hitId);
+    if(idx>=0){
+      S.hits[idx] = {
+        ...S.hits[idx],
+        // Both risk levels
+        inherent_score:    analysis.inherent_score ?? 50,
+        inherent_level:    analysis.inherent_level || 'warning',
+        inherent_rationale:analysis.inherent_rationale || '',
+        residual_score:    analysis.residual_score ?? 30,
+        residual_level:    analysis.residual_level || 'info',
+        residual_rationale:analysis.residual_rationale || '',
+        // Display level = residual
+        level:             finalLevel,
+        relevance_score:   analysis.residual_score ?? S.hits[idx].relevance_score,
+        company_impact,
+        // Coverage details
+        controls_activated: analysis.controls_activated || [],
+        weakest_element:   analysis.weakest_element || '',
+        coverage_quality:  analysis.coverage_quality || '',
+        gaps_identified:   analysis.gaps_identified || '',
+        ctrl_proposal:     analysis.ctrl_proposal || '',
+        false_positive_reason: analysis.false_positive_reason || '',
+        false_positive:    !company_impact,
+        twin_analysis:     analysis.residual_rationale || S.hits[idx].twin_analysis || '',
+        recommended_action:analysis.gaps_identified || '',
+        rag_fragments_used:retrievedFragments.length,
+        _reanalyzed:       new Date().toISOString(),
+      };
+      lsSet('hits', S.hits);
+      if(S.hits[idx]._fsId){
+        fsUpdate('hits', S.hits[idx]._fsId, {
+          inherent_score: analysis.inherent_score,
+          inherent_level: analysis.inherent_level,
+          residual_score: analysis.residual_score,
+          residual_level: analysis.residual_level,
+          level: finalLevel,
+          company_impact,
+          coverage_quality: analysis.coverage_quality||'',
+          gaps_identified: analysis.gaps_identified||'',
+          false_positive: !company_impact,
+          rag_fragments_used: retrievedFragments.length,
+          _reanalyzed: new Date().toISOString(),
+        }).catch(()=>{});
+      }
+    }
+
+    updateFunnelCounts();
+    updateBadges();
+    renderHits();
+    showRiskToast(hitId, analysis, company_impact, retrievedFragments.length);
+
+  }catch(e){
+    if(btn){ btn.innerHTML='⟳ Re-evaluar'; btn.disabled=false; }
+    console.error('reAnalyzeHit error:', e);
+    showAlert('hits-alert','Error: '+e.message,'err');
+  }
+}
+
+function showRiskToast(hitId, analysis, company_impact, ragCount){
+  const el = document.getElementById('hits-inline-alert') || (() => {
+    const d=document.createElement('div'); d.id='hits-inline-alert';
+    d.style.cssText='position:fixed;bottom:20px;right:20px;max-width:400px;z-index:9999';
+    document.body.appendChild(d); return d;
+  })();
+  const inh = analysis.inherent_level || 'info';
+  const res = analysis.residual_level || 'info';
+  const levelColors = {critical:'var(--danger)',warning:'var(--warn)',info:'var(--accent2)',irrelevant:'var(--text-muted)'};
+  const ic = levelColors[inh]||'var(--text-muted)';
+  const rc = levelColors[res]||'var(--text-muted)';
+  el.innerHTML = `<div style="background:var(--surface);border:1px solid var(--border2);border-radius:6px;padding:13px 15px;box-shadow:0 6px 24px rgba(0,0,0,.5)">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+      <div style="text-align:center">
+        <div style="font-size:7.5px;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:2px">INHERENTE</div>
+        <span style="font-size:9px;font-weight:700;color:${ic};background:rgba(0,0,0,.2);padding:2px 8px;border-radius:3px">${levelLabel(inh)}</span>
+      </div>
+      <div style="color:var(--text-muted);font-size:14px">→</div>
+      <div style="text-align:center">
+        <div style="font-size:7.5px;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:2px">RESIDUAL</div>
+        <span style="font-size:9px;font-weight:700;color:${rc};background:rgba(0,0,0,.2);padding:2px 8px;border-radius:3px">${levelLabel(res)}</span>
+      </div>
+      ${ragCount>0?`<div style="margin-left:auto;font-size:8.5px;color:var(--accent)">⬡ ${ragCount} fragmentos RAG</div>`:''}
+    </div>
+    <div style="font-size:9.5px;color:var(--text-dim);line-height:1.6">${esc(analysis.inherent_rationale||'')}</div>
+    ${!company_impact?`<div style="margin-top:6px;font-size:9px;color:var(--text-muted);font-style:italic">${esc(analysis.false_positive_reason||'')}</div>`:''}
+  </div>`;
+  setTimeout(()=>{ el.innerHTML=''; }, 10000);
+}
+
+// ── Batch re-analysis ────────────────────────────────────────────────────────
+async function batchReAnalyze(){
+  if(!S.cfg.mistralKey){ go('config'); return; }
+  const toProcess = S.hits.filter(h=>!h._reanalyzed && !h.is_sentencia).slice(0,15);
+  if(!toProcess.length){ showAlert('hits-alert','Todos los hits ya han sido evaluados','info'); return; }
+
+  const btn = document.getElementById('batch-reanalyze-btn');
+  if(btn){ btn.disabled=true; }
+
+  for(let i=0; i<toProcess.length; i++){
+    const h = toProcess[i];
+    if(btn) btn.innerHTML=`<span class="spin"></span> ${i+1}/${toProcess.length}`;
+    await reAnalyzeHit(h.id);
+    await new Promise(r=>setTimeout(r,1200)); // rate limit
+  }
+
+  if(btn){ btn.innerHTML='✓ Completado'; setTimeout(()=>{ btn.innerHTML='⟳ Re-evaluar todos'; btn.disabled=false; },3000); }
+}
+
+// ── Build twin context string (used elsewhere) ───────────────────────────────
+function buildTwinContext(){
+  const ctx = S.ctx || {};
+  return [
+    ctx.name       ? 'Empresa: '+ctx.name : '',
+    ctx.sector     ? 'Sector: '+ctx.sector : '',
+    ctx.business   ? 'Actividad: '+ctx.business : '',
+    ctx.geography  ? 'Geografía: '+ctx.geography : '',
+    ctx.certifications ? 'Normativa: '+ctx.certifications : '',
+    S.twinSummary  ? '\nResumen Twin:\n'+S.twinSummary.slice(0,500) : '',
+  ].filter(Boolean).join('\n');
+}
+
+</script>
+</body>
+</html>
