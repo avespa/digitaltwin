@@ -228,6 +228,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
 .ctrl-table th{background:var(--surface2);padding:7px 10px;text-align:left;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border);white-space:nowrap;position:sticky;top:0}
 .ctrl-table td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--text-dim);vertical-align:middle;line-height:1.4}
 .ctrl-table tr:hover td{background:rgba(255,255,255,.02);color:var(--text)}
+.ctrl-row-selected td{background:rgba(0,229,160,.04)!important;border-left:2px solid var(--accent)}
 .ctrl-table tr.dup-warn td{background:rgba(245,158,11,.04);border-left:2px solid var(--warn)}
 .ctrl-wrap{overflow-x:auto;max-height:calc(100vh - 340px);border:1px solid var(--border);border-radius:6px}
 .freq-tag{font-size:8px;padding:2px 6px;border-radius:10px;background:rgba(0,102,255,.12);color:var(--accent2);letter-spacing:.5px}
@@ -731,10 +732,23 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
       </div>
     </div>
 
+    <!-- Bulk action bar (shows when rows selected) -->
+    <div id="ctrl-bulk-bar" style="display:none;background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.2);border-radius:5px;padding:8px 14px;margin-bottom:10px;display:none" class="flex ic gap12">
+      <span id="ctrl-bulk-count" style="font-size:10.5px;color:var(--accent)"></span>
+      <div style="flex:1"></div>
+      <span style="font-size:10px;color:var(--text-muted)">Marcar como:</span>
+      <button class="btn btn-ghost btn-xs" onclick="bulkMarkExecuted('Sí')">✓ Ejecutado</button>
+      <button class="btn btn-ghost btn-xs" onclick="bulkMarkExecuted('No')">✗ No ejecutado</button>
+      <button class="btn btn-ghost btn-xs" onclick="bulkSetStatus('Activo')">Activo</button>
+      <button class="btn btn-ghost btn-xs" onclick="bulkSetStatus('Inactivo')">Inactivo</button>
+      <button class="btn btn-danger btn-xs" onclick="bulkDelete()">Eliminar</button>
+    </div>
+
     <div class="ctrl-wrap">
       <table class="ctrl-table">
         <thead>
           <tr>
+            <th style="width:32px"><input type="checkbox" id="ctrl-check-all" onchange="ctrlToggleAll(this.checked)" title="Seleccionar todos"></th>
             <th>ID</th><th>Título</th><th>Responsable</th><th>Riesgo</th>
             <th>Frecuencia</th><th>Naturaleza</th><th>Tipo</th>
             <th>Elemento ISO</th><th>Ejecutado</th><th>Última Ejec.</th><th>Estado</th><th></th>
@@ -866,6 +880,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
 </div>
 
 <script>
+let hitFunnel = 'all'; // declared at top to avoid TDZ in renderHits
 // ═══════════════════════════════════════════════════════════════
 // FIREBASE INIT
 // ═══════════════════════════════════════════════════════════════
@@ -2480,6 +2495,54 @@ function printBrief(){
     </div>
   </div>
 </div>
+
+<!-- MODAL IMPORT CONTROLES -->
+<div class="overlay" id="modal-import">
+  <div class="modal" style="max-width:900px;width:95vw">
+    <div class="modal-title">Importar Controles — Revisión previa</div>
+    <button class="modal-x" onclick="closeModal('modal-import')">✕</button>
+    
+    <div id="import-step1">
+      <!-- Column mapping -->
+      <div class="card mb10" style="padding:10px 14px" id="import-col-map-wrap">
+        <div class="fl mb8">Mapeo de columnas detectado <span style="color:var(--text-muted);font-size:9px">— ajusta si es necesario</span></div>
+        <div id="import-col-map" class="g2" style="font-size:10px"></div>
+      </div>
+
+      <!-- Stats -->
+      <div class="flex ic gap14 mb10" style="font-size:10.5px">
+        <span id="import-stat-total" style="color:var(--text-dim)"></span>
+        <span id="import-stat-new" style="color:var(--accent)"></span>
+        <span id="import-stat-dup" style="color:var(--warn)"></span>
+        <span id="import-stat-error" style="color:var(--danger)"></span>
+        <div style="margin-left:auto;display:flex;gap:8px">
+          <button class="btn btn-ghost btn-xs" onclick="importSelectAll(true)">✓ Seleccionar todos los nuevos</button>
+          <button class="btn btn-ghost btn-xs" onclick="importSelectAll(false)">✗ Deseleccionar todos</button>
+        </div>
+      </div>
+
+      <!-- Preview table -->
+      <div style="overflow-x:auto;max-height:420px;border:1px solid var(--border);border-radius:5px">
+        <table class="ctrl-table" id="import-preview-table">
+          <thead>
+            <tr>
+              <th style="width:32px"><input type="checkbox" id="import-check-all" onchange="importToggleAll(this.checked)"></th>
+              <th>Estado</th><th>ID</th><th>Título</th><th>Responsable</th>
+              <th>Naturaleza</th><th>Frecuencia</th><th>Riesgo</th><th>Duplicado de</th>
+            </tr>
+          </thead>
+          <tbody id="import-preview-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="import-alert" style="margin-top:10px"></div>
+    <div class="flex gap8 mt14" style="justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('modal-import')">Cancelar</button>
+      <button class="btn btn-primary" onclick="confirmImport()" id="import-confirm-btn">Importar seleccionados →</button>
+    </div>
+  </div>
+</div>
 </body></html>`);
   w.document.close(); w.print();
 }
@@ -2851,13 +2914,16 @@ async function saveControls(){
   showAlert('ctrl-alert',ok?`✓ ${S.controls.length} controles guardados`:'Error parcial','ok');
 }
 
+let ctrlSelectedIds = new Set();
+let ctrlFilteredList = [];
+
 function renderControls(){
   const search=(document.getElementById('ctrl-search')?.value||'').toLowerCase();
   const nat=document.getElementById('ctrl-filter-nat')?.value||'';
   const exec=document.getElementById('ctrl-filter-exec')?.value||'';
   const freq=document.getElementById('ctrl-filter-freq')?.value||'';
 
-  let list=S.controls.filter(c=>{
+  ctrlFilteredList=S.controls.filter(c=>{
     if(nat && c.nature!==nat) return false;
     if(exec && c.executed!==exec) return false;
     if(freq && c.freq!==freq) return false;
@@ -2865,16 +2931,19 @@ function renderControls(){
     return true;
   });
 
-  document.getElementById('ctrl-count').textContent = `${list.length} de ${S.controls.length} controles`;
+  document.getElementById('ctrl-count').textContent = `${ctrlFilteredList.length} de ${S.controls.length} controles`;
   const tbody=document.getElementById('ctrl-tbody');
   if(!tbody) return;
 
-  tbody.innerHTML = list.length ? list.map(c=>`
-    <tr onclick="openCtrlModal('${c.id}')" style="cursor:pointer">
-      <td><code>${esc(c.id)}</code></td>
-      <td style="font-weight:500;max-width:200px">${esc(c.title)}</td>
-      <td>${esc(c.owner)}</td>
-      <td style="max-width:160px;color:var(--text-muted)">${esc((c.risk||'').slice(0,50))}${(c.risk||'').length>50?'...':''}</td>
+  tbody.innerHTML = ctrlFilteredList.length ? ctrlFilteredList.map(c=>`
+    <tr class="ctrl-row ${ctrlSelectedIds.has(c.id)?'ctrl-row-selected':''}" data-ctrl-id="${c.id}">
+      <td onclick="event.stopPropagation()">
+        <input type="checkbox" class="ctrl-row-cb" data-id="${c.id}" ${ctrlSelectedIds.has(c.id)?'checked':''} onchange="ctrlToggleRow('${c.id}',this.checked)">
+      </td>
+      <td onclick="openCtrlModal('${c.id}')" style="cursor:pointer"><code>${esc(c.id)}</code></td>
+      <td onclick="openCtrlModal('${c.id}')" style="cursor:pointer;font-weight:500;max-width:200px">${esc(c.title)}</td>
+      <td onclick="openCtrlModal('${c.id}')" style="cursor:pointer">${esc(c.owner)}</td>
+      <td onclick="openCtrlModal('${c.id}')" style="cursor:pointer;max-width:160px;color:var(--text-muted)">${esc((c.risk||'').slice(0,50))}${(c.risk||'').length>50?'...':''}</td>
       <td><span class="freq-tag">${esc(c.freq)}</span></td>
       <td><span class="${c.nature==='Preventivo'?'nat-prev':'nat-det'}">${esc(c.nature)}</span></td>
       <td style="color:var(--text-muted)">${esc(c.type)}</td>
@@ -2884,7 +2953,76 @@ function renderControls(){
       <td><span class="tag ${c.status==='Activo'?'tag-closed':c.status==='Inactivo'?'tag-critical':'tag-warning'}">${esc(c.status||'Activo')}</span></td>
       <td><button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();openCtrlModal('${c.id}')">✏</button></td>
     </tr>`).join('') :
-    `<tr><td colspan="12"><div class="empty"><div class="empty-sub">Sin controles${search?' que coincidan con "'+esc(search)+'"':''}</div></div></td></tr>`;
+    `<tr><td colspan="13"><div class="empty"><div class="empty-sub">Sin controles${search?' que coincidan con "'+esc(search)+'"':''}</div></div></td></tr>`;
+
+  updateCtrlBulkBar();
+}
+
+function ctrlToggleRow(id, checked){
+  if(checked) ctrlSelectedIds.add(id);
+  else ctrlSelectedIds.delete(id);
+  const row=document.querySelector(`.ctrl-row[data-ctrl-id="${id}"]`);
+  if(row) row.classList.toggle('ctrl-row-selected', checked);
+  updateCtrlBulkBar();
+  // Update "select all" checkbox state
+  const allCb=document.getElementById('ctrl-check-all');
+  if(allCb) allCb.checked = ctrlFilteredList.length>0 && ctrlFilteredList.every(c=>ctrlSelectedIds.has(c.id));
+}
+
+function ctrlToggleAll(checked){
+  ctrlFilteredList.forEach(c=>{ if(checked) ctrlSelectedIds.add(c.id); else ctrlSelectedIds.delete(c.id); });
+  document.querySelectorAll('.ctrl-row-cb').forEach(cb=>cb.checked=checked);
+  document.querySelectorAll('.ctrl-row').forEach(r=>r.classList.toggle('ctrl-row-selected',checked));
+  updateCtrlBulkBar();
+}
+
+function updateCtrlBulkBar(){
+  const n=ctrlSelectedIds.size;
+  const bar=document.getElementById('ctrl-bulk-bar');
+  if(!bar) return;
+  bar.style.display=n>0?'flex':'none';
+  const cnt=document.getElementById('ctrl-bulk-count');
+  if(cnt) cnt.textContent=`${n} control${n!==1?'es':''} seleccionado${n!==1?'s':''}`;
+}
+
+async function bulkMarkExecuted(val){
+  const date = val==='Sí' ? new Date().toISOString().slice(0,10) : '';
+  let changed=0;
+  for(const id of ctrlSelectedIds){
+    const c=S.controls.find(x=>x.id===id);
+    if(c){ c.executed=val; if(date) c.exec_date=date; changed++;
+      if(c._fsId) await fsUpdate('controls',c._fsId,{executed:val,exec_date:date||c.exec_date||''}); }
+  }
+  lsSet('controls',S.controls);
+  ctrlSelectedIds.clear();
+  renderControls(); renderCtrlStats();
+  showAlert('ctrl-alert',`✓ ${changed} controles marcados como "${val}"`,'ok');
+}
+
+async function bulkSetStatus(val){
+  let changed=0;
+  for(const id of ctrlSelectedIds){
+    const c=S.controls.find(x=>x.id===id);
+    if(c){ c.status=val; changed++;
+      if(c._fsId) await fsUpdate('controls',c._fsId,{status:val}); }
+  }
+  lsSet('controls',S.controls);
+  ctrlSelectedIds.clear();
+  renderControls(); renderCtrlStats();
+  showAlert('ctrl-alert',`✓ ${changed} controles actualizados a "${val}"`,'ok');
+}
+
+async function bulkDelete(){
+  if(!confirm(`¿Eliminar ${ctrlSelectedIds.size} controles seleccionados? Esta acción no se puede deshacer.`)) return;
+  let deleted=0;
+  for(const id of [...ctrlSelectedIds]){
+    const i=S.controls.findIndex(c=>c.id===id);
+    if(i>=0){ if(S.controls[i]._fsId) await fsDelete('controls',S.controls[i]._fsId); S.controls.splice(i,1); deleted++; }
+  }
+  lsSet('controls',S.controls);
+  ctrlSelectedIds.clear();
+  renderControls(); renderCtrlStats();
+  showAlert('ctrl-alert',`✓ ${deleted} controles eliminados`,'ok');
 }
 
 function renderCtrlStats(){
@@ -2896,8 +3034,9 @@ function renderCtrlStats(){
 }
 
 // ── Excel Import/Export ──────────────────────────────────────────────────────
+let importPreviewRows = []; // {row, parsed, isDup, dupOf, selected, errors}
+
 function downloadCtrlTemplate(){
-  // Download the pre-built template — redirect to outputs
   const a=document.createElement('a');
   a.href='controles_template.xlsx';
   a.download='CDT_Controles_Template.xlsx';
@@ -2907,59 +3046,184 @@ function downloadCtrlTemplate(){
 async function importControls(input){
   const file=input.files[0];
   if(!file){return;}
-  showAlert('ctrl-alert','Leyendo Excel...','info');
+  if(typeof XLSX==='undefined'){showAlert('ctrl-alert','SheetJS no disponible — recarga la página','err');return;}
+  
   try{
-    const data = await file.arrayBuffer();
-    // Parse using SheetJS if available, otherwise show instructions
-    if(typeof XLSX !== 'undefined'){
-      const wb = XLSX.read(data,{type:'array'});
-      const ws = wb.Sheets[wb.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
-      // Find header row (row 3 in template = index 2)
-      const headerRow = rows.findIndex(r=>r.some(c=>String(c).toLowerCase().includes('título')));
-      if(headerRow<0){showAlert('ctrl-alert','No se encontró la fila de cabeceras. Usa la plantilla descargable.','err');return;}
-      const headers=rows[headerRow].map(h=>String(h).toLowerCase().trim());
-      const getCol=(name)=>headers.findIndex(h=>h.includes(name));
-      const colMap={
-        id:getCol('id'), title:getCol('título')||getCol('titulo'),
-        desc:getCol('descripción')||getCol('descripcion'), owner:getCol('responsable'),
-        risk:getCol('riesgo'), freq:getCol('frecuencia'), nature:getCol('naturaleza'),
-        type:getCol('tipo'), iso:getCol('iso'), evidence:getCol('evidencia'),
-        comments:getCol('comentarios'), executed:getCol('ejecutado'),
-        exec_date:getCol('fecha'), status:getCol('estado'),
-      };
-      const newControls=[]; const dups=[];
-      for(let i=headerRow+1;i<rows.length;i++){
-        const r=rows[i];
-        const id=String(r[colMap.id]||'').trim();
-        const title=String(r[colMap.title]||'').trim();
-        if(!id&&!title) continue;
-        // Duplicate check
-        const existing=S.controls.find(c=>c.id===id||(title&&similarityPct(c.title,title)>=80));
-        if(existing){ dups.push({id,title,match:existing.title}); continue; }
-        newControls.push({
-          id:id||'C-'+Date.now(), title, desc:String(r[colMap.desc]||''),
-          owner:String(r[colMap.owner]||''), risk:String(r[colMap.risk]||''),
-          freq:String(r[colMap.freq]||'mensual'), nature:String(r[colMap.nature]||'Preventivo'),
-          type:String(r[colMap.type]||'Manual'), iso_elements:String(r[colMap.iso]||'').split(',').map(s=>s.trim()).filter(Boolean),
-          evidence:String(r[colMap.evidence]||''), comments:String(r[colMap.comments]||''),
-          executed:String(r[colMap.executed]||'No'), exec_date:String(r[colMap.exec_date]||''),
-          status:String(r[colMap.status]||'Activo'), exec_history:[],
-        });
+    const data=await file.arrayBuffer();
+    const wb=XLSX.read(data,{type:'array'});
+    const ws=wb.Sheets[wb.SheetNames[0]];
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+    
+    // Find header row (look for row with "título" or "title")
+    let headerRow=-1;
+    for(let i=0;i<Math.min(rows.length,6);i++){
+      const r=rows[i].map(c=>String(c).toLowerCase());
+      if(r.some(c=>c.includes('título')||c.includes('titulo')||c.includes('title'))){
+        headerRow=i; break;
       }
-      S.controls.push(...newControls);
-      lsSet('controls',S.controls);
-      renderControls(); renderCtrlStats();
-      const msg=`✓ ${newControls.length} controles importados${dups.length?` · ${dups.length} duplicados omitidos`:''}`;
-      showAlert('ctrl-alert',msg,dups.length?'warn':'ok');
-      if(dups.length) console.table(dups);
-    } else {
-      showAlert('ctrl-alert','Librería SheetJS no disponible. Recarga la página e intenta de nuevo.','err');
     }
+    if(headerRow<0){showAlert('ctrl-alert','No se encontró la fila de cabeceras. Usa la plantilla descargable.','err');input.value='';return;}
+    
+    const headers=rows[headerRow].map(h=>String(h).toLowerCase().trim().replace(/[*]/g,'').trim());
+    
+    // Smart column detection
+    const findCol=(terms)=>{ for(const t of terms){ const i=headers.findIndex(h=>h.includes(t)); if(i>=0) return i; } return -1; };
+    const colMap={
+      id:        findCol(['id']),
+      title:     findCol(['título','titulo','title','nombre']),
+      desc:      findCol(['descripción','descripcion','description','desc']),
+      owner:     findCol(['responsable','owner','responsability']),
+      risk:      findCol(['riesgo','risk']),
+      freq:      findCol(['frecuencia','frequency','freq']),
+      nature:    findCol(['naturaleza','nature','tipo control']),
+      type:      findCol(['tipo','type']),
+      iso:       findCol(['iso','elemento']),
+      evidence:  findCol(['evidencia','evidence']),
+      comments:  findCol(['comentarios','comments','notas','notes']),
+      executed:  findCol(['ejecutado','executed','realizado']),
+      exec_date: findCol(['fecha','date']),
+      status:    findCol(['estado','status']),
+    };
+    
+    // Show column mapping UI
+    renderColMap(colMap, headers);
+    
+    // Parse all data rows
+    importPreviewRows=[];
+    const dataRows=rows.slice(headerRow+1).filter(r=>r.some(c=>String(c).trim()!==''));
+    
+    for(const r of dataRows){
+      const get=(col)=>col>=0?String(r[col]||'').trim():'';
+      
+      // ID: use col if present, else generate later
+      const rawId=get(colMap.id);
+      const title=get(colMap.title);
+      if(!title && !rawId) continue; // skip empty rows
+      
+      const parsed={
+        id:       rawId||'', // blank if no ID col
+        title,
+        desc:     get(colMap.desc),
+        owner:    get(colMap.owner),
+        risk:     get(colMap.risk),
+        freq:     get(colMap.freq)||'mensual',
+        nature:   get(colMap.nature)||'Preventivo',
+        type:     get(colMap.type)||'Manual',
+        iso_elements: get(colMap.iso).split(',').map(s=>s.trim()).filter(Boolean),
+        evidence: get(colMap.evidence),
+        comments: get(colMap.comments),
+        executed: get(colMap.executed)||'No',
+        exec_date:get(colMap.exec_date),
+        status:   get(colMap.status)||'Activo',
+        exec_history:[],
+      };
+      
+      // Duplicate detection
+      let isDup=false, dupOf=null;
+      const existingById = rawId ? S.controls.find(c=>c.id===rawId) : null;
+      if(existingById){ isDup=true; dupOf=existingById; }
+      else if(title){
+        const existingByTitle=S.controls.find(c=>similarityPct(c.title,title)>=80);
+        if(existingByTitle){ isDup=true; dupOf=existingByTitle; }
+      }
+      
+      importPreviewRows.push({parsed, isDup, dupOf, selected: !isDup, errors:[]});
+    }
+    
+    renderImportPreview();
+    openModal('modal-import');
+    
   }catch(e){
-    showAlert('ctrl-alert','Error importando: '+e.message,'err');
+    showAlert('ctrl-alert','Error leyendo Excel: '+e.message,'err');
+    console.error(e);
   }
   input.value='';
+}
+
+function renderColMap(colMap, headers){
+  const wrap=document.getElementById('import-col-map');
+  if(!wrap) return;
+  const FIELD_LABELS={id:'ID',title:'Título',desc:'Descripción',owner:'Responsable',risk:'Riesgo',freq:'Frecuencia',nature:'Naturaleza',type:'Tipo',iso:'ISO 37301',evidence:'Evidencia',comments:'Comentarios',executed:'Ejecutado',exec_date:'Fecha ejec.',status:'Estado'};
+  wrap.innerHTML=Object.entries(colMap).map(([field,colIdx])=>`
+    <div style="display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--border)">
+      <span style="min-width:90px;color:var(--text-muted);font-size:9.5px">${FIELD_LABELS[field]||field}</span>
+      <select class="fi import-col-sel" data-field="${field}" style="font-size:9px;padding:2px 6px;height:24px">
+        <option value="-1">${colIdx<0?'— no detectado —':'(ninguno)'}</option>
+        ${headers.map((h,i)=>`<option value="${i}" ${i===colIdx?'selected':''}>${h||'Col '+(i+1)}</option>`).join('')}
+      </select>
+      ${colIdx>=0?`<span style="font-size:8.5px;color:var(--accent)">✓ Col ${colIdx+1}</span>`:'<span style="font-size:8.5px;color:var(--warn)">⚠ no mapeada</span>'}
+    </div>`).join('');
+}
+
+function renderImportPreview(){
+  const tbody=document.getElementById('import-preview-tbody');
+  if(!tbody) return;
+  
+  const newRows=importPreviewRows.filter(r=>!r.isDup);
+  const dupRows=importPreviewRows.filter(r=>r.isDup);
+  
+  document.getElementById('import-stat-total').textContent=`${importPreviewRows.length} filas detectadas`;
+  document.getElementById('import-stat-new').textContent=`${newRows.length} nuevos`;
+  document.getElementById('import-stat-dup').textContent=`${dupRows.length} duplicados`;
+  document.getElementById('import-stat-error').textContent='';
+  
+  tbody.innerHTML=importPreviewRows.map((row,i)=>{
+    const p=row.parsed;
+    const isDup=row.isDup;
+    const rowStyle=isDup?'background:rgba(245,158,11,.06);border-left:3px solid var(--warn)':'';
+    return `<tr style="${rowStyle}">
+      <td><input type="checkbox" class="import-row-cb" data-idx="${i}" ${row.selected?'checked':''} onchange="importPreviewRows[${i}].selected=this.checked;updateImportStats()"></td>
+      <td>${isDup
+        ?'<span style="font-size:8.5px;background:rgba(245,158,11,.15);color:var(--warn);padding:2px 6px;border-radius:3px">⚠ DUPLICADO</span>'
+        :'<span style="font-size:8.5px;background:rgba(0,229,160,.1);color:var(--accent);padding:2px 6px;border-radius:3px">✓ NUEVO</span>'
+      }</td>
+      <td><code style="font-size:9px">${esc(p.id||'(auto)')}</code></td>
+      <td style="font-weight:500;max-width:180px">${esc(p.title)}</td>
+      <td style="color:var(--text-muted)">${esc(p.owner)}</td>
+      <td><span class="${p.nature==='Preventivo'?'nat-prev':'nat-det'}">${esc(p.nature)}</span></td>
+      <td><span class="freq-tag">${esc(p.freq)}</span></td>
+      <td style="color:var(--text-muted);font-size:9px;max-width:120px">${esc((p.risk||'').slice(0,50))}</td>
+      <td style="color:var(--warn);font-size:9px">${isDup?`"${esc((row.dupOf?.title||'').slice(0,35))}"`:''}</td>
+    </tr>`;
+  }).join('');
+  
+  updateImportStats();
+}
+
+function updateImportStats(){
+  const selected=importPreviewRows.filter(r=>r.selected).length;
+  const btn=document.getElementById('import-confirm-btn');
+  if(btn) btn.textContent=`Importar ${selected} seleccionados →`;
+}
+
+function importSelectAll(select){
+  importPreviewRows.forEach((r,i)=>{ if(!r.isDup||select) r.selected=select; });
+  document.querySelectorAll('.import-row-cb').forEach((cb,i)=>{ cb.checked=importPreviewRows[i]?.selected||false; });
+  updateImportStats();
+}
+function importToggleAll(checked){ importSelectAll(checked); }
+
+async function confirmImport(){
+  const toImport=importPreviewRows.filter(r=>r.selected);
+  if(!toImport.length){showAlert('import-alert','Selecciona al menos un control','err');return;}
+  
+  let added=0;
+  const maxExistingN=S.controls.reduce((m,x)=>{ const n=parseInt((x.id||'').replace(/\D/g,'')||0); return n>m?n:m; },0);
+  let nextN=maxExistingN+1;
+  
+  for(const row of toImport){
+    const ctrl={...row.parsed};
+    if(!ctrl.id) ctrl.id='C-'+String(nextN++).padStart(3,'0');
+    ctrl._updated=new Date().toISOString();
+    const docId=await fsAdd('controls',ctrl);
+    if(docId){ ctrl._fsId=docId; S.controls.push(ctrl); added++; }
+  }
+  
+  lsSet('controls',S.controls);
+  closeModal('modal-import');
+  renderControls();
+  renderCtrlStats();
+  showAlert('ctrl-alert',`✓ ${added} controles importados correctamente`,'ok');
 }
 
 function exportControls(){
@@ -2974,9 +3238,8 @@ function exportControls(){
   const ws=XLSX.utils.aoa_to_sheet([headers,...rows]);
   ws['!cols']=headers.map((_,i)=>({wch:[8,32,40,18,28,14,14,14,26,30,30,12,22,12][i]||15}));
   XLSX.utils.book_append_sheet(wb,ws,'Controles');
-  // Historial
-  const hHeaders=['ID Control','Título','Fecha','Ejecutado por','Resultado','Notas'];
-  const hRows=S.controls.flatMap(c=>(c.exec_history||[]).map(h=>[c.id,c.title,h.date,h.by,h.result,'']));
+  const hHeaders=['ID Control','Título','Fecha','Ejecutado por','Resultado'];
+  const hRows=S.controls.flatMap(c=>(c.exec_history||[]).map(h=>[c.id,c.title,h.date,h.by,h.result]));
   const ws2=XLSX.utils.aoa_to_sheet([hHeaders,...hRows]);
   XLSX.utils.book_append_sheet(wb,ws2,'Historial');
   XLSX.writeFile(wb,'CDT_Controles_'+new Date().toISOString().slice(0,10)+'.xlsx');
@@ -3136,7 +3399,6 @@ function renderSentencias(){
 // ═══════════════════════════════════════════════════════════════
 // FUNNEL DE HITS
 // ═══════════════════════════════════════════════════════════════
-let hitFunnel = 'all';
 
 function setHitFunnel(level){
   hitFunnel=level;
