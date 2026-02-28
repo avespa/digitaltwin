@@ -108,9 +108,9 @@ select.fi{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .hit.info{border-left-color:var(--accent2)}
 .hit-head{display:flex;align-items:center;gap:7px;margin-bottom:4px;flex-wrap:wrap}
 .tag{font-size:8.5px;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;border-radius:3px;font-weight:600;flex-shrink:0}
-.tag-critical{background:rgba(239,68,68,.15);color:var(--danger)}
-.tag-warning{background:rgba(245,158,11,.15);color:var(--warn)}
-.tag-info{background:rgba(0,102,255,.15);color:var(--accent2)}
+.tag-critical,.tag-alto{background:rgba(239,68,68,.15);color:var(--danger)}
+.tag-warning,.tag-medio{background:rgba(245,158,11,.15);color:var(--warn)}
+.tag-info,.tag-bajo{background:rgba(0,102,255,.15);color:var(--accent2)}
 .tag-irrelevant{background:rgba(74,96,112,.12);color:var(--text-muted)}
 .tag-open{background:rgba(245,158,11,.15);color:var(--warn)}
 .tag-progress{background:rgba(139,92,246,.15);color:var(--purple)}
@@ -2137,7 +2137,7 @@ Responde SOLO el JSON, sin texto adicional.`;
   }
 
   try{
-    const raw = await callMistral(prompt, 2000);
+    const raw = await callMistral(prompt, 4000);
 
     // Parse JSON safely
     let parsed;
@@ -2779,8 +2779,8 @@ function val(id){ const el=document.getElementById(id); return el?el.value.trim(
 function esc(s=''){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function fmtDate(iso){ if(!iso)return'—'; const d=new Date(iso); return d.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'2-digit'}); }
 function fmtTime(iso){ if(!iso)return'—'; const d=new Date(iso); return d.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}); }
-function levelLabel(l){ return {critical:'CRÍTICO',warning:'ALERTA',info:'INFO',irrelevant:'NO APLICA'}[l]||l||'?'; }
-function levelColor(l){ return {critical:'var(--danger)',warning:'var(--warn)',info:'var(--accent2)',irrelevant:'var(--text-muted)'}[l]||'var(--border2)'; }
+function levelLabel(l){ return {critical:'ALTO',warning:'MEDIO',info:'BAJO',irrelevant:'NO APLICA',alto:'ALTO',medio:'MEDIO',bajo:'BAJO'}[l]||l||'?'; }
+function levelColor(l){ return {critical:'var(--danger)',warning:'var(--warn)',info:'var(--accent2)',irrelevant:'var(--text-muted)',alto:'var(--danger)',medio:'var(--warn)',bajo:'var(--accent2)'}[l]||'var(--text-dim)'; }
 function setStatus(t){ document.getElementById('foot-status').textContent=t; }
 function showAlert(containerId, msg, type){
   const cls={ok:'alert-ok',err:'alert-err',warn:'alert-warn',info:'alert-info'}[type]||'alert-info';
@@ -3773,10 +3773,10 @@ Sé muy específico: si la empresa es agrícola y el evento es sobre regulación
 Devuelve SOLO este JSON:
 {
   "inherent_score": 0-100,
-  "inherent_level": "critical|warning|info|irrelevant",
+  "inherent_level": "alto|medio|bajo|irrelevant",
   "inherent_rationale": "1-2 frases: por qué este riesgo existe o no para esta empresa específica por su sector/actividad",
   "residual_score": 0-100,
-  "residual_level": "critical|warning|info|irrelevant",
+  "residual_level": "alto|medio|bajo|irrelevant",
   "residual_rationale": "1-2 frases: qué cobertura tiene el Twin y qué gap queda",
   "company_impact": true|false,
   "controls_activated": ["IDs de controles del Twin que cubrirían este riesgo, si los hay"],
@@ -3828,17 +3828,23 @@ Devuelve SOLO este JSON:
       lsSet('hits', S.hits);
       if(S.hits[idx]._fsId){
         fsUpdate('hits', S.hits[idx]._fsId, {
-          inherent_score: analysis.inherent_score,
-          inherent_level: analysis.inherent_level,
-          residual_score: analysis.residual_score,
-          residual_level: analysis.residual_level,
-          level: finalLevel,
+          inherent_score:     analysis.inherent_score,
+          inherent_level:     analysis.inherent_level,
+          inherent_rationale: analysis.inherent_rationale||'',
+          residual_score:     analysis.residual_score,
+          residual_level:     analysis.residual_level,
+          residual_rationale: analysis.residual_rationale||'',
+          level:              finalLevel,
           company_impact,
-          coverage_quality: analysis.coverage_quality||'',
-          gaps_identified: analysis.gaps_identified||'',
-          false_positive: !company_impact,
+          controls_activated: analysis.controls_activated||[],
+          weakest_element:    analysis.weakest_element||'',
+          coverage_quality:   analysis.coverage_quality||'',
+          gaps_identified:    analysis.gaps_identified||'',
+          ctrl_proposal:      analysis.ctrl_proposal||'',
+          false_positive_reason: analysis.false_positive_reason||'',
+          false_positive:     !company_impact,
           rag_fragments_used: retrievedFragments.length,
-          _reanalyzed: new Date().toISOString(),
+          _reanalyzed:        new Date().toISOString(),
         }).catch(()=>{});
       }
     }
