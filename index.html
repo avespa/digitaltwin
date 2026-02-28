@@ -1038,7 +1038,7 @@ async function syncAll(){
       fsGet('twin_summary','main'),
       fsList('action_plans'),
       fsGet('config','main'),
-      fsList('controls','_created','asc'),
+      fsList('controls'),
     ]);
     if(ctx){ S.ctx = ctx; lsSet('ctx', ctx); }
     if(mat){ S.maturity = mat; lsSet('mat', mat); }
@@ -1655,7 +1655,7 @@ function hitCard(h){
       ${h.financial_impact?`<div class="hit-detail-row"><div class="hit-detail-label">Impacto financiero</div><div class="hit-detail-val">${esc(h.financial_impact)}</div></div>`:''}
       ${h.recommended_action?`<div class="hit-detail-row"><div class="hit-detail-label">Acción recomendada</div><div class="hit-detail-val">${esc(h.recommended_action)}</div></div>`:''}
       ${h.ctrl_proposal?`<div class="hit-detail-row"><div class="hit-detail-label" style="color:var(--purple)">◎ Propuesta de control</div><div class="hit-detail-val" style="color:var(--text-dim)">${esc(h.ctrl_proposal)}</div></div>`:''}
-      ${h.is_sentencia?`<div class="hit-detail-row"><div class="hit-detail-label" style="color:var(--purple)">ECLI / Referencia</div><div class="hit-detail-val">${esc(h.ecli||'')}</div></div>`:''}`
+      ${h.is_sentencia?`<div class="hit-detail-row"><div class="hit-detail-label" style="color:var(--purple)">ECLI / Referencia</div><div class="hit-detail-val">${esc(h.ecli||'')}</div></div>`:''}
     </div>`:''}
   </div>`;
 }
@@ -2676,7 +2676,7 @@ function levenshtein(a, b){
   for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
   return dp[m][n];
 }
-function normalizeTitle(s){ return (s||'').toLowerCase().replace(/[áàä]/g,'a').replace(/[éèë]/g,'e').replace(/[íìï]/g,'i').replace(/[óòö]/g,'o').replace(/[úùü]/g,'u').replace(/ñ/g,'n').replace(/[^a-z0-9 ]/g,'').replace(/(el|la|los|las|de|del|en|y|a|con|por|para|un|una)/g,'').replace(/\s+/g,' ').trim(); }
+function normalizeTitle(s){ var acc={"á":"a","à":"a","ä":"a","é":"e","è":"e","ë":"e","í":"i","ì":"i","ï":"i","ó":"o","ò":"o","ö":"o","ú":"u","ù":"u","ü":"u","ñ":"n"}; var r=(s||"").toLowerCase().split("").map(function(c){return acc[c]||c;}).join("").replace(/[^a-z0-9 ]/g,""); var stop=["el","la","los","las","de","del","en","y","a","con","por","para","un","una"]; stop.forEach(function(w){r=r.replace(new RegExp(" "+w+" ","g")," ");}); return r.replace(/\s+/g," ").trim(); }
 function similarityPct(a,b){ const na=normalizeTitle(a),nb=normalizeTitle(b),maxL=Math.max(na.length,nb.length,1); return Math.round((1-levenshtein(na,nb)/maxL)*100); }
 
 function openCtrlModal(id){
