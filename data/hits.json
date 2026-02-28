@@ -1,6 +1,28 @@
 {
   "hits": [
     {
+      "id": "5295e47f1053",
+      "title": "Ibai Llanos ironiza con Sánchez tras el expediente de la CNMC: \"¿Cómo le haces esto a un hermano?\"",
+      "link": "https://www.libertaddigital.com/libremercado/2026-02-27/ibai-llanos-ironiza-con-sanchez-tras-el-expediente-de-la-cnmc-como-le-haces-esto-a-un-hermano-7365937/",
+      "source": "NewsAPI-Q2 · Libertaddigital.com",
+      "raw_date": "2026-02-27T03:22:07Z",
+      "fetched_at": "2026-02-28T04:17:26.920514+00:00",
+      "level": "critical",
+      "relevance_score": 75,
+      "risks": [
+        "Multa de hasta 750.000€",
+        "Daño reputacional",
+        "Expediente sancionador abierto"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia"
+      ],
+      "summary": "La CNMC podría sancionar a Ibai Llanos con hasta 750.000€ por infracción grave. El caso destaca por el alto impacto económico y reputacional.",
+      "vulnerability": "Falta de compliance en prácticas de competencia desleal",
+      "financial_impact": "750.000€",
+      "recommended_action": "Revisar y ajustar las prácticas comerciales para cumplir con la normativa de competencia, y asesorar al afectado sobre las posibles defensas legales."
+    },
+    {
       "id": "e6e559a1312f",
       "title": "El gerente del CNIO señalado por acoso había denunciado decenas de corruptelas, entre ellas el contrato a medida de la 'acosada'",
       "link": "https://www.elmundo.es/espana/2026/02/27/69a0a99bfdddff45408b45ab.html",
@@ -449,12 +471,12 @@
     }
   ],
   "stats": {
-    "total_hits": 20,
-    "critical_count": 7,
+    "total_hits": 21,
+    "critical_count": 8,
     "warning_count": 13,
     "info_count": 0,
-    "new_this_run": 0,
-    "articles_checked": 6,
+    "new_this_run": 1,
+    "articles_checked": 7,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -473,5 +495,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-02-28T02:09:34.434475+00:00"
+  "last_updated": "2026-02-28T04:17:33.216594+00:00"
 }
