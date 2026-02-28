@@ -2720,7 +2720,7 @@ function loadConfig(){
   document.getElementById('cfg-threshold').value=S.cfg.threshold||60;
   document.getElementById('cfg-repo').value=S.cfg.repo||'avespa/digitaltwin';
   document.getElementById('cfg-twin-days').value=S.cfg.twinDays||90;
-  if(document.getElementById('cfg-pinecone-key')) document.getElementById('cfg-pinecone-key').value=S.cfg.pineconeKey||'';
+  // Pinecone key is server-side (Vercel env var PINECONE_API_KEY)
   if(document.getElementById('cfg-pinecone-host')) document.getElementById('cfg-pinecone-host').value=S.cfg.pineconeHost||'https://digitaltwin-xm7jklu.svc.aped-4627-b74a.pinecone.io';
   if(document.getElementById('cfg-pinecone-index')) document.getElementById('cfg-pinecone-index').value=S.cfg.pineconeIndex||'digitaltwin';
   if(document.getElementById('cfg-impact-threshold')) document.getElementById('cfg-impact-threshold').value=S.cfg.impactThreshold||50;
@@ -2735,7 +2735,7 @@ function saveConfig(){
     impactThreshold: parseInt(document.getElementById('cfg-impact-threshold')?.value)||50,
     repo: document.getElementById('cfg-repo').value.trim(),
     twinDays: parseInt(document.getElementById('cfg-twin-days').value)||90,
-    pineconeKey: document.getElementById('cfg-pinecone-key')?.value?.trim()||'',
+    pineconeKey: 'server-side', // key is in Vercel env vars
     pineconeHost: document.getElementById('cfg-pinecone-host')?.value?.trim()||'https://digitaltwin-xm7jklu.svc.aped-4627-b74a.pinecone.io',
     pineconeIndex: document.getElementById('cfg-pinecone-index')?.value?.trim()||'digitaltwin',
   };
@@ -3491,26 +3491,36 @@ function updateFunnelCounts(){
 // No Mistral embeddings needed — Pinecone generates them natively
 // ═══════════════════════════════════════════════════════════════
 
-const PC_HOST = 'https://digitaltwin-xm7jklu.svc.aped-4627-b74a.pinecone.io';
-// This index uses llama-text-embed-v2 as integrated model → use text-based API directly
-// No separate embedding call needed: upsert and query accept raw text
+// ── Pinecone via Vercel proxy (avoids CORS) ─────────────────────────────────
+// API key lives in Vercel env var PINECONE_API_KEY — never sent from browser
+// Proxy: /api/pinecone?path=<pinecone_endpoint>
+const PC_PROXY = '/api/pinecone';
 
-function pcKey(){ return S.cfg.pineconeKey || document.getElementById('cfg-pinecone-key')?.value?.trim() || ''; }
+function pcKey(){ return true; } // key is server-side, always available
 
-// ── Core: upsert record with TEXT (integrated index — Pinecone embeds internally) ──
-async function pcUpsert(id, text, metadata){
-  const key = pcKey();
-  if(!key) return false;
+async function pcCall(path, method='GET', body=null){
   try{
-    // Integrated indexes use /records/upsert with text input
-    const r = await fetch(PC_HOST + '/records/upsert', {
-      method: 'POST',
-      headers: { 'Api-Key': key, 'Content-Type': 'application/x-ndjson' },
-      body: JSON.stringify({ _id: id, chunk_text: text.slice(0, 8000), ...metadata }) + '\n'
+    const opts = {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+    };
+    if(body) opts.body = JSON.stringify(body);
+    const r = await fetch(PC_PROXY + '?path=' + encodeURIComponent(path), opts);
+    return r;
+  }catch(e){ console.warn('pcCall exception:', e); return null; }
+}
+
+// ── Core: upsert record with TEXT ────────────────────────────────────────────
+async function pcUpsert(id, text, metadata){
+  try{
+    const r = await pcCall('/records/upsert', 'POST', {
+      _id: id,
+      chunk_text: text.slice(0, 8000),
+      ...metadata
     });
-    if(!r.ok){
-      const errText = await r.text();
-      console.warn('pcUpsert error:', r.status, errText);
+    if(!r || !r.ok){
+      const errText = await r?.text();
+      console.warn('pcUpsert error:', r?.status, errText);
       return false;
     }
     return true;
@@ -3519,8 +3529,6 @@ async function pcUpsert(id, text, metadata){
 
 // ── Core: semantic search with TEXT query ────────────────────────────────────
 async function pcQuery(queryText, topK=8, filter=null){
-  const key = pcKey();
-  if(!key) return [];
   try{
     const body = {
       query: { inputs: { text: String(queryText).slice(0, 2000) }, top_k: topK },
@@ -3529,18 +3537,12 @@ async function pcQuery(queryText, topK=8, filter=null){
                'score', 'score_label', 'name', 'sector']
     };
     if(filter) body.query.filter = filter;
-    const r = await fetch(PC_HOST + '/records/search', {
-      method: 'POST',
-      headers: { 'Api-Key': key, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    if(!r.ok){
-      const errText = await r.text();
-      console.warn('pcQuery error:', r.status, errText);
+    const r = await pcCall('/records/search', 'POST', body);
+    if(!r || !r.ok){
+      console.warn('pcQuery error:', r?.status);
       return [];
     }
     const d = await r.json();
-    // Integrated search returns { result: { hits: [...] } }
     return (d.result?.hits || d.hits || []).map(h => ({
       score: h._score || 0,
       metadata: { ...h.fields, type: h.fields?.type || 'unknown' }
@@ -3551,32 +3553,27 @@ async function pcQuery(queryText, topK=8, filter=null){
 // ── vectorizeAndStore: unified entry point ───────────────────────────────────
 async function vectorizeAndStore(text, metadata){
   const id = metadata.id || 'vec-'+Date.now();
-  const { id: _removed, ...meta } = metadata; // remove id from metadata fields
+  const { id: _removed, ...meta } = metadata;
   return pcUpsert(id, text, meta);
 }
 
-// ── pcEmbedQuery alias (used in reAnalyzeHit — now just returns the query text) ──
-async function pcEmbedQuery(text){ return text; } // integrated index: no pre-embedding
+// ── pcEmbedQuery alias ───────────────────────────────────────────────────────
+async function pcEmbedQuery(text){ return text; }
 
 // ── TEST connection ──────────────────────────────────────────────────────────
 async function testPinecone(){
-  const key = document.getElementById('cfg-pinecone-key')?.value?.trim();
-  if(!key){ showAlert('config-alert', 'Introduce la API key de Pinecone', 'err'); return; }
-  S.cfg.pineconeKey = key;
-  showAlert('config-alert', 'Conectando...', 'info');
+  showAlert('config-alert', 'Verificando conexión...', 'info');
   try{
-    const r = await fetch(PC_HOST + '/describe_index_stats', {
-      headers: { 'Api-Key': key, 'Content-Type': 'application/json' }
-    });
-    if(r.ok){
+    const r = await pcCall('/describe_index_stats', 'GET');
+    if(r && r.ok){
       const d = await r.json();
       const count = d.totalVectorCount || d.namespaces?.['']?.vectorCount || 0;
       showAlert('config-alert', `✓ Pinecone conectado — ${count} registros en el índice`, 'ok');
     } else {
-      const err = await r.text();
-      showAlert('config-alert', '✗ Error ' + r.status + ': ' + err.slice(0,100), 'err');
+      const err = await r?.text();
+      showAlert('config-alert', '✗ Error ' + r?.status + ': verifica que PINECONE_API_KEY está en Vercel', 'err');
     }
-  }catch(e){ showAlert('config-alert', 'Error de conexión: ' + e.message, 'err'); }
+  }catch(e){ showAlert('config-alert', 'Error: ' + e.message, 'err'); }
 }
 
 // ════════════════════════════════════════════════════════════════
