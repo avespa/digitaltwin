@@ -3492,89 +3492,71 @@ function updateFunnelCounts(){
 // ═══════════════════════════════════════════════════════════════
 
 const PC_HOST = 'https://digitaltwin-xm7jklu.svc.aped-4627-b74a.pinecone.io';
-const PC_EMBED_HOST = 'https://api.pinecone.io'; // inference endpoint
-const PC_MODEL = 'llama-text-embed-v2';
+// This index uses llama-text-embed-v2 as integrated model → use text-based API directly
+// No separate embedding call needed: upsert and query accept raw text
 
 function pcKey(){ return S.cfg.pineconeKey || document.getElementById('cfg-pinecone-key')?.value?.trim() || ''; }
 
-// ── Core: embed text via Pinecone Inference API ──────────────────────────────
-async function pcEmbed(text){
+// ── Core: upsert record with TEXT (integrated index — Pinecone embeds internally) ──
+async function pcUpsert(id, text, metadata){
   const key = pcKey();
-  if(!key) return null;
+  if(!key) return false;
   try{
-    const r = await fetch(PC_EMBED_HOST + '/embed', {
+    // Integrated indexes use /records/upsert with text input
+    const r = await fetch(PC_HOST + '/records/upsert', {
       method: 'POST',
-      headers: { 'Api-Key': key, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: PC_MODEL,
-        inputs: [{ text: text.slice(0, 8000) }],
-        parameters: { input_type: 'passage', truncate: 'END' }
-      })
+      headers: { 'Api-Key': key, 'Content-Type': 'application/x-ndjson' },
+      body: JSON.stringify({ _id: id, chunk_text: text.slice(0, 8000), ...metadata }) + '\n'
     });
-    if(!r.ok){ console.warn('pcEmbed error:', r.status, await r.text()); return null; }
-    const d = await r.json();
-    return d.data?.[0]?.values || null;
-  }catch(e){ console.warn('pcEmbed exception:', e); return null; }
+    if(!r.ok){
+      const errText = await r.text();
+      console.warn('pcUpsert error:', r.status, errText);
+      return false;
+    }
+    return true;
+  }catch(e){ console.warn('pcUpsert exception:', e); return false; }
 }
 
-// ── Core: embed query (different input_type for queries) ─────────────────────
-async function pcEmbedQuery(text){
+// ── Core: semantic search with TEXT query ────────────────────────────────────
+async function pcQuery(queryText, topK=8, filter=null){
   const key = pcKey();
-  if(!key) return null;
+  if(!key) return [];
   try{
-    const r = await fetch(PC_EMBED_HOST + '/embed', {
-      method: 'POST',
-      headers: { 'Api-Key': key, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: PC_MODEL,
-        inputs: [{ text: text.slice(0, 2000) }],
-        parameters: { input_type: 'query', truncate: 'END' }
-      })
-    });
-    if(!r.ok) return null;
-    const d = await r.json();
-    return d.data?.[0]?.values || null;
-  }catch(e){ return null; }
-}
-
-// ── Core: upsert vector ──────────────────────────────────────────────────────
-async function pcUpsert(id, values, metadata){
-  const key = pcKey();
-  if(!key || !values) return false;
-  try{
-    const r = await fetch(PC_HOST + '/vectors/upsert', {
-      method: 'POST',
-      headers: { 'Api-Key': key, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ vectors: [{ id, values, metadata }] })
-    });
-    return r.ok;
-  }catch(e){ console.warn('pcUpsert error:', e); return false; }
-}
-
-// ── Core: query similar vectors ──────────────────────────────────────────────
-async function pcQuery(queryVector, topK=6, filter=null){
-  const key = pcKey();
-  if(!key || !queryVector) return [];
-  try{
-    const body = { vector: queryVector, topK, includeMetadata: true };
-    if(filter) body.filter = filter;
-    const r = await fetch(PC_HOST + '/query', {
+    const body = {
+      query: { inputs: { text: String(queryText).slice(0, 2000) }, top_k: topK },
+      fields: ['chunk_text', 'type', 'ctrl_id', 'title', 'nature', 'freq', 'executed',
+               'status', 'iso_elements', 'elem_id', 'dim_id', 'dim_label', 'elem_label',
+               'score', 'score_label', 'name', 'sector']
+    };
+    if(filter) body.query.filter = filter;
+    const r = await fetch(PC_HOST + '/records/search', {
       method: 'POST',
       headers: { 'Api-Key': key, 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     });
-    if(!r.ok) return [];
+    if(!r.ok){
+      const errText = await r.text();
+      console.warn('pcQuery error:', r.status, errText);
+      return [];
+    }
     const d = await r.json();
-    return d.matches || [];
-  }catch(e){ console.warn('pcQuery error:', e); return []; }
+    // Integrated search returns { result: { hits: [...] } }
+    return (d.result?.hits || d.hits || []).map(h => ({
+      score: h._score || 0,
+      metadata: { ...h.fields, type: h.fields?.type || 'unknown' }
+    }));
+  }catch(e){ console.warn('pcQuery exception:', e); return []; }
 }
 
-// ── Vectorize and store one item ─────────────────────────────────────────────
+// ── vectorizeAndStore: unified entry point ───────────────────────────────────
 async function vectorizeAndStore(text, metadata){
-  const values = await pcEmbed(text);
-  if(!values) return false;
-  return pcUpsert(metadata.id || 'vec-'+Date.now(), values, metadata);
+  const id = metadata.id || 'vec-'+Date.now();
+  const { id: _removed, ...meta } = metadata; // remove id from metadata fields
+  return pcUpsert(id, text, meta);
 }
+
+// ── pcEmbedQuery alias (used in reAnalyzeHit — now just returns the query text) ──
+async function pcEmbedQuery(text){ return text; } // integrated index: no pre-embedding
 
 // ── TEST connection ──────────────────────────────────────────────────────────
 async function testPinecone(){
@@ -3588,12 +3570,13 @@ async function testPinecone(){
     });
     if(r.ok){
       const d = await r.json();
-      const count = d.totalVectorCount || 0;
-      showAlert('config-alert', `✓ Pinecone conectado — ${count} vectores en el índice`, 'ok');
+      const count = d.totalVectorCount || d.namespaces?.['']?.vectorCount || 0;
+      showAlert('config-alert', `✓ Pinecone conectado — ${count} registros en el índice`, 'ok');
     } else {
-      showAlert('config-alert', '✗ Error ' + r.status + ': verifica la API key', 'err');
+      const err = await r.text();
+      showAlert('config-alert', '✗ Error ' + r.status + ': ' + err.slice(0,100), 'err');
     }
-  }catch(e){ showAlert('config-alert', 'Error: ' + e.message, 'err'); }
+  }catch(e){ showAlert('config-alert', 'Error de conexión: ' + e.message, 'err'); }
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -3610,6 +3593,8 @@ async function syncTwinToPinecone(){
 
   let done = 0, errors = 0;
   const log = [];
+  let progressMsg = '';
+  const updateProgress = (msg) => { progressMsg = msg; showAlert('config-alert', msg, 'info'); };
 
   // 1. Organization context
   const ctx = S.ctx || {};
@@ -3627,6 +3612,7 @@ async function syncTwinToPinecone(){
       ctx.incidents  ? 'Incidencias históricas: ' + ctx.incidents : '',
     ].filter(Boolean).join('\n');
     const ok = await vectorizeAndStore(text, { id: 'org-context', type: 'org', name: ctx.name || '', sector: ctx.sector || '' });
+    if(!ok){ console.error('Failed to sync: org-context'); }
     ok ? done++ : errors++;
     log.push({ label: 'Contexto organizacional', ok });
   }
@@ -3639,6 +3625,7 @@ async function syncTwinToPinecone(){
   }
 
   // 3. Controls
+  updateProgress(`Vectorizando controles (${S.controls.length})...`);
   for(const ctrl of S.controls){
     const text = [
       'Control: ' + ctrl.title,
@@ -3666,6 +3653,7 @@ async function syncTwinToPinecone(){
   log.push({ label: `Controles (${S.controls.length})`, ok: errors === 0 });
 
   // 4. Maturity elements
+  updateProgress(`Vectorizando elementos de madurez...`);
   for(const dim of DIMS){
     for(const elem of dim.elements){
       const mat = S.maturity?.[elem.id] || {};
@@ -3725,11 +3713,9 @@ async function reAnalyzeHit(hitId){
     try{
       // Embed the hit text as a query
       const hitText = [hit.title, hit.summary, hit.twin_analysis].filter(Boolean).join(' ');
-      const queryVector = await pcEmbedQuery(hitText);
-
-      if(queryVector){
-        // Retrieve top 8 most semantically relevant Twin fragments
-        const matches = await pcQuery(queryVector, 8);
+      // Integrated index: pcQuery takes text directly, no pre-embedding needed
+      const matches = await pcQuery(hitText, 8);
+      if(true){
 
         retrievedFragments = matches.filter(m => m.score > 0.3).map(m => {
           const meta = m.metadata || {};
