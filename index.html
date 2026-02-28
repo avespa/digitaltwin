@@ -219,6 +219,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
 <body>
 <div class="shell">
 
+<!-- SIDEBAR -->
 <nav class="sidebar">
   <div class="logo">
     <div class="logo-mark"><span class="logo-dot"></span>CDT</div>
@@ -246,6 +247,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   </div>
 </nav>
 
+<!-- MAIN -->
 <div class="main">
   <div class="topbar">
     <div class="topbar-title" id="tb-title">Dashboard & KRIs</div>
@@ -256,6 +258,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
 
   <div class="page">
 
+  <!-- DASHBOARD -->
   <div class="view active" id="view-dashboard">
     <div id="twin-disclaimer"></div>
     <div class="kri-grid">
@@ -286,6 +289,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     </div>
   </div>
 
+  <!-- CONTEXTO ORGANIZACIONAL -->
   <div class="view" id="view-contexto">
     <div class="ph">
       <div class="ph-left"><div class="ph-title">Contexto Organizacional</div><div class="ph-sub">ISO 37301 §4.1-4.2 — Define el modelo base de tu Digital Twin</div></div>
@@ -401,6 +405,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     </div>
   </div>
 
+  <!-- ASSESSMENT DE MADUREZ -->
   <div class="view" id="view-madurez">
     <div class="ph">
       <div class="ph-left"><div class="ph-title">Assessment de Madurez</div><div class="ph-sub">ISO 37301 — 7 dimensiones · Escala 1-5</div></div>
@@ -429,6 +434,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     <div id="mat-dimensions"></div>
   </div>
 
+  <!-- TWIN SUMMARY -->
   <div class="view" id="view-twin-summary">
     <div class="ph">
       <div class="ph-left"><div class="ph-title">Resumen Ejecutivo del Twin</div><div class="ph-sub">500 palabras · Usado en todos los análisis de hits</div></div>
@@ -452,6 +458,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     </div>
   </div>
 
+  <!-- HITS -->
   <div class="view" id="view-hits">
     <div class="ph">
       <div class="ph-left"><div class="ph-title">Hits Detectados</div><div class="ph-sub">Analizados contra tu Digital Twin</div></div>
@@ -465,6 +472,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     <div id="hits-list"></div>
   </div>
 
+  <!-- PLANES DE ACCIÓN -->
   <div class="view" id="view-planes">
     <div class="ph">
       <div class="ph-left"><div class="ph-title">Planes de Acción</div><div class="ph-sub">Seguimiento y cierre con mejora documentada</div></div>
@@ -477,6 +485,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     <div id="planes-list"></div>
   </div>
 
+  <!-- BRIEF EJECUTIVO -->
   <div class="view" id="view-brief">
     <div class="ph">
       <div class="ph-left"><div class="ph-title">Brief Ejecutivo</div><div class="ph-sub">Informe para Comité de Cumplimiento / Consejo</div></div>
@@ -489,6 +498,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     <div id="brief-content"></div>
   </div>
 
+  <!-- FUENTES -->
   <div class="view" id="view-fuentes">
     <div class="ph">
       <div class="ph-left"><div class="ph-title">Fuentes & Búsquedas</div><div class="ph-sub">Configura el monitor activo</div></div>
@@ -519,6 +529,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     </div>
   </div>
 
+  <!-- ANÁLISIS MANUAL -->
   <div class="view" id="view-analisis">
     <div class="ph"><div class="ph-left"><div class="ph-title">Análisis Manual IA</div><div class="ph-sub">Analiza cualquier noticia contra tu Digital Twin</div></div></div>
     <div class="g2" style="align-items:start">
@@ -544,6 +555,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     </div>
   </div>
 
+  <!-- CONFIG -->
   <div class="view" id="view-config">
     <div class="ph"><div class="ph-left"><div class="ph-title">Configuración APIs</div></div><div class="ph-actions"><button class="btn btn-primary" onclick="saveConfig()">Guardar</button></div></div>
     <div id="config-alert"></div>
@@ -576,31 +588,51 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     </div>
   </div>
 
-  </div></div></div><div class="overlay" id="modal-doc">
-  <div class="modal">
+  </div><!-- /page -->
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- MODAL ANÁLISIS DOCUMENTO -->
+<div class="overlay" id="modal-doc">
+  <div class="modal modal-lg">
     <div class="modal-title" id="doc-modal-title">Analizar documento con IA</div>
     <button class="modal-x" onclick="closeModal('modal-doc')">✕</button>
-    <div class="fg">
-      <label class="fl">Selecciona un archivo</label>
-      <input type="file" class="fi" id="doc-file" accept=".pdf,.txt,.docx,.doc,.xlsx">
-      <div class="fhint" style="margin-top:4px">
-        <p>✓ <strong>.docx</strong> — extracción perfecta &nbsp;·&nbsp;
-        ✓ <strong>.txt</strong> — texto plano &nbsp;·&nbsp;
-        ⚠ <strong>.pdf</strong> — solo si no está escaneado &nbsp;·&nbsp;
-        ⚠ <strong>.xlsx</strong> — pega el contenido manualmente</p>
+
+    <!-- Paso 1: cargar documentos -->
+    <div id="doc-step1">
+      <div style="font-size:10px;color:var(--text-muted);margin-bottom:10px">
+        Puedes añadir varios documentos. La IA los analizará todos juntos o por separado.
+      </div>
+
+      <!-- Lista de documentos acumulados -->
+      <div id="doc-queue-list" style="margin-bottom:10px"></div>
+
+      <!-- Añadir nuevo doc -->
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:12px;margin-bottom:10px">
+        <div class="fg">
+          <label class="fl">Añadir archivo</label>
+          <input type="file" class="fi" id="doc-file" accept=".pdf,.txt,.docx,.doc" multiple>
+          <div class="fhint mt6">✓ .docx — extracción perfecta &nbsp;·&nbsp; ✓ .txt — texto plano &nbsp;·&nbsp; ⚠ .pdf — solo si no está escaneado</div>
+        </div>
+        <div class="fg"><label class="fl">O pega texto directamente</label><textarea class="fi" id="doc-text" rows="3" placeholder="Pega el texto aquí..."></textarea></div>
+        <button class="btn btn-ghost btn-sm" style="width:100%" onclick="addDocToQueue()">+ Añadir a la cola</button>
+      </div>
+
+      <div id="doc-alert"></div>
+
+      <div class="flex gap8 mt10" style="justify-content:flex-end">
+        <button class="btn btn-ghost" onclick="closeModal('modal-doc')">Cancelar</button>
+        <button class="btn btn-ghost" id="doc-analyze-one-btn" onclick="analyzeDocQueue(false)" style="display:none">Analizar último →</button>
+        <button class="btn btn-primary" id="doc-analyze-all-btn" onclick="analyzeDocQueue(true)" style="display:none">Analizar todos con IA →</button>
       </div>
     </div>
-    <div class="fg"><label class="fl">O pega el texto directamente</label><textarea class="fi" id="doc-text" rows="6" placeholder="Pega el texto del documento aquí..."></textarea></div>
-    <div class="fg"><label class="fl">Instrucción para la IA</label><input type="text" class="fi" id="doc-instruction" value="Extrae y estructura la información relevante para el contexto organizacional de compliance ISO 37301"></div>
-    <div id="doc-alert"></div>
-    <div class="flex gap8 mt14" style="justify-content:flex-end">
-      <button class="btn btn-ghost" onclick="closeModal('modal-doc')">Cancelar</button>
-      <button class="btn btn-primary" onclick="analyzeDoc()">Analizar →</button>
-    </div>
+
+    <!-- Resultado -->
     <div id="doc-result" style="margin-top:14px"></div>
   </div>
 </div>
 
+<!-- MODAL PLAN DE ACCIÓN -->
 <div class="overlay" id="modal-ap">
   <div class="modal modal-lg">
     <div class="modal-title" id="ap-modal-title">Plan de Acción</div>
@@ -655,6 +687,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   </div>
 </div>
 
+<!-- MODAL HISTORIAL MADUREZ -->
 <div class="overlay" id="modal-history">
   <div class="modal">
     <div class="modal-title">Historial de Madurez</div>
@@ -681,9 +714,6 @@ const db = firebase.firestore();
 // ═══════════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════════
-let lastAnalysisResult = ""; // Variable para guardar el resultado temporalmente
-let docAnalysisTargetGlobal = 'contexto'; 
-
 let S = {
   cfg: { mistralKey:'', mistralModel:'mistral-small-latest', newsapiKey:'', threshold:60, repo:'avespa/digitaltwin', twinDays:90 },
   ctx: {},       // organization context
@@ -828,20 +858,28 @@ async function syncAll(){
   setStatus('Sincronizando...');
   document.getElementById('sync-btn').innerHTML='<span class="spin"></span>';
   try{
-    const [ctx, mat, ts, hits, plans, cfg] = await Promise.all([
+    const [ctx, mat, ts, plans, cfg] = await Promise.all([
       fsGet('organization','main'),
       fsGet('maturity','current'),
       fsGet('twin_summary','main'),
-      fsList('hits'),
       fsList('action_plans'),
       fsGet('config','main'),
     ]);
     if(ctx){ S.ctx = ctx; lsSet('ctx', ctx); }
     if(mat){ S.maturity = mat; lsSet('mat', mat); }
     if(ts){ S.twinSummary = ts.text||''; lsSet('ts', ts.text||''); }
-    S.hits = hits || [];
     S.actionPlans = plans || [];
     if(cfg){ S.remoteCfg = {...S.remoteCfg,...cfg}; }
+
+    // Hits: try Firestore first, fallback to GitHub raw JSON
+    const fsHits = await fsList('hits');
+    if(fsHits && fsHits.length > 0){
+      S.hits = fsHits;
+    } else {
+      // Fetcher writes to GitHub — read directly from raw
+      await syncHitsFromGitHub();
+    }
+
     S.lastSync = new Date().toISOString();
     lsSet('hits', S.hits);
     lsSet('plans', S.actionPlans);
@@ -850,15 +888,50 @@ async function syncAll(){
     document.getElementById('tb-meta').textContent = 'Sync: '+fmtTime(S.lastSync);
   }catch(e){
     setStatus('Error sync');
-    console.error(e);
+    console.error('syncAll error:', e);
   }
   document.getElementById('sync-btn').textContent='⟳ Sync';
 }
 
+async function syncHitsFromGitHub(){
+  const repo = S.cfg.repo || 'avespa/digitaltwin';
+  const url = `https://raw.githubusercontent.com/${repo}/main/data/hits.json?t=${Date.now()}`;
+  try{
+    const r = await fetch(url);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const data = await r.json();
+    const ghHits = data.hits || [];
+    if(ghHits.length > 0){
+      // Mirror to Firestore for future use
+      S.hits = ghHits;
+      // Write each hit to Firestore if not already there (batch by checking ids)
+      const fsHits = await fsList('hits');
+      const fsIds = new Set(fsHits.map(h=>h.id||h.link));
+      const newHits = ghHits.filter(h=>!fsIds.has(h.id||h.link));
+      for(const hit of newHits.slice(0,50)){ // max 50 at a time
+        await fsAdd('hits', hit);
+      }
+      console.log(`GitHub hits: ${ghHits.length} total, ${newHits.length} nuevos mirrored a Firestore`);
+    }
+  }catch(e){
+    console.warn('GitHub hits sync failed:', e.message);
+    // Use cached local hits
+    const cached = lsGet('hits');
+    if(cached && cached.length) S.hits = cached;
+  }
+}
+
 async function syncHits(){
-  S.hits = await fsList('hits');
+  // Try both sources
+  const fsHits = await fsList('hits');
+  if(fsHits && fsHits.length>0){
+    S.hits = fsHits;
+  } else {
+    await syncHitsFromGitHub();
+  }
   lsSet('hits', S.hits);
   renderHits();
+  updateBadges();
 }
 
 function restoreLocal(){
@@ -961,17 +1034,17 @@ function loadContexto(){
 
 async function saveContexto(){
   const ctx = {
-    name:       val('ctx-name'),   sector:      val('ctx-sector'),
-    size:       val('ctx-size'),   revenue:     val('ctx-revenue'),
-    geo:        val('ctx-geo'),    business:    val('ctx-business'),
-    strategy:   val('ctx-strategy'),legal:      val('ctx-legal'),
-    economic:   val('ctx-economic'),social:     val('ctx-social'),
-    trends:     val('ctx-trends'), structure:   val('ctx-structure'),
-    culture:    val('ctx-culture'),tech:        val('ctx-tech'),
+    name:       val('ctx-name'),   sector:     val('ctx-sector'),
+    size:       val('ctx-size'),   revenue:    val('ctx-revenue'),
+    geo:        val('ctx-geo'),    business:   val('ctx-business'),
+    strategy:   val('ctx-strategy'),legal:     val('ctx-legal'),
+    economic:   val('ctx-economic'),social:    val('ctx-social'),
+    trends:     val('ctx-trends'), structure:  val('ctx-structure'),
+    culture:    val('ctx-culture'),tech:       val('ctx-tech'),
     thirds:     val('ctx-thirds'),
     'ext-parties': val('ctx-ext-parties'),
     'int-parties': val('ctx-int-parties'),
-    risks:      val('ctx-risks'),  incidents:   val('ctx-incidents'),
+    risks:      val('ctx-risks'),  incidents:  val('ctx-incidents'),
     norms:      [...document.querySelectorAll('.ctx-norm:checked')].map(c=>c.value),
   };
   if(!ctx.name||!ctx.sector){ showAlert('ctx-alert','Nombre y sector son obligatorios','err'); return; }
@@ -1452,93 +1525,379 @@ function findMaturityElement(controlText){
 }
 
 // ═══════════════════════════════════════════════════════════════
-// DOCUMENTO ANALYSIS
+// DOCUMENTO ANALYSIS — queue-based, JSON-structured
 // ═══════════════════════════════════════════════════════════════
 let docAnalysisTarget = 'contexto';
 let docAnalysisElementId = null;
 let docAnalysisElementLabel = null;
+let docQueue = []; // [{name, text}]
+let lastDocResult = null; // store result safely (no inline onclick)
 
 function openDocAnalysis(target, elemId=null, elemLabel=null){
-  docAnalysisTarget=target; docAnalysisElementId=elemId; docAnalysisElementLabel=elemLabel;
-  const title = target==='element'?`Analizar documento para: ${elemLabel}` :
-    target==='madurez'?'Analizar documento — Assessment de Madurez':'Analizar documento — Contexto Organizacional';
+  docAnalysisTarget=target;
+  docAnalysisElementId=elemId;
+  docAnalysisElementLabel=elemLabel;
+  docQueue=[];
+  lastDocResult=null;
+
+  const title = target==='element' ? `Analizar doc → ${elemLabel}` :
+    target==='madurez' ? 'Analizar documentos — Assessment de Madurez' :
+    'Analizar documentos — Contexto Organizacional';
   document.getElementById('doc-modal-title').textContent=title;
   document.getElementById('doc-file').value='';
   document.getElementById('doc-text').value='';
-  document.getElementById('doc-instruction').value = target==='element'?
-    `Evalúa el nivel de madurez (1-5) del elemento de compliance: "${elemLabel}". Justifica la puntuación con evidencias del documento.`:
-    target==='madurez'?'Analiza el nivel de madurez del sistema de compliance y propón puntuaciones para cada dimensión ISO 37301':
-    'Extrae y estructura la información relevante para el contexto organizacional de compliance ISO 37301';
   document.getElementById('doc-result').innerHTML='';
+  renderDocQueue();
   openModal('modal-doc');
 }
 
-async function analyzeDoc(){
+function renderDocQueue(){
+  const list = document.getElementById('doc-queue-list');
+  const btnOne = document.getElementById('doc-analyze-one-btn');
+  const btnAll = document.getElementById('doc-analyze-all-btn');
+
+  if(!docQueue.length){
+    list.innerHTML='<div style="font-size:10px;color:var(--text-muted);padding:6px 0">Sin documentos en cola aún.</div>';
+    btnOne.style.display='none';
+    btnAll.style.display='none';
+    return;
+  }
+
+  list.innerHTML = docQueue.map((d,i)=>`
+    <div class="flex ic gap8" style="padding:6px 10px;background:var(--bg);border:1px solid var(--border);border-radius:4px;margin-bottom:5px">
+      <span style="font-size:11px;color:var(--accent)">📄</span>
+      <span style="font-size:10.5px;flex:1">${esc(d.name)}</span>
+      <span style="font-size:9px;color:var(--text-muted)">${(d.text.length/1000).toFixed(1)}k chars</span>
+      <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:13px" onclick="removeDocFromQueue(${i})">×</button>
+    </div>`).join('');
+
+  btnOne.style.display = docQueue.length===1 ? '' : 'none';
+  btnAll.style.display = '';
+  btnAll.textContent = docQueue.length===1 ? 'Analizar con IA →' : `Analizar ${docQueue.length} docs con IA →`;
+}
+
+function removeDocFromQueue(i){
+  docQueue.splice(i,1);
+  renderDocQueue();
+}
+
+async function addDocToQueue(){
+  const files = document.getElementById('doc-file').files;
+  const pasted = document.getElementById('doc-text').value.trim();
+
+  if(files.length===0 && !pasted){
+    showAlert('doc-alert','Adjunta un archivo o pega texto','err'); return;
+  }
+
+  showAlert('doc-alert','Leyendo...','info');
+
+  // Files
+  for(const file of files){
+    try{
+      const text = await readFileAsText(file);
+      if(text && text.trim().length>20){
+        docQueue.push({name: file.name, text});
+      } else {
+        showAlert('doc-alert',`No se pudo extraer texto de ${file.name} — prueba a pegar el contenido`,'err');
+      }
+    }catch(e){
+      showAlert('doc-alert',`Error leyendo ${file.name}: ${e.message}`,'err');
+    }
+  }
+
+  // Pasted text
+  if(pasted){
+    docQueue.push({name:'Texto pegado', text: pasted});
+  }
+
+  document.getElementById('doc-file').value='';
+  document.getElementById('doc-text').value='';
+  document.getElementById('doc-alert').innerHTML='';
+  renderDocQueue();
+}
+
+async function analyzeDocQueue(allDocs){
   const key=S.cfg.mistralKey;
   if(!key){showAlert('doc-alert','Configura la API key de Mistral en ⚙ Configuración','err');return;}
-  const file=document.getElementById('doc-file').files[0];
-  const pastedText=document.getElementById('doc-text').value.trim();
-  const instruction=document.getElementById('doc-instruction').value.trim();
+  if(!docQueue.length){showAlert('doc-alert','Añade al menos un documento','err');return;}
 
-  let docText='';
-  document.getElementById('doc-result').innerHTML='<div class="flex ic gap8" style="color:var(--text-muted);padding:8px 0"><span class="spin"></span> Leyendo archivo...</div>';
+  const docsToAnalyze = allDocs ? docQueue : [docQueue[docQueue.length-1]];
+  const combinedText = docsToAnalyze.map(d=>`=== ${d.name} ===\n${d.text}`).join('\n\n').slice(0,12000);
 
-  if(file){
-    try{
-      docText = await readFileAsText(file);
-    }catch(e){
-      document.getElementById('doc-result').innerHTML=`<div class="alert alert-err">Error leyendo el archivo: ${esc(e.message)}<br><br>Prueba a copiar el texto y pegarlo en el campo de texto de abajo.</div>`;
-      return;
-    }
-  } else if(pastedText){
-    docText=pastedText;
-  } else {
-    showAlert('doc-alert','Adjunta un archivo o pega texto en el campo de abajo','err');
-    document.getElementById('doc-result').innerHTML='';
-    return;
-  }
-
-  if(!docText || docText.trim().length < 20){
-    document.getElementById('doc-result').innerHTML=`<div class="alert alert-err">No se pudo extraer texto del archivo. Por favor copia el contenido y pégalo en el campo de texto.</div>`;
-    return;
-  }
-
-  const preview = docText.slice(0,200).replace(/\n/g,' ');
   document.getElementById('doc-result').innerHTML=`
-    <div class="alert alert-info">✓ Texto extraído (${docText.length} caracteres) — Enviando a Mistral...</div>
-    <div style="font-size:9px;color:var(--text-muted);padding:4px 0;font-style:italic">Preview: "${esc(preview)}..."</div>
-    <div class="flex ic gap8 mt6" style="color:var(--text-muted)"><span class="spin"></span> Analizando con Mistral AI...</div>`;
+    <div class="flex ic gap8" style="color:var(--text-muted);padding:10px 0">
+      <span class="spin"></span> Analizando ${docsToAnalyze.length} documento(s) con Mistral AI...
+    </div>`;
 
-  const prompt=`${instruction}\n\nDOCUMENTO (${file?.name||'texto pegado'}):\n${docText.slice(0,10000)}`;
+  let prompt, resultHandler;
+
+  if(docAnalysisTarget==='contexto'){
+    // Structured JSON extraction for all context fields
+    const existingCtx = JSON.stringify({
+      name:val('ctx-name'), sector:val('ctx-sector'), business:val('ctx-business'),
+      strategy:val('ctx-strategy'), legal:val('ctx-legal'), economic:val('ctx-economic'),
+      social:val('ctx-social'), trends:val('ctx-trends'), structure:val('ctx-structure'),
+      culture:val('ctx-culture'), tech:val('ctx-tech'), thirds:val('ctx-thirds'),
+      extParties:val('ctx-ext-parties'), intParties:val('ctx-int-parties'),
+      risks:val('ctx-risks'), incidents:val('ctx-incidents'),
+    });
+
+    prompt = `Analiza el/los siguiente(s) documento(s) y extrae información para rellenar el contexto organizacional de compliance ISO 37301.
+
+CONTEXTO ACTUAL (ya rellenado, complementa sin borrar):
+${existingCtx}
+
+DOCUMENTOS A ANALIZAR:
+${combinedText}
+
+Responde ÚNICAMENTE con un objeto JSON válido con estos campos exactos (strings en español, vacío "" si no hay info):
+{
+  "name": "nombre legal de la empresa",
+  "sector": "sector principal",
+  "size": "tamaño (Microempresa/Pequeña/Mediana/Grande/Corporación)",
+  "revenue": "facturación aproximada",
+  "geo": "ámbito geográfico",
+  "business": "descripción del modelo de negocio",
+  "strategy": "estrategia y objetivos principales",
+  "legal": "marco legal y regulatorio aplicable",
+  "economic": "contexto económico y de mercado",
+  "social": "contexto social, cultural y medioambiental",
+  "trends": "tendencias futuras con impacto en compliance",
+  "structure": "estructura organizativa",
+  "culture": "cultura de compliance actual",
+  "tech": "recursos tecnológicos relevantes",
+  "thirds": "relaciones con terceros",
+  "ext_parties": "partes interesadas externas y sus expectativas",
+  "int_parties": "partes interesadas internas y sus expectativas",
+  "risks": "riesgos de compliance prioritarios identificados",
+  "incidents": "historial de incidentes o sanciones relevantes",
+  "norms": ["array", "de", "normas", "aplicables"]
+}
+
+IMPORTANTE: Si el campo ya tiene contenido en el contexto actual, COMPLEMENTA con la nueva información, no reemplaces.
+Responde SOLO el JSON, sin texto adicional, sin bloques de código markdown.`;
+
+    resultHandler = applyContextoJson;
+
+  } else if(docAnalysisTarget==='madurez'){
+    // Structured JSON for all maturity dimensions
+    const existingMat = JSON.stringify(S.maturity||{});
+    const dimsDesc = DIMS.map(d=>
+      `${d.label}:\n${d.elements.map(e=>`  - ${e.id}: ${e.label}`).join('\n')}`
+    ).join('\n\n');
+
+    prompt = `Analiza el/los siguiente(s) documento(s) y evalúa la madurez del sistema de compliance ISO 37301.
+
+ESCALA: 1=No existe, 2=Inicial/Ad hoc, 3=Definido/Documentado, 4=Gestionado/Medido, 5=Optimizado
+
+DIMENSIONES Y ELEMENTOS A EVALUAR:
+${dimsDesc}
+
+EVALUACIÓN ACTUAL (complementa, no reemplaces si ya hay datos):
+${existingMat}
+
+DOCUMENTOS:
+${combinedText}
+
+Responde ÚNICAMENTE con un JSON válido. Para cada element_id incluye:
+- el campo "element_id": score (número 1-5, 0 si no hay información suficiente)
+- el campo "ev_element_id": "evidencia encontrada en el documento que justifica la puntuación"
+
+Ejemplo: {"ctx1": 3, "ev_ctx1": "El documento menciona un mapa de procesos aprobado por dirección..."}
+
+IMPORTANTE: Si ya hay puntuación para un elemento, solo actualiza si encuentras evidencia más clara. 
+Para evidencias, COMPLEMENTA el texto existente con la nueva información encontrada.
+Responde SOLO el JSON, sin texto adicional.`;
+
+    resultHandler = applyMaturityJson;
+
+  } else if(docAnalysisTarget==='element'){
+    // Single element analysis
+    const existingEv = document.getElementById('ev-'+docAnalysisElementId)?.value||'';
+    prompt = `Analiza el/los siguiente(s) documento(s) y evalúa el nivel de madurez del elemento de compliance:
+
+ELEMENTO: "${docAnalysisElementLabel}"
+ESCALA: 1=No existe, 2=Inicial/Ad hoc, 3=Definido/Documentado, 4=Gestionado/Medido, 5=Optimizado
+
+EVIDENCIA EXISTENTE (complementa):
+${existingEv||'Ninguna aún'}
+
+DOCUMENTOS:
+${combinedText}
+
+Responde ÚNICAMENTE con un JSON válido:
+{
+  "score": <número 1-5>,
+  "justification": "justificación de la puntuación con evidencias concretas del documento",
+  "evidence": "texto de evidencia específica encontrada en el documento"
+}
+
+Responde SOLO el JSON, sin texto adicional.`;
+
+    resultHandler = applyElementJson;
+  }
+
   try{
-    const result=await callMistral(prompt, 1500);
-    lastAnalysisResult = result; // Guardamos el texto aquí
-    docAnalysisTargetGlobal = docAnalysisTarget;
+    const raw = await callMistral(prompt, 2000);
 
-    document.getElementById('doc-result').innerHTML=`
-      <div class="alert alert-ok">✓ Análisis completado — ${docText.length} caracteres procesados</div>
-      <div style="background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:12px;font-size:10.5px;color:var(--text-dim);line-height:1.7;white-space:pre-wrap;max-height:320px;overflow-y:auto">${esc(result)}</div>
-      <div class="flex gap6 mt10">
-        <button class="btn btn-primary btn-sm" onclick="applyDocResult(lastAnalysisResult)">Aplicar al Twin →</button>
-        <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-doc')">Cerrar</button>
-      </div>`;
+    // Parse JSON safely
+    let parsed;
+    try{
+      // Strip markdown code blocks if present
+      const clean = raw.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+      parsed = JSON.parse(clean);
+    }catch(e){
+      // Try to extract JSON from response
+      const match = raw.match(/\{[\s\S]*\}/);
+      if(match) parsed = JSON.parse(match[0]);
+      else throw new Error('La IA no devolvió JSON válido. Respuesta: '+raw.slice(0,200));
+    }
+
+    lastDocResult = parsed;
+    resultHandler(parsed, true); // preview mode
+
   }catch(e){
-    document.getElementById('doc-result').innerHTML=`<div class="alert alert-err">Error Mistral: ${esc(e.message)}</div>`;
+    document.getElementById('doc-result').innerHTML=`<div class="alert alert-err">Error: ${esc(e.message)}</div>`;
   }
 }
 
-function applyDocResult(result){
-  if(docAnalysisTargetGlobal==='contexto'){
-    const ta=document.getElementById('ctx-risks');
-    if(ta) ta.value=(ta.value?ta.value+'\n\n':'')+result.slice(0,600);
-    showAlert('ctx-alert','Análisis aplicado al contexto — revisa y guarda','ok');
-    closeModal('modal-doc'); go('contexto');
-  } else if(docAnalysisTargetGlobal==='madurez'||docAnalysisTargetGlobal==='element'){
-    const ta=docAnalysisElementId?document.getElementById('ev-'+docAnalysisElementId):null;
-    if(ta) ta.value=(ta.value?ta.value+'\n\n':'')+result.slice(0,400);
-    showAlert('mat-alert','Análisis aplicado — revisa puntuaciones y guarda','ok');
-    closeModal('modal-doc'); go('madurez');
+function applyContextoJson(data, preview=false){
+  const fieldMap = {
+    name:'ctx-name', sector:'ctx-sector', size:'ctx-size', revenue:'ctx-revenue',
+    geo:'ctx-geo', business:'ctx-business', strategy:'ctx-strategy', legal:'ctx-legal',
+    economic:'ctx-economic', social:'ctx-social', trends:'ctx-trends',
+    structure:'ctx-structure', culture:'ctx-culture', tech:'ctx-tech', thirds:'ctx-thirds',
+    ext_parties:'ctx-ext-parties', int_parties:'ctx-int-parties',
+    risks:'ctx-risks', incidents:'ctx-incidents',
+  };
+
+  // Build preview
+  const changes = [];
+  for(const [key, fieldId] of Object.entries(fieldMap)){
+    if(data[key] && data[key].trim()){
+      const el = document.getElementById(fieldId);
+      const existing = el?.value?.trim()||'';
+      const newVal = existing ? existing+'\n\n[Complemento IA]:\n'+data[key] : data[key];
+      changes.push({fieldId, label:fieldId.replace('ctx-',''), newVal, isNew:!existing});
+    }
   }
+
+  if(preview){
+    document.getElementById('doc-result').innerHTML=`
+      <div class="alert alert-ok">✓ Análisis completado — ${changes.length} campos con información</div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:12px;max-height:260px;overflow-y:auto;margin-bottom:10px">
+        ${changes.map(c=>`
+          <div style="margin-bottom:8px;padding:6px;border-left:2px solid ${c.isNew?'var(--accent)':'var(--warn)'}">
+            <div style="font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:${c.isNew?'var(--accent)':'var(--warn)'};margin-bottom:2px">${c.isNew?'NUEVO':'COMPLEMENTA'} → ${c.label}</div>
+            <div style="font-size:10px;color:var(--text-dim);line-height:1.5">${esc(c.newVal.slice(0,150))}${c.newVal.length>150?'...':''}</div>
+          </div>`).join('')}
+        ${data.norms?.length?`<div style="margin-bottom:8px;padding:6px;border-left:2px solid var(--accent)"><div style="font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:2px">NORMAS DETECTADAS</div><div style="font-size:10px;color:var(--text-dim)">${data.norms.join(', ')}</div></div>`:''}
+      </div>
+      <div class="flex gap8">
+        <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-doc')">Cancelar</button>
+        <button class="btn btn-primary btn-sm" onclick="applyContextoJson(lastDocResult,false)">Aplicar al formulario →</button>
+      </div>`;
+    return;
+  }
+
+  // Actually apply
+  for(const {fieldId, newVal} of changes){
+    const el = document.getElementById(fieldId);
+    if(el) el.value = newVal;
+  }
+
+  // Apply norms
+  if(data.norms?.length){
+    document.querySelectorAll('.ctx-norm').forEach(cb=>{
+      if(data.norms.some(n=>n.toLowerCase().includes(cb.value.toLowerCase())||cb.value.toLowerCase().includes(n.toLowerCase()))){
+        cb.checked=true;
+      }
+    });
+  }
+
+  closeModal('modal-doc');
+  go('contexto');
+  showAlert('ctx-alert',`✓ ${changes.length} campos actualizados desde el documento — revisa y guarda`,'ok');
+}
+
+function applyMaturityJson(data, preview=false){
+  if(preview){
+    const updates = [];
+    DIMS.forEach(d=>d.elements.forEach(e=>{
+      if(data[e.id] && data[e.id]>0){
+        updates.push({id:e.id, label:e.label, score:data[e.id], ev:data['ev_'+e.id]||''});
+      }
+    }));
+
+    document.getElementById('doc-result').innerHTML=`
+      <div class="alert alert-ok">✓ Análisis completado — ${updates.length} elementos evaluados</div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:12px;max-height:280px;overflow-y:auto;margin-bottom:10px">
+        ${updates.map(u=>`
+          <div style="margin-bottom:7px;padding:6px;border-left:2px solid var(--accent)">
+            <div class="flex ic gap8">
+              <span style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted)">${esc(u.label.slice(0,40))}</span>
+              <span style="font-family:var(--font-ui);font-weight:800;color:var(--accent);margin-left:auto">${u.score}/5</span>
+            </div>
+            ${u.ev?`<div style="font-size:9.5px;color:var(--text-dim);margin-top:2px;line-height:1.4">${esc(u.ev.slice(0,120))}${u.ev.length>120?'...':''}</div>`:''}
+          </div>`).join('')}
+      </div>
+      <div class="flex gap8">
+        <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-doc')">Cancelar</button>
+        <button class="btn btn-primary btn-sm" onclick="applyMaturityJson(lastDocResult,false)">Aplicar puntuaciones →</button>
+      </div>`;
+    return;
+  }
+
+  // Actually apply
+  if(!S.maturity) S.maturity={};
+  DIMS.forEach(d=>d.elements.forEach(e=>{
+    if(data[e.id] && data[e.id]>0){
+      // Only update score if new score > existing or no existing
+      const existing = parseInt(S.maturity[e.id])||0;
+      if(data[e.id]>existing || !existing) S.maturity[e.id]=data[e.id];
+    }
+    if(data['ev_'+e.id]){
+      const existing = S.maturity['ev_'+e.id]||'';
+      S.maturity['ev_'+e.id] = existing ? existing+'\n\n[Doc IA]: '+data['ev_'+e.id] : data['ev_'+e.id];
+    }
+  }));
+
+  closeModal('modal-doc');
+  go('madurez');
+  showAlert('mat-alert','✓ Puntuaciones actualizadas — revisa y guarda la versión','ok');
+}
+
+function applyElementJson(data, preview=false){
+  if(preview){
+    document.getElementById('doc-result').innerHTML=`
+      <div class="alert alert-ok">✓ Análisis completado</div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:12px;margin-bottom:10px">
+        <div class="flex ic gap8 mb8">
+          <span style="font-size:10px;color:var(--text-muted)">Puntuación propuesta</span>
+          <span style="font-family:var(--font-ui);font-weight:800;font-size:18px;color:var(--accent)">${data.score}/5</span>
+          <span style="font-size:10px;color:var(--text-muted)">${SCORE_LABELS[data.score]||''}</span>
+        </div>
+        <div style="font-size:10.5px;color:var(--text-dim);line-height:1.6">${esc(data.justification||'')}</div>
+        ${data.evidence?`<div style="margin-top:8px;padding:6px;background:var(--surface2);border-radius:3px;font-size:9.5px;color:var(--text-muted);line-height:1.5">Evidencia: ${esc(data.evidence.slice(0,200))}</div>`:''}
+      </div>
+      <div class="flex gap8">
+        <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-doc')">Cancelar</button>
+        <button class="btn btn-primary btn-sm" onclick="applyElementJson(lastDocResult,false)">Aplicar →</button>
+      </div>`;
+    return;
+  }
+
+  // Apply score
+  if(data.score && docAnalysisElementId){
+    setScore(docAnalysisElementId, data.score, '');
+    const ev = document.getElementById('ev-'+docAnalysisElementId);
+    if(ev && data.evidence){
+      ev.value = ev.value ? ev.value+'\n\n[Doc IA]: '+data.evidence : data.evidence;
+    }
+  }
+
+  closeModal('modal-doc');
+  showAlert('mat-alert','✓ Elemento actualizado — guarda la versión cuando termines','ok');
 }
 
 async function readFileAsText(file){
@@ -1634,7 +1993,7 @@ async function generateBrief(){
   const topHits=S.hits.filter(h=>h.level==='critical'||h.level==='warning').slice(0,3);
   const openPlans=S.actionPlans.filter(p=>p.status!=='closed');
 
-  const prompt = `Eres el Compliance Officer de "${S.ctx?.name||'la organización'}". Genera un BRIEF EJECUTIVO en español para presentar al Comité de Cumplimiento o Consejo de Administración.
+  const prompt=`Eres el Compliance Officer de "${S.ctx?.name||'la organización'}". Genera un BRIEF EJECUTIVO en español para presentar al Comité de Cumplimiento o Consejo de Administración.
 
 DATOS DEL TWIN:
 - Organización: ${S.ctx?.name} · ${S.ctx?.sector} · ${S.ctx?.size}
