@@ -922,6 +922,7 @@ let S = {
   sentences: [],
   remoteCfg: { newsapi_queries:[], newsapi_sources:'', custom_keywords:[], rss_enabled:{} },
   lastSync: null,
+  docBibliography: [], // [{id, name, date, elements:[], summary}]
 };
 
 // Local cache
@@ -934,60 +935,90 @@ function lsSet(k,v){ try{ localStorage.setItem('cdt_'+k, JSON.stringify(v)); }ca
 const DIMS = [
   { id:'contexto', label:'Contexto', icon:'⬡', color:'#00e5a0',
     elements:[
-      { id:'ctx1', label:'Comprensión del contexto organizacional (§4.1)' },
-      { id:'ctx2', label:'Identificación de partes interesadas (§4.2)' },
-      { id:'ctx3', label:'Obligaciones de compliance identificadas (§4.5)' },
-      { id:'ctx4', label:'Evaluación de riesgos de compliance (§4.6)' },
+      { id:'ctx1', label:'Comprensión del contexto organizacional (§4.1)',
+        criteria:'§4.1 exige que la organización determine los factores externos (legales, regulatorios, mercado, competencia) e internos (estructura, cultura, capacidades) que son relevantes para su propósito y que afectan a su capacidad para lograr los resultados del sistema de compliance. Evidencia esperada: análisis PESTEL, DAFO, memorias, actas de dirección que identifiquen el entorno regulatorio y de negocio.' },
+      { id:'ctx2', label:'Identificación de partes interesadas (§4.2)',
+        criteria:'§4.2 exige identificar las partes interesadas relevantes (empleados, accionistas, clientes, reguladores, proveedores, comunidad) y determinar sus necesidades y expectativas de compliance pertinentes. Evidencia esperada: registro de partes interesadas, mapa de stakeholders, análisis de sus expectativas en materia de cumplimiento normativo.' },
+      { id:'ctx3', label:'Obligaciones de compliance identificadas (§4.5)',
+        criteria:'§4.5 exige que la organización identifique, tenga acceso y comprenda sus obligaciones de compliance (leyes, reglamentos, permisos, códigos voluntarios, directrices). Debe mantener actualizado un registro o inventario de obligaciones aplicables. Evidencia esperada: registro de requisitos legales y normativos, matriz de obligaciones, suscripción a actualizaciones regulatorias.' },
+      { id:'ctx4', label:'Evaluación de riesgos de compliance (§4.6)',
+        criteria:'§4.6 exige un proceso formal para identificar, analizar y evaluar los riesgos de compliance (probabilidad e impacto de incumplimiento) y las oportunidades de mejora. El proceso debe ser documentado y revisado periódicamente. Evidencia esperada: mapa de riesgos de compliance, metodología de evaluación, matriz probabilidad-impacto, registro de riesgos actualizado.' },
     ]
   },
   { id:'liderazgo', label:'Liderazgo', icon:'★', color:'#8b5cf6',
     elements:[
-      { id:'lid1', label:'Compromiso del órgano de gobierno (§5.1.1)' },
-      { id:'lid2', label:'Cultura de compliance (§5.1.2)' },
-      { id:'lid3', label:'Gobernanza de compliance (§5.1.3)' },
-      { id:'lid4', label:'Política de compliance (§5.2)' },
-      { id:'lid5', label:'Función de compliance: independencia y autoridad (§5.3.2)' },
+      { id:'lid1', label:'Compromiso del órgano de gobierno (§5.1.1)',
+        criteria:'§5.1.1 exige que el órgano de gobierno demuestre liderazgo y compromiso con el sistema de compliance: aprobando la política, asignando responsabilidades, garantizando recursos, promoviendo la cultura de cumplimiento y revisando el sistema periódicamente. Evidencia esperada: actas de consejo que reflejen supervisión de compliance, delegación de funciones, aprobación de política, revisiones formales del sistema.' },
+      { id:'lid2', label:'Cultura de compliance (§5.1.2)',
+        criteria:'§5.1.2 exige que la alta dirección fomente activamente una cultura en la que el cumplimiento normativo sea un valor integrado, no solo un requisito formal. Deben establecerse mecanismos para medir y mejorar la cultura. Evidencia esperada: encuestas de cultura, programas de tone-at-the-top, comunicaciones de liderazgo sobre compliance, indicadores de clima de integridad.' },
+      { id:'lid3', label:'Gobernanza de compliance (§5.1.3)',
+        criteria:'§5.1.3 exige definir roles, responsabilidades y autoridades claras para la gestión del compliance en todos los niveles. Debe existir una estructura de gobernanza con líneas de reporte definidas (comité de compliance, compliance officer, etc.). Evidencia esperada: organigrama de compliance, fichas de roles y responsabilidades, comités formalizados, reporting a órgano de gobierno.' },
+      { id:'lid4', label:'Política de compliance (§5.2)',
+        criteria:'§5.2 exige una política de compliance documentada, aprobada por el órgano de gobierno, que exprese el compromiso con el cumplimiento de obligaciones, establezca el marco del sistema y proporcione la base para los objetivos. Debe estar disponible para las partes interesadas. Evidencia esperada: política aprobada, firmada, con fecha, difundida internamente y publicada/disponible para terceros.' },
+      { id:'lid5', label:'Función de compliance: independencia y autoridad (§5.3.2)',
+        criteria:'§5.3.2 exige que la función de compliance tenga suficiente independencia, autoridad y acceso a información para desempeñar su rol eficazmente, con línea directa al órgano de gobierno. El compliance officer debe poder actuar sin interferencias. Evidencia esperada: estatuto de la función de compliance, acceso directo a órgano de gobierno documentado, ausencia de conflictos de interés en reporting.' },
     ]
   },
   { id:'planificacion', label:'Planificación', icon:'◎', color:'#0066ff',
     elements:[
-      { id:'plan1', label:'Acciones para abordar riesgos (§6.1)' },
-      { id:'plan2', label:'Objetivos de compliance medibles (§6.2)' },
-      { id:'plan3', label:'Planificación de cambios (§6.3)' },
+      { id:'plan1', label:'Acciones para abordar riesgos (§6.1)',
+        criteria:'§6.1 exige que la organización planifique acciones para abordar los riesgos e incumplimientos potenciales identificados en la evaluación de riesgos (§4.6), y que estas acciones se integren en los procesos del sistema. Evidencia esperada: plan de tratamiento de riesgos, acciones preventivas documentadas vinculadas a riesgos específicos, responsables y plazos asignados.' },
+      { id:'plan2', label:'Objetivos de compliance medibles (§6.2)',
+        criteria:'§6.2 exige establecer objetivos de compliance medibles, coherentes con la política, que tengan en cuenta los riesgos, con indicadores de seguimiento, responsables, plazos y recursos asignados. Evidencia esperada: cuadro de objetivos de compliance con KPIs, seguimiento periódico documentado, vinculación con política y riesgos.' },
+      { id:'plan3', label:'Planificación de cambios (§6.3)',
+        criteria:'§6.3 exige que cuando la organización determine la necesidad de cambios en el sistema de compliance, estos se lleven a cabo de manera planificada, considerando el propósito, consecuencias, disponibilidad de recursos e integridad del sistema. Evidencia esperada: procedimiento de gestión del cambio, registro de cambios normativos y organizativos, evaluación de impacto en el sistema de compliance.' },
     ]
   },
   { id:'soporte', label:'Soporte', icon:'⬟', color:'#f59e0b',
     elements:[
-      { id:'sop1', label:'Recursos asignados al sistema (§7.1)' },
-      { id:'sop2', label:'Competencia y formación del personal (§7.2)' },
-      { id:'sop3', label:'Concienciación en compliance (§7.3)' },
-      { id:'sop4', label:'Comunicación interna y externa (§7.4)' },
-      { id:'sop5', label:'Información documentada (§7.5)' },
+      { id:'sop1', label:'Recursos asignados al sistema (§7.1)',
+        criteria:'§7.1 exige que la organización determine y proporcione los recursos necesarios (humanos, financieros, tecnológicos, de infraestructura) para establecer, implementar, mantener y mejorar continuamente el sistema de compliance. Evidencia esperada: presupuesto de compliance aprobado, dotación de personal, herramientas tecnológicas, plan de recursos.' },
+      { id:'sop2', label:'Competencia y formación del personal (§7.2)',
+        criteria:'§7.2 exige determinar la competencia necesaria de las personas que realizan trabajo bajo el control de la organización que afecta al compliance, asegurar que sean competentes mediante formación/experiencia y mantener evidencias documentadas. Evidencia esperada: mapa de competencias de compliance, plan de formación, registros de formaciones realizadas, evaluaciones de competencia.' },
+      { id:'sop3', label:'Concienciación en compliance (§7.3)',
+        criteria:'§7.3 exige que las personas que trabajan bajo el control de la organización sean conscientes de la política de compliance, su contribución al sistema, las consecuencias del incumplimiento y los canales de reporte disponibles. Evidencia esperada: programas de awareness, comunicaciones periódicas, métricas de concienciación, confirmaciones de lectura de políticas.' },
+      { id:'sop4', label:'Comunicación interna y externa (§7.4)',
+        criteria:'§7.4 exige determinar qué comunicar sobre compliance (a quién, cuándo, cómo), tanto internamente como con partes externas. La comunicación debe ser coherente y veraz. Evidencia esperada: plan de comunicación de compliance, registros de comunicaciones internas/externas, informes de compliance publicados o reportados a reguladores.' },
+      { id:'sop5', label:'Información documentada (§7.5)',
+        criteria:'§7.5 exige que el sistema de compliance incluya la información documentada requerida por la norma y la determinada por la organización como necesaria, controlando su creación, actualización, distribución y protección. Evidencia esperada: inventario documental, control de versiones, procedimientos de gestión documental, accesibilidad de documentos a personas pertinentes.' },
     ]
   },
   { id:'operacion', label:'Operación', icon:'◈', color:'#ef4444',
     elements:[
-      { id:'op1', label:'Controles operacionales implementados (§8.1-8.2)' },
-      { id:'op2', label:'Canal de denuncias / Whistleblowing (§8.3)' },
-      { id:'op3', label:'Procesos de investigación (§8.4)' },
-      { id:'op4', label:'Due diligence de terceros (§8.1)' },
-      { id:'op5', label:'Código de conducta y procedimientos (§8.1)' },
+      { id:'op1', label:'Controles operacionales implementados (§8.1-8.2)',
+        criteria:'§8.1-8.2 exigen planificar, implementar, controlar y revisar los procesos necesarios para cumplir con los requisitos del sistema y ejecutar las acciones identificadas en planificación. Deben existir controles documentados para gestionar los riesgos de compliance en los procesos críticos. Evidencia esperada: matriz de controles, procedimientos operativos, evidencias de ejecución de controles, registros de supervisión.' },
+      { id:'op2', label:'Canal de denuncias / Whistleblowing (§8.3)',
+        criteria:'§8.3 exige establecer, implementar y mantener procesos accesibles y fiables para que las personas puedan informar de posibles incumplimientos de compliance (whistleblowing), garantizando: accesibilidad a empleados e interesados externos, confidencialidad y anonimato, protección contra represalias, seguimiento de las denuncias recibidas y retroalimentación al denunciante. Evidencia esperada: procedimiento de canal de denuncias documentado, canales disponibles (web, teléfono, email), política de no represalias, protocolo de investigación de denuncias, métricas de uso del canal.' },
+      { id:'op3', label:'Procesos de investigación (§8.4)',
+        criteria:'§8.4 exige que la organización establezca, implemente y mantenga un proceso para investigar los posibles incumplimientos de compliance identificados, tanto por el canal de denuncias como por otras vías. El proceso debe ser objetivo, documentado y derivar en acciones. Evidencia esperada: procedimiento de investigación interna, criterios de apertura/cierre, registro de investigaciones, roles de investigador, plazos definidos, medidas correctoras.' },
+      { id:'op4', label:'Due diligence de terceros (§8.1)',
+        criteria:'§8.1 exige que la organización implemente controles de compliance para terceros (proveedores, socios, agentes, distribuidores) proporcionados al riesgo que representan, incluyendo evaluación previa y seguimiento continuo. Evidencia esperada: procedimiento de due diligence de terceros, cuestionarios de evaluación, clasificación de terceros por riesgo, registros de evaluaciones realizadas, cláusulas de compliance en contratos.' },
+      { id:'op5', label:'Código de conducta y procedimientos (§8.1)',
+        criteria:'§8.1 exige que la organización disponga de un código de conducta u otros procedimientos equivalentes que establezcan las expectativas de comportamiento en materia de compliance para todos los miembros de la organización. Evidencia esperada: código de conducta aprobado y difundido, confirmaciones de adhesión, políticas específicas (conflictos de interés, regalos, etc.), procedimientos operativos de compliance.' },
     ]
   },
   { id:'evaluacion', label:'Evaluación', icon:'◉', color:'#06b6d4',
     elements:[
-      { id:'ev1', label:'Monitorización y medición de compliance (§9.1)' },
-      { id:'ev2', label:'KPIs/KRIs de compliance definidos (§9.1.3)' },
-      { id:'ev3', label:'Reporting de compliance (§9.1.4)' },
-      { id:'ev4', label:'Auditoría interna del sistema (§9.2)' },
-      { id:'ev5', label:'Revisión por la dirección (§9.3)' },
+      { id:'ev1', label:'Monitorización y medición de compliance (§9.1)',
+        criteria:'§9.1 exige que la organización evalúe el rendimiento del sistema de compliance y la eficacia de los controles, determinando qué monitorizar/medir, los métodos de análisis/evaluación, cuándo y quién. Evidencia esperada: programa de monitorización continua, herramientas de seguimiento, informes periódicos de rendimiento, revisión de eficacia de controles.' },
+      { id:'ev2', label:'KPIs/KRIs de compliance definidos (§9.1.3)',
+        criteria:'§9.1.3 exige que la organización defina indicadores clave de rendimiento (KPIs) y/o indicadores de riesgo (KRIs) de compliance que permitan medir objetivamente el desempeño del sistema. Evidencia esperada: cuadro de mando de compliance con indicadores definidos, umbrales, frecuencia de medición, responsables y series históricas.' },
+      { id:'ev3', label:'Reporting de compliance (§9.1.4)',
+        criteria:'§9.1.4 exige que la organización genere informes de compliance para las partes interesadas pertinentes (órgano de gobierno, alta dirección, reguladores) con la frecuencia adecuada. Evidencia esperada: informes periódicos de compliance al órgano de gobierno, memorias de compliance, informes a reguladores, actas de presentación ante comités.' },
+      { id:'ev4', label:'Auditoría interna del sistema (§9.2)',
+        criteria:'§9.2 exige que la organización lleve a cabo auditorías internas del sistema de compliance a intervalos planificados para determinar si el sistema es conforme con los requisitos y se implementa y mantiene eficazmente. Evidencia esperada: programa anual de auditoría interna de compliance, informes de auditoría, hallazgos documentados, planes de acción correctiva derivados.' },
+      { id:'ev5', label:'Revisión por la dirección (§9.3)',
+        criteria:'§9.3 exige que la alta dirección revise el sistema de compliance a intervalos planificados para asegurar su idoneidad, adecuación y eficacia. La revisión debe incluir resultados de auditorías, incumplimientos, objetivos, riesgos y oportunidades de mejora. Evidencia esperada: actas de revisión por la dirección, agenda con todos los puntos requeridos por §9.3, decisiones y compromisos documentados.' },
     ]
   },
   { id:'mejora', label:'Mejora', icon:'↑', color:'#10b981',
     elements:[
-      { id:'mej1', label:'Mejora continua del sistema (§10.1)' },
-      { id:'mej2', label:'Gestión de no conformidades (§10.2)' },
-      { id:'mej3', label:'Acciones correctivas documentadas (§10.2)' },
+      { id:'mej1', label:'Mejora continua del sistema (§10.1)',
+        criteria:'§10.1 exige que la organización mejore continuamente la idoneidad, adecuación y eficacia del sistema de compliance. Deben existir mecanismos para identificar oportunidades de mejora y actuar sobre ellas de forma sistemática. Evidencia esperada: ciclo PDCA documentado, registro de oportunidades de mejora, mejoras implementadas con evidencias, evolución positiva de KPIs.' },
+      { id:'mej2', label:'Gestión de no conformidades (§10.2)',
+        criteria:'§10.2 exige que cuando ocurra un incumplimiento o no conformidad, la organización reaccione, evalúe si existen causas raíz, implemente acciones correctivas y revise su eficacia. El proceso debe estar documentado. Evidencia esperada: procedimiento de gestión de no conformidades, registro de incumplimientos detectados, análisis de causa raíz, acciones correctivas y seguimiento de cierre.' },
+      { id:'mej3', label:'Acciones correctivas documentadas (§10.2)',
+        criteria:'§10.2 exige que las acciones correctivas sean apropiadas a los efectos de los incumplimientos, que se documenten y que se verifique su eficacia. La organización debe retener información documentada de la naturaleza de los incumplimientos y las acciones tomadas. Evidencia esperada: ficha o registro de acción correctiva con descripción, causa, acciones, responsable, plazo y evidencia de cierre efectivo.' },
     ]
   },
 ];
@@ -1090,11 +1121,44 @@ async function syncAll(){
     renderAll();
     setStatus('Sync ✓ '+fmtTime(S.lastSync));
     document.getElementById('tb-meta').textContent = 'Sync: '+fmtTime(S.lastSync);
+
+    // Auto-analyze hits without RAG evaluation (silent background queue)
+    autoAnalyzePending();
+
   }catch(e){
     setStatus('Error sync');
     console.error('syncAll error:', e);
   }
   document.getElementById('sync-btn').textContent='⟳ Sync';
+}
+
+// ── Auto-analyze pending hits in background ───────────────────────────────────
+async function autoAnalyzePending(){
+  if(!S.cfg.mistralKey){ return; }
+  if(!S.ctx || !S.ctx.name){ return; }
+
+  const pending = S.hits.filter(h =>
+    !h.inherent_level && h.level !== 'irrelevant'
+  );
+  if(pending.length === 0) return;
+
+  console.log('[AutoAnalyze] ' + pending.length + ' hits pendientes de evaluacion RAG');
+  setStatus('Evaluando ' + pending.length + ' hits con IA...');
+
+  let done = 0;
+  for(const hit of pending.slice(0, 20)){
+    try{
+      await reAnalyzeHit(hit.id);
+      done++;
+      if(done % 3 === 0) setStatus('Evaluando hits... ' + done + '/' + Math.min(pending.length, 20));
+      await new Promise(r => setTimeout(r, 600));
+    }catch(e){
+      console.warn('[AutoAnalyze] Error en hit', hit.id, e.message);
+    }
+  }
+
+  setStatus('Sync OK ' + fmtTime(S.lastSync));
+  console.log('[AutoAnalyze] Completado: ' + done + ' hits evaluados');
 }
 
 async function syncHitsFromGitHub(){
@@ -1147,6 +1211,7 @@ function restoreLocal(){
   const cfg  = lsGet('cfg');  if(cfg)  S.cfg = {...S.cfg,...cfg};
   const ctrls= lsGet('controls'); if(ctrls) S.controls = ctrls;
   const sents= lsGet('sentences'); if(sents) S.sentences = sents;
+  const bib = lsGet('docBibliography'); if(bib) S.docBibliography = bib;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1376,12 +1441,15 @@ function renderMaturity(){
                 ${[1,2,3,4,5].map(n=>`<button class="score-btn ${s===n?'active':''}" style="${s===n?`background:${scoreColor(n)};border-color:${scoreColor(n)}`:''}" onclick="setScore('${e.id}',${n},'${d.id}')" title="${SCORE_LABELS[n]}">${n}</button>`).join('')}
               </div>
             </div>
+            ${e.criteria?`<details style="margin:4px 0 2px"><summary style="font-size:8.5px;color:var(--text-muted);cursor:pointer;letter-spacing:.5px;user-select:none">▸ Criterios ISO 37301</summary><div style="font-size:9px;color:var(--text-dim);line-height:1.6;padding:6px 0 4px;border-left:2px solid var(--border2);padding-left:8px;margin-top:4px">${esc(e.criteria)}</div></details>`:''}
             <textarea class="fi mel-evidence" id="ev-${e.id}" rows="2" placeholder="Evidencias, documentos, notas..." onchange="saveMatQuick('${e.id}','ev')">${mat['ev_'+e.id]||''}</textarea>
+            ${mat['gap_'+e.id]?`<div style="font-size:8.5px;color:var(--warn);background:rgba(245,158,11,.07);border-left:2px solid var(--warn);padding:4px 8px;border-radius:0 3px 3px 0;margin-top:3px">⚠ Gap: ${esc(mat['gap_'+e.id])}</div>`:''}
+            ${(S.docBibliography||[]).filter(b=>b.elements.includes(e.id)).length>0?`<div style="font-size:8px;color:var(--text-muted);margin-top:4px">📄 ${(S.docBibliography||[]).filter(b=>b.elements.includes(e.id)).map(b=>`<span title="${b.date}" style="color:var(--accent)">${esc(b.name.slice(0,35))} (${b.date})</span>`).join(', ')}</div>`:''}
             <div class="mel-actions">
               <button class="btn btn-ghost btn-xs" onclick="openDocAnalysis('element','${e.id}','${e.label}')">📄 Analizar doc</button>
               <button class="btn btn-ghost btn-xs" onclick="openApFromElement('${d.label}','${e.label}')">+ Plan de acción</button>
             </div>
-          </div>`;
+          </div>`
         }).join('')}
       </div>
     </div>`;
@@ -2079,56 +2147,51 @@ Responde SOLO el JSON válido, sin texto adicional, sin bloques markdown.`;
     resultHandler = applyContextoJson;
 
   } else if(docAnalysisTarget==='madurez'){
-    // Structured JSON for all maturity dimensions
-    const existingMat = JSON.stringify(S.maturity||{});
-    const dimsDesc = DIMS.map(d=>
-      `${d.label}:\n${d.elements.map(e=>`  - ${e.id}: ${e.label}`).join('\n')}`
-    ).join('\n\n');
-
-    prompt = `Analiza el/los siguiente(s) documento(s) y evalúa la madurez del sistema de compliance ISO 37301.
-
-ESCALA: 1=No existe, 2=Inicial/Ad hoc, 3=Definido/Documentado, 4=Gestionado/Medido, 5=Optimizado
-
-DIMENSIONES Y ELEMENTOS A EVALUAR:
-${dimsDesc}
-
-EVALUACIÓN ACTUAL (complementa, no reemplaces si ya hay datos):
-${existingMat}
-
-DOCUMENTOS:
-${combinedText}
-
-Responde ÚNICAMENTE con un JSON válido. Para cada element_id incluye:
-- el campo "element_id": score (número 1-5, 0 si no hay información suficiente)
-- el campo "ev_element_id": "evidencia encontrada en el documento que justifica la puntuación"
-
-Ejemplo: {"ctx1": 3, "ev_ctx1": "El documento menciona un mapa de procesos aprobado por dirección..."}
-
-IMPORTANTE: Si ya hay puntuación para un elemento, solo actualiza si encuentras evidencia más clara. 
-Para evidencias, COMPLEMENTA el texto existente con la nueva información encontrada.
-Responde SOLO el JSON, sin texto adicional.`;
-
-    resultHandler = applyMaturityJson;
+    // Sequential per-element analysis — calls IA once per element
+    closeModal('modal-doc');
+    await analyzeMaturitySequential(combinedText, docsToAnalyze);
+    return;
 
   } else if(docAnalysisTarget==='element'){
-    // Single element analysis
+    // Single element analysis with full ISO criteria
+    const elemDef = DIMS.flatMap(d=>d.elements).find(e=>e.id===docAnalysisElementId);
     const existingEv = document.getElementById('ev-'+docAnalysisElementId)?.value||'';
-    prompt = `Analiza el/los siguiente(s) documento(s) y evalúa el nivel de madurez del elemento de compliance:
+    const criteria = elemDef?.criteria || '';
 
-ELEMENTO: "${docAnalysisElementLabel}"
-ESCALA: 1=No existe, 2=Inicial/Ad hoc, 3=Definido/Documentado, 4=Gestionado/Medido, 5=Optimizado
+    prompt = `Eres un auditor experto en compliance ISO 37301. Evalúa el nivel de madurez del siguiente elemento.
 
-EVIDENCIA EXISTENTE (complementa):
-${existingEv||'Ninguna aún'}
+ELEMENTO A EVALUAR: "${docAnalysisElementLabel}"
+CLAUSULA ISO 37301: ${elemDef?.label||docAnalysisElementLabel}
 
-DOCUMENTOS:
+CRITERIOS NORMATIVOS (lo que exige la ISO 37301 para este elemento):
+${criteria}
+
+ESCALA DE MADUREZ:
+1 = No existe / No hay evidencia en el documento
+2 = Inicial / Mencionado pero sin documentar ni formalizar
+3 = Definido / Documentado formalmente (procedimiento, política o proceso escrito)
+4 = Gestionado / Implementado con seguimiento, métricas o evidencias de funcionamiento
+5 = Optimizado / Revisado, mejorado continuamente, con indicadores y ciclo de mejora
+
+INSTRUCCIONES DE EVALUACIÓN:
+- Evalúa SOLO contra los criterios normativos indicados arriba
+- Busca evidencias concretas en el documento (citas, referencias, procesos descritos)
+- Si el documento ES el procedimiento del elemento, puntúa según su completitud y profundidad
+- Si el documento no aporta información sobre este elemento, devuelve score: 0
+- Sé riguroso: mencionar algo no equivale a tenerlo implementado (score 3 requiere documentación formal)
+
+EVIDENCIA PREVIA (complementa sin repetir):
+${existingEv||'Sin evidencia previa'}
+
+DOCUMENTO A ANALIZAR:
 ${combinedText}
 
-Responde ÚNICAMENTE con un JSON válido:
+Responde ÚNICAMENTE con JSON válido:
 {
-  "score": <número 1-5>,
-  "justification": "justificación de la puntuación con evidencias concretas del documento",
-  "evidence": "texto de evidencia específica encontrada en el documento"
+  "score": <número 0-5>,
+  "justification": "Justificación técnica referenciando los criterios normativos y las evidencias encontradas",
+  "evidence": "Cita o descripción literal de la evidencia encontrada en el documento",
+  "gaps": "Qué falta para alcanzar el siguiente nivel de madurez según la ISO 37301"
 }
 
 Responde SOLO el JSON, sin texto adicional.`;
@@ -2142,11 +2205,9 @@ Responde SOLO el JSON, sin texto adicional.`;
     // Parse JSON safely
     let parsed;
     try{
-      // Strip markdown code blocks if present
-      const clean = raw.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+      const clean = raw.replace(/\`\`\`json\n?/g,'').replace(/\`\`\`\n?/g,'').trim();
       parsed = JSON.parse(clean);
     }catch(e){
-      // Try to extract JSON from response
       const match = raw.match(/\{[\s\S]*\}/);
       if(match) parsed = JSON.parse(match[0]);
       else throw new Error('La IA no devolvió JSON válido. Respuesta: '+raw.slice(0,200));
@@ -2158,6 +2219,132 @@ Responde SOLO el JSON, sin texto adicional.`;
   }catch(e){
     document.getElementById('doc-result').innerHTML=`<div class="alert alert-err">Error: ${esc(e.message)}</div>`;
   }
+}
+
+// ── Sequential maturity analysis: one IA call per element ─────────────────────
+async function analyzeMaturitySequential(combinedText, docsToAnalyze){
+  const allElements = DIMS.flatMap(d => d.elements);
+  const totalElements = allElements.length;
+  let processed = 0;
+  const results = {}; // {elemId: {score, evidence, gaps}}
+
+  // Register documents in bibliography
+  const docDate = new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const docEntry = {
+    id: 'doc-'+Date.now(),
+    name: docsToAnalyze.map(d=>d.name).join(' + '),
+    date: docDate,
+    dateISO: new Date().toISOString(),
+    elements: [],
+    summary: ''
+  };
+
+  // Show progress UI in maturity page
+  const progressId = 'mat-seq-progress';
+  let progressEl = document.getElementById(progressId);
+  if(!progressEl){
+    const matAlert = document.getElementById('mat-alert');
+    if(matAlert){
+      matAlert.innerHTML = `
+        <div id="${progressId}" style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:12px;margin-bottom:10px">
+          <div style="font-size:10px;color:var(--text-muted);margin-bottom:8px">Analizando elemento a elemento con ISO 37301...</div>
+          <div style="background:var(--bg);border-radius:3px;height:6px;overflow:hidden">
+            <div id="mat-seq-bar" style="height:100%;background:var(--accent);width:0%;transition:width .3s"></div>
+          </div>
+          <div id="mat-seq-label" style="font-size:9px;color:var(--text-dim);margin-top:6px">Iniciando...</div>
+        </div>`;
+      progressEl = document.getElementById(progressId);
+    }
+  }
+
+  function updateProgress(label){
+    const pct = Math.round((processed/totalElements)*100);
+    const bar = document.getElementById('mat-seq-bar');
+    const lbl = document.getElementById('mat-seq-label');
+    if(bar) bar.style.width = pct+'%';
+    if(lbl) lbl.textContent = `${processed}/${totalElements} — ${label}`;
+  }
+
+  for(const elem of allElements){
+    updateProgress(elem.label.slice(0,50));
+
+    const existingEv = S.maturity?.['ev_'+elem.id] || '';
+    const prompt = `Eres un auditor experto en compliance ISO 37301. Evalúa el nivel de madurez del siguiente elemento basándote ESTRICTAMENTE en los criterios normativos.
+
+ELEMENTO: "${elem.label}"
+
+CRITERIOS NORMATIVOS ISO 37301:
+${elem.criteria}
+
+ESCALA DE MADUREZ:
+1 = No existe / Sin evidencia en el documento
+2 = Inicial / Mencionado informalmente, sin documentar
+3 = Definido / Documentado formalmente (procedimiento, política escrita)
+4 = Gestionado / Implementado con seguimiento, métricas o controles verificables
+5 = Optimizado / Con ciclo de mejora continua, indicadores y revisión periódica
+
+INSTRUCCIONES:
+- Evalúa SOLO contra los criterios normativos de arriba
+- Score 0 si el documento no aporta ninguna información sobre este elemento
+- Score 3 requiere evidencia de documentación formal (no solo mención)
+- Score 4 requiere evidencia de implementación y seguimiento activo
+- Cita evidencias literales del documento cuando existan
+
+DOCUMENTO:
+${combinedText.slice(0,8000)}
+
+Responde SOLO con JSON:
+{"score":<0-5>,"evidence":"evidencia literal del documento o vacío si no hay","gaps":"qué falta para el siguiente nivel según ISO 37301"}`;
+
+    try{
+      const raw = await callMistral(prompt, 600);
+      const clean = raw.replace(/\`\`\`json\n?/g,'').replace(/\`\`\`\n?/g,'').trim();
+      let parsed;
+      try{ parsed = JSON.parse(clean); }
+      catch(e){
+        const m = raw.match(/\{[\s\S]*?\}/);
+        parsed = m ? JSON.parse(m[0]) : {score:0,evidence:'',gaps:''};
+      }
+
+      const score = parseInt(parsed.score)||0;
+      results[elem.id] = {score, evidence:parsed.evidence||'', gaps:parsed.gaps||''};
+
+      // Apply immediately to state
+      if(!S.maturity) S.maturity={};
+      if(score > 0) S.maturity[elem.id] = score;
+      if(parsed.evidence){
+        const existing = S.maturity['ev_'+elem.id]||'';
+        S.maturity['ev_'+elem.id] = parsed.evidence.length > (existing.length*0.8)
+          ? parsed.evidence
+          : existing ? existing+'\n\n[Doc IA '+docDate+']: '+parsed.evidence : parsed.evidence;
+      }
+      if(parsed.gaps) S.maturity['gap_'+elem.id] = parsed.gaps;
+
+      if(score > 0) docEntry.elements.push(elem.id);
+
+    }catch(e){
+      console.warn('Element analysis error:', elem.id, e.message);
+    }
+
+    processed++;
+    // Small delay to avoid rate limiting
+    await new Promise(r=>setTimeout(r,300));
+  }
+
+  // Save bibliography entry
+  docEntry.summary = `Analizado ${docEntry.elements.length}/${totalElements} elementos con evidencia`;
+  if(!S.docBibliography) S.docBibliography=[];
+  S.docBibliography.push(docEntry);
+  lsSet('docBibliography', S.docBibliography);
+  await fsSet('maturity','current',S.maturity).catch(()=>{});
+
+  // Remove progress UI
+  const prog = document.getElementById('mat-seq-progress');
+  if(prog) prog.remove();
+
+  // Refresh maturity view
+  renderMaturity();
+  showAlert('mat-alert', `✓ Análisis completado: ${docEntry.elements.length} elementos con evidencia. Fuente: "${docEntry.name}" (${docDate})`, 'ok');
 }
 
 function applyContextoJson(data, preview=false){
@@ -2247,17 +2434,20 @@ function applyMaturityJson(data, preview=false){
     return;
   }
 
-  // Actually apply
+  // Actually apply — document is source of truth, always update when AI finds evidence
   if(!S.maturity) S.maturity={};
   DIMS.forEach(d=>d.elements.forEach(e=>{
-    if(data[e.id] && data[e.id]>0){
-      // Only update score if new score > existing or no existing
-      const existing = parseInt(S.maturity[e.id])||0;
-      if(data[e.id]>existing || !existing) S.maturity[e.id]=data[e.id];
+    const newScore = parseInt(data[e.id])||0;
+    if(newScore > 0){
+      S.maturity[e.id] = newScore;
     }
     if(data['ev_'+e.id]){
       const existing = S.maturity['ev_'+e.id]||'';
-      S.maturity['ev_'+e.id] = existing ? existing+'\n\n[Doc IA]: '+data['ev_'+e.id] : data['ev_'+e.id];
+      const newEv = data['ev_'+e.id];
+      // Replace if new evidence is more informative (longer), else append
+      S.maturity['ev_'+e.id] = newEv.length > (existing.length * 0.8)
+        ? newEv
+        : existing ? existing+'\n\n[Doc IA]: '+newEv : newEv;
     }
   }));
 
