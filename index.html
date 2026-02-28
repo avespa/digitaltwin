@@ -431,6 +431,23 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
       </div>
     </div>
 
+    <!-- Filter bar -->
+    <div class="card mb14" style="padding:12px 16px">
+      <div class="flex ic gap8 flex-wrap">
+        <span style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);flex-shrink:0">Filtrar:</span>
+        <button class="btn btn-ghost btn-xs mat-filter-btn active" data-filter="all" onclick="setMatFilter('all')">Todos</button>
+        <button class="btn btn-ghost btn-xs mat-filter-btn" data-filter="0" onclick="setMatFilter('0')" style="color:var(--text-muted)">Sin evaluar</button>
+        <button class="btn btn-ghost btn-xs mat-filter-btn" data-filter="1" onclick="setMatFilter('1')" style="color:var(--danger)">1 — No existe</button>
+        <button class="btn btn-ghost btn-xs mat-filter-btn" data-filter="2" onclick="setMatFilter('2')" style="color:var(--warn)">2 — Inicial</button>
+        <button class="btn btn-ghost btn-xs mat-filter-btn" data-filter="3" onclick="setMatFilter('3')" style="color:#eab308">3 — Definido</button>
+        <button class="btn btn-ghost btn-xs mat-filter-btn" data-filter="4" onclick="setMatFilter('4')" style="color:var(--accent2)">4 — Gestionado</button>
+        <button class="btn btn-ghost btn-xs mat-filter-btn" data-filter="5" onclick="setMatFilter('5')" style="color:var(--accent)">5 — Optimizado</button>
+        <div style="flex:1"></div>
+        <button class="btn btn-ghost btn-xs" onclick="collapseAllDims(true)">⊟ Plegar todos</button>
+        <button class="btn btn-ghost btn-xs" onclick="collapseAllDims(false)">⊞ Desplegar todos</button>
+      </div>
+    </div>
+
     <div id="mat-dimensions"></div>
   </div>
 
@@ -1070,6 +1087,48 @@ function calcGlobalScore(){
   return scores.length ? scores.reduce((a,b)=>a+b,0)/scores.length : 0;
 }
 
+let matFilter = 'all';
+
+function setMatFilter(f){
+  matFilter = f;
+  document.querySelectorAll('.mat-filter-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.filter===f);
+  });
+  applyMatFilter();
+}
+
+function applyMatFilter(){
+  const mat = S.maturity||{};
+  document.querySelectorAll('.mel[data-elem-id]').forEach(el=>{
+    const id = el.dataset.elemId;
+    const score = parseInt(mat[id])||0;
+    let show = true;
+    if(matFilter==='0') show = score===0;
+    else if(matFilter!=='all') show = score===parseInt(matFilter);
+    el.style.display = show ? '' : 'none';
+  });
+
+  // Hide whole dim card if all elements hidden
+  DIMS.forEach(d=>{
+    const body = document.getElementById('dim-body-'+d.id);
+    if(!body) return;
+    const visible = [...body.querySelectorAll('.mel')].some(el=>el.style.display!=='none');
+    const card = body.closest('.card');
+    if(card) card.style.display = visible ? '' : 'none';
+  });
+}
+
+function collapseAllDims(collapse){
+  DIMS.forEach(d=>{
+    const body = document.getElementById('dim-body-'+d.id);
+    if(body) body.style.display = collapse ? 'none' : '';
+  });
+}
+
+function scoreColor(s){
+  return {1:'var(--danger)',2:'var(--warn)',3:'#eab308',4:'var(--accent2)',5:'var(--accent)'}[s]||'var(--text-muted)';
+}
+
 function renderMaturity(){
   const mat = S.maturity||{};
   drawRadar('radar-mat', getDimScores());
@@ -1079,53 +1138,114 @@ function renderMaturity(){
   const container = document.getElementById('mat-dimensions');
   container.innerHTML = DIMS.map(d=>{
     const dimScore = getDimScores()[DIMS.indexOf(d)];
+    const dimColor = dimScore>=4?'var(--accent)':dimScore>=3?'#eab308':dimScore>=2?'var(--warn)':dimScore>0?'var(--danger)':d.color;
     return `
     <div class="card mb14">
       <div class="card-title" style="cursor:pointer" onclick="toggleDim('dim-body-${d.id}')">
         <span class="card-title-left">
           <span style="color:${d.color};font-size:14px">${d.icon}</span>
-          ${d.label}
+          <span style="font-family:var(--font-ui);font-weight:700">${d.label}</span>
           <span style="font-size:10px;color:var(--text-muted);font-weight:400">§ ISO 37301</span>
         </span>
         <div class="flex ic gap8">
-          <span style="font-family:var(--font-ui);font-weight:800;color:${d.color};font-size:14px">${dimScore>0?dimScore.toFixed(1):'—'}/5</span>
-          <span style="color:var(--text-muted);font-size:12px">▾</span>
+          <div style="display:flex;gap:3px">
+            ${d.elements.map(e=>{
+              const s=parseInt(mat[e.id])||0;
+              return `<span style="width:8px;height:8px;border-radius:2px;background:${s>0?scoreColor(s):'var(--border2)'};display:inline-block" title="${e.label}: ${s||'sin evaluar'}"></span>`;
+            }).join('')}
+          </div>
+          <span style="font-family:var(--font-ui);font-weight:800;color:${dimColor};font-size:14px;min-width:36px;text-align:right">${dimScore>0?dimScore.toFixed(1):'—'}/5</span>
+          <span style="color:var(--text-muted);font-size:11px" id="dim-caret-${d.id}">▾</span>
         </div>
       </div>
       <div id="dim-body-${d.id}">
-        ${d.elements.map(e=>`
-          <div class="mel">
+        ${d.elements.map(e=>{
+          const s = parseInt(mat[e.id])||0;
+          const sc = s>0?scoreColor(s):'var(--border2)';
+          return `
+          <div class="mel" data-elem-id="${e.id}">
             <div class="mel-head">
-              <span class="mel-name">${e.label}</span>
+              <div style="display:flex;align-items:center;gap:6px;flex:1">
+                <span style="width:10px;height:10px;border-radius:2px;background:${sc};flex-shrink:0;display:inline-block"></span>
+                <span class="mel-name">${e.label}</span>
+                ${s>0?`<span style="font-size:9px;color:${sc};font-weight:600">${SCORE_LABELS[s]}</span>`:'<span style="font-size:9px;color:var(--text-muted)">sin evaluar</span>'}
+              </div>
               <div class="mel-score-wrap">
-                ${[1,2,3,4,5].map(s=>`<button class="score-btn ${parseInt(mat[e.id])===s?'active':''}" onclick="setScore('${e.id}',${s},'${d.id}')" title="${SCORE_LABELS[s]}">${s}</button>`).join('')}
+                ${[1,2,3,4,5].map(n=>`<button class="score-btn ${s===n?'active':''}" style="${s===n?`background:${scoreColor(n)};border-color:${scoreColor(n)}`:''}" onclick="setScore('${e.id}',${n},'${d.id}')" title="${SCORE_LABELS[n]}">${n}</button>`).join('')}
               </div>
             </div>
-            <div class="mel-score-desc" id="sdesc-${e.id}" style="font-size:9.5px;color:var(--text-muted);margin-bottom:4px">${mat[e.id]?SCORE_LABELS[parseInt(mat[e.id])]||'':''}</div>
             <textarea class="fi mel-evidence" id="ev-${e.id}" rows="2" placeholder="Evidencias, documentos, notas..." onchange="saveMatQuick('${e.id}','ev')">${mat['ev_'+e.id]||''}</textarea>
             <div class="mel-actions">
               <button class="btn btn-ghost btn-xs" onclick="openDocAnalysis('element','${e.id}','${e.label}')">📄 Analizar doc</button>
               <button class="btn btn-ghost btn-xs" onclick="openApFromElement('${d.label}','${e.label}')">+ Plan de acción</button>
             </div>
-          </div>`).join('')}
+          </div>`;
+        }).join('')}
       </div>
     </div>`;
   }).join('');
+
+  applyMatFilter();
 }
 
 function toggleDim(id){
   const el = document.getElementById(id);
-  if(el) el.style.display = el.style.display==='none'?'':'none';
+  if(!el) return;
+  const collapsed = el.style.display==='none';
+  el.style.display = collapsed ? '' : 'none';
+  const dimId = id.replace('dim-body-','');
+  const caret = document.getElementById('dim-caret-'+dimId);
+  if(caret) caret.textContent = collapsed ? '▾' : '▸';
 }
 
 function setScore(elemId, score, dimId){
   if(!S.maturity) S.maturity={};
   S.maturity[elemId] = score;
-  document.querySelectorAll(`[onclick*="'${elemId}'"]`).forEach(btn=>{
-    btn.classList.toggle('active', parseInt(btn.textContent)===score);
-  });
-  const desc = document.getElementById('sdesc-'+elemId);
-  if(desc) desc.textContent = SCORE_LABELS[score]||'';
+  const sc = scoreColor(score);
+
+  // Update score buttons and visual elements without full re-render
+  const mel = document.querySelector(`.mel[data-elem-id="${elemId}"]`);
+  if(mel){
+    mel.querySelectorAll('.score-btn').forEach(btn=>{
+      const n = parseInt(btn.textContent);
+      const active = n===score;
+      btn.classList.toggle('active', active);
+      btn.style.background = active ? scoreColor(n) : '';
+      btn.style.borderColor = active ? scoreColor(n) : '';
+      btn.style.color = active ? '#000' : '';
+    });
+    const dot = mel.querySelector('span[style*="width:10px"]');
+    if(dot) dot.style.background = sc;
+    const labelSpan = mel.querySelector('.mel-head span[style*="font-size:9px"]');
+    if(labelSpan){
+      labelSpan.style.color = sc;
+      labelSpan.style.fontWeight = '600';
+      labelSpan.textContent = SCORE_LABELS[score]||'';
+    }
+  }
+
+  // Update dim header dots and score
+  const d = DIMS.find(x=>x.elements.some(e=>e.id===elemId));
+  if(d){
+    const dimBody = document.getElementById('dim-body-'+d.id);
+    const dimCard = dimBody ? dimBody.closest('.card') : null;
+    if(dimCard){
+      const dots = dimCard.querySelector('div[style*="display:flex;gap:3px"]');
+      if(dots){
+        dots.innerHTML = d.elements.map(e=>{
+          const s2=parseInt(S.maturity[e.id])||0;
+          return `<span style="width:8px;height:8px;border-radius:2px;background:${s2>0?scoreColor(s2):'var(--border2)'};display:inline-block" title="${e.label}: ${s2||'sin evaluar'}"></span>`;
+        }).join('');
+      }
+      const dimScores = getDimScores();
+      const di = DIMS.indexOf(d);
+      const ds = di>=0 ? dimScores[di] : 0;
+      const dc = ds>=4?'var(--accent)':ds>=3?'#eab308':ds>=2?'var(--warn)':ds>0?'var(--danger)':d.color;
+      const scoreSpan = dimCard.querySelector('span[style*="font-weight:800"]');
+      if(scoreSpan){ scoreSpan.textContent = (ds>0?ds.toFixed(1):'\u2014')+'/5'; scoreSpan.style.color=dc; }
+    }
+  }
+
   renderMatScoresSummary();
   drawRadar('radar-mat', getDimScores());
   renderRadarLegend('radar-legend-mat', false);
@@ -1642,15 +1762,23 @@ async function analyzeDocQueue(allDocs){
       risks:val('ctx-risks'), incidents:val('ctx-incidents'),
     });
 
-    prompt = `Analiza el/los siguiente(s) documento(s) y extrae información para rellenar el contexto organizacional de compliance ISO 37301.
+    prompt = `Eres un experto en compliance corporativo. Analiza EXHAUSTIVAMENTE el/los siguiente(s) documento(s) y extrae TODA la información relevante para el contexto organizacional ISO 37301.
 
-CONTEXTO ACTUAL (ya rellenado, complementa sin borrar):
+CONTEXTO ACTUAL (ya rellenado, COMPLEMENTA sin borrar lo existente):
 ${existingCtx}
 
 DOCUMENTOS A ANALIZAR:
 ${combinedText}
 
-Responde ÚNICAMENTE con un objeto JSON válido con estos campos exactos (strings en español, vacío "" si no hay info):
+INSTRUCCIONES CRÍTICAS:
+- Lee el documento completo y busca ACTIVAMENTE información para CADA campo
+- Para "incidents": busca CUALQUIER mención de sanciones, multas, expedientes, inspecciones, denuncias, investigaciones regulatorias, litigios, condenas, amonestaciones, requerimientos de reguladores, noticias negativas, conflictos legales. Si el documento menciona algo así, INCLÚYELO aunque sea implícito.
+- Para "risks": identifica riesgos de compliance mencionados explícita o implícitamente
+- Para "legal": incluye toda normativa, leyes, reguladores mencionados
+- Para "thirds": incluye proveedores, clientes, distribuidores, socios
+- No dejes campos vacíos si hay información relevante en el documento
+
+Responde ÚNICAMENTE con un objeto JSON válido con estos campos exactos (strings en español):
 {
   "name": "nombre legal de la empresa",
   "sector": "sector principal",
@@ -1666,16 +1794,16 @@ Responde ÚNICAMENTE con un objeto JSON válido con estos campos exactos (string
   "structure": "estructura organizativa",
   "culture": "cultura de compliance actual",
   "tech": "recursos tecnológicos relevantes",
-  "thirds": "relaciones con terceros",
-  "ext_parties": "partes interesadas externas y sus expectativas",
-  "int_parties": "partes interesadas internas y sus expectativas",
-  "risks": "riesgos de compliance prioritarios identificados",
-  "incidents": "historial de incidentes o sanciones relevantes",
-  "norms": ["array", "de", "normas", "aplicables"]
+  "thirds": "relaciones con terceros (proveedores, clientes, socios)",
+  "ext_parties": "partes interesadas externas y sus expectativas de compliance",
+  "int_parties": "partes interesadas internas y sus expectativas de compliance",
+  "risks": "riesgos de compliance prioritarios identificados en el documento",
+  "incidents": "IMPORTANTE: cualquier sanción, multa, expediente, inspección, investigación regulatoria, litigio, requerimiento de autoridades, incidente de compliance, o historial negativo mencionado en el documento",
+  "norms": ["array de normas/leyes/regulaciones mencionadas en el documento"]
 }
 
-IMPORTANTE: Si el campo ya tiene contenido en el contexto actual, COMPLEMENTA con la nueva información, no reemplaces.
-Responde SOLO el JSON, sin texto adicional, sin bloques de código markdown.`;
+IMPORTANTE: Si el campo ya tiene contenido en el contexto actual, COMPLEMENTA con la nueva información separada por salto de línea. No uses "" para campos que tengan información en el documento.
+Responde SOLO el JSON válido, sin texto adicional, sin bloques markdown.`;
 
     resultHandler = applyContextoJson;
 
