@@ -1,8 +1,8 @@
 {
-  "name": "digitaltwin",
-  "version": "1.0.0",
-  "private": true,
-  "engines": {
-    "node": "18.x"
-  }
+  "rewrites": [
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ]
 }
