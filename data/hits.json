@@ -475,8 +475,8 @@
     "critical_count": 8,
     "warning_count": 13,
     "info_count": 0,
-    "new_this_run": 1,
-    "articles_checked": 7,
+    "new_this_run": 0,
+    "articles_checked": 6,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -495,5 +495,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-02-28T04:17:33.216594+00:00"
+  "last_updated": "2026-02-28T06:43:09.526999+00:00"
 }
