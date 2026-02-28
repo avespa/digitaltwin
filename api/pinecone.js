@@ -43,6 +43,14 @@ export default async function handler(req, res) {
     const { id, text, metadata } = req.body;
     if (!id || !text) return res.status(400).json({ error: 'id and text required' });
 
+    // Pinecone requires ASCII-only IDs — normalize accents and special chars
+    const safeId = id
+      .normalize('NFD')                          // decompose accents: é → e +  ́
+      .replace(/[\u0300-\u036f]/g, '')          // strip accent marks
+      .replace(/[^\x00-\x7F]/g, '_')            // replace remaining non-ASCII with _
+      .replace(/\s+/g, '_')                      // spaces → underscore
+      .slice(0, 512);                             // Pinecone max ID length
+
     try {
       // 1. Generate embedding via Pinecone Inference API
       const embRes = await fetch(PC_API_HOST + '/embed', {
