@@ -1,6 +1,52 @@
 {
   "hits": [
     {
+      "id": "30064e5c339f",
+      "title": "Vox cuestiona el discurso de Page sobre corrupción tras la imputación de la exconsejera Charo Arévalo",
+      "link": "https://www.abc.es/espana/castilla-la-mancha/vox-cuestiona-discurso-page-sobre-corrupcion-tras-20260227171109-nt.html",
+      "source": "NewsAPI-Q2 · Www.abc.es",
+      "raw_date": "2026-02-27T16:11:14Z",
+      "fetched_at": "2026-02-28T18:37:42.974187+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Daño reputacional",
+        "Posible incumplimiento de ISO 37001"
+      ],
+      "norms_affected": [
+        "ISO 37001",
+        "Ley 10/2010 de prevención del blanqueo de capitales"
+      ],
+      "summary": "Vox cuestiona el discurso del presidente de Castilla-La Mancha sobre la lucha contra la corrupción tras la imputación de una exconsejera por presunto amaño de contratos.",
+      "vulnerability": "Falta de controles efectivos en la gestión de contratos públicos.",
+      "financial_impact": "Multa entre 50K€ y 500K€ por incumplimiento de normativas anticorrupción.",
+      "recommended_action": "Revisar y fortalecer los protocolos de gestión de contratos públicos y auditorías internas."
+    },
+    {
+      "id": "86fc8cbe3ba7",
+      "title": "Vocento sale de pérdidas y reformula las cuentas de 2024 tras detectar un fraude interno de casi seis millones de euros",
+      "link": "https://www.libertaddigital.com/libremercado/2026-02-27/vocento-sale-de-perdidas-y-reformula-las-cuentas-de-2024-tras-detectar-un-fraude-interno-de-casi-seis-millones-de-euros-7366399/",
+      "source": "NewsAPI-Q2 · Libertaddigital.com",
+      "raw_date": "2026-02-27T15:45:10Z",
+      "fetched_at": "2026-02-28T18:37:45.810890+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Fraude interno",
+        "Falsedad contable",
+        "Daño reputacional"
+      ],
+      "norms_affected": [
+        "Código Penal (Art. 257-261)",
+        "Ley de Sociedades de Capital (Art. 234)",
+        "ISO 37001"
+      ],
+      "summary": "Vocento detectó un fraude interno de casi seis millones de euros, reformulando cuentas de 2024. La deuda financiera neta se redujo un 72%, pero el fraude afecta a la integridad financiera y reputación.",
+      "vulnerability": "Falta de controles internos efectivos para prevenir y detectar fraudes financieros.",
+      "financial_impact": "Multa estimada entre 500K€ y 1M€ por falsedad contable y daño reputacional.",
+      "recommended_action": "Implementar auditorías internas periódicas y protocolos de detección de fraudes según ISO 37001."
+    },
+    {
       "id": "f028b6c07ef0",
       "title": "Las búsquedas de Google podrían cambiar para siempre para evitar multas en Europa",
       "link": "https://www.adslzone.net/noticias/internet/busquedas-google-cambian-multas-europa/",
@@ -584,12 +630,12 @@
     }
   ],
   "stats": {
-    "total_hits": 26,
-    "critical_count": 10,
-    "warning_count": 16,
+    "total_hits": 28,
+    "critical_count": 11,
+    "warning_count": 17,
     "info_count": 0,
-    "new_this_run": 0,
-    "articles_checked": 4,
+    "new_this_run": 2,
+    "articles_checked": 6,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -608,5 +654,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-02-28T15:26:34.437347+00:00"
+  "last_updated": "2026-02-28T18:37:50.832663+00:00"
 }
