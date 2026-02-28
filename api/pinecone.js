@@ -45,9 +45,13 @@ export default async function handler(req, res) {
 
     try {
       // 1. Generate embedding via Pinecone Inference API
-      const embRes = await fetch(PC_API_HOST + '/v1/embed', {
+      const embRes = await fetch(PC_API_HOST + '/embed', {
         method: 'POST',
-        headers: { 'Api-Key': apiKey, 'Content-Type': 'application/json' },
+        headers: {
+          'Api-Key': apiKey,
+          'Content-Type': 'application/json',
+          'X-Pinecone-Api-Version': '2025-10'
+        },
         body: JSON.stringify({
           model: PC_MODEL,
           inputs: [{ text: text.slice(0, 8000) }],
@@ -58,7 +62,7 @@ export default async function handler(req, res) {
       if (!embRes.ok) {
         const err = await embRes.text();
         console.error('Embed error:', embRes.status, err);
-        return res.status(502).json({ error: 'Embedding failed', detail: err });
+        return res.status(502).json({ error: 'Embedding failed', status: embRes.status, detail: err.slice(0, 300) });
       }
 
       const embData = await embRes.json();
@@ -93,9 +97,13 @@ export default async function handler(req, res) {
 
     try {
       // 1. Embed query
-      const embRes = await fetch(PC_API_HOST + '/v1/embed', {
+      const embRes = await fetch(PC_API_HOST + '/embed', {
         method: 'POST',
-        headers: { 'Api-Key': apiKey, 'Content-Type': 'application/json' },
+        headers: {
+          'Api-Key': apiKey,
+          'Content-Type': 'application/json',
+          'X-Pinecone-Api-Version': '2025-10'
+        },
         body: JSON.stringify({
           model: PC_MODEL,
           inputs: [{ text: text.slice(0, 2000) }],
