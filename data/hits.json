@@ -1,6 +1,119 @@
 {
   "hits": [
     {
+      "id": "f028b6c07ef0",
+      "title": "Las búsquedas de Google podrían cambiar para siempre para evitar multas en Europa",
+      "link": "https://www.adslzone.net/noticias/internet/busquedas-google-cambian-multas-europa/",
+      "source": "NewsAPI-Q1 · Adslzone.net",
+      "raw_date": "2026-02-27T11:06:07Z",
+      "fetched_at": "2026-02-28T12:52:59.632743+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Multas por incumplimiento de normativa antimonopolio",
+        "Daño reputacional",
+        "Cambios forzados en el modelo de negocio"
+      ],
+      "norms_affected": [
+        "Reglamento General de Protección de Datos (RGPD)",
+        "Reglamento de Defensa de la Competencia de la UE"
+      ],
+      "summary": "Google podría enfrentar multas significativas por incumplimiento de normativas antimonopolio en la UE. La empresa está considerando cambios en sus resultados de búsqueda para evitar sanciones. Esto podría afectar su modelo de negocio y reputación.",
+      "vulnerability": "Falta de cumplimiento con las normativas de competencia de la UE y posibles deficiencias en la protección de datos.",
+      "financial_impact": "Multas que podrían superar los 500.000€, dependiendo de la gravedad y la persistencia de las infracciones.",
+      "recommended_action": "El Compliance Officer debe revisar y asegurar el cumplimiento de las normativas antimonopolio y de protección de datos, implementando auditorías internas y ajustando las prácticas comerciales para evitar sanciones."
+    },
+    {
+      "id": "d5b5180ee5ba",
+      "title": "El PP llamará a declarar al Senado a Montero por la SEPI y Pardo de Vera tras el informe de la UCO",
+      "link": "https://www.abc.es/espana/pp-llamara-declarar-senado-montero-sepi-pardo-20260227134022-nt.html",
+      "source": "NewsAPI-Q2 · Www.abc.es",
+      "raw_date": "2026-02-27T12:40:29Z",
+      "fetched_at": "2026-02-28T12:53:04.405441+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Riesgo reputacional",
+        "Riesgo legal y regulatorio"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Código Penal español"
+      ],
+      "summary": "El PP convoca a declarar a la ministra de Hacienda por presuntos casos de corrupción en la SEPI, lo que podría afectar a la reputación de la administración pública y generar riesgos legales.",
+      "vulnerability": "Falta de controles internos efectivos en la gestión de participaciones públicas y transparencia en la toma de decisiones.",
+      "financial_impact": "Multas y sanciones que podrían ascender a entre 50.000€ y 500.000€, dependiendo de la gravedad de los hechos.",
+      "recommended_action": "El Compliance Officer debe revisar y fortalecer los protocolos de transparencia y control en la gestión de participaciones públicas, asegurando el cumplimiento de la normativa anticorrupción."
+    },
+    {
+      "id": "60c897535f47",
+      "title": "Ibai Llanos, investigado por la CNMC tras un descuido publicitario con Coca-Cola",
+      "link": "https://es.gizmodo.com/ibai-llanos-investigado-por-la-cnmc-tras-un-descuido-publicitario-con-coca-cola-2000223322",
+      "source": "NewsAPI-Q2 · Gizmodo.com",
+      "raw_date": "2026-02-27T12:15:34Z",
+      "fetched_at": "2026-02-28T12:53:07.312165+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Publicidad encubierta",
+        "Incumplimiento de normativa CNMC"
+      ],
+      "norms_affected": [
+        "Ley 34/2002 de Servicios de la Sociedad de la Información y de Comercio Electrónico",
+        "Artículo 20 de la Ley General de Publicidad"
+      ],
+      "summary": "Ibai Llanos está siendo investigado por la CNMC por posible publicidad encubierta con Coca-Cola, lo que podría afectar a la transparencia en publicidad y la confianza de los consumidores.",
+      "vulnerability": "Falta de protocolos claros para identificar y declarar publicidad en contenidos digitales.",
+      "financial_impact": "Multa estimada entre 50.000€ y 500.000€ para una empresa española media.",
+      "recommended_action": "Revisar y actualizar políticas de publicidad encubierta, formar a influencers y colaboradores, y auditar contenidos pasados para evitar riesgos legales."
+    },
+    {
+      "id": "af6d234dc2d9",
+      "title": "El PP abre una nueva comisión de investigación en el Senado sobre la corrupción en la SEPI y cita a la vicepresidenta Montero",
+      "link": "https://www.elespanol.com/espana/politica/20260227/pp-abre-nueva-comision-investigacion-senado-corrupcion-sepi-cita-vicepresidenta-montero/1003744148769_0.html",
+      "source": "NewsAPI-Q2 · Elespanol.com",
+      "raw_date": "2026-02-27T12:08:58Z",
+      "fetched_at": "2026-02-28T12:53:11.058170+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Daño reputacional",
+        "Posibles sanciones regulatorias",
+        "Riesgo de incumplimiento normativo"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "ISO 37001",
+        "UNE 19601"
+      ],
+      "summary": "El PP abre una nueva comisión de investigación en el Senado sobre corrupción en la SEPI, citando a la vicepresidenta Montero y a la expresidenta de Adif. Plus Ultra prescindió y volvió a fichar a un directivo vinculado a una investigación judicial.",
+      "vulnerability": "Falta de controles efectivos en procesos de contratación y gestión de altos cargos",
+      "financial_impact": "Multas entre 50K€ y 500K€ por incumplimiento de normativas anticorrupción",
+      "recommended_action": "Revisar y fortalecer los protocolos de compliance en la SEPI y empresas públicas, asegurando transparencia en procesos de contratación y gestión de personal."
+    },
+    {
+      "id": "17b65ae2d96b",
+      "title": "Podría enfrentarse a una multa de hasta 750.000 euros",
+      "link": "https://www.mundodeportivo.com/elotromundo/gente/20260227/1004137116/ibai-llanos-cuerda-floja-enfrentarse-multa-750-000-euros-dct.html",
+      "source": "NewsAPI-Q2 · Mundodeportivo.com",
+      "raw_date": "2026-02-27T10:25:14Z",
+      "fetched_at": "2026-02-28T12:53:13.696716+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Multa económica significativa",
+        "Daño reputacional",
+        "Posible impacto en patrocinadores"
+      ],
+      "norms_affected": [
+        "Ley General de Comunicación Audiovisual"
+      ],
+      "summary": "La CNMC ha iniciado un expediente sancionador contra Ibai Llanos por presunta infracción grave de la Ley General de Comunicación Audiovisual, con una posible multa de hasta 750.000 euros.",
+      "vulnerability": "Falta de cumplimiento normativo en contenidos audiovisuales",
+      "financial_impact": "750.000 euros",
+      "recommended_action": "Revisar y ajustar los contenidos audiovisuales a la normativa vigente, y consultar con un experto en compliance para evaluar riesgos legales."
+    },
+    {
       "id": "5295e47f1053",
       "title": "Ibai Llanos ironiza con Sánchez tras el expediente de la CNMC: \"¿Cómo le haces esto a un hermano?\"",
       "link": "https://www.libertaddigital.com/libremercado/2026-02-27/ibai-llanos-ironiza-con-sanchez-tras-el-expediente-de-la-cnmc-como-le-haces-esto-a-un-hermano-7365937/",
@@ -471,12 +584,12 @@
     }
   ],
   "stats": {
-    "total_hits": 21,
-    "critical_count": 8,
-    "warning_count": 13,
+    "total_hits": 26,
+    "critical_count": 10,
+    "warning_count": 16,
     "info_count": 0,
-    "new_this_run": 0,
-    "articles_checked": 6,
+    "new_this_run": 5,
+    "articles_checked": 10,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -495,5 +608,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-02-28T09:29:57.996461+00:00"
+  "last_updated": "2026-02-28T12:53:19.658264+00:00"
 }
