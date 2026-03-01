@@ -357,19 +357,18 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     <div style="display:grid;grid-template-columns:1fr 260px;gap:14px;margin-bottom:14px">
 
       <!-- Ciudad pixel art -->
-      <div class="card" style="position:relative;overflow:hidden;padding:0;height:290px;background:var(--bg)">
+      <div class="card" style="position:relative;overflow:hidden;padding:0;min-height:300px;background:var(--bg)">
         <canvas id="city-canvas" style="width:100%;height:100%;display:block;image-rendering:pixelated"></canvas>
         <div style="position:absolute;top:12px;left:12px">
           <div style="background:rgba(0,0,0,.75);backdrop-filter:blur(8px);border:1px solid var(--border2);border-radius:10px;padding:8px 14px;display:flex;align-items:center;gap:10px">
             <div>
               <div style="font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase">Health Score</div>
               <div id="health-score-val" style="font-family:var(--font-ui);font-size:28px;font-weight:800;color:var(--accent);line-height:1">100</div>
-              <div id="health-score-sub" style="font-size:8px;color:var(--text-muted);margin-top:2px"></div>
             </div>
             <canvas id="health-gauge" width="52" height="52"></canvas>
           </div>
-          <div id="health-breakdown" style="margin-top:5px;font-size:8px;display:flex;flex-wrap:wrap;gap:4px;max-width:360px;line-height:1.5"></div>
-        </div> style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);backdrop-filter:blur(8px);border:1px solid var(--border2);border-radius:6px;padding:5px 14px;font-size:10px;letter-spacing:1px;color:var(--accent);text-transform:uppercase;white-space:nowrap"></div>
+        </div>
+        <div id="city-status-label" style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);backdrop-filter:blur(8px);border:1px solid var(--border2);border-radius:6px;padding:5px 14px;font-size:10px;letter-spacing:1px;color:var(--accent);text-transform:uppercase;white-space:nowrap"></div>
       </div>
 
       <!-- Panel KPIs secundarios -->
@@ -410,15 +409,15 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
       <div class="card" style="padding:12px">
         <div style="font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">📈 Health Score — 30 días</div>
-        <canvas id="chart-health" height="60"></canvas>
+        <canvas id="chart-health" height="90"></canvas>
       </div>
       <div class="card" style="padding:12px">
         <div style="font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">📊 Hits vs Impactos</div>
-        <canvas id="chart-hits" height="60"></canvas>
+        <canvas id="chart-hits" height="90"></canvas>
       </div>
       <div class="card" style="padding:12px">
         <div style="font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">🎯 Evolución Madurez</div>
-        <canvas id="chart-madurez" height="60"></canvas>
+        <canvas id="chart-madurez" height="90"></canvas>
       </div>
     </div>
   </div>
@@ -984,7 +983,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
 
 <script>
 let hitFunnel = 'all'; // declared at top to avoid TDZ in renderHits
-var importPreviewRows = []; // var (not let) avoids TDZ when modal HTML fires onchange before script2
 // ═══════════════════════════════════════════════════════════════
 // FIREBASE INIT
 // ═══════════════════════════════════════════════════════════════
@@ -1416,41 +1414,36 @@ function renderAll(){
 // ── Health Score ─────────────────────────────────────────────
 function calcHealthScore(){
   let score = 100;
-  const hits  = S.hits || [];
+  const hits = S.hits || [];
   const plans = S.actionPlans || [];
   const ctrls = S.controls || [];
 
-  // Impactos residual ALTO sin plan de acción: -15 c/u (max -45)
+  // Impactos residual ALTO sin plan: -12 cada uno (max -48)
   const critNoplan = hits.filter(h =>
     (h.residual_level==='alto'||h.residual_level==='critical') &&
     !plans.find(p => p.hit_id===h.id && p.status!=='closed')
   );
-  score -= Math.min(critNoplan.length * 15, 45);
+  score -= Math.min(critNoplan.length * 12, 48);
 
-  // Impactos inherente MEDIO/ALTO sin analizar: -4 c/u (max -20)
+  // Impactos inherente MEDIO/ALTO sin analizar: -5 (max -20)
   const unanalyzed = hits.filter(h => isImpact(h) && !h._analyzed && !h.inherent_level);
-  score -= Math.min(unanalyzed.length * 4, 20);
+  score -= Math.min(unanalyzed.length * 5, 20);
 
-  // Planes vencidos (abiertos, due_date pasada): -8 c/u (max -24)
+  // Planes vencidos (abiertos con due_date pasada): -8 (max -24)
   const now = Date.now();
-  const overdue = plans.filter(p =>
-    p.status!=='closed' && p.due_date && new Date(p.due_date) < now
-  );
+  const overdue = plans.filter(p => p.status!=='closed' && p.due_date && new Date(p.due_date)<now);
   score -= Math.min(overdue.length * 8, 24);
 
-  // Controles sin ejecutar: penalización proporcional hasta -10
-  // (suavizado: solo se penaliza si >50% sin ejecutar)
+  // Controles sin ejecutar: hasta -15 proporcional
   if(ctrls.length > 0){
-    const noExecRatio = ctrls.filter(c => c.executed !== 'Sí').length / ctrls.length;
-    if(noExecRatio > 0.5){
-      score -= Math.round((noExecRatio - 0.5) * 20); // max -10
-    }
+    const noExec = ctrls.filter(c => c.executed !== 'Sí').length;
+    score -= Math.round((noExec / ctrls.length) * 15);
   }
 
-  // Bonus: controles ejecutados este mes: +2 c/u (max +8)
+  // Controles ejecutados este mes: +2 (max +10)
   const thisMonth = new Date(); thisMonth.setDate(1); thisMonth.setHours(0,0,0,0);
   const execRecent = ctrls.filter(c => c.exec_date && new Date(c.exec_date) >= thisMonth);
-  score += Math.min(execRecent.length * 2, 8);
+  score += Math.min(execRecent.length * 2, 10);
 
   return Math.max(0, Math.min(100, Math.round(score)));
 }
@@ -1548,393 +1541,224 @@ function renderSecondaryKpis(){
 
   const sy = document.getElementById('dash-sync-time');
   if(sy) sy.textContent = S.lastSync ? fmtTime(S.lastSync) : '—';
-
-  // Health score breakdown (shown as subtitle under score)
-  const hsBreakdown = document.getElementById('health-breakdown');
-  if(hsBreakdown){
-    const hits  = S.hits||[], plans = S.actionPlans||[], ctrls = S.controls||[];
-    const critNoplan = hits.filter(h=>(h.residual_level==='alto'||h.residual_level==='critical')&&!plans.find(p=>p.hit_id===h.id&&p.status!=='closed'));
-    const unanalyzed = hits.filter(h=>isImpact(h)&&!h._analyzed&&!h.inherent_level);
-    const now=Date.now();
-    const overdue=plans.filter(p=>p.status!=='closed'&&p.due_date&&new Date(p.due_date)<now);
-    const noExecRatio=ctrls.length?ctrls.filter(c=>c.executed!=='Sí').length/ctrls.length:0;
-    const parts=[];
-    if(critNoplan.length) parts.push(`<span style="color:var(--danger)">▼ ${critNoplan.length} críticos sin plan</span>`);
-    if(unanalyzed.length) parts.push(`<span style="color:var(--warn)">▼ ${unanalyzed.length} sin analizar</span>`);
-    if(overdue.length)    parts.push(`<span style="color:var(--warn)">▼ ${overdue.length} planes vencidos</span>`);
-    if(noExecRatio>0.5)   parts.push(`<span style="color:var(--text-muted)">▼ ${Math.round(noExecRatio*100)}% ctrls sin ejecutar</span>`);
-    if(!parts.length)     parts.push(`<span style="color:var(--accent)">✓ Sin penalizaciones activas</span>`);
-    hsBreakdown.innerHTML = parts.join(' · ');
-  }
 }
 
-// ── Ciudad Pixel Art 16-bit — SVG detallado ───────────────────
-// ── Ciudad Pixel Art 16-bit — SVG detallado ───────────────────
+// ── Ciudad Pixel Art 16-bit ───────────────────────────────────
 let cityAnimFrame = null;
 let cityTick = 0;
 
 function drawCity(score){
   const canvas = document.getElementById('city-canvas');
   if(!canvas) return;
-  if(cityAnimFrame){ cancelAnimationFrame(cityAnimFrame); cityAnimFrame=null; }
+  if(cityAnimFrame) cancelAnimationFrame(cityAnimFrame);
 
-  function resize(){
-    const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio||1;
-    const nw = Math.round(rect.width*dpr)||800;
-    const nh = Math.round(rect.height*dpr)||320;
-    if(canvas.width!==nw||canvas.height!==nh){ canvas.width=nw; canvas.height=nh; }
-  }
+  // Match canvas resolution to actual displayed size
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio||1;
+  canvas.width  = Math.round(rect.width  * dpr) || 800;
+  canvas.height = Math.round(rect.height * dpr) || 300;
+  const W = canvas.width, H = canvas.height;
 
-  const isLight = document.documentElement.getAttribute('data-theme')==='light';
   const hl = healthLabel(score);
-
-  // ── Palette ────────────────────────────────────────────────────────────────
-  const PAL = isLight ? {
-    sky1:'#8ecef5', sky2:'#c8e8f8', skyBad1:'#7a9bb0', skyBad2:'#a0b8c0',
-    ground:'#4a5e3a', road:'#5a5a5a', roadLine:'rgba(255,255,200,.5)',
-    moonSun:'#FFD700'
-  } : {
-    sky1: score>=50?'#0a1020':'#1a0808', sky2: score>=50?'#0e1828':'#250a0a',
-    skyBad1:'#1a0a0a', skyBad2:'#200c0c',
-    ground:'#141a0e', road:'#1c1c1c', roadLine:'rgba(255,255,180,.25)',
-    moonSun:'#e8f0ff'
-  };
-
-  // Building definitions — diverse 16-bit style (x, w, h, style)
-  // style: 0=glass tower, 1=brick, 2=art-deco, 3=modern flat, 4=old/ornate
-  const BLDGS = [
-    {x:0.01,w:0.07,h:0.38,s:1,c0:'#7a3020',c1:'#5a2015',win:'#ffd070',roof:0}, // brick left
-    {x:0.09,w:0.06,h:0.28,s:3,c0:'#3a6050',c1:'#2a4840',win:'#80ffcc',roof:1},
-    {x:0.16,w:0.10,h:0.55,s:0,c0:'#2a5070',c1:'#1e3d58',win:'#b0deff',roof:2}, // glass tower
-    {x:0.27,w:0.07,h:0.32,s:4,c0:'#b06030',c1:'#885020',win:'#ffd090',roof:3},
-    {x:0.35,w:0.12,h:0.68,s:2,c0:'#c09040',c1:'#907028',win:'#fff0a0',roof:4}, // art-deco tall
-    {x:0.48,w:0.06,h:0.25,s:3,c0:'#405870',c1:'#304058',win:'#90ccff',roof:1},
-    {x:0.55,w:0.11,h:0.60,s:0,c0:'#1e4060',c1:'#152e48',win:'#a0d8f0',roof:2}, // glass center
-    {x:0.67,w:0.08,h:0.35,s:1,c0:'#803828',c1:'#601c18',win:'#ffcc60',roof:0},
-    {x:0.76,w:0.07,h:0.42,s:4,c0:'#704528',c1:'#503218',win:'#ffd880',roof:3},
-    {x:0.84,w:0.09,h:0.30,s:3,c0:'#2a5848',c1:'#1e4038',win:'#70ffaa',roof:1},
-    {x:0.94,w:0.06,h:0.22,s:1,c0:'#604828',c1:'#483820',win:'#ffb060',roof:0},
-  ];
-
-  // Pedestrian state
-  if(!window._ped){
-    window._ped = [
-      {x:0.15, dir:1, speed:0.0008, color:'#3a8fe8', hatColor:'#1a4a80'},
-      {x:0.60, dir:-1,speed:0.0006, color:'#e87040', hatColor:'#a04020'},
-      {x:0.80, dir:1, speed:0.0005, color:'#40b060', hatColor:'#207040'},
-    ];
-    window._bike = {x:0.05, dir:1, speed:0.0018};
-    window._carX = -0.15;
-    window._carDir = 1;
-  }
+  const isDay = document.documentElement.getAttribute('data-theme') === 'light';
 
   function animate(){
-    resize();
     cityTick++;
     const ctx = canvas.getContext('2d');
-    const W=canvas.width, H=canvas.height;
     ctx.clearRect(0,0,W,H);
+    const S2 = W/800; // scale factor
 
-    const groundY = H*0.76;   // where ground starts
-    const streetY = H*0.82;   // top of road
-    const domeBaseY = groundY + 2;
-
-    // ── SKY ───────────────────────────────────────────────────────────────────
-    const skyG = ctx.createLinearGradient(0,0,0,groundY);
-    skyG.addColorStop(0, score>=50?PAL.sky1:PAL.skyBad1);
-    skyG.addColorStop(1, score>=50?PAL.sky2:PAL.skyBad2);
-    ctx.fillStyle=skyG; ctx.fillRect(0,0,W,groundY);
-
-    // Stars or sun
-    if(!isLight){
-      // Stars
-      ctx.fillStyle='rgba(255,255,255,.9)';
-      [[0.06,0.08],[0.15,0.04],[0.25,0.12],[0.40,0.03],[0.56,0.09],[0.72,0.05],[0.88,0.11],[0.94,0.04]].forEach(([fx,fy])=>{
-        const tw = Math.sin(cityTick*0.05+fx*20)*0.4+0.6;
-        ctx.globalAlpha=tw;
-        ctx.fillRect(fx*W, fy*H, 2, 2);
-      });
-      ctx.globalAlpha=1;
-      // Moon
-      ctx.fillStyle='#ddeeff';
-      ctx.beginPath(); ctx.arc(W*0.88, H*0.10, W*0.022, 0, Math.PI*2); ctx.fill();
-      ctx.fillStyle=PAL.sky1;
-      ctx.beginPath(); ctx.arc(W*0.90, H*0.08, W*0.017, 0, Math.PI*2); ctx.fill();
+    // ── SKY ──────────────────────────────────────────────────
+    const skyGrad = ctx.createLinearGradient(0,0,0,H*0.65);
+    if(isDay){
+      skyGrad.addColorStop(0, score>=50?'#87ceeb':'#607d8b');
+      skyGrad.addColorStop(1, score>=50?'#b0e0f0':'#90a4ae');
     } else {
-      // Sun
+      skyGrad.addColorStop(0, score>=50?'#0a0f1a':'#1a0a0a');
+      skyGrad.addColorStop(1, score>=50?'#0d1520':'#2a0a0a');
+    }
+    ctx.fillStyle = skyGrad; ctx.fillRect(0,0,W,H*0.65);
+
+    // Stars (night)
+    if(!isDay){
+      ctx.fillStyle='rgba(255,255,255,.8)';
+      const stars=[[50,30],[120,15],[200,40],[320,10],[450,25],[580,18],[700,35],[760,12],[80,55],[380,48]];
+      stars.forEach(([x,y])=>{
+        const twinkle = Math.sin(cityTick*0.05 + x) * 0.4 + 0.6;
+        ctx.globalAlpha = twinkle;
+        ctx.fillRect(x*S2, y*S2, 1.5*S2, 1.5*S2);
+      });
+      ctx.globalAlpha = 1;
+    }
+
+    // Sun / Moon
+    if(isDay){
       ctx.fillStyle='#FFD700';
-      ctx.beginPath(); ctx.arc(W*0.88, H*0.12, W*0.025, 0, Math.PI*2); ctx.fill();
-      // Rays
-      ctx.strokeStyle='rgba(255,215,0,.4)'; ctx.lineWidth=1.5;
-      for(let r=0;r<8;r++){
-        const a=r*Math.PI/4;
-        ctx.beginPath();
-        ctx.moveTo(W*0.88+Math.cos(a)*W*0.03, H*0.12+Math.sin(a)*W*0.03);
-        ctx.lineTo(W*0.88+Math.cos(a)*W*0.046, H*0.12+Math.sin(a)*W*0.046);
-        ctx.stroke();
-      }
-      // Clouds
-      if(score>=30){
-        [[0.15,0.10],[0.45,0.07],[0.68,0.13]].forEach(([cfx,cfy],ci)=>{
-          const ox = ((cityTick*0.25+ci*200)%(W+120))-60;
-          const cx2=cfx*W+ox, cy2=cfy*H, cr=W*0.055;
-          ctx.fillStyle='rgba(255,255,255,.88)';
-          ctx.beginPath(); ctx.ellipse(cx2,cy2,cr,cr*0.45,0,0,Math.PI*2); ctx.fill();
-          ctx.beginPath(); ctx.ellipse(cx2+cr*0.5,cy2-cr*0.25,cr*0.65,cr*0.38,0,0,Math.PI*2); ctx.fill();
-          ctx.beginPath(); ctx.ellipse(cx2-cr*0.4,cy2-cr*0.15,cr*0.55,cr*0.32,0,0,Math.PI*2); ctx.fill();
-        });
-      }
+      ctx.beginPath(); ctx.arc(720*S2, 45*S2, 18*S2, 0, Math.PI*2); ctx.fill();
+    } else {
+      ctx.fillStyle='#ddeeff';
+      ctx.beginPath(); ctx.arc(720*S2, 45*S2, 14*S2, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle=isDay?'#b0e0f0':'#0a0f1a';
+      ctx.beginPath(); ctx.arc(728*S2, 40*S2, 11*S2, 0, Math.PI*2); ctx.fill();
     }
 
-    // Rain
-    if(score<50){
-      const rainA=Math.min(0.5,(50-score)/50*0.6);
-      ctx.strokeStyle=`rgba(120,160,220,${rainA})`;
+    // Clouds (day only, drift slowly)
+    if(isDay && score>=30){
+      const cloudOffset = (cityTick * 0.3) % (W+120*S2);
+      [[100,40,60],[300,25,80],[600,50,50]].forEach(([cx,cy,cw])=>{
+        const x = ((cx*S2 + cloudOffset) % (W + 120*S2)) - 60*S2;
+        ctx.fillStyle='rgba(255,255,255,.85)';
+        ctx.beginPath(); ctx.ellipse(x,cy*S2,cw*S2*0.5,12*S2,0,0,Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(x+20*S2,cy*S2-8*S2,cw*S2*0.35,10*S2,0,0,Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(x-20*S2,cy*S2-4*S2,cw*S2*0.3,9*S2,0,0,Math.PI*2); ctx.fill();
+      });
+    }
+
+    // Rain (score < 50)
+    if(score < 50){
+      ctx.strokeStyle='rgba(100,150,200,.3)';
       ctx.lineWidth=1;
-      for(let r=0;r<35;r++){
-        const rx=(r*97+cityTick*3)%W;
-        const ry=(r*61+cityTick*5)%(groundY);
-        ctx.beginPath(); ctx.moveTo(rx,ry); ctx.lineTo(rx-1.5,ry+9); ctx.stroke();
+      for(let r=0;r<30;r++){
+        const rx = (r*73 + cityTick*2) % W;
+        const ry = (r*53 + cityTick*4) % (H*0.65);
+        ctx.beginPath(); ctx.moveTo(rx,ry); ctx.lineTo(rx-2*S2,ry+8*S2); ctx.stroke();
       }
     }
 
-    // ── BUILDINGS (drawn BEFORE dome) ─────────────────────────────────────────
-    BLDGS.forEach((b,bi)=>{
-      const bx=b.x*W, bw=b.w*W;
-      const bh=b.h*groundY;
-      const by=groundY-bh;
+    // ── GROUND ───────────────────────────────────────────────
+    ctx.fillStyle = isDay ? '#4a5240' : '#1a2010';
+    ctx.fillRect(0, H*0.65, W, H*0.35);
 
-      // Shadow
-      ctx.fillStyle='rgba(0,0,0,0.2)';
-      ctx.fillRect(bx+bw*0.05, by+bh*0.05, bw*0.9, bh*0.95);
+    // Road
+    ctx.fillStyle = isDay ? '#555' : '#222';
+    ctx.fillRect(0, H*0.78, W, H*0.08);
+    // Road lines
+    ctx.fillStyle='rgba(255,255,200,.4)';
+    for(let d=0;d<W;d+=60*S2){
+      const dx = (d + cityTick) % W;
+      ctx.fillRect(dx, H*0.815, 30*S2, 2*S2);
+    }
 
-      // Body gradient
-      const bGrad=ctx.createLinearGradient(bx,0,bx+bw,0);
-      bGrad.addColorStop(0, b.c0); bGrad.addColorStop(1, b.c1);
-      ctx.fillStyle=bGrad;
-      ctx.fillRect(bx,by,bw,bh);
+    // ── BUILDINGS ────────────────────────────────────────────
+    const buildings = [
+      {x:50, w:80, h:180, floors:9, color:isDay?'#4a6080':'#1a2535'},  // rascacielos izq
+      {x:150,w:60, h:130, floors:7, color:isDay?'#5a6070':'#1e2830'},
+      {x:240,w:100,h:220, floors:11,color:isDay?'#3d5570':'#162030'},  // rascacielos centro
+      {x:370,w:70, h:150, floors:8, color:isDay?'#506070':'#1c2835'},
+      {x:460,w:90, h:190, floors:10,color:isDay?'#405060':'#182233'},
+      {x:580,w:65, h:140, floors:7, color:isDay?'#4a5868':'#1a2530'},
+      {x:670,w:85, h:170, floors:9, color:isDay?'#384860':'#141e2a'},
+    ];
 
-      // Style-specific details
-      if(b.s===2){ // Art-deco: stepped crown
-        ctx.fillStyle=b.c0;
-        ctx.fillRect(bx+bw*0.1, by-bh*0.05, bw*0.8, bh*0.05);
-        ctx.fillRect(bx+bw*0.2, by-bh*0.09, bw*0.6, bh*0.04);
-        ctx.fillRect(bx+bw*0.3, by-bh*0.13, bw*0.4, bh*0.04);
-        // Spire
-        ctx.fillStyle='#d4a830';
-        ctx.beginPath();
-        ctx.moveTo(bx+bw*0.5, by-bh*0.22);
-        ctx.lineTo(bx+bw*0.44, by-bh*0.13);
-        ctx.lineTo(bx+bw*0.56, by-bh*0.13);
-        ctx.closePath(); ctx.fill();
-      }
-      if(b.s===4){ // Old/ornate: cornice
-        ctx.fillStyle='rgba(255,255,255,.12)';
-        ctx.fillRect(bx, by, bw, bh*0.04); // top band
-        ctx.fillRect(bx, by+bh*0.95, bw, bh*0.05); // base
-        // Pilasters
-        for(let p=0;p<4;p++){
-          ctx.fillStyle='rgba(0,0,0,.15)';
-          ctx.fillRect(bx+bw*(0.1+p*0.25), by+bh*0.1, bw*0.04, bh*0.85);
-        }
-      }
-      if(b.s===0){ // Glass tower: grid lines
-        ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.lineWidth=1;
-        const cols=Math.round(bw/12);
-        for(let c=1;c<cols;c++){
-          ctx.beginPath(); ctx.moveTo(bx+c*(bw/cols),by); ctx.lineTo(bx+c*(bw/cols),by+bh); ctx.stroke();
-        }
-      }
+    buildings.forEach((b,bi)=>{
+      const bx=b.x*S2, bw=b.w*S2, bh=b.h*S2;
+      const by=H*0.65-bh+4*S2;
 
-      // Roof details
-      if(b.roof===2){ // antenna
-        ctx.fillStyle=isLight?'#607080':'#2a3a4a';
-        ctx.fillRect(bx+bw*0.48, by-bh*0.12, bw*0.04, bh*0.12);
-        const blink=Math.sin(cityTick*0.08+bi*1.2)>0.3;
-        ctx.fillStyle=blink?'#ef4444':'rgba(239,68,68,.25)';
-        ctx.beginPath(); ctx.arc(bx+bw*0.5, by-bh*0.12, 3, 0, Math.PI*2); ctx.fill();
-      }
-      if(b.roof===4){ // water tower
-        ctx.fillStyle='#704020';
-        ctx.fillRect(bx+bw*0.55, by-bh*0.09, bw*0.2, bh*0.09);
-        ctx.beginPath();
-        ctx.ellipse(bx+bw*0.65, by-bh*0.09, bw*0.12, bh*0.04, 0, 0, Math.PI*2);
-        ctx.fillStyle='#5a3018'; ctx.fill();
+      // Building body
+      ctx.fillStyle=b.color;
+      ctx.fillRect(bx, by, bw, bh);
+
+      // Building outline (pixel art feel)
+      ctx.strokeStyle=isDay?'rgba(0,0,0,.2)':'rgba(255,255,255,.05)';
+      ctx.lineWidth=1; ctx.strokeRect(bx,by,bw,bh);
+
+      // Antenna on tall buildings
+      if(b.h>160){
+        ctx.fillStyle=isDay?'#8090a0':'#304050';
+        ctx.fillRect(bx+bw/2-1.5*S2, by-18*S2, 3*S2, 18*S2);
+        // Blinking light
+        const blink = Math.sin(cityTick*0.08+bi)>0;
+        ctx.fillStyle=blink?'#ef4444':'rgba(239,68,68,.3)';
+        ctx.beginPath(); ctx.arc(bx+bw/2,by-18*S2,2.5*S2,0,Math.PI*2); ctx.fill();
       }
 
-      // Windows
-      const floorH = Math.max(8, bh/14);
-      const winW=Math.max(3,bw*0.09), winH=Math.max(4,floorH*0.6);
-      const wCols=Math.max(2,Math.floor((bw-6)/(winW+4)));
-      const wRows=Math.floor((bh-10)/floorH);
-      for(let wr=0;wr<wRows;wr++){
-        for(let wc=0;wc<wCols;wc++){
-          const wx=bx+3+(bw-3-(wCols*(winW+4)))/2+wc*(winW+4);
-          const wy=by+5+wr*floorH;
-          const litSeed=(bi*31+wr*7+wc*13)%17;
-          const lit = score>75 ? litSeed<14
-            : score>50 ? litSeed<9
-            : score>25 ? litSeed<5
-            : litSeed<2;
+      // Windows grid
+      const floorH = bh/b.floors;
+      const winW=5*S2, winH=6*S2, colW=10*S2;
+      const cols = Math.floor((bw-8*S2)/colW);
+      for(let f=0;f<b.floors-1;f++){
+        for(let c=0;c<cols;c++){
+          const wx = bx+4*S2+c*colW;
+          const wy = by+4*S2+f*floorH;
+          // Window lit or dark depends on health + randomish pattern
+          const lit = score>70
+            ? true
+            : score>40
+              ? ((bi*7+f*3+c*5)%10) < Math.round(score/15)
+              : ((bi*7+f*3+c*5)%10) < 2;
           if(lit){
-            ctx.fillStyle=isLight?'rgba(200,230,255,.8)':b.win;
+            // Night: warm yellow glow; Day: reflective blue
+            ctx.fillStyle = isDay ? 'rgba(180,210,240,.7)' : '#ffd060';
             ctx.fillRect(wx,wy,winW,winH);
-            if(!isLight){
-              // glow
-              ctx.fillStyle='rgba(255,220,80,.12)';
-              ctx.fillRect(wx-1,wy+winH,winW+2,3);
+            if(!isDay){
+              ctx.fillStyle='rgba(255,200,50,.3)';
+              ctx.fillRect(wx-1*S2,wy+winH,winW+2*S2,2*S2);
             }
           } else {
-            ctx.fillStyle=isLight?'rgba(0,0,0,.25)':'rgba(10,18,28,.85)';
+            ctx.fillStyle=isDay?'rgba(0,0,0,.3)':'rgba(0,0,0,.6)';
             ctx.fillRect(wx,wy,winW,winH);
           }
         }
       }
 
-      // Smoke (score < 60)
-      if(score<60 && bi%3===0){
-        const sA=Math.min(0.55,(60-score)/60*0.7);
-        for(let s=0;s<5;s++){
-          const sOff=(cityTick*0.7+s*18)%70;
-          const sr2=(5+sOff*0.55);
-          ctx.fillStyle=`rgba(70,70,70,${(sA*(1-sOff/70)).toFixed(2)})`;
+      // Smoke (bad score)
+      if(score<60 && bi%2===0){
+        const smokeAlpha = (60-score)/60*0.5;
+        const smokeX = bx+bw/2;
+        const smokeY = by - 5*S2;
+        for(let s=0;s<4;s++){
+          const sOff = (cityTick*0.8+s*15)%50;
+          const sAlpha = smokeAlpha*(1-sOff/50);
+          const sRadius = (4+sOff*0.5)*S2;
+          ctx.fillStyle=`rgba(80,80,80,${sAlpha.toFixed(2)})`;
           ctx.beginPath();
-          ctx.arc(bx+bw*0.5+Math.sin(s*1.8)*4, by-sOff, sr2, 0, Math.PI*2);
+          ctx.arc(smokeX+Math.sin(s*1.5)*4*S2, smokeY-sOff*S2, sRadius, 0, Math.PI*2);
           ctx.fill();
         }
       }
     });
 
-    // ── DOME — drawn AFTER buildings, transparent fill only ───────────────────
-    const dCx=W*0.5, dCy=domeBaseY;
-    const dRx=W*0.52, dRy=groundY*0.98; // ellipse radii
-    const domeColor=hl.color;
+    // ── DOME (CÚPULA) ─────────────────────────────────────────
+    const domeX=W/2, domeY=H*0.65+2*S2, domeR=320*S2;
+    const domeScore01 = score/100;
+    const domeColor = hl.color;
 
-    // Inner glow (radial, very subtle)
-    const glowA=score>=80?0.06:score>=50?0.04:0.03;
-    const glowG=ctx.createRadialGradient(dCx,dCy-dRy*0.5,dRy*0.2, dCx,dCy,dRx*1.1);
-    glowG.addColorStop(0,`${domeColor}00`);
-    glowG.addColorStop(0.7,`${domeColor}${Math.round(glowA*255).toString(16).padStart(2,'0')}`);
-    glowG.addColorStop(1,`${domeColor}00`);
-    ctx.save();
-    ctx.beginPath();
-    ctx.ellipse(dCx,dCy,dRx*1.05,dRy*1.05,0,Math.PI,Math.PI*2);
-    ctx.closePath();
-    ctx.fillStyle=glowG;
-    ctx.fill();
-    ctx.restore();
+    // Dome glow
+    const glowA = score>=80 ? 0.15 : score>=50 ? 0.10 : 0.06;
+    const glowGrad = ctx.createRadialGradient(domeX,domeY,domeR*0.6,domeX,domeY,domeR);
+    glowGrad.addColorStop(0, `${domeColor}00`);
+    glowGrad.addColorStop(0.8, `${domeColor}${Math.round(glowA*255).toString(16).padStart(2,'0')}`);
+    glowGrad.addColorStop(1, `${domeColor}00`);
+    ctx.beginPath(); ctx.arc(domeX,domeY,domeR,Math.PI,Math.PI*2); ctx.fillStyle=glowGrad; ctx.fill();
 
-    // Dome arc — top outline only, NO solid fill
-    const pulseW=score>=80?2+Math.sin(cityTick*0.04)*0.7:score>=50?2:1.5;
-    ctx.save();
-    ctx.globalAlpha=score<20?0.5+Math.sin(cityTick*0.14)*0.5:1;
+    // Dome arc
+    const pulseW = score>=80 ? 2+Math.sin(cityTick*0.05)*0.8 : score>=50 ? 2 : 1.5;
+    ctx.beginPath(); ctx.arc(domeX,domeY,domeR,Math.PI,Math.PI*2);
     ctx.strokeStyle=domeColor;
-    ctx.lineWidth=pulseW;
-    ctx.setLineDash(score<50?[8,4]:[]);
-    ctx.beginPath();
-    ctx.ellipse(dCx,dCy,dRx,dRy,0,Math.PI,Math.PI*2);
+    ctx.lineWidth=(pulseW)*S2;
+    ctx.globalAlpha = score<20 ? 0.5+Math.sin(cityTick*0.15)*0.5 : 1; // flicker if critical
     ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.restore();
-
-    // Base line of dome
-    ctx.strokeStyle=domeColor;
-    ctx.lineWidth=pulseW*0.8;
-    ctx.globalAlpha=0.4; ctx.beginPath(); ctx.moveTo(dCx-dRx,dCy); ctx.lineTo(dCx+dRx,dCy); ctx.stroke();
     ctx.globalAlpha=1;
 
-    // Cracks (score < 30)
+    // Dome cracks (score < 30)
     if(score<30){
-      ctx.strokeStyle='rgba(239,68,68,.65)'; ctx.lineWidth=2;
-      [[-0.15,-0.55],[0.12,-0.70]].forEach(([fx,fy])=>{
-        const cx3=dCx+dRx*fx, cy3=dCy+dRy*fy;
-        ctx.beginPath(); ctx.moveTo(cx3,cy3);
-        ctx.lineTo(cx3+10,cy3+18); ctx.lineTo(cx3+4,cy3+32); ctx.stroke();
+      ctx.strokeStyle='rgba(239,68,68,.6)';
+      ctx.lineWidth=1.5*S2;
+      const cracks=[[domeX-50*S2,domeY-180*S2],[domeX+80*S2,domeY-220*S2]];
+      cracks.forEach(([cx,cy])=>{
+        ctx.beginPath(); ctx.moveTo(cx,cy);
+        ctx.lineTo(cx+12*S2,cy+20*S2); ctx.lineTo(cx+5*S2,cy+35*S2); ctx.stroke();
       });
     }
+
     // Lightning (score < 20)
-    if(score<20 && cityTick%45<4){
-      ctx.strokeStyle='rgba(255,220,50,.95)'; ctx.lineWidth=2.5;
-      ctx.beginPath(); ctx.moveTo(W*0.38,H*0.15); ctx.lineTo(W*0.36,H*0.26); ctx.lineTo(W*0.40,H*0.30); ctx.stroke();
-    }
-
-    // ── GROUND ────────────────────────────────────────────────────────────────
-    ctx.fillStyle=PAL.ground;
-    ctx.fillRect(0, groundY, W, H-groundY);
-
-    // Sidewalk
-    ctx.fillStyle=isLight?'#8a8880':'#2a2a28';
-    ctx.fillRect(0, streetY-H*0.02, W, H*0.02);
-
-    // Road
-    ctx.fillStyle=PAL.road;
-    ctx.fillRect(0, streetY, W, H*0.10);
-
-    // Road dashes (static)
-    ctx.fillStyle=PAL.roadLine;
-    for(let d=0;d<W;d+=W*0.07){
-      ctx.fillRect(d, streetY+H*0.04, W*0.04, H*0.012);
-    }
-
-    // ── PEDESTRIANS ───────────────────────────────────────────────────────────
-    if(score>=20){
-      const pedY=streetY-H*0.022;
-      window._ped.forEach(p=>{
-        p.x += p.dir*p.speed;
-        if(p.x>1.05) p.x=-0.05;
-        if(p.x<-0.05) p.x=1.05;
-        const px=p.x*W;
-        const bobY=Math.sin(cityTick*0.15+px)*H*0.005;
-        const s2=H*0.032; // ped size
-
-        // Body
-        ctx.fillStyle=p.color;
-        ctx.fillRect(px-s2*0.3,pedY-s2*1.4+bobY, s2*0.6, s2*0.9);
-        // Head
-        ctx.fillStyle=p.hatColor;
-        ctx.beginPath(); ctx.arc(px, pedY-s2*1.5+bobY, s2*0.38, 0, Math.PI*2); ctx.fill();
-        // Legs
-        const legSwing=Math.sin(cityTick*0.2+px)*s2*0.25;
-        ctx.fillStyle=isLight?'#303030':'#c0a060';
-        ctx.fillRect(px-s2*0.2, pedY-s2*0.5+bobY, s2*0.18, s2*0.5+legSwing);
-        ctx.fillRect(px+s2*0.02, pedY-s2*0.5+bobY, s2*0.18, s2*0.5-legSwing);
-      });
-    }
-
-    // ── BICYCLE ───────────────────────────────────────────────────────────────
-    if(score>=10){
-      const bk=window._bike;
-      bk.x+=bk.dir*bk.speed;
-      if(bk.x>1.08){bk.x=-0.08; bk.dir=1;}
-      const bkx=bk.x*W;
-      const bky=streetY-H*0.018;
-      const wr=H*0.03; // wheel radius
-      const wheelA=cityTick*0.12;
-
-      ctx.strokeStyle=isLight?'#404040':'#a0b0c0';
-      ctx.lineWidth=2;
-      // Wheels
-      ctx.beginPath(); ctx.arc(bkx-wr*1.2,bky,wr,0,Math.PI*2); ctx.stroke();
-      ctx.beginPath(); ctx.arc(bkx+wr*1.2,bky,wr,0,Math.PI*2); ctx.stroke();
-      // Spokes
-      ctx.lineWidth=1;
-      for(let s=0;s<4;s++){
-        const sa=wheelA+s*Math.PI/2;
-        ctx.beginPath(); ctx.moveTo(bkx-wr*1.2+Math.cos(sa)*wr,bky+Math.sin(sa)*wr);
-        ctx.lineTo(bkx-wr*1.2-Math.cos(sa)*wr,bky-Math.sin(sa)*wr); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(bkx+wr*1.2+Math.cos(sa)*wr,bky+Math.sin(sa)*wr);
-        ctx.lineTo(bkx+wr*1.2-Math.cos(sa)*wr,bky-Math.sin(sa)*wr); ctx.stroke();
-      }
-      ctx.lineWidth=2;
-      // Frame
-      ctx.beginPath(); ctx.moveTo(bkx-wr*1.2,bky); ctx.lineTo(bkx,bky-wr*1.2); ctx.lineTo(bkx+wr*1.2,bky); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(bkx,bky-wr*1.2); ctx.lineTo(bkx-wr*0.4,bky); ctx.stroke();
-      // Rider (simple)
-      ctx.fillStyle='#e07030';
-      ctx.beginPath(); ctx.arc(bkx+wr*0.3, bky-wr*1.8, wr*0.55, 0, Math.PI*2); ctx.fill();
-      ctx.fillStyle='#c05820';
-      ctx.fillRect(bkx-wr*0.1, bky-wr*1.55, wr*0.8, wr*0.8);
+    if(score<20 && cityTick%40<3){
+      ctx.strokeStyle='rgba(255,200,0,.9)'; ctx.lineWidth=2*S2;
+      ctx.beginPath();
+      ctx.moveTo(domeX-20*S2,domeY-200*S2);
+      ctx.lineTo(domeX-30*S2,domeY-160*S2);
+      ctx.lineTo(domeX-15*S2,domeY-140*S2);
+      ctx.stroke();
     }
 
     cityAnimFrame = requestAnimationFrame(animate);
@@ -2092,19 +1916,6 @@ function renderDashboard(){
   // Health score display
   const hsv = document.getElementById('health-score-val');
   if(hsv){ hsv.textContent = score; hsv.style.color = hl.color; }
-
-  // Health score breakdown subtitle
-  const hss = document.getElementById('health-score-sub');
-  if(hss){
-    const hits  = S.hits||[], plans = S.actionPlans||[], ctrls = S.controls||[];
-    const critN = hits.filter(h=>(h.residual_level==='alto'||h.residual_level==='critical')&&!plans.find(p=>p.hit_id===h.id&&p.status!=='closed')).length;
-    const noExecPct = ctrls.length ? Math.round(ctrls.filter(c=>c.executed!=='Sí').length/ctrls.length*100) : 0;
-    const parts=[];
-    if(critN>0) parts.push(`${critN} imp. crit.`);
-    if(noExecPct>0) parts.push(`${noExecPct}% ctrls sin exec.`);
-    hss.textContent = parts.length ? parts.join(' · ') : 'Sin penalizaciones';
-  }
-
   drawGauge('health-gauge', score);
 
   // City status label
@@ -3472,9 +3283,7 @@ async function readFileAsText(file){
 // BRIEF EJECUTIVO
 // ═══════════════════════════════════════════════════════════════
 function renderBriefPlaceholder(){
-  const el = document.getElementById('brief-content');
-  if(!el) return;
-  if(!el.innerHTML){
+  if(!document.getElementById('brief-content').innerHTML){
     document.getElementById('brief-content').innerHTML=`<div class="empty"><div class="empty-icon">▤</div><div class="empty-title">Sin brief generado</div><div class="empty-sub">Haz clic en "Generar con IA" para crear el informe ejecutivo</div></div>`;
   }
 }
@@ -4200,7 +4009,7 @@ function renderCtrlStats(){
 }
 
 // ── Excel Import/Export ──────────────────────────────────────────────────────
-// importPreviewRows declared at top of first script block to avoid TDZ
+let importPreviewRows = []; // {row, parsed, isDup, dupOf, selected, errors}
 
 function downloadCtrlTemplate(){
   const a=document.createElement('a');
