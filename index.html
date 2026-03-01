@@ -245,7 +245,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
 .funnel-step:hover{background:rgba(255,255,255,.02)}
 .funnel-step.active{background:rgba(0,229,160,.04);border-bottom:2px solid var(--accent)}
 .funnel-count{font-family:var(--font-ui);font-size:24px;font-weight:800;line-height:1}
-.funnel-label{font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-top:3px}
+.funnel-label{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-top:3px}
 .funnel-arrow{display:flex;align-items:center;padding:0 6px;color:var(--text-muted);font-size:16px;flex-shrink:0}
 
 /* SENTENCIAS */
@@ -310,7 +310,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
 
     <div class="nav-group" style="margin-top:10px">⟁ Monitor Activo</div>
     <div class="nav-item" data-view="hits" onclick="go('hits')"><span class="icon">⚡</span>Monitorización de Hits<span class="nav-badge nb-danger" id="badge-hits">0</span></div>
-    <div class="nav-item" data-view="brief" onclick="go('brief')"><span class="icon">▤</span>Brief Ejecutivo</div>
     <div class="nav-item" data-view="sentencias" onclick="go('sentencias')"><span class="icon">⚖</span>Sentencias<span class="nav-badge nb-accent" id="badge-sent">0</span></div>
     <div class="nav-item" data-view="fuentes" onclick="go('fuentes')"><span class="icon">📡</span>Fuentes & Búsquedas</div>
 
@@ -328,7 +327,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   <div class="topbar">
     <div class="topbar-title" id="tb-title">Dashboard & KRIs</div>
     <div class="topbar-meta" id="tb-meta"></div>
-    <button class="btn btn-ghost" onclick="syncAll()" id="sync-btn">⟳ Sync</button>
+    <button class="btn btn-ghost" onclick="syncAll()" id="sync-btn" title="Sincroniza datos con Firestore y GitHub. Actualiza hits, controles y configuración.">⟳ Sync</button>
     <button class="btn btn-primary" onclick="go('analisis')">+ Análisis</button>
   </div>
 
@@ -554,7 +553,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   <!-- HITS -->
   <div class="view" id="view-hits">
     <div class="ph">
-      <div class="ph-left"><div class="ph-title">Monitorización de Hits</div><div class="ph-sub">Funnel de relevancia · Filtrado por keywords → Impacto en tu empresa</div></div>
+      <div class="ph-left"><div class="ph-title">Monitorización de Hits</div><div class="ph-sub" id="hits-sync-info">Funnel de relevancia · Filtrado por keywords → Impacto en tu empresa</div></div>
       <div class="ph-actions">
         <button class="btn btn-ghost btn-sm" id="batch-reanalyze-btn" onclick="batchReAnalyze()" title="Re-analiza todos los hits pendientes contra tu Digital Twin">⟳ Re-evaluar todos</button>
         <button class="btn btn-ghost btn-sm" onclick="syncHits()">Sync</button>
@@ -626,17 +625,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   </div>
 
   <!-- BRIEF EJECUTIVO -->
-  <div class="view" id="view-brief">
-    <div class="ph">
-      <div class="ph-left"><div class="ph-title">Brief Ejecutivo</div><div class="ph-sub">Informe para Comité de Cumplimiento / Consejo</div></div>
-      <div class="ph-actions">
-        <button class="btn btn-purple" onclick="generateBrief()" id="brief-gen-btn">✦ Generar con IA</button>
-        <button class="btn btn-primary" onclick="printBrief()">⬇ Exportar PDF</button>
-      </div>
-    </div>
-    <div id="brief-alert"></div>
-    <div id="brief-content"></div>
-  </div>
 
   <!-- FUENTES -->
   <div class="view" id="view-fuentes">
@@ -1172,6 +1160,24 @@ async function syncAll(){
     lsSet('plans', S.actionPlans);
     renderAll();
     setStatus('Sync ✓ '+fmtTime(S.lastSync));
+
+    // Actualizar info de última actualización en cabecera de hits
+    const syncInfoEl = document.getElementById('hits-sync-info');
+    if(syncInfoEl){
+      const latestHit = S.hits.reduce((max,h)=>{
+        const d = h.raw_date||h.published_at||h.fetched_at||'';
+        return d > max ? d : max;
+      }, '');
+      const latestSent = (S.sentences||[]).reduce((max,s)=>{
+        const d = s.date||s.raw_date||'';
+        return d > max ? d : max;
+      }, '');
+      const parts = [];
+      if(latestHit) parts.push('Última noticia: ' + fmtDate(latestHit));
+      if(latestSent) parts.push('Última sentencia: ' + fmtDate(latestSent));
+      parts.push('Sync: ' + fmtTime(S.lastSync));
+      syncInfoEl.textContent = parts.join(' · ');
+    }
     document.getElementById('tb-meta').textContent = 'Sync: '+fmtTime(S.lastSync);
 
     // Auto-analyze hits without RAG evaluation (silent background queue)
@@ -3469,16 +3475,21 @@ async function bulkSetStatus(val){
 }
 
 async function bulkDelete(){
+  if(!ctrlSelectedIds.size) return;
   if(!confirm(`¿Eliminar ${ctrlSelectedIds.size} controles seleccionados? Esta acción no se puede deshacer.`)) return;
-  let deleted=0;
-  for(const id of [...ctrlSelectedIds]){
-    const i=S.controls.findIndex(c=>c.id===id);
-    if(i>=0){ if(S.controls[i]._fsId) await fsDelete('controls',S.controls[i]._fsId); S.controls.splice(i,1); deleted++; }
-  }
-  lsSet('controls',S.controls);
+
+  // Optimistic UI: eliminar del estado y renderizar INMEDIATAMENTE
+  const idsToDelete = [...ctrlSelectedIds];
+  const toDelete = S.controls.filter(c => idsToDelete.includes(c.id));
+  S.controls = S.controls.filter(c => !idsToDelete.includes(c.id));
+  lsSet('controls', S.controls);
   ctrlSelectedIds.clear();
   renderControls(); renderCtrlStats();
-  showAlert('ctrl-alert',`✓ ${deleted} controles eliminados`,'ok');
+  showAlert('ctrl-alert', `✓ ${toDelete.length} controles eliminados`, 'ok');
+
+  // Borrar en Firestore en background (no bloquea la UI)
+  const delPromises = toDelete.filter(c => c._fsId).map(c => fsDelete('controls', c._fsId).catch(()=>{}));
+  await Promise.all(delPromises);
 }
 
 function renderCtrlStats(){
@@ -3510,17 +3521,20 @@ async function importControls(input){
     const ws=wb.Sheets[wb.SheetNames[0]];
     const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
     
-    // Find header row (look for row with "título" or "title")
+    // Normalize helper: quita tildes para comparar sin acentos
+    const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+
+    // Find header row (look for row with "titulo" or "title" — sin tilde)
     let headerRow=-1;
     for(let i=0;i<Math.min(rows.length,6);i++){
-      const r=rows[i].map(c=>String(c).toLowerCase());
-      if(r.some(c=>c.includes('título')||c.includes('titulo')||c.includes('title'))){
+      const r=rows[i].map(c=>norm(c));
+      if(r.some(c=>c.includes('titulo')||c.includes('title'))){
         headerRow=i; break;
       }
     }
     if(headerRow<0){showAlert('ctrl-alert','No se encontró la fila de cabeceras. Usa la plantilla descargable.','err');input.value='';return;}
     
-    const headers=rows[headerRow].map(h=>String(h).toLowerCase().trim().replace(/[*]/g,'').trim());
+    const headers=rows[headerRow].map(h=>norm(h).replace(/[*]/g,''));
     
     // Smart column detection
     const findCol=(terms)=>{ for(const t of terms){ const i=headers.findIndex(h=>h.includes(t)); if(i>=0) return i; } return -1; };
@@ -4445,15 +4459,18 @@ async function openDeepDive(hitId){
   if(!hit) return;
   ddCurrentHitId = hitId;
 
-  // Set header
-  document.getElementById('dd-hit-title').textContent = hit.title||'';
-  const inhPill = document.getElementById('dd-inh-pill');
-  const resPill = document.getElementById('dd-res-pill');
+  // Set header — guard against drawer not yet in DOM
+  const titleEl  = document.getElementById('dd-hit-title');
+  const inhPill  = document.getElementById('dd-inh-pill');
+  const resPill  = document.getElementById('dd-res-pill');
+  const dateMeta = document.getElementById('dd-date-meta');
+  if(!titleEl || !inhPill || !resPill){ console.error('Drawer elements not found'); return; }
+  titleEl.textContent = hit.title||'';
   inhPill.textContent = 'INHERENTE ' + levelLabel(hit.inherent_level||'');
   inhPill.className = 'tag tag-'+(hit.inherent_level||'info');
   resPill.textContent = 'RESIDUAL ' + levelLabel(hit.residual_level||'');
   resPill.className = 'tag tag-'+(hit.residual_level||'info');
-  document.getElementById('dd-date-meta').textContent = fmtDate(hit.raw_date||hit.fetched_at||'');
+  if(dateMeta) dateMeta.textContent = fmtDate(hit.raw_date||hit.fetched_at||'');
   document.getElementById('dd-export-btn').style.display='none';
 
   openDrawer();
