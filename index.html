@@ -265,6 +265,30 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
 .risk-pill-val{font-size:8.5px}
 .rag-badge{font-size:7.5px;background:rgba(0,229,160,.1);color:var(--accent);padding:1px 6px;border-radius:3px;letter-spacing:.5px;margin-left:6px}
 
+
+/* ── Deepdive drawer ─────────────────────────────────── */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;opacity:0;pointer-events:none;transition:opacity .25s}
+.drawer-overlay.open{opacity:1;pointer-events:all}
+.drawer{position:fixed;top:0;right:0;height:100vh;width:min(680px,90vw);background:var(--surface);border-left:1px solid var(--border2);z-index:501;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
+.drawer.open{transform:translateX(0)}
+.drawer-head{padding:18px 20px;border-bottom:1px solid var(--border2);display:flex;align-items:flex-start;gap:12px;flex-shrink:0}
+.drawer-close{background:none;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;padding:0;line-height:1;margin-left:auto;flex-shrink:0}
+.drawer-close:hover{color:var(--text)}
+.drawer-body{flex:1;overflow-y:auto;padding:20px}
+.drawer-foot{padding:14px 20px;border-top:1px solid var(--border2);display:flex;gap:8px;align-items:center;flex-shrink:0;background:var(--surface)}
+.dd-section{margin-bottom:20px}
+.dd-section-title{font-size:8px;letter-spacing:2px;font-weight:700;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase}
+.dd-block{background:var(--surface2);border-radius:5px;padding:12px 14px;font-size:10.5px;color:var(--text-dim);line-height:1.7;margin-bottom:8px}
+.dd-block.danger{border-left:3px solid var(--danger)}
+.dd-block.warn{border-left:3px solid var(--warn)}
+.dd-block.ok{border-left:3px solid var(--accent)}
+.dd-pill-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.dd-pill{font-size:9px;padding:3px 9px;border-radius:12px;background:rgba(0,229,160,.08);color:var(--accent);border:1px solid rgba(0,229,160,.2)}
+.dd-pill.ctrl{background:rgba(139,92,246,.08);color:var(--purple);border-color:rgba(139,92,246,.2)}
+.dd-pill.gap{background:rgba(245,158,11,.08);color:var(--warn);border-color:rgba(245,158,11,.2)}
+.dd-disclaimer{font-size:9px;color:var(--text-muted);background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.15);border-radius:4px;padding:8px 10px;margin-bottom:14px;line-height:1.5}
+.dd-meta{font-size:8.5px;color:var(--text-muted);margin-top:4px}
+.dd-precedent{background:var(--surface2);border-radius:4px;padding:8px 10px;margin-bottom:6px;font-size:10px;color:var(--text-dim);line-height:1.6;border-left:2px solid var(--border2)}
 </style>
 </head>
 <body>
@@ -547,9 +571,15 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
       </div>
       <div class="funnel-arrow">→</div>
       <div class="funnel-step" id="funnel-company" onclick="setHitFunnel('impacts')">
-        <div class="funnel-count" id="funnel-count-company" style="color:var(--warn)">0</div>
+        <div style="display:flex;align-items:baseline;gap:6px;justify-content:center">
+          <div class="funnel-count" id="funnel-count-company" style="color:var(--warn)">0</div>
+          <div style="font-size:11px;color:var(--text-muted)">·</div>
+          <div id="funnel-count-residual-alto" style="font-family:var(--font-ui);font-size:18px;font-weight:800;color:var(--danger)">0</div>
+        </div>
         <div class="funnel-label">Impactos</div>
-        <div style="font-size:9px;color:var(--text-muted);margin-top:2px">inherente medio o alto</div>
+        <div style="font-size:9px;color:var(--text-muted);margin-top:2px">
+          <span style="color:var(--warn)">inh.</span> medio/alto · <span style="color:var(--danger)">res.</span> alto
+        </div>
       </div>
       <div class="funnel-arrow">→</div>
       <div class="funnel-step" id="funnel-plans" onclick="setHitFunnel('plans')">
@@ -1095,7 +1125,7 @@ async function fsSet(col, doc, data){ try{ await db.collection(col).doc(doc||'ma
 async function fsAdd(col, data){ try{ const r=await db.collection(col).add({...data, _created: new Date().toISOString()}); return r.id; }catch(e){ console.error('fsAdd',e); return null; } }
 async function fsUpdate(col, id, data){ try{ await db.collection(col).doc(id).update({...data, _updated: new Date().toISOString()}); return true; }catch(e){ console.error('fsUpdate',e); return false; } }
 async function fsDelete(col, id){ try{ await db.collection(col).doc(id).delete(); return true; }catch(e){ return false; } }
-async function fsList(col, orderBy='_created', dir='desc'){ try{ const s=await db.collection(col).orderBy(orderBy,dir).limit(200).get(); return s.docs.map(d=>({id:d.id,...d.data()})); }catch(e){ console.warn('fsList',e); return []; } }
+async function fsList(col, orderBy='_created', dir='desc'){ try{ const s=await db.collection(col).orderBy(orderBy,dir).limit(200).get(); return s.docs.map(d=>{ const data=d.data(); return {_fsId:d.id, ...data, id: data.id||d.id}; }); }catch(e){ console.warn('fsList',e); return []; } }
 
 // ═══════════════════════════════════════════════════════════════
 // SYNC ALL
@@ -1197,30 +1227,89 @@ async function syncHitsFromGitHub(){
     const data = await r.json();
     const ghHits = data.hits || [];
     if(ghHits.length > 0){
-      // Mirror to Firestore for future use
-      S.hits = ghHits;
-      // Write each hit to Firestore if not already there (batch by checking ids)
+      // Load Firestore hits to build an analyzed-data map
       const fsHits = await fsList('hits');
-      const fsIds = new Set(fsHits.map(h=>h.id||h.link));
-      const newHits = ghHits.filter(h=>!fsIds.has(h.id||h.link));
-      for(const hit of newHits.slice(0,50)){ // max 50 at a time
-        await fsAdd('hits', hit);
+      // Map by hit id (not Firestore doc id)
+      const fsMap = {};
+      fsHits.forEach(h => { fsMap[h.id||h.link] = h; });
+      const fsIdSet = new Set(Object.keys(fsMap));
+
+      // Merge: use GitHub as source of truth for raw fields,
+      // but PRESERVE all analyzed/evaluated fields from Firestore
+      S.hits = ghHits.map(ghHit => {
+        const key = ghHit.id || ghHit.link;
+        const fsHit = fsMap[key];
+        if(fsHit && fsHit._analyzed){
+          // Already analyzed — keep all enriched data, update raw fields
+          return { ...ghHit, ...fsHit, id: ghHit.id||fsHit.id };
+        }
+        return fsHit ? { ...fsHit, ...ghHit, id: ghHit.id||fsHit.id } : ghHit;
+      });
+
+      // Write truly new hits to Firestore (not yet there at all)
+      const newHits = ghHits.filter(h=>!fsIdSet.has(h.id||h.link));
+      for(const hit of newHits.slice(0,50)){
+        const docId = await fsAdd('hits', hit);
+        // Update state with _fsId so future fsUpdate works
+        const idx = S.hits.findIndex(h=>(h.id||h.link)===(hit.id||hit.link));
+        if(idx>=0 && docId) S.hits[idx]._fsId = docId;
       }
-      console.log(`GitHub hits: ${ghHits.length} total, ${newHits.length} nuevos mirrored a Firestore`);
+      console.log('GitHub hits: ' + ghHits.length + ' total, ' + newHits.length + ' nuevos en Firestore');
     }
   }catch(e){
     console.warn('GitHub hits sync failed:', e.message);
-    // Use cached local hits
     const cached = lsGet('hits');
     if(cached && cached.length) S.hits = cached;
   }
 }
 
 async function syncHits(){
-  // Try both sources
+  // Always load Firestore first (has analyzed data), then merge GitHub
   const fsHits = await fsList('hits');
-  if(fsHits && fsHits.length>0){
-    S.hits = fsHits;
+  if(fsHits && fsHits.length > 0){
+    // Build map of Firestore hits
+    const fsMap = {};
+    fsHits.forEach(h => { fsMap[h.id||h.link] = h; });
+    // Try to get newer hits from GitHub and merge
+    try{
+      const repo = S.cfg.repo || 'avespa/digitaltwin';
+      const url = `https://raw.githubusercontent.com/\${repo}/main/data/hits.json?t=\${Date.now()}`;
+      const r = await fetch(url);
+      if(r.ok){
+        const data = await r.json();
+        const ghHits = data.hits || [];
+        // Merge: Firestore data wins for analyzed hits, GitHub provides new ones
+        const merged = ghHits.map(ghHit => {
+          const key = ghHit.id || ghHit.link;
+          const fsHit = fsMap[key];
+          if(fsHit && fsHit._analyzed){
+            return { ...ghHit, ...fsHit, id: ghHit.id||fsHit.id };
+          }
+          return fsHit ? { ...fsHit, ...ghHit, id: ghHit.id||fsHit.id } : ghHit;
+        });
+        // Add Firestore-only hits (sentencias, etc.) not in GitHub
+        fsHits.forEach(fh => {
+          const key = fh.id||fh.link;
+          if(!ghHits.find(gh=>(gh.id||gh.link)===key)){
+            merged.push(fh);
+          }
+        });
+        S.hits = merged;
+        // Write new GitHub hits to Firestore
+        const fsIds = new Set(Object.keys(fsMap));
+        const newHits = ghHits.filter(h=>!fsIds.has(h.id||h.link));
+        for(const hit of newHits.slice(0,50)){
+          const docId = await fsAdd('hits', hit);
+          const idx = S.hits.findIndex(h=>(h.id||h.link)===(hit.id||hit.link));
+          if(idx>=0 && docId) S.hits[idx]._fsId = docId;
+        }
+        if(newHits.length) console.log(newHits.length + ' hits nuevos añadidos desde GitHub');
+      } else {
+        S.hits = fsHits;
+      }
+    }catch(e){
+      S.hits = fsHits; // Fallback to Firestore only
+    }
   } else {
     await syncHitsFromGitHub();
   }
@@ -1299,7 +1388,7 @@ function miniHit(h){
   return `<div class="flex ic gap8 mb8" style="padding:7px;background:var(--bg);border-radius:4px;border-left:2px solid ${levelColor(h.level)}">
     <span class="tag tag-${h.level||'info'}" style="flex-shrink:0">${levelLabel(h.level)}</span>
     <span style="font-size:10.5px;flex:1;line-height:1.3">${esc(h.title?.slice(0,70))}${h.title?.length>70?'...':''}</span>
-    <span style="font-size:9px;color:var(--text-muted);flex-shrink:0">${fmtDate(h.fetched_at)}</span>
+    <span style="font-size:9px;color:var(--text-muted);flex-shrink:0">${fmtDate(h.raw_date||h.published_at||h.fetched_at||h._created)}</span>
   </div>`;
 }
 
@@ -1824,17 +1913,18 @@ function hitCard(h){
             <span class="risk-pill-label">RESIDUAL</span>
             <span class="risk-pill-val tag tag-${h.residual_level||h.level||'info'}">${levelLabel(h.residual_level||h.level)}</span>
           </div>
-          ${h.rag_fragments_used>0?`<span class="rag-badge" title="Análisis enriquecido con contexto del Digital Twin">⬡ Twin</span>`:''}
+          ${h.rag_fragments_used>0||h.inherent_level?`<span class="rag-badge" title="${h.rag_fragments_used>0?'Análisis con '+h.rag_fragments_used+' fragmentos del Digital Twin':'Análisis Twin'}">⬡ Twin${h.rag_fragments_used>0?' ·'+h.rag_fragments_used:''}</span>`:''}
         </div>
       ` : `<span class="tag tag-${h.level||'info'}">${levelLabel(h.level)}</span>`}
       ${h.is_sentencia?'<span class="sent-tag">SENTENCIA</span>':''}<span class="hit-source">${esc((h.source||'').split('·')[0].trim())}</span>
-      <span class="hit-date">${fmtDate(h.fetched_at||h.raw_date)}</span>
+      <span class="hit-date">${fmtDate(h.raw_date||h.published_at||h.fetched_at||h._created)}</span>
     </div>
     <div class="hit-title">${esc(h.title)}</div>
     ${h.summary?`<div class="hit-summary">${esc(h.summary)}</div>`:''}
     ${h.relevance_score?`<div style="font-size:8px;color:var(--text-muted);margin-top:4px">Relevancia: ${h.relevance_score}/100</div>`:''}
     <div class="flex gap6 mt6" style="flex-wrap:wrap">
       ${hasDetail?`<button class="btn btn-ghost btn-xs" onclick="toggleHitDetail('hd-${h.id}')">Ver análisis ↓</button>`:''}
+      ${h.inherent_level?`<button class="btn btn-ghost btn-xs" style="color:var(--purple);border-color:rgba(139,92,246,.3)" onclick="openDeepDive('${h.id}')">✦ Análisis Profundo</button>`:'' }
       ${h.link?`<a href="${h.link}" target="_blank" class="btn btn-ghost btn-xs">Fuente ↗</a>`:''}
       <button class="btn btn-ghost btn-xs" onclick="reAnalyzeHit('${h.id}')" title="Re-analizar manualmente contra el Twin" id="reanalyze-${h.id}">⟳ Re-evaluar</button>
       ${h._discarded?
@@ -2281,7 +2371,7 @@ Responde SOLO el JSON, sin texto adicional.`;
     // Parse JSON safely
     let parsed;
     try{
-      const clean = raw.replace(/\`\`\`json\n?/g,'').replace(/\`\`\`\n?/g,'').trim();
+      const clean = raw.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
       parsed = JSON.parse(clean);
     }catch(e){
       const match = raw.match(/\{[\s\S]*\}/);
@@ -2374,7 +2464,7 @@ Responde SOLO con JSON:
 
     try{
       const raw = await callMistral(prompt, 600);
-      const clean = raw.replace(/\`\`\`json\n?/g,'').replace(/\`\`\`\n?/g,'').trim();
+      const clean = raw.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
       let parsed;
       try{ parsed = JSON.parse(clean); }
       catch(e){
@@ -2880,6 +2970,33 @@ function printBrief(){
     </div>
   </div>
 </div>
+
+<!-- ── Deepdive Drawer ──────────────────────────────────────── -->
+<div class="drawer-overlay" id="dd-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="dd-drawer">
+  <div class="drawer-head">
+    <div style="flex:1">
+      <div id="dd-hit-title" style="font-size:13px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:6px"></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <span id="dd-inh-pill" class="tag"></span>
+        <span style="color:var(--text-muted);font-size:10px">→</span>
+        <span id="dd-res-pill" class="tag"></span>
+        <span id="dd-date-meta" class="dd-meta"></span>
+      </div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body" id="dd-body">
+    <div class="empty" style="padding:40px 0">
+      <div class="empty-icon">✦</div>
+      <div class="empty-title">Cargando análisis...</div>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost btn-sm" id="dd-export-btn" onclick="exportDeepDiveWord()" style="display:none">⬇ Exportar Word</button>
+    <span id="dd-analyzed-at" style="font-size:9px;color:var(--text-muted);margin-left:auto"></span>
+  </div>
+</div>
 </body></html>`);
   w.document.close(); w.print();
 }
@@ -3173,7 +3290,7 @@ Responde SOLO el array JSON, sin texto adicional.`;
 
   try{
     const raw = await callMistral(prompt, 200);
-    const clean = raw.replace(/\`\`\`json|\`\`\`/g,'').trim();
+    const clean = raw.replace(/```json|```/g,'').trim();
     const ids = JSON.parse(clean.match(/\[.*\]/s)?.[0]||'[]');
     document.querySelectorAll('.ctrl-iso-cb').forEach(cb=>{
       if(ids.includes(cb.value)) cb.checked=true;
@@ -3647,7 +3764,7 @@ Responde SOLO el JSON, sin texto adicional.`;
 
   try{
     const raw=await callMistral(prompt,2000);
-    const clean=raw.replace(/\`\`\`json|\`\`\`/g,'').trim();
+    const clean=raw.replace(/```json|```/g,'').trim();
     const data=JSON.parse(clean.match(/\{[\s\S]*\}/)?.[0]||'{}');
     lastSentAnalysis=data;
 
@@ -3751,19 +3868,20 @@ function setHitFunnel(level){
 function updateFunnelCounts(){
   const all = S.hits.length;
   const impacts = S.hits.filter(h=>isImpact(h)).length;
-  const plans = S.actionPlans.filter(p=>p.status!=='closed').length;
-  document.getElementById('funnel-count-all').textContent=all;
-  document.getElementById('funnel-count-company').textContent=impacts;
-  const fp = document.getElementById('funnel-count-plans');
-  if(fp) fp.textContent=plans;
-
-  // Badge in nav = residual ALTO count (the ones that need immediate action)
-  const highRisk = S.hits.filter(h=>{
+  const residualAlto = S.hits.filter(h=>{
     const r=h.residual_level||'';
     return r==='alto'||r==='critical';
   }).length;
+  const plans = S.actionPlans.filter(p=>p.status!=='closed').length;
+  document.getElementById('funnel-count-all').textContent=all;
+  document.getElementById('funnel-count-company').textContent=impacts;
+  const fra = document.getElementById('funnel-count-residual-alto');
+  if(fra) fra.textContent=residualAlto;
+  const fp = document.getElementById('funnel-count-plans');
+  if(fp) fp.textContent=plans;
+  // Badge in nav = residual ALTO count
   const badge = document.getElementById('badge-hits');
-  if(badge) badge.textContent=highRisk;
+  if(badge) badge.textContent=residualAlto;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -4235,6 +4353,328 @@ function buildTwinContext(){
     ctx.certifications ? 'Normativa: '+ctx.certifications : '',
     S.twinSummary  ? '\nResumen Twin:\n'+S.twinSummary.slice(0,500) : '',
   ].filter(Boolean).join('\n');
+}
+
+
+// ═══════════════════════════════════════════════════════════════
+// DEEPDIVE DRAWER
+// ═══════════════════════════════════════════════════════════════
+let ddCurrentHitId = null;
+
+function openDrawer(){
+  document.getElementById('dd-overlay').classList.add('open');
+  document.getElementById('dd-drawer').classList.add('open');
+}
+function closeDrawer(){
+  document.getElementById('dd-overlay').classList.remove('open');
+  document.getElementById('dd-drawer').classList.remove('open');
+  ddCurrentHitId = null;
+}
+
+function renderDeepDiveContent(hit, dd){
+  const body = document.getElementById('dd-body');
+  const inhColor = levelColor(dd.inherent_level||'');
+  const resColor = levelColor(dd.residual_level||'');
+
+  // Build controls rows
+  const ctrlsHtml = (dd.controls_coverage||[]).map(c=>
+    `<div style="display:flex;gap:8px;align-items:start;margin-bottom:8px">
+      <span style="flex-shrink:0;font-size:9px;padding:2px 7px;border-radius:3px;background:rgba(139,92,246,.1);color:var(--purple)">${esc(c.id||'')}</span>
+      <div>
+        <div style="font-size:10px;color:var(--text);margin-bottom:2px">${esc(c.title||'')}</div>
+        <div style="font-size:9.5px;color:var(--text-dim)">${esc(c.coverage_comment||'')}</div>
+      </div>
+    </div>`
+  ).join('');
+
+  const precedentsHtml = (dd.precedents||[]).length
+    ? (dd.precedents).map(p=>
+        `<div class="dd-precedent"><strong style="color:var(--text)">${esc(p.case||'')}</strong> — ${esc(p.outcome||'')}${p.source?`<div style="font-size:8.5px;color:var(--text-muted);margin-top:2px">${esc(p.source)}</div>`:''}</div>`
+      ).join('')
+    : `<div style="font-size:10px;color:var(--text-muted);font-style:italic">No se encontraron precedentes concretos en NewsAPI para esta tipología.</div>`;
+
+  const gapsHtml = (dd.gaps||[]).map(g=>
+    `<div style="display:flex;gap:8px;align-items:start;margin-bottom:8px">
+      <span style="flex-shrink:0;width:6px;height:6px;border-radius:50%;background:var(--warn);margin-top:5px;display:inline-block"></span>
+      <div style="font-size:10px;color:var(--text-dim)">${esc(g)}</div>
+    </div>`
+  ).join('');
+
+  body.innerHTML = `
+    <div class="dd-disclaimer">
+      ⚠ Este análisis ha sido generado con Inteligencia Artificial. Los datos, precedentes e implicaciones legales requieren supervisión y validación humana antes de tomar decisiones.
+    </div>
+
+    <div class="dd-section">
+      <div class="dd-section-title">Exposición inherente</div>
+      <div class="dd-block danger">${esc(dd.inherent_analysis||'')}</div>
+      ${dd.worst_case?`<div class="dd-block" style="border-left:3px solid var(--border2)">
+        <div style="font-size:8px;letter-spacing:1.5px;color:var(--text-muted);margin-bottom:4px">ESCENARIO ADVERSO</div>
+        ${esc(dd.worst_case)}
+      </div>`:''}
+    </div>
+
+    <div class="dd-section">
+      <div class="dd-section-title">Precedentes relevantes</div>
+      ${precedentsHtml}
+    </div>
+
+    <div class="dd-section">
+      <div class="dd-section-title">Cobertura del Digital Twin</div>
+      ${ctrlsHtml||`<div style="font-size:10px;color:var(--text-muted)">No se identificaron controles específicos en el Twin para este riesgo.</div>`}
+      ${dd.maturity_comment?`<div class="dd-block ok" style="margin-top:8px">${esc(dd.maturity_comment)}</div>`:''}
+    </div>
+
+    ${(dd.gaps||[]).length?`
+    <div class="dd-section">
+      <div class="dd-section-title">Gaps identificados</div>
+      ${gapsHtml}
+    </div>`:''}
+
+    ${dd.recommended_action?`
+    <div class="dd-section">
+      <div class="dd-section-title">Acción recomendada</div>
+      <div class="dd-block warn">${esc(dd.recommended_action)}</div>
+    </div>`:''}
+  `;
+  document.getElementById('dd-export-btn').style.display='';
+}
+
+async function openDeepDive(hitId){
+  const hit = S.hits.find(h=>h.id===hitId);
+  if(!hit) return;
+  ddCurrentHitId = hitId;
+
+  // Set header
+  document.getElementById('dd-hit-title').textContent = hit.title||'';
+  const inhPill = document.getElementById('dd-inh-pill');
+  const resPill = document.getElementById('dd-res-pill');
+  inhPill.textContent = 'INHERENTE ' + levelLabel(hit.inherent_level||'');
+  inhPill.className = 'tag tag-'+(hit.inherent_level||'info');
+  resPill.textContent = 'RESIDUAL ' + levelLabel(hit.residual_level||'');
+  resPill.className = 'tag tag-'+(hit.residual_level||'info');
+  document.getElementById('dd-date-meta').textContent = fmtDate(hit.raw_date||hit.fetched_at||'');
+  document.getElementById('dd-export-btn').style.display='none';
+
+  openDrawer();
+
+  // Check if deepdive already saved in Firestore
+  const fsId = hit._fsId;
+  if(hit._deepdive && hit._deepdive_at){
+    document.getElementById('dd-analyzed-at').textContent = 'Análisis realizado: ' + fmtDate(hit._deepdive_at);
+    renderDeepDiveContent(hit, hit._deepdive);
+    return;
+  }
+
+  // Show confirmation before calling IA
+  const body = document.getElementById('dd-body');
+  body.innerHTML = `
+    <div style="padding:30px 0;text-align:center">
+      <div style="font-size:28px;margin-bottom:12px">✦</div>
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px">Análisis Profundo con IA</div>
+      <div style="font-size:11px;color:var(--text-dim);line-height:1.7;max-width:400px;margin:0 auto 20px">
+        Se va a realizar un análisis extendido usando Mistral AI + NewsAPI (~3.000 tokens).<br>
+        El resultado se guardará en Firestore para no repetirlo.<br><br>
+        <span style="color:var(--warn);font-size:10px">⚠ Requiere supervisión humana. No sustituye asesoramiento legal.</span>
+      </div>
+      <button class="btn btn-primary" onclick="runDeepDive('${hitId}')">Ejecutar análisis →</button>
+      <button class="btn btn-ghost" onclick="closeDrawer()" style="margin-left:8px">Cancelar</button>
+    </div>`;
+  document.getElementById('dd-analyzed-at').textContent='';
+}
+
+async function runDeepDive(hitId){
+  const hit = S.hits.find(h=>h.id===hitId);
+  if(!hit) return;
+
+  const body = document.getElementById('dd-body');
+  body.innerHTML = `<div class="flex ic gap8" style="color:var(--text-muted);padding:40px 0;justify-content:center"><span class="spin"></span> Analizando en profundidad...</div>`;
+
+  // Build RAG context
+  let ragContext = '';
+  let ragFragments = [];
+  if(pcKey()){
+    try{
+      const hitText = [hit.title, hit.summary].filter(Boolean).join(' ');
+      const matches = await pcQuery(hitText, 12);
+      ragFragments = matches.filter(m=>m.score>0.25).map(m=>{
+        const meta = m.metadata||{};
+        if(meta.type==='control') return `CONTROL [${meta.ctrl_id}] "${meta.title}" — ${meta.nature}, ${meta.freq}, ejecutado: ${meta.executed}`;
+        if(meta.type==='element') return `MADUREZ [${meta.elem_id}] "${meta.elem_label}" — Score: ${meta.score}/5`;
+        if(meta.type==='org') return `CONTEXTO: ${meta.name}, sector ${meta.sector}`;
+        return '';
+      }).filter(Boolean);
+      if(ragFragments.length) ragContext = '\n\nCONTEXTO DEL TWIN:\n' + ragFragments.join('\n');
+    }catch(e){ console.warn('RAG error in deepdive:', e); }
+  }
+
+  // Build prompt
+  const ctx = S.ctx||{};
+  const orgCtx = [
+    ctx.name ? 'Empresa: '+ctx.name : '',
+    ctx.sector ? 'Sector: '+ctx.sector : '',
+    ctx.business ? 'Actividad: '+ctx.business : '',
+    ctx.legal ? 'Marco legal: '+ctx.legal : '',
+  ].filter(Boolean).join('\n');
+
+  const prompt = `Eres un experto en compliance corporativo español. Realiza un análisis profundo y ejecutivo del siguiente evento de riesgo para la organización.
+
+ORGANIZACIÓN:
+${orgCtx}
+${ragContext}
+
+EVENTO:
+Título: ${hit.title}
+Fuente: ${hit.source||''}  
+Resumen: ${(hit.summary||'').slice(0,600)}
+Riesgo inherente previo: ${levelLabel(hit.inherent_level||'')}
+Riesgo residual previo: ${levelLabel(hit.residual_level||'')}
+
+INSTRUCCIONES:
+Proporciona un análisis ejecutivo completo con:
+1. Análisis detallado de la exposición inherente (por qué aplica o no a esta empresa, normativa específica española/europea)
+2. Escenario adverso concreto (consecuencias regulatorias reales: multas máximas, sanciones, publicidad negativa)
+3. Hasta 3 precedentes REALES y concretos de casos similares en España/Europa (si los conoces con certeza; si no, no inventes)
+4. Evaluación de cada control/elemento del Twin que cubriría este riesgo
+5. Gaps concretos (qué falta exactamente)
+6. Acción recomendada específica y accionable
+
+Devuelve SOLO este JSON:
+{
+  "inherent_analysis": "párrafo detallado sobre la exposición inherente",
+  "worst_case": "descripción del escenario adverso con cifras concretas si las hay",
+  "precedents": [
+    {"case": "Nombre del caso real", "outcome": "Resultado/sanción concreta", "source": "Regulador/fuente"}
+  ],
+  "controls_coverage": [
+    {"id": "ID control o elemento Twin", "title": "nombre", "coverage_comment": "qué cubre y qué no de este riesgo"}
+  ],
+  "maturity_comment": "evaluación del nivel de madurez del Twin para este riesgo",
+  "gaps": ["gap 1 concreto", "gap 2 concreto"],
+  "recommended_action": "acción específica y accionable"
+}
+Responde SOLO el JSON. Precedentes: solo incluye si son reales y verificables; omite el array si no estás seguro.`;
+
+  try{
+    const raw = await callMistral(prompt, 3000);
+    const clean = raw.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+    const dd = JSON.parse(clean.match(/\{[\s\S]*\}/)?.[0]||'{}');
+
+    // Save to hit in state + Firestore
+    const idx = S.hits.findIndex(h=>h.id===hitId);
+    if(idx>=0){
+      S.hits[idx]._deepdive = dd;
+      S.hits[idx]._deepdive_at = new Date().toISOString();
+      S.hits[idx]._deepdive_frags = ragFragments.length;
+      lsSet('hits', S.hits);
+      if(S.hits[idx]._fsId){
+        fsUpdate('hits', S.hits[idx]._fsId, {
+          _deepdive: dd,
+          _deepdive_at: S.hits[idx]._deepdive_at,
+          _deepdive_frags: ragFragments.length,
+        }).catch(()=>{});
+      }
+    }
+
+    document.getElementById('dd-analyzed-at').textContent = 'Análisis realizado: ' + fmtDate(new Date().toISOString());
+    renderDeepDiveContent(hit, dd);
+
+  }catch(e){
+    body.innerHTML = `<div class="alert alert-err">Error en análisis: ${esc(e.message)}</div>`;
+  }
+}
+
+// ── Export deepdive to Word ────────────────────────────────────────────────────
+async function exportDeepDiveWord(){
+  const hit = S.hits.find(h=>h.id===ddCurrentHitId);
+  if(!hit||!hit._deepdive) return;
+  const dd = hit._deepdive;
+
+  // Read docx skill then generate
+  const btn = document.getElementById('dd-export-btn');
+  btn.textContent='Generando...'; btn.disabled=true;
+
+  try{
+    // Build markdown content for the Word doc
+    const md = buildDeepDiveMarkdown(hit, dd);
+    // Use mammoth-style approach: create blob and download as HTML-based doc
+    const htmlContent = buildDeepDiveHtml(hit, dd);
+    const blob = new Blob([htmlContent], {type:'application/vnd.ms-word;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `AnalisisProfundo_${(hit.title||'hit').slice(0,40).replace(/[^a-zA-Z0-9]/g,'_')}_${new Date().toISOString().slice(0,10)}.doc`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }catch(e){
+    alert('Error exportando: '+e.message);
+  }
+  btn.textContent='⬇ Exportar Word'; btn.disabled=false;
+}
+
+function buildDeepDiveHtml(hit, dd){
+  const date = new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const ctx = S.ctx||{};
+  const precedentsRows = (dd.precedents||[]).map(p=>
+    `<tr><td style="padding:6px 10px;border:1px solid #ddd">${p.case||''}</td><td style="padding:6px 10px;border:1px solid #ddd">${p.outcome||''}</td><td style="padding:6px 10px;border:1px solid #ddd">${p.source||''}</td></tr>`
+  ).join('');
+  const ctrlRows = (dd.controls_coverage||[]).map(c=>
+    `<tr><td style="padding:6px 10px;border:1px solid #ddd">${c.id||''}</td><td style="padding:6px 10px;border:1px solid #ddd">${c.title||''}</td><td style="padding:6px 10px;border:1px solid #ddd">${c.coverage_comment||''}</td></tr>`
+  ).join('');
+  const gapsList = (dd.gaps||[]).map(g=>`<li>${g}</li>`).join('');
+
+  return `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="utf-8"><title>Análisis Profundo de Riesgo</title>
+<style>
+  body{font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#1a1a1a;margin:2cm}
+  h1{font-size:16pt;color:#1a1a1a;border-bottom:2px solid #00e5a0;padding-bottom:8px}
+  h2{font-size:12pt;color:#333;margin-top:20px;border-left:4px solid #00e5a0;padding-left:8px}
+  h3{font-size:11pt;color:#555;margin-top:14px}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:10pt}
+  th{background:#f0f0f0;padding:7px 10px;border:1px solid #ddd;text-align:left;font-weight:bold}
+  .meta{font-size:9pt;color:#777}
+  .disclaimer{background:#fff8e1;border:1px solid #f59e0b;padding:10px 14px;border-radius:4px;font-size:9.5pt;color:#7a5f00;margin-bottom:16px}
+  .risk-box{display:inline-block;padding:4px 12px;border-radius:4px;font-weight:bold;font-size:10pt;margin:0 4px}
+  .risk-alto{background:#fee2e2;color:#dc2626}
+  .risk-medio{background:#fef9c3;color:#ca8a04}
+  .risk-bajo{background:#d1fae5;color:#059669}
+</style></head><body>
+<h1>Análisis Profundo de Riesgo de Compliance</h1>
+<p class="meta">Organización: <strong>${ctx.name||'—'}</strong> | Sector: ${ctx.sector||'—'} | Fecha análisis: ${date}</p>
+<p class="meta">Evento: <em>${hit.title||''}</em> | Fuente: ${hit.source||''} | Fecha evento: ${fmtDate(hit.raw_date||hit.fetched_at||'')}</p>
+<br>
+<p>
+  <span class="risk-box risk-${hit.inherent_level||'bajo'}">INHERENTE: ${levelLabel(hit.inherent_level||'')}</span>
+  → 
+  <span class="risk-box risk-${hit.residual_level||'bajo'}">RESIDUAL: ${levelLabel(hit.residual_level||'')}</span>
+</p>
+<br>
+<div class="disclaimer">⚠ Este documento ha sido generado con asistencia de Inteligencia Artificial (Mistral AI). Los datos, precedentes e implicaciones legales deben ser validados por un profesional del derecho o compliance antes de tomar decisiones.</div>
+
+<h2>1. Exposición Inherente</h2>
+<p>${dd.inherent_analysis||'—'}</p>
+
+${dd.worst_case?`<h3>Escenario Adverso</h3><p>${dd.worst_case}</p>`:''}
+
+${(dd.precedents||[]).length?`
+<h2>2. Precedentes Relevantes</h2>
+<table><tr><th>Caso</th><th>Resultado</th><th>Fuente</th></tr>${precedentsRows}</table>`:''}
+
+<h2>3. Cobertura del Digital Twin</h2>
+${ctrlRows?`<table><tr><th>Control/Elemento</th><th>Descripción</th><th>Cobertura</th></tr>${ctrlRows}</table>`:'<p>No se identificaron controles específicos en el Twin para este riesgo.</p>'}
+${dd.maturity_comment?`<p><em>${dd.maturity_comment}</em></p>`:''}
+
+${(dd.gaps||[]).length?`<h2>4. Gaps Identificados</h2><ul>${gapsList}</ul>`:''}
+
+${dd.recommended_action?`<h2>5. Acción Recomendada</h2><p>${dd.recommended_action}</p>`:''}
+
+<br><br>
+<p class="meta">Generado por Digital Twin Compliance · ${date} · Análisis IA (Mistral + RAG Twin)</p>
+</body></html>`;
+}
+
+function buildDeepDiveMarkdown(hit, dd){
+  return `# Análisis Profundo: ${hit.title}\n\n${dd.inherent_analysis||''}\n\n## Acción\n${dd.recommended_action||''}`;
 }
 
 </script>
