@@ -16,7 +16,19 @@
   --accent:#00e5a0;--accent2:#0066ff;--warn:#f59e0b;--danger:#ef4444;--purple:#8b5cf6;
   --text:#dce8f0;--text-muted:#3d5468;--text-dim:#7a96aa;
   --font-ui:'Syne',sans-serif;--font-mono:'DM Mono',monospace;
+  --sky-day:#a8d8f0;--sky-night:#070b0f;
 }
+[data-theme="light"]{
+  --bg:#f0f4f8;--surface:#ffffff;--surface2:#e8eef5;--surface3:#dde5ee;
+  --border:#c8d6e5;--border2:#b0c4d8;
+  --accent:#00a572;--accent2:#0050cc;--warn:#d97706;--danger:#dc2626;--purple:#7c3aed;
+  --text:#0f1f2e;--text-muted:#8aa0b4;--text-dim:#4a6070;
+  --sky-day:#87ceeb;--sky-night:#1a2a4a;
+}
+/* Theme toggle button */
+.theme-toggle{background:none;border:1px solid var(--border);color:var(--text-dim);
+  border-radius:6px;padding:4px 8px;cursor:pointer;font-size:13px;transition:all .2s}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent)}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
 body{background:var(--bg);color:var(--text);font-family:var(--font-mono);overflow:hidden}
@@ -327,6 +339,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   <div class="topbar">
     <div class="topbar-title" id="tb-title">Dashboard & KRIs</div>
     <div class="topbar-meta" id="tb-meta"></div>
+    <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Cambiar modo día/noche">🌙</button>
     <button class="btn btn-ghost" onclick="syncAll()" id="sync-btn" title="Sincroniza datos con Firestore y GitHub. Actualiza hits, controles y configuración.">⟳ Sync</button>
     <button class="btn btn-primary" onclick="go('analisis')">+ Análisis</button>
   </div>
@@ -336,31 +349,76 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   <!-- DASHBOARD -->
   <div class="view active" id="view-dashboard">
     <div id="twin-disclaimer"></div>
-    <div class="kri-grid">
-      <div class="kri" style="--c:var(--accent)"><div class="kri-label">Madurez Global</div><div class="kri-val" id="kri-madurez">—</div><div class="kri-sub">/5.0 puntos</div></div>
-      <div class="kri" style="--c:var(--danger)"><div class="kri-label">Hits Críticos</div><div class="kri-val" id="kri-criticos">0</div><div class="kri-sub">sin plan de acción</div></div>
-      <div class="kri" style="--c:var(--warn)"><div class="kri-label">Planes Abiertos</div><div class="kri-val" id="kri-planes">0</div><div class="kri-sub">requieren atención</div></div>
-      <div class="kri" style="--c:var(--accent2)"><div class="kri-label">Última Sync</div><div class="kri-val" style="font-size:14px;padding-top:4px" id="kri-sync">—</div><div class="kri-sub">actualización hits</div></div>
-    </div>
 
-    <div class="g2" style="margin-bottom:16px">
-      <div class="card">
-        <div class="card-title"><span class="card-title-left">📡 Radar de Madurez</span><button class="btn btn-ghost btn-xs" onclick="go('madurez')">Ver detalle →</button></div>
-        <div class="radar-wrap">
-          <canvas id="radar-dash" width="200" height="200"></canvas>
-          <div class="radar-legend" id="radar-legend-dash"></div>
+    <!-- KPI BAR -->
+    <div id="dash-kpi-bar" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px"></div>
+
+    <!-- MAIN GRID: ciudad + panel secundario -->
+    <div style="display:grid;grid-template-columns:1fr 260px;gap:14px;margin-bottom:14px">
+
+      <!-- Ciudad pixel art -->
+      <div class="card" style="position:relative;overflow:hidden;padding:0;min-height:300px;background:var(--bg)">
+        <canvas id="city-canvas" style="width:100%;height:100%;display:block;image-rendering:pixelated"></canvas>
+        <div style="position:absolute;top:12px;left:12px">
+          <div style="background:rgba(0,0,0,.75);backdrop-filter:blur(8px);border:1px solid var(--border2);border-radius:10px;padding:8px 14px;display:flex;align-items:center;gap:10px">
+            <div>
+              <div style="font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase">Health Score</div>
+              <div id="health-score-val" style="font-family:var(--font-ui);font-size:28px;font-weight:800;color:var(--accent);line-height:1">100</div>
+            </div>
+            <canvas id="health-gauge" width="52" height="52"></canvas>
+          </div>
         </div>
-        <div id="dash-narrative" style="margin-top:12px;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:4px;font-size:10.5px;color:var(--text-dim);line-height:1.6"></div>
+        <div id="city-status-label" style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);backdrop-filter:blur(8px);border:1px solid var(--border2);border-radius:6px;padding:5px 14px;font-size:10px;letter-spacing:1px;color:var(--accent);text-transform:uppercase;white-space:nowrap"></div>
       </div>
-      <div class="card">
-        <div class="card-title"><span class="card-title-left">⚡ Últimos Hits</span><button class="btn btn-ghost btn-xs" onclick="go('hits')">Ver todos →</button></div>
-        <div id="dash-hits"></div>
+
+      <!-- Panel KPIs secundarios -->
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="card" style="padding:12px">
+          <div style="font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">⬡ Madurez ISO 37301</div>
+          <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:8px">
+            <div id="dash-madurez-val" style="font-family:var(--font-ui);font-size:26px;font-weight:800;color:var(--accent)">—</div>
+            <div style="color:var(--text-muted);font-size:12px">/5.0</div>
+          </div>
+          <div style="background:var(--surface2);border-radius:4px;height:6px;overflow:hidden">
+            <div id="dash-madurez-bar" style="height:100%;background:var(--accent);border-radius:4px;transition:width .6s;width:0%"></div>
+          </div>
+          <div id="dash-madurez-dims" style="margin-top:8px;display:flex;flex-direction:column;gap:3px"></div>
+        </div>
+        <div class="card" style="padding:12px">
+          <div style="font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">⬟ Controles</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:center">
+            <div><div id="dash-ctrl-total" style="font-family:var(--font-ui);font-size:22px;font-weight:800;color:var(--text)">—</div><div style="font-size:9px;color:var(--text-muted)">Activos</div></div>
+            <div><div id="dash-ctrl-noexec" style="font-family:var(--font-ui);font-size:22px;font-weight:800;color:var(--warn)">—</div><div style="font-size:9px;color:var(--text-muted)">Sin ejecutar</div></div>
+          </div>
+        </div>
+        <div class="card" style="padding:12px">
+          <div style="font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">⚖ Sentencias</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:center">
+            <div><div id="dash-sent-total" style="font-family:var(--font-ui);font-size:22px;font-weight:800;color:var(--text)">—</div><div style="font-size:9px;color:var(--text-muted)">Total</div></div>
+            <div><div id="dash-sent-recent" style="font-family:var(--font-ui);font-size:22px;font-weight:800;color:var(--accent2)">—</div><div style="font-size:9px;color:var(--text-muted)">Último mes</div></div>
+          </div>
+        </div>
+        <div class="card" style="padding:10px 12px;display:flex;align-items:center;justify-content:space-between">
+          <div style="font-size:9px;color:var(--text-muted)">Último sync</div>
+          <div id="dash-sync-time" style="font-size:11px;color:var(--text-dim)">—</div>
+        </div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-title"><span class="card-title-left">◉ Planes de Acción Activos</span><button class="btn btn-ghost btn-xs" onclick="go('planes')">Ver todos →</button></div>
-      <div id="dash-planes"></div>
+    <!-- GRÁFICAS EVOLUCIÓN -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+      <div class="card" style="padding:12px">
+        <div style="font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">📈 Health Score — 30 días</div>
+        <canvas id="chart-health" height="90"></canvas>
+      </div>
+      <div class="card" style="padding:12px">
+        <div style="font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">📊 Hits vs Impactos</div>
+        <canvas id="chart-hits" height="90"></canvas>
+      </div>
+      <div class="card" style="padding:12px">
+        <div style="font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">🎯 Evolución Madurez</div>
+        <canvas id="chart-madurez" height="90"></canvas>
+      </div>
     </div>
   </div>
 
@@ -1161,6 +1219,9 @@ async function syncAll(){
     renderAll();
     setStatus('Sync ✓ '+fmtTime(S.lastSync));
 
+    // Save daily historical snapshot for charts
+    saveHistoricalSnapshot();
+
     // Actualizar info de última actualización en cabecera de hits
     const syncInfoEl = document.getElementById('hits-sync-info');
     if(syncInfoEl){
@@ -1346,48 +1407,532 @@ function renderAll(){
   updateBadges();
 }
 
+// ═══════════════════════════════════════════════════════════════
+// DASHBOARD — CIUDAD PIXEL ART + KPIs + GRÁFICAS
+// ═══════════════════════════════════════════════════════════════
+
+// ── Health Score ─────────────────────────────────────────────
+function calcHealthScore(){
+  let score = 100;
+  const hits = S.hits || [];
+  const plans = S.actionPlans || [];
+  const ctrls = S.controls || [];
+
+  // Impactos residual ALTO sin plan: -12 cada uno (max -48)
+  const critNoplan = hits.filter(h =>
+    (h.residual_level==='alto'||h.residual_level==='critical') &&
+    !plans.find(p => p.hit_id===h.id && p.status!=='closed')
+  );
+  score -= Math.min(critNoplan.length * 12, 48);
+
+  // Impactos inherente MEDIO/ALTO sin analizar: -5 (max -20)
+  const unanalyzed = hits.filter(h => isImpact(h) && !h._analyzed && !h.inherent_level);
+  score -= Math.min(unanalyzed.length * 5, 20);
+
+  // Planes vencidos (abiertos con due_date pasada): -8 (max -24)
+  const now = Date.now();
+  const overdue = plans.filter(p => p.status!=='closed' && p.due_date && new Date(p.due_date)<now);
+  score -= Math.min(overdue.length * 8, 24);
+
+  // Controles sin ejecutar: hasta -15 proporcional
+  if(ctrls.length > 0){
+    const noExec = ctrls.filter(c => c.executed !== 'Sí').length;
+    score -= Math.round((noExec / ctrls.length) * 15);
+  }
+
+  // Controles ejecutados este mes: +2 (max +10)
+  const thisMonth = new Date(); thisMonth.setDate(1); thisMonth.setHours(0,0,0,0);
+  const execRecent = ctrls.filter(c => c.exec_date && new Date(c.exec_date) >= thisMonth);
+  score += Math.min(execRecent.length * 2, 10);
+
+  return Math.max(0, Math.min(100, Math.round(score)));
+}
+
+function healthLabel(score){
+  if(score >= 80) return { label:'Sistema protegido', color:'#00e5a0' };
+  if(score >= 50) return { label:'Atención requerida', color:'#f59e0b' };
+  if(score >= 20) return { label:'Riesgo elevado', color:'#ef4444' };
+  return { label:'Estado crítico', color:'#ef4444' };
+}
+
+// ── Gauge circular ────────────────────────────────────────────
+function drawGauge(canvasId, score){
+  const c = document.getElementById(canvasId);
+  if(!c) return;
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height, cx = W/2, cy = H/2, r = W*0.42;
+  ctx.clearRect(0,0,W,H);
+  const hl = healthLabel(score);
+  // Track
+  ctx.beginPath(); ctx.arc(cx,cy,r, Math.PI*0.75, Math.PI*2.25);
+  ctx.strokeStyle='rgba(255,255,255,.12)'; ctx.lineWidth=5; ctx.lineCap='round'; ctx.stroke();
+  // Fill
+  const pct = score/100;
+  ctx.beginPath(); ctx.arc(cx,cy,r, Math.PI*0.75, Math.PI*0.75 + Math.PI*1.5*pct);
+  ctx.strokeStyle=hl.color; ctx.lineWidth=5; ctx.stroke();
+  // Text
+  ctx.fillStyle=hl.color; ctx.font=`bold ${W*0.22}px sans-serif`;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(score+'%', cx, cy);
+}
+
+// ── KPI Bar ───────────────────────────────────────────────────
+function renderKpiBar(score){
+  const bar = document.getElementById('dash-kpi-bar');
+  if(!bar) return;
+  const hits  = S.hits||[];
+  const plans = S.actionPlans||[];
+
+  const critHits    = hits.filter(h=>(h.residual_level==='alto'||h.residual_level==='critical'));
+  const relHits     = hits.filter(h=>isImpact(h));
+  const allAnalyzed = hits.filter(h=>h._analyzed||h.inherent_level);
+  const planOpen    = plans.filter(p=>p.status!=='closed');
+  const planClosed  = plans.filter(p=>p.status==='closed');
+  const planPending = plans.filter(p=>p.status==='open'||p.status==='pending'||!p.status);
+
+  const kpis = [
+    { label:'Hits totales',     val: hits.length,          color:'var(--text)' },
+    { label:'Analizados',       val: allAnalyzed.length,   color:'var(--accent)' },
+    { label:'Imp. relevantes',  val: relHits.length,       color:'var(--warn)' },
+    { label:'Imp. críticos',    val: critHits.length,      color:'var(--danger)' },
+    { label:'Pendiente análisis',val:hits.filter(h=>!h._analyzed&&!h.inherent_level).length, color:'var(--text-dim)' },
+    { label:'Planes abiertos',  val: planOpen.length,      color:'var(--warn)' },
+    { label:'Planes pendientes',val: planPending.length,   color:'var(--accent2)' },
+    { label:'Planes cerrados',  val: planClosed.length,    color:'var(--accent)' },
+  ];
+
+  bar.innerHTML = kpis.map(k=>`
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 14px;display:flex;flex-direction:column;gap:2px;min-width:90px">
+      <div style="font-family:var(--font-ui);font-size:20px;font-weight:800;color:${k.color};line-height:1">${k.val}</div>
+      <div style="font-size:8.5px;color:var(--text-muted);letter-spacing:.5px;text-transform:uppercase;line-height:1.2">${k.label}</div>
+    </div>`).join('');
+}
+
+// ── Panel secundario ──────────────────────────────────────────
+function renderSecondaryKpis(){
+  const gs = calcGlobalScore();
+  const dims = getDimScores ? getDimScores() : [];
+  const dimNames = ['Contexto','Liderazgo','Planificación','Soporte','Operación','Evaluación','Mejora'];
+
+  const mv = document.getElementById('dash-madurez-val');
+  const mb = document.getElementById('dash-madurez-bar');
+  const md = document.getElementById('dash-madurez-dims');
+  if(mv) mv.textContent = gs > 0 ? gs.toFixed(1) : '—';
+  if(mb) mb.style.width = gs > 0 ? (gs/5*100)+'%' : '0%';
+  if(md) md.innerHTML = dims.slice(0,7).map((s,i)=>`
+    <div style="display:flex;align-items:center;gap:5px">
+      <div style="font-size:8px;color:var(--text-muted);width:70px;white-space:nowrap;overflow:hidden">${dimNames[i]||''}</div>
+      <div style="flex:1;background:var(--surface2);border-radius:2px;height:3px;overflow:hidden">
+        <div style="width:${(s/5*100).toFixed(0)}%;height:100%;background:var(--accent);border-radius:2px"></div>
+      </div>
+      <div style="font-size:8px;color:var(--text-dim);width:18px;text-align:right">${s.toFixed(1)}</div>
+    </div>`).join('');
+
+  const ct = document.getElementById('dash-ctrl-total');
+  const cn = document.getElementById('dash-ctrl-noexec');
+  if(ct) ct.textContent = S.controls?.length ?? '—';
+  if(cn) cn.textContent = S.controls?.filter(c=>c.executed!=='Sí').length ?? '—';
+
+  const st = document.getElementById('dash-sent-total');
+  const sr = document.getElementById('dash-sent-recent');
+  const monthAgo = new Date(); monthAgo.setMonth(monthAgo.getMonth()-1);
+  if(st) st.textContent = S.sentences?.length ?? '—';
+  if(sr) sr.textContent = S.sentences?.filter(s=>s.date&&new Date(s.date)>monthAgo).length ?? '—';
+
+  const sy = document.getElementById('dash-sync-time');
+  if(sy) sy.textContent = S.lastSync ? fmtTime(S.lastSync) : '—';
+}
+
+// ── Ciudad Pixel Art 16-bit ───────────────────────────────────
+let cityAnimFrame = null;
+let cityTick = 0;
+
+function drawCity(score){
+  const canvas = document.getElementById('city-canvas');
+  if(!canvas) return;
+  if(cityAnimFrame) cancelAnimationFrame(cityAnimFrame);
+
+  // Match canvas resolution to actual displayed size
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio||1;
+  canvas.width  = Math.round(rect.width  * dpr) || 800;
+  canvas.height = Math.round(rect.height * dpr) || 300;
+  const W = canvas.width, H = canvas.height;
+
+  const hl = healthLabel(score);
+  const isDay = document.documentElement.getAttribute('data-theme') === 'light';
+
+  function animate(){
+    cityTick++;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0,0,W,H);
+    const S2 = W/800; // scale factor
+
+    // ── SKY ──────────────────────────────────────────────────
+    const skyGrad = ctx.createLinearGradient(0,0,0,H*0.65);
+    if(isDay){
+      skyGrad.addColorStop(0, score>=50?'#87ceeb':'#607d8b');
+      skyGrad.addColorStop(1, score>=50?'#b0e0f0':'#90a4ae');
+    } else {
+      skyGrad.addColorStop(0, score>=50?'#0a0f1a':'#1a0a0a');
+      skyGrad.addColorStop(1, score>=50?'#0d1520':'#2a0a0a');
+    }
+    ctx.fillStyle = skyGrad; ctx.fillRect(0,0,W,H*0.65);
+
+    // Stars (night)
+    if(!isDay){
+      ctx.fillStyle='rgba(255,255,255,.8)';
+      const stars=[[50,30],[120,15],[200,40],[320,10],[450,25],[580,18],[700,35],[760,12],[80,55],[380,48]];
+      stars.forEach(([x,y])=>{
+        const twinkle = Math.sin(cityTick*0.05 + x) * 0.4 + 0.6;
+        ctx.globalAlpha = twinkle;
+        ctx.fillRect(x*S2, y*S2, 1.5*S2, 1.5*S2);
+      });
+      ctx.globalAlpha = 1;
+    }
+
+    // Sun / Moon
+    if(isDay){
+      ctx.fillStyle='#FFD700';
+      ctx.beginPath(); ctx.arc(720*S2, 45*S2, 18*S2, 0, Math.PI*2); ctx.fill();
+    } else {
+      ctx.fillStyle='#ddeeff';
+      ctx.beginPath(); ctx.arc(720*S2, 45*S2, 14*S2, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle=isDay?'#b0e0f0':'#0a0f1a';
+      ctx.beginPath(); ctx.arc(728*S2, 40*S2, 11*S2, 0, Math.PI*2); ctx.fill();
+    }
+
+    // Clouds (day only, drift slowly)
+    if(isDay && score>=30){
+      const cloudOffset = (cityTick * 0.3) % (W+120*S2);
+      [[100,40,60],[300,25,80],[600,50,50]].forEach(([cx,cy,cw])=>{
+        const x = ((cx*S2 + cloudOffset) % (W + 120*S2)) - 60*S2;
+        ctx.fillStyle='rgba(255,255,255,.85)';
+        ctx.beginPath(); ctx.ellipse(x,cy*S2,cw*S2*0.5,12*S2,0,0,Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(x+20*S2,cy*S2-8*S2,cw*S2*0.35,10*S2,0,0,Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(x-20*S2,cy*S2-4*S2,cw*S2*0.3,9*S2,0,0,Math.PI*2); ctx.fill();
+      });
+    }
+
+    // Rain (score < 50)
+    if(score < 50){
+      ctx.strokeStyle='rgba(100,150,200,.3)';
+      ctx.lineWidth=1;
+      for(let r=0;r<30;r++){
+        const rx = (r*73 + cityTick*2) % W;
+        const ry = (r*53 + cityTick*4) % (H*0.65);
+        ctx.beginPath(); ctx.moveTo(rx,ry); ctx.lineTo(rx-2*S2,ry+8*S2); ctx.stroke();
+      }
+    }
+
+    // ── GROUND ───────────────────────────────────────────────
+    ctx.fillStyle = isDay ? '#4a5240' : '#1a2010';
+    ctx.fillRect(0, H*0.65, W, H*0.35);
+
+    // Road
+    ctx.fillStyle = isDay ? '#555' : '#222';
+    ctx.fillRect(0, H*0.78, W, H*0.08);
+    // Road lines
+    ctx.fillStyle='rgba(255,255,200,.4)';
+    for(let d=0;d<W;d+=60*S2){
+      const dx = (d + cityTick) % W;
+      ctx.fillRect(dx, H*0.815, 30*S2, 2*S2);
+    }
+
+    // ── BUILDINGS ────────────────────────────────────────────
+    const buildings = [
+      {x:50, w:80, h:180, floors:9, color:isDay?'#4a6080':'#1a2535'},  // rascacielos izq
+      {x:150,w:60, h:130, floors:7, color:isDay?'#5a6070':'#1e2830'},
+      {x:240,w:100,h:220, floors:11,color:isDay?'#3d5570':'#162030'},  // rascacielos centro
+      {x:370,w:70, h:150, floors:8, color:isDay?'#506070':'#1c2835'},
+      {x:460,w:90, h:190, floors:10,color:isDay?'#405060':'#182233'},
+      {x:580,w:65, h:140, floors:7, color:isDay?'#4a5868':'#1a2530'},
+      {x:670,w:85, h:170, floors:9, color:isDay?'#384860':'#141e2a'},
+    ];
+
+    buildings.forEach((b,bi)=>{
+      const bx=b.x*S2, bw=b.w*S2, bh=b.h*S2;
+      const by=H*0.65-bh+4*S2;
+
+      // Building body
+      ctx.fillStyle=b.color;
+      ctx.fillRect(bx, by, bw, bh);
+
+      // Building outline (pixel art feel)
+      ctx.strokeStyle=isDay?'rgba(0,0,0,.2)':'rgba(255,255,255,.05)';
+      ctx.lineWidth=1; ctx.strokeRect(bx,by,bw,bh);
+
+      // Antenna on tall buildings
+      if(b.h>160){
+        ctx.fillStyle=isDay?'#8090a0':'#304050';
+        ctx.fillRect(bx+bw/2-1.5*S2, by-18*S2, 3*S2, 18*S2);
+        // Blinking light
+        const blink = Math.sin(cityTick*0.08+bi)>0;
+        ctx.fillStyle=blink?'#ef4444':'rgba(239,68,68,.3)';
+        ctx.beginPath(); ctx.arc(bx+bw/2,by-18*S2,2.5*S2,0,Math.PI*2); ctx.fill();
+      }
+
+      // Windows grid
+      const floorH = bh/b.floors;
+      const winW=5*S2, winH=6*S2, colW=10*S2;
+      const cols = Math.floor((bw-8*S2)/colW);
+      for(let f=0;f<b.floors-1;f++){
+        for(let c=0;c<cols;c++){
+          const wx = bx+4*S2+c*colW;
+          const wy = by+4*S2+f*floorH;
+          // Window lit or dark depends on health + randomish pattern
+          const lit = score>70
+            ? true
+            : score>40
+              ? ((bi*7+f*3+c*5)%10) < Math.round(score/15)
+              : ((bi*7+f*3+c*5)%10) < 2;
+          if(lit){
+            // Night: warm yellow glow; Day: reflective blue
+            ctx.fillStyle = isDay ? 'rgba(180,210,240,.7)' : '#ffd060';
+            ctx.fillRect(wx,wy,winW,winH);
+            if(!isDay){
+              ctx.fillStyle='rgba(255,200,50,.3)';
+              ctx.fillRect(wx-1*S2,wy+winH,winW+2*S2,2*S2);
+            }
+          } else {
+            ctx.fillStyle=isDay?'rgba(0,0,0,.3)':'rgba(0,0,0,.6)';
+            ctx.fillRect(wx,wy,winW,winH);
+          }
+        }
+      }
+
+      // Smoke (bad score)
+      if(score<60 && bi%2===0){
+        const smokeAlpha = (60-score)/60*0.5;
+        const smokeX = bx+bw/2;
+        const smokeY = by - 5*S2;
+        for(let s=0;s<4;s++){
+          const sOff = (cityTick*0.8+s*15)%50;
+          const sAlpha = smokeAlpha*(1-sOff/50);
+          const sRadius = (4+sOff*0.5)*S2;
+          ctx.fillStyle=`rgba(80,80,80,${sAlpha.toFixed(2)})`;
+          ctx.beginPath();
+          ctx.arc(smokeX+Math.sin(s*1.5)*4*S2, smokeY-sOff*S2, sRadius, 0, Math.PI*2);
+          ctx.fill();
+        }
+      }
+    });
+
+    // ── DOME (CÚPULA) ─────────────────────────────────────────
+    const domeX=W/2, domeY=H*0.65+2*S2, domeR=320*S2;
+    const domeScore01 = score/100;
+    const domeColor = hl.color;
+
+    // Dome glow
+    const glowA = score>=80 ? 0.15 : score>=50 ? 0.10 : 0.06;
+    const glowGrad = ctx.createRadialGradient(domeX,domeY,domeR*0.6,domeX,domeY,domeR);
+    glowGrad.addColorStop(0, `${domeColor}00`);
+    glowGrad.addColorStop(0.8, `${domeColor}${Math.round(glowA*255).toString(16).padStart(2,'0')}`);
+    glowGrad.addColorStop(1, `${domeColor}00`);
+    ctx.beginPath(); ctx.arc(domeX,domeY,domeR,Math.PI,Math.PI*2); ctx.fillStyle=glowGrad; ctx.fill();
+
+    // Dome arc
+    const pulseW = score>=80 ? 2+Math.sin(cityTick*0.05)*0.8 : score>=50 ? 2 : 1.5;
+    ctx.beginPath(); ctx.arc(domeX,domeY,domeR,Math.PI,Math.PI*2);
+    ctx.strokeStyle=domeColor;
+    ctx.lineWidth=(pulseW)*S2;
+    ctx.globalAlpha = score<20 ? 0.5+Math.sin(cityTick*0.15)*0.5 : 1; // flicker if critical
+    ctx.stroke();
+    ctx.globalAlpha=1;
+
+    // Dome cracks (score < 30)
+    if(score<30){
+      ctx.strokeStyle='rgba(239,68,68,.6)';
+      ctx.lineWidth=1.5*S2;
+      const cracks=[[domeX-50*S2,domeY-180*S2],[domeX+80*S2,domeY-220*S2]];
+      cracks.forEach(([cx,cy])=>{
+        ctx.beginPath(); ctx.moveTo(cx,cy);
+        ctx.lineTo(cx+12*S2,cy+20*S2); ctx.lineTo(cx+5*S2,cy+35*S2); ctx.stroke();
+      });
+    }
+
+    // Lightning (score < 20)
+    if(score<20 && cityTick%40<3){
+      ctx.strokeStyle='rgba(255,200,0,.9)'; ctx.lineWidth=2*S2;
+      ctx.beginPath();
+      ctx.moveTo(domeX-20*S2,domeY-200*S2);
+      ctx.lineTo(domeX-30*S2,domeY-160*S2);
+      ctx.lineTo(domeX-15*S2,domeY-140*S2);
+      ctx.stroke();
+    }
+
+    cityAnimFrame = requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+// ── Mini line chart ───────────────────────────────────────────
+function drawLineChart(canvasId, datasets, labels){
+  const canvas = document.getElementById(canvasId);
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W=canvas.offsetWidth||canvas.parentElement.offsetWidth||300;
+  canvas.width=W; // match layout width
+  const H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+
+  if(!datasets.length || !datasets[0].data.length){
+    ctx.fillStyle='rgba(255,255,255,.2)';
+    ctx.font='11px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('Acumulando datos…', W/2, H/2);
+    return;
+  }
+
+  // Y range
+  let allVals = datasets.flatMap(d=>d.data);
+  let yMin=Math.min(...allVals), yMax=Math.max(...allVals);
+  if(yMax===yMin){ yMin=Math.max(0,yMin-1); yMax=yMax+1; }
+  const pad={t:8,b:20,l:28,r:8};
+  const gW=W-pad.l-pad.r, gH=H-pad.t-pad.b;
+
+  const scaleX=i=>(datasets[0].data.length>1 ? i/(datasets[0].data.length-1) : 0.5)*gW+pad.l;
+  const scaleY=v=>pad.t+gH-(v-yMin)/(yMax-yMin)*gH;
+
+  // Grid lines
+  ctx.strokeStyle='rgba(255,255,255,.06)'; ctx.lineWidth=1;
+  [0,.5,1].forEach(f=>{
+    const y=pad.t+gH*f;
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,.25)'; ctx.font='7px sans-serif'; ctx.textAlign='right';
+    ctx.fillText(Math.round(yMin+(yMax-yMin)*(1-f)), pad.l-2, y+3);
+  });
+
+  // X labels (first/last)
+  if(labels && labels.length){
+    ctx.fillStyle='rgba(255,255,255,.3)'; ctx.font='7px sans-serif';
+    ctx.textAlign='left';  ctx.fillText(labels[0], pad.l, H-4);
+    ctx.textAlign='right'; ctx.fillText(labels[labels.length-1], W-pad.r, H-4);
+  }
+
+  // Lines + fill
+  datasets.forEach(ds=>{
+    if(!ds.data.length) return;
+    ctx.strokeStyle=ds.color; ctx.lineWidth=2; ctx.lineJoin='round';
+    ctx.beginPath();
+    ds.data.forEach((v,i)=>{ i===0?ctx.moveTo(scaleX(i),scaleY(v)):ctx.lineTo(scaleX(i),scaleY(v)); });
+    ctx.stroke();
+
+    // Fill gradient
+    const grad=ctx.createLinearGradient(0,pad.t,0,H-pad.b);
+    grad.addColorStop(0,ds.color.replace(')',',0.25)').replace('rgb','rgba'));
+    grad.addColorStop(1,ds.color.replace(')',',0)').replace('rgb','rgba'));
+    ctx.beginPath();
+    ds.data.forEach((v,i)=>{ i===0?ctx.moveTo(scaleX(i),scaleY(v)):ctx.lineTo(scaleX(i),scaleY(v)); });
+    ctx.lineTo(scaleX(ds.data.length-1),H-pad.b);
+    ctx.lineTo(scaleX(0),H-pad.b);
+    ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+
+    // Dots
+    ds.data.forEach((v,i)=>{
+      ctx.beginPath(); ctx.arc(scaleX(i),scaleY(v),2.5,0,Math.PI*2);
+      ctx.fillStyle=ds.color; ctx.fill();
+    });
+  });
+}
+
+// ── Historical data accumulation ──────────────────────────────
+async function saveHistoricalSnapshot(){
+  const score = calcHealthScore();
+  const gs = calcGlobalScore();
+  const snap = {
+    date: new Date().toISOString().split('T')[0],
+    health: score,
+    hits_total: (S.hits||[]).length,
+    hits_impact: (S.hits||[]).filter(isImpact).length,
+    madurez: parseFloat(gs.toFixed(2)),
+    _ts: new Date().toISOString()
+  };
+  try {
+    // Check if today's snapshot already exists
+    const existing = await db.collection('dashboard_history').where('date','==',snap.date).limit(1).get();
+    if(existing.empty){
+      await db.collection('dashboard_history').add(snap);
+    } else {
+      // Update today's snapshot
+      await db.collection('dashboard_history').doc(existing.docs[0].id).update({
+        health: snap.health, hits_total: snap.hits_total,
+        hits_impact: snap.hits_impact, madurez: snap.madurez, _ts: snap._ts
+      });
+    }
+  } catch(e){ console.warn('Historical snapshot error:', e); }
+}
+
+async function loadHistoricalCharts(){
+  try {
+    const snap = await db.collection('dashboard_history').orderBy('_ts','asc').limit(30).get();
+    const rows = snap.docs.map(d=>d.data());
+
+    const labels = rows.map(r=>r.date ? r.date.slice(5) : ''); // MM-DD
+
+    // Health chart
+    drawLineChart('chart-health', [{
+      data: rows.map(r=>r.health||0),
+      color: 'rgb(0,229,160)'
+    }], labels);
+
+    // Hits vs Impactos
+    drawLineChart('chart-hits', [
+      { data: rows.map(r=>r.hits_total||0),  color:'rgb(0,102,255)' },
+      { data: rows.map(r=>r.hits_impact||0), color:'rgb(245,158,11)' }
+    ], labels);
+
+    // Madurez (×20 to show as pct out of 100 visually, or just raw /5)
+    drawLineChart('chart-madurez', [{
+      data: rows.map(r=>r.madurez||0),
+      color:'rgb(139,92,246)'
+    }], labels);
+
+  } catch(e){
+    // No data yet – show placeholder
+    ['chart-health','chart-hits','chart-madurez'].forEach(id=>drawLineChart(id,[],[]));
+    console.warn('No historical data:', e);
+  }
+}
+
+// ── Main renderDashboard ──────────────────────────────────────
 function renderDashboard(){
   // Twin disclaimer
   const lastCtxUpdate = S.ctx?._updated;
   const daysSince = lastCtxUpdate ? Math.floor((Date.now()-new Date(lastCtxUpdate))/86400000) : null;
   const disc = document.getElementById('twin-disclaimer');
-  if(!S.twinSummary){
-    disc.innerHTML=`<div class="alert alert-warn mb14">⚠ El Resumen del Digital Twin está vacío. <button class="btn btn-ghost btn-xs" onclick="go('twin-summary')">Configurar →</button></div>`;
-  } else if(daysSince !== null && daysSince > (S.cfg.twinDays||90)){
-    disc.innerHTML=`<div class="alert alert-warn mb14">⚠ El Digital Twin no se actualiza hace <strong>${daysSince} días</strong>. Considera revisar el contexto y la madurez. <button class="btn btn-ghost btn-xs" onclick="go('contexto')">Revisar →</button></div>`;
-  } else {
-    disc.innerHTML='';
+  if(disc){
+    if(!S.twinSummary){
+      disc.innerHTML=`<div class="alert alert-warn mb14">⚠ El Resumen del Digital Twin está vacío. <button class="btn btn-ghost btn-xs" onclick="go('contexto')">Configurar →</button></div>`;
+    } else if(daysSince !== null && daysSince > (S.cfg.twinDays||90)){
+      disc.innerHTML=`<div class="alert alert-warn mb14">⚠ El Digital Twin no se actualiza hace <strong>${daysSince} días</strong>.</div>`;
+    } else {
+      disc.innerHTML='';
+    }
   }
 
-  // KRIs
-  const globalScore = calcGlobalScore();
-  document.getElementById('kri-madurez').textContent = globalScore>0 ? globalScore.toFixed(1) : '—';
-  const crits = S.hits.filter(h=>h.level==='critical' && !S.actionPlans.find(p=>p.hit_id===h.id && p.status!=='open')).length;
-  document.getElementById('kri-criticos').textContent = crits;
-  document.getElementById('kri-planes').textContent = S.actionPlans.filter(p=>p.status!=='closed').length;
-  document.getElementById('kri-sync').textContent = S.lastSync ? fmtTime(S.lastSync) : '—';
+  const score = calcHealthScore();
+  const hl = healthLabel(score);
 
-  // Radar
-  drawRadar('radar-dash', getDimScores());
-  renderRadarLegend('radar-legend-dash', true);
+  // Health score display
+  const hsv = document.getElementById('health-score-val');
+  if(hsv){ hsv.textContent = score; hsv.style.color = hl.color; }
+  drawGauge('health-gauge', score);
 
-  // Narrative
-  const narrative = S.twinSummary ?
-    `<em>Twin activo.</em> Madurez global: ${globalScore.toFixed(1)}/5. ${S.hits.filter(h=>h.level==='critical').length} hits críticos · ${S.actionPlans.filter(p=>p.status!=='closed').length} planes abiertos.` :
-    'Configura el Digital Twin para ver el análisis contextualizado.';
-  document.getElementById('dash-narrative').innerHTML = narrative;
+  // City status label
+  const sl = document.getElementById('city-status-label');
+  if(sl){ sl.textContent = hl.label; sl.style.color = hl.color; }
 
-  // Recent hits
-  const dh = document.getElementById('dash-hits');
-  const recent = S.hits.slice(0,4);
-  dh.innerHTML = recent.length ? recent.map(h=>miniHit(h)).join('') :
-    `<div class="empty"><div class="empty-icon">⟁</div><div class="empty-sub">Sin hits · ejecuta el workflow en GitHub</div></div>`;
+  // KPI bar
+  renderKpiBar(score);
 
-  // Planes
-  const dp = document.getElementById('dash-planes');
-  const open = S.actionPlans.filter(p=>p.status!=='closed').slice(0,4);
-  dp.innerHTML = open.length ? open.map(p=>miniPlan(p)).join('') :
-    `<div class="empty"><div class="empty-sub">Sin planes abiertos</div></div>`;
+  // Secondary KPIs
+  renderSecondaryKpis();
+
+  // City animation
+  drawCity(score);
+
+  // Charts (async)
+  loadHistoricalCharts();
 }
 
 function miniHit(h){
@@ -3122,10 +3667,30 @@ function showAlert(containerId, msg, type){
   if(containerId){ const el=document.getElementById(containerId); if(el){ el.innerHTML=html; setTimeout(()=>el.innerHTML='',5000); } }
 }
 
-// ═══════════════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════════════
+// ── Theme toggle ──────────────────────────────────────────────
+function toggleTheme(){
+  const html = document.documentElement;
+  const isLight = html.getAttribute('data-theme') === 'light';
+  const newTheme = isLight ? 'dark' : 'light';
+  html.setAttribute('data-theme', newTheme);
+  localStorage.setItem('cdt-theme', newTheme);
+  const btn = document.getElementById('theme-btn');
+  if(btn) btn.textContent = newTheme === 'light' ? '🌙' : '☀️';
+  // Redraw city for new theme
+  const score = calcHealthScore();
+  drawCity(score);
+}
+
+function initTheme(){
+  const saved = localStorage.getItem('cdt-theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  const btn = document.getElementById('theme-btn');
+  if(btn) btn.textContent = saved === 'light' ? '🌙' : '☀️';
+}
+
+// ── INIT ──────────────────────────────────────────────────────
 restoreLocal();
+initTheme();
 renderAll();
 drawRadar('radar-dash', getDimScores());
 renderRadarLegend('radar-legend-dash', true);
