@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -245,7 +246,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
 .funnel-step:hover{background:rgba(255,255,255,.02)}
 .funnel-step.active{background:rgba(0,229,160,.04);border-bottom:2px solid var(--accent)}
 .funnel-count{font-family:var(--font-ui);font-size:24px;font-weight:800;line-height:1}
-.funnel-label{font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-top:3px}
+.funnel-label{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-top:3px}
 .funnel-arrow{display:flex;align-items:center;padding:0 6px;color:var(--text-muted);font-size:16px;flex-shrink:0}
 
 /* SENTENCIAS */
@@ -310,7 +311,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
 
     <div class="nav-group" style="margin-top:10px">⟁ Monitor Activo</div>
     <div class="nav-item" data-view="hits" onclick="go('hits')"><span class="icon">⚡</span>Monitorización de Hits<span class="nav-badge nb-danger" id="badge-hits">0</span></div>
-    <div class="nav-item" data-view="brief" onclick="go('brief')"><span class="icon">▤</span>Brief Ejecutivo</div>
     <div class="nav-item" data-view="sentencias" onclick="go('sentencias')"><span class="icon">⚖</span>Sentencias<span class="nav-badge nb-accent" id="badge-sent">0</span></div>
     <div class="nav-item" data-view="fuentes" onclick="go('fuentes')"><span class="icon">📡</span>Fuentes & Búsquedas</div>
 
@@ -328,7 +328,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   <div class="topbar">
     <div class="topbar-title" id="tb-title">Dashboard & KRIs</div>
     <div class="topbar-meta" id="tb-meta"></div>
-    <button class="btn btn-ghost" onclick="syncAll()" id="sync-btn">⟳ Sync</button>
+    <button class="btn btn-ghost" onclick="syncAll()" id="sync-btn" title="Sincroniza datos con Firestore y GitHub. Actualiza hits, controles y configuración.">⟳ Sync</button>
     <button class="btn btn-primary" onclick="go('analisis')">+ Análisis</button>
   </div>
 
@@ -337,55 +337,31 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   <!-- DASHBOARD -->
   <div class="view active" id="view-dashboard">
     <div id="twin-disclaimer"></div>
+    <div class="kri-grid">
+      <div class="kri" style="--c:var(--accent)"><div class="kri-label">Madurez Global</div><div class="kri-val" id="kri-madurez">—</div><div class="kri-sub">/5.0 puntos</div></div>
+      <div class="kri" style="--c:var(--danger)"><div class="kri-label">Hits Críticos</div><div class="kri-val" id="kri-criticos">0</div><div class="kri-sub">sin plan de acción</div></div>
+      <div class="kri" style="--c:var(--warn)"><div class="kri-label">Planes Abiertos</div><div class="kri-val" id="kri-planes">0</div><div class="kri-sub">requieren atención</div></div>
+      <div class="kri" style="--c:var(--accent2)"><div class="kri-label">Última Sync</div><div class="kri-val" style="font-size:14px;padding-top:4px" id="kri-sync">—</div><div class="kri-sub">actualización hits</div></div>
+    </div>
 
-    <!-- KPI bar -->
-    <div id="dash-kpi-bar" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
-
-    <!-- City + KRI -->
-    <div style="display:grid;grid-template-columns:1fr 220px;gap:12px;margin-bottom:12px">
-      <div class="card" style="padding:0;overflow:hidden;position:relative;height:200px">
-        <canvas id="city-canvas" style="width:100%;height:100%;display:block"></canvas>
-        <div style="position:absolute;top:8px;left:10px;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.75);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:5px 11px">
-          <canvas id="health-gauge" width="40" height="40"></canvas>
-          <div>
-            <div style="font-size:8px;color:rgba(255,255,255,.4);letter-spacing:1.5px;text-transform:uppercase">Health</div>
-            <div id="health-score-val" style="font-family:var(--font-ui);font-size:20px;font-weight:800;color:var(--accent);line-height:1">—</div>
-          </div>
+    <div class="g2" style="margin-bottom:16px">
+      <div class="card">
+        <div class="card-title"><span class="card-title-left">📡 Radar de Madurez</span><button class="btn btn-ghost btn-xs" onclick="go('madurez')">Ver detalle →</button></div>
+        <div class="radar-wrap">
+          <canvas id="radar-dash" width="200" height="200"></canvas>
+          <div class="radar-legend" id="radar-legend-dash"></div>
         </div>
-        <div id="city-status-lbl" style="position:absolute;bottom:7px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);border:1px solid rgba(255,255,255,.1);border-radius:4px;padding:2px 11px;font-size:9px;letter-spacing:1px;color:var(--accent);text-transform:uppercase;white-space:nowrap"></div>
+        <div id="dash-narrative" style="margin-top:12px;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:4px;font-size:10.5px;color:var(--text-dim);line-height:1.6"></div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div class="card" style="padding:10px 12px;flex:1">
-          <div style="font-size:8px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px">KRI — Estado</div>
-          <div id="dash-kri-panel"></div>
-        </div>
-        <div class="card" style="padding:8px 12px">
-          <div style="font-size:8px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px">Última sync</div>
-          <div id="dash-sync-time" style="font-size:11px;color:var(--text-dim)">—</div>
-        </div>
+      <div class="card">
+        <div class="card-title"><span class="card-title-left">⚡ Últimos Hits</span><button class="btn btn-ghost btn-xs" onclick="go('hits')">Ver todos →</button></div>
+        <div id="dash-hits"></div>
       </div>
     </div>
 
-    <!-- 3 charts -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px">
-      <div class="card" style="padding:10px 12px">
-        <div style="font-size:8px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">📈 Health Score — 30 días</div>
-        <canvas id="chart-health" height="65"></canvas>
-      </div>
-      <div class="card" style="padding:10px 12px">
-        <div style="font-size:8px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">📊 Hits vs Impactos</div>
-        <canvas id="chart-hits" height="65"></canvas>
-      </div>
-      <div class="card" style="padding:10px 12px">
-        <div style="font-size:8px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">📋 Planes abiertos/cerrados</div>
-        <canvas id="chart-planes" height="65"></canvas>
-      </div>
-    </div>
-
-    <!-- Recent hits -->
     <div class="card">
-      <div class="card-title"><span class="card-title-left">⚡ Últimos Hits</span><button class="btn btn-ghost btn-xs" onclick="go('hits')">Ver todos →</button></div>
-      <div id="dash-hits"></div>
+      <div class="card-title"><span class="card-title-left">◉ Planes de Acción Activos</span><button class="btn btn-ghost btn-xs" onclick="go('planes')">Ver todos →</button></div>
+      <div id="dash-planes"></div>
     </div>
   </div>
 
@@ -578,7 +554,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   <!-- HITS -->
   <div class="view" id="view-hits">
     <div class="ph">
-      <div class="ph-left"><div class="ph-title">Monitorización de Hits</div><div class="ph-sub">Funnel de relevancia · Filtrado por keywords → Impacto en tu empresa</div></div>
+      <div class="ph-left"><div class="ph-title">Monitorización de Hits</div><div class="ph-sub" id="hits-sync-info">Funnel de relevancia · Filtrado por keywords → Impacto en tu empresa</div></div>
       <div class="ph-actions">
         <button class="btn btn-ghost btn-sm" id="batch-reanalyze-btn" onclick="batchReAnalyze()" title="Re-analiza todos los hits pendientes contra tu Digital Twin">⟳ Re-evaluar todos</button>
         <button class="btn btn-ghost btn-sm" onclick="syncHits()">Sync</button>
@@ -650,17 +626,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   </div>
 
   <!-- BRIEF EJECUTIVO -->
-  <div class="view" id="view-brief">
-    <div class="ph">
-      <div class="ph-left"><div class="ph-title">Brief Ejecutivo</div><div class="ph-sub">Informe para Comité de Cumplimiento / Consejo</div></div>
-      <div class="ph-actions">
-        <button class="btn btn-purple" onclick="generateBrief()" id="brief-gen-btn">✦ Generar con IA</button>
-        <button class="btn btn-primary" onclick="printBrief()">⬇ Exportar PDF</button>
-      </div>
-    </div>
-    <div id="brief-alert"></div>
-    <div id="brief-content"></div>
-  </div>
 
   <!-- FUENTES -->
   <div class="view" id="view-fuentes">
@@ -1196,8 +1161,25 @@ async function syncAll(){
     lsSet('plans', S.actionPlans);
     renderAll();
     setStatus('Sync ✓ '+fmtTime(S.lastSync));
+
+    // Actualizar info de última actualización en cabecera de hits
+    const syncInfoEl = document.getElementById('hits-sync-info');
+    if(syncInfoEl){
+      const latestHit = S.hits.reduce((max,h)=>{
+        const d = h.raw_date||h.published_at||h.fetched_at||'';
+        return d > max ? d : max;
+      }, '');
+      const latestSent = (S.sentences||[]).reduce((max,s)=>{
+        const d = s.date||s.raw_date||'';
+        return d > max ? d : max;
+      }, '');
+      const parts = [];
+      if(latestHit) parts.push('Última noticia: ' + fmtDate(latestHit));
+      if(latestSent) parts.push('Última sentencia: ' + fmtDate(latestSent));
+      parts.push('Sync: ' + fmtTime(S.lastSync));
+      syncInfoEl.textContent = parts.join(' · ');
+    }
     document.getElementById('tb-meta').textContent = 'Sync: '+fmtTime(S.lastSync);
-    saveDashSnapshot();
 
     // Auto-analyze hits without RAG evaluation (silent background queue)
     autoAnalyzePending();
@@ -1365,430 +1347,48 @@ function renderAll(){
   updateBadges();
 }
 
-// ═══════════════════════════════════════════════════════════════
-// DASHBOARD — Health, Ciudad, KPIs, Charts
-// ═══════════════════════════════════════════════════════════════
-
-function calcHealthScore(){
-  var score=100;
-  var hits=S.hits||[], plans=S.actionPlans||[], ctrls=S.controls||[];
-  // Residual ALTO sin plan: -12 c/u (cap -48)
-  var critNoplan=hits.filter(function(h){
-    var r=h.residual_level||'';
-    return (r==='alto'||r==='critical')&&!plans.find(function(p){return p.hit_id===h.id&&p.status!=='closed';});
-  });
-  score-=Math.min(critNoplan.length*12,48);
-  // Inherente medio/alto sin analizar: -5 (cap -20)
-  var unanalyzed=hits.filter(function(h){return isImpact(h)&&!h._analyzed&&!h.inherent_level;});
-  score-=Math.min(unanalyzed.length*5,20);
-  // Planes vencidos: -8 (cap -24)
-  var now=Date.now();
-  var overdue=plans.filter(function(p){return p.status!=='closed'&&p.due_date&&new Date(p.due_date)<now;});
-  score-=Math.min(overdue.length*8,24);
-  // Controles sin ejecutar: hasta -12
-  if(ctrls.length>0){
-    var noExec=ctrls.filter(function(c){return c.executed!=='Sí';}).length;
-    score-=Math.round((noExec/ctrls.length)*12);
-  }
-  // Controles ejecutados este mes: +2 (cap +8)
-  var mo=new Date(); mo.setDate(1); mo.setHours(0,0,0,0);
-  var fresh=ctrls.filter(function(c){return c.exec_date&&new Date(c.exec_date)>=mo;});
-  score+=Math.min(fresh.length*2,8);
-  return Math.max(0,Math.min(100,Math.round(score)));
-}
-
-function healthMeta(score){
-  if(score>=80) return {label:'Sistema protegido',color:'#00e5a0'};
-  if(score>=50) return {label:'Atención requerida',color:'#f59e0b'};
-  if(score>=20) return {label:'Riesgo elevado',color:'#ef4444'};
-  return {label:'Estado crítico',color:'#ef4444'};
-}
-
-function drawHealthGauge(score){
-  var c=document.getElementById('health-gauge'); if(!c)return;
-  var ctx=c.getContext('2d'),W=c.width,H=c.height,cx=W/2,cy=H/2,r=W*.40;
-  var m=healthMeta(score);
-  ctx.clearRect(0,0,W,H);
-  ctx.beginPath(); ctx.arc(cx,cy,r,Math.PI*.75,Math.PI*2.25);
-  ctx.strokeStyle='rgba(255,255,255,.1)'; ctx.lineWidth=3.5; ctx.lineCap='round'; ctx.stroke();
-  if(score>0){
-    ctx.beginPath(); ctx.arc(cx,cy,r,Math.PI*.75,Math.PI*.75+Math.PI*1.5*(score/100));
-    ctx.strokeStyle=m.color; ctx.lineWidth=3.5; ctx.stroke();
-  }
-}
-
-function renderDashKpiBar(){
-  var bar=document.getElementById('dash-kpi-bar'); if(!bar)return;
-  var hits=S.hits||[], plans=S.actionPlans||[], ctrls=S.controls||[];
-  var monthAgo=new Date(); monthAgo.setMonth(monthAgo.getMonth()-1);
-  var kpis=[
-    {icon:'⚡',label:'Hits totales',   val:hits.length,                                                                               col:'var(--text)'},
-    {icon:'🔴',label:'Res. críticos',  val:hits.filter(function(h){var r=h.residual_level||'';return r==='alto'||r==='critical';}).length, col:'var(--danger)'},
-    {icon:'🟡',label:'Impactos',       val:hits.filter(isImpact).length,                                                              col:'var(--warn)'},
-    {icon:'⏳',label:'Sin analizar',   val:hits.filter(function(h){return !h._analyzed&&!h.inherent_level;}).length,                  col:'var(--text-dim)'},
-    {icon:'📋',label:'Planes abiertos',val:plans.filter(function(p){return p.status!=='closed';}).length,                            col:'var(--warn)'},
-    {icon:'✅',label:'Planes cerrados',val:plans.filter(function(p){return p.status==='closed';}).length,                             col:'var(--accent)'},
-    {icon:'⬟', label:'Controles',      val:ctrls.length,                                                                              col:'var(--text)'},
-    {icon:'⚠️',label:'Sin ejecutar',   val:ctrls.filter(function(c){return c.executed!=='Sí';}).length,                              col:'var(--warn)'},
-  ];
-  bar.innerHTML=kpis.map(function(k){
-    return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 12px;display:flex;flex-direction:column;gap:2px;min-width:78px">'
-      +'<div style="font-family:var(--font-ui);font-size:18px;font-weight:800;color:'+k.col+';line-height:1">'+k.val+'</div>'
-      +'<div style="font-size:8px;color:var(--text-muted);letter-spacing:.4px;text-transform:uppercase;line-height:1.2">'+k.icon+' '+k.label+'</div>'
-      +'</div>';
-  }).join('');
-}
-
-function renderDashKriPanel(){
-  var el=document.getElementById('dash-kri-panel'); if(!el)return;
-  var hits=S.hits||[], plans=S.actionPlans||[], ctrls=S.controls||[];
-  var score=calcHealthScore();
-  var monthAgo=new Date(); monthAgo.setMonth(monthAgo.getMonth()-1);
-  var kris=[
-    {label:'Health Score',           val:score+'%',        col:healthMeta(score).color},
-    {label:'Críticos sin plan',       val:hits.filter(function(h){var r=h.residual_level||'';return (r==='alto'||r==='critical')&&!plans.find(function(p){return p.hit_id===h.id&&p.status!=='closed';});}).length, col:'var(--danger)'},
-    {label:'Planes vencidos',         val:plans.filter(function(p){return p.status!=='closed'&&p.due_date&&new Date(p.due_date)<Date.now();}).length, col:'var(--danger)'},
-    {label:'Controles sin ejecutar',  val:ctrls.filter(function(c){return c.executed!=='Sí';}).length, col:'var(--warn)'},
-    {label:'Sentencias último mes',   val:(S.sentences||[]).filter(function(s){return s.date&&new Date(s.date)>monthAgo;}).length, col:'var(--accent2)'},
-  ];
-  el.innerHTML=kris.map(function(k){
-    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid var(--border)">'
-      +'<div style="font-size:9px;color:var(--text-dim)">'+k.label+'</div>'
-      +'<div style="font-family:var(--font-ui);font-size:13px;font-weight:700;color:'+k.col+'">'+k.val+'</div>'
-      +'</div>';
-  }).join('');
-}
-
-function drawMiniChart(canvasId,datasets,labels){
-  var canvas=document.getElementById(canvasId); if(!canvas)return;
-  var W=canvas.parentElement.clientWidth-24||240;
-  canvas.width=W; var H=canvas.height;
-  var ctx=canvas.getContext('2d');
-  ctx.clearRect(0,0,W,H);
-  if(!datasets.length||!datasets[0].data.length){
-    ctx.fillStyle='rgba(255,255,255,.2)'; ctx.font='9px sans-serif';
-    ctx.textAlign='center'; ctx.fillText('Acumulando datos…',W/2,H/2); return;
-  }
-  var allV=datasets.reduce(function(a,d){return a.concat(d.data);},[]);
-  var yMn=Math.min.apply(null,allV),yMx=Math.max.apply(null,allV);
-  if(yMx===yMn){yMn=Math.max(0,yMn-1);yMx+=1;}
-  var pad={t:4,b:14,l:22,r:4},gW=W-pad.l-pad.r,gH=H-pad.t-pad.b;
-  var n=datasets[0].data.length;
-  var sx=function(i){return pad.l+(n>1?i/(n-1):0.5)*gW;};
-  var sy=function(v){return pad.t+gH-(v-yMn)/(yMx-yMn)*gH;};
-  ctx.strokeStyle='rgba(255,255,255,.05)'; ctx.lineWidth=1;
-  [0,.5,1].forEach(function(f){
-    var y=pad.t+gH*f; ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
-    ctx.fillStyle='rgba(255,255,255,.2)'; ctx.font='6px sans-serif'; ctx.textAlign='right';
-    ctx.fillText(Math.round(yMn+(yMx-yMn)*(1-f)),pad.l-2,y+3);
-  });
-  if(labels&&labels.length){
-    ctx.fillStyle='rgba(255,255,255,.25)'; ctx.font='6px sans-serif';
-    ctx.textAlign='left';  ctx.fillText(labels[0],pad.l,H-2);
-    ctx.textAlign='right'; ctx.fillText(labels[labels.length-1],W-pad.r,H-2);
-  }
-  datasets.forEach(function(ds){
-    var rc=ds.color;
-    var grad=ctx.createLinearGradient(0,pad.t,0,H-pad.b);
-    grad.addColorStop(0,'rgba('+rc+',.2)'); grad.addColorStop(1,'rgba('+rc+',0)');
-    ctx.beginPath();
-    ds.data.forEach(function(v,ii){ii===0?ctx.moveTo(sx(ii),sy(v)):ctx.lineTo(sx(ii),sy(v));});
-    ctx.lineTo(sx(n-1),H-pad.b); ctx.lineTo(sx(0),H-pad.b); ctx.closePath();
-    ctx.fillStyle=grad; ctx.fill();
-    ctx.strokeStyle='rgb('+rc+')'; ctx.lineWidth=1.8; ctx.lineJoin='round';
-    ctx.beginPath();
-    ds.data.forEach(function(v,ii){ii===0?ctx.moveTo(sx(ii),sy(v)):ctx.lineTo(sx(ii),sy(v));});
-    ctx.stroke();
-    ds.data.forEach(function(v,ii){
-      ctx.beginPath(); ctx.arc(sx(ii),sy(v),2.2,0,Math.PI*2);
-      ctx.fillStyle='rgb('+rc+')'; ctx.fill();
-    });
-  });
-}
-
-async function saveDashSnapshot(){
-  var score=calcHealthScore(),gs=calcGlobalScore();
-  var today=new Date().toISOString().split('T')[0];
-  var snap={date:today,health:score,hits_total:(S.hits||[]).length,
-    hits_impact:(S.hits||[]).filter(isImpact).length,
-    plans_open:(S.actionPlans||[]).filter(function(p){return p.status!=='closed';}).length,
-    plans_closed:(S.actionPlans||[]).filter(function(p){return p.status==='closed';}).length,
-    _ts:new Date().toISOString()};
-  try{
-    var ex=await db.collection('dashboard_history').where('date','==',today).limit(1).get();
-    if(ex.empty) await db.collection('dashboard_history').add(snap);
-    else await db.collection('dashboard_history').doc(ex.docs[0].id).update(snap);
-  }catch(e){console.warn('snapshot',e);}
-}
-
-async function loadDashCharts(){
-  try{
-    var snap=await db.collection('dashboard_history').orderBy('_ts','asc').limit(30).get();
-    var rows=snap.docs.map(function(d){return d.data();});
-    var lbl=rows.map(function(r){return (r.date||'').slice(5);});
-    drawMiniChart('chart-health',[{data:rows.map(function(r){return r.health||0;}),color:'0,229,160'}],lbl);
-    drawMiniChart('chart-hits',[
-      {data:rows.map(function(r){return r.hits_total||0;}),color:'0,102,255'},
-      {data:rows.map(function(r){return r.hits_impact||0;}),color:'245,158,11'}
-    ],lbl);
-    drawMiniChart('chart-planes',[
-      {data:rows.map(function(r){return r.plans_open||0;}),color:'245,158,11'},
-      {data:rows.map(function(r){return r.plans_closed||0;}),color:'0,229,160'}
-    ],lbl);
-  }catch(e){
-    ['chart-health','chart-hits','chart-planes'].forEach(function(id){drawMiniChart(id,[],[]);});
-  }
-}
-
-// Ciudad pixel art — todo el estado en closure, sin variables globales
-function drawCity(score){
-  var canvas=document.getElementById('city-canvas'); if(!canvas)return;
-  // Cancel previous animation
-  if(canvas._raf){cancelAnimationFrame(canvas._raf);canvas._raf=null;}
-  var m=healthMeta(score);
-  // Buildings: [xFrac, wFrac, hFrac, style(0=glass,1=brick,2=deco,3=modern,4=ornate), bodyColor, darkColor, winColor]
-  var B=[
-    [.01,.07,.42,1,'#7a3020','#501a10','#ffd070'],
-    [.09,.055,.30,3,'#3a5f50','#264038','#80ffcc'],
-    [.15,.095,.60,0,'#2a507a','#1a3858','#b0dfff'],
-    [.26,.065,.34,4,'#b06030','#804420','#ffd090'],
-    [.34,.11,.72,2,'#b08828','#7a6018','#fff0a0'],
-    [.47,.055,.28,3,'#3a5070','#263650','#90ccff'],
-    [.54,.10,.65,0,'#1e4060','#122840','#a0d8f0'],
-    [.66,.07,.38,1,'#7a3828','#521c18','#ffcc60'],
-    [.74,.065,.46,4,'#704228','#4e2c18','#ffd880'],
-    [.82,.085,.33,3,'#2a5848','#1c3c30','#70ffaa'],
-    [.92,.07,.25,1,'#604828','#403018','#ffb060'],
-  ];
-  // Pedestrian & bike state in closure
-  var peds=[
-    {x:.15,d:1,sp:.0007,c:'#3a8ee8',h:'#1a4a80'},
-    {x:.58,d:-1,sp:.0005,c:'#e07040',h:'#a03820'},
-    {x:.80,d:1,sp:.0004,c:'#40b060',h:'#20703a'},
-  ];
-  var bike={x:.04,d:1,sp:.0016};
-  var tick=0;
-
-  function frame(){
-    tick++;
-    var dpr=window.devicePixelRatio||1;
-    var rect=canvas.getBoundingClientRect();
-    var W=Math.round(rect.width*dpr)||600, H=Math.round(rect.height*dpr)||200;
-    if(canvas.width!==W||canvas.height!==H){canvas.width=W;canvas.height=H;}
-    var ctx=canvas.getContext('2d');
-    ctx.clearRect(0,0,W,H);
-    var gY=H*.74;
-
-    // Sky
-    var sg=ctx.createLinearGradient(0,0,0,gY);
-    sg.addColorStop(0,score>=50?'#060c18':'#160606');
-    sg.addColorStop(1,score>=50?'#0b1422':'#1e0808');
-    ctx.fillStyle=sg; ctx.fillRect(0,0,W,gY);
-
-    // Stars / moon
-    [[.07,.07],[.18,.04],[.30,.10],[.44,.03],[.58,.08],[.73,.05],[.87,.12],[.93,.04]].forEach(function(s){
-      ctx.globalAlpha=Math.sin(tick*.05+s[0]*20)*.4+.6;
-      ctx.fillStyle='#fff'; ctx.fillRect(s[0]*W,s[1]*H,1.4,1.4);
-    });
-    ctx.globalAlpha=1;
-    ctx.fillStyle='#ddeeff';
-    ctx.beginPath(); ctx.arc(W*.87,H*.11,W*.018,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#060c18';
-    ctx.beginPath(); ctx.arc(W*.89,H*.09,W*.014,0,Math.PI*2); ctx.fill();
-
-    // Rain
-    if(score<50){
-      var rA=Math.min(.45,(50-score)/50*.6);
-      ctx.strokeStyle='rgba(110,150,210,'+rA+')'; ctx.lineWidth=.9;
-      for(var ri=0;ri<28;ri++){
-        var rx=(ri*89+tick*3)%W, ry=(ri*61+tick*5)%gY;
-        ctx.beginPath(); ctx.moveTo(rx,ry); ctx.lineTo(rx-1,ry+7); ctx.stroke();
-      }
-    }
-
-    // Buildings (before dome)
-    B.forEach(function(b,bi){
-      var bx=b[0]*W, bw=b[1]*W, bh=b[2]*gY, by=gY-bh;
-      // shadow
-      ctx.fillStyle='rgba(0,0,0,.18)';
-      ctx.fillRect(bx+bw*.04,by+bh*.03,bw*.92,bh*.97);
-      // body
-      var bg=ctx.createLinearGradient(bx,0,bx+bw,0);
-      bg.addColorStop(0,b[4]); bg.addColorStop(1,b[5]);
-      ctx.fillStyle=bg; ctx.fillRect(bx,by,bw,bh);
-      // style details
-      if(b[3]===2){
-        ctx.fillStyle=b[4];
-        ctx.fillRect(bx+bw*.08,by-bh*.04,bw*.84,bh*.04);
-        ctx.fillRect(bx+bw*.18,by-bh*.08,bw*.64,bh*.04);
-        ctx.fillStyle='#d4a830';
-        ctx.beginPath(); ctx.moveTo(bx+bw*.5,by-bh*.22);
-        ctx.lineTo(bx+bw*.43,by-bh*.12); ctx.lineTo(bx+bw*.57,by-bh*.12);
-        ctx.closePath(); ctx.fill();
-      }
-      if(b[3]===4){
-        ctx.fillStyle='rgba(255,255,255,.1)';
-        ctx.fillRect(bx,by,bw,bh*.03);
-        for(var p=0;p<4;p++){ctx.fillStyle='rgba(0,0,0,.14)';ctx.fillRect(bx+bw*(.08+p*.24),by+bh*.08,bw*.034,bh*.88);}
-      }
-      if(b[3]===0){
-        ctx.strokeStyle='rgba(255,255,255,.07)'; ctx.lineWidth=.7;
-        var cols=Math.round(bw/10);
-        for(var gc=1;gc<cols;gc++){ctx.beginPath();ctx.moveTo(bx+gc*(bw/cols),by);ctx.lineTo(bx+gc*(bw/cols),by+bh);ctx.stroke();}
-      }
-      // antenna
-      if(b[2]>.5&&b[3]!==2){
-        ctx.fillStyle='#2a3848';
-        ctx.fillRect(bx+bw*.47,by-bh*.12,bw*.06,bh*.12);
-        var bl=Math.sin(tick*.08+bi*1.3)>.2;
-        ctx.fillStyle=bl?'#ef4444':'rgba(239,68,68,.2)';
-        ctx.beginPath(); ctx.arc(bx+bw*.5,by-bh*.13,2.2,0,Math.PI*2); ctx.fill();
-      }
-      // windows
-      var flH=Math.max(6,bh/13), wW=Math.max(2,bw*.08), wH=Math.max(3,flH*.55);
-      var wCols=Math.max(2,Math.floor((bw-4)/(wW+3)));
-      var wRows=Math.floor((bh-6)/flH);
-      for(var wr=0;wr<wRows;wr++){
-        for(var wc=0;wc<wCols;wc++){
-          var wx=bx+2+(bw-4-wCols*(wW+3))/2+wc*(wW+3);
-          var wy=by+3+wr*flH;
-          var seed=(bi*31+wr*7+wc*13)%17;
-          var lit=score>75?seed<14:score>50?seed<9:score>25?seed<4:seed<2;
-          ctx.fillStyle=lit?b[6]:'rgba(8,15,25,.9)';
-          ctx.fillRect(wx,wy,wW,wH);
-        }
-      }
-      // smoke
-      if(score<60&&bi%3===0){
-        var sA=Math.min(.5,(60-score)/60*.65);
-        for(var si=0;si<4;si++){
-          var sOff=(tick*.6+si*15)%60, sr=4+sOff*.5;
-          ctx.fillStyle='rgba(65,65,65,'+Math.max(0,sA*(1-sOff/60)).toFixed(2)+')';
-          ctx.beginPath(); ctx.arc(bx+bw*.5+Math.sin(si*1.7)*2,by-sOff,sr,0,Math.PI*2); ctx.fill();
-        }
-      }
-    });
-
-    // DOME — arc only, no fill (drawn AFTER buildings)
-    var dCx=W*.5, dCy=gY+1, dRx=W*.50, dRy=gY*.95;
-    // subtle glow
-    var gg=ctx.createRadialGradient(dCx,dCy-dRy*.4,dRy*.05,dCx,dCy,dRx);
-    var ga=score>=80?.06:score>=50?.04:.025;
-    var gc2=m.color;
-    gg.addColorStop(0,gc2+'00');
-    gg.addColorStop(.8,gc2+Math.round(ga*255).toString(16).padStart(2,'0'));
-    gg.addColorStop(1,gc2+'00');
-    ctx.save();
-    ctx.beginPath(); ctx.ellipse(dCx,dCy,dRx,dRy,0,Math.PI,Math.PI*2); ctx.closePath();
-    ctx.fillStyle=gg; ctx.fill(); ctx.restore();
-    // arc stroke
-    var pw=score>=80?1.8+Math.sin(tick*.04)*.5:1.6;
-    ctx.save();
-    ctx.globalAlpha=score<20?.5+Math.sin(tick*.14)*.5:1;
-    ctx.strokeStyle=m.color; ctx.lineWidth=pw;
-    ctx.setLineDash(score<50?[7,4]:[]);
-    ctx.beginPath(); ctx.ellipse(dCx,dCy,dRx,dRy,0,Math.PI,Math.PI*2); ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.globalAlpha=.35; ctx.lineWidth=pw*.65;
-    ctx.beginPath(); ctx.moveTo(dCx-dRx,dCy); ctx.lineTo(dCx+dRx,dCy); ctx.stroke();
-    ctx.restore();
-    // cracks
-    if(score<30){
-      ctx.strokeStyle='rgba(239,68,68,.6)'; ctx.lineWidth=1.6;
-      [[-W*.18,-dRy*.58],[W*.14,-dRy*.72]].forEach(function(cr){
-        ctx.beginPath(); ctx.moveTo(dCx+cr[0],dCy+cr[1]);
-        ctx.lineTo(dCx+cr[0]+8,dCy+cr[1]+15); ctx.lineTo(dCx+cr[0]+3,dCy+cr[1]+26); ctx.stroke();
-      });
-    }
-    if(score<20&&tick%44<4){
-      ctx.strokeStyle='rgba(255,220,50,.85)'; ctx.lineWidth=1.8;
-      ctx.beginPath(); ctx.moveTo(W*.36,H*.12); ctx.lineTo(W*.34,H*.22); ctx.lineTo(W*.38,H*.26); ctx.stroke();
-    }
-
-    // Ground + road
-    ctx.fillStyle='#111808'; ctx.fillRect(0,gY,W,H-gY);
-    ctx.fillStyle='#1c1c1c'; ctx.fillRect(0,gY+H*.06,W,H*.10);
-    ctx.fillStyle='rgba(255,255,160,.18)';
-    for(var di=0;di<W;di+=W*.07){ctx.fillRect(di,gY+H*.095,W*.038,H*.012);}
-
-    // Pedestrians
-    if(score>=20){
-      peds.forEach(function(p){
-        p.x+=p.d*p.sp; if(p.x>1.05)p.x=-0.05; if(p.x<-0.05)p.x=1.05;
-        var px=p.x*W, bob=Math.sin(tick*.14+px)*(H*.004), sz=H*.027;
-        var pedY=gY+H*.042;
-        ctx.fillStyle=p.c; ctx.fillRect(px-sz*.3,pedY-sz*1.25+bob,sz*.6,sz*.8);
-        ctx.fillStyle=p.h; ctx.beginPath(); ctx.arc(px,pedY-sz*1.35+bob,sz*.33,0,Math.PI*2); ctx.fill();
-        var ls=Math.sin(tick*.18+px)*sz*.2;
-        ctx.fillStyle='#c0a060';
-        ctx.fillRect(px-sz*.17,pedY-sz*.42+bob,sz*.15,sz*.42+ls);
-        ctx.fillRect(px+sz*.02,pedY-sz*.42+bob,sz*.15,sz*.42-ls);
-      });
-    }
-
-    // Bicycle
-    if(score>=10){
-      bike.x+=bike.d*bike.sp; if(bike.x>1.06)bike.x=-0.06;
-      var bkx=bike.x*W, bky=gY+H*.040, wr=H*.021, wa=tick*.11;
-      ctx.strokeStyle='#90a8c0'; ctx.lineWidth=1.6;
-      ctx.beginPath(); ctx.arc(bkx-wr*1.2,bky,wr,0,Math.PI*2); ctx.stroke();
-      ctx.beginPath(); ctx.arc(bkx+wr*1.2,bky,wr,0,Math.PI*2); ctx.stroke();
-      ctx.lineWidth=.85;
-      for(var s2=0;s2<4;s2++){
-        var sa=wa+s2*Math.PI/2;
-        ctx.beginPath();ctx.moveTo(bkx-wr*1.2+Math.cos(sa)*wr,bky+Math.sin(sa)*wr);ctx.lineTo(bkx-wr*1.2-Math.cos(sa)*wr,bky-Math.sin(sa)*wr);ctx.stroke();
-        ctx.beginPath();ctx.moveTo(bkx+wr*1.2+Math.cos(sa)*wr,bky+Math.sin(sa)*wr);ctx.lineTo(bkx+wr*1.2-Math.cos(sa)*wr,bky-Math.sin(sa)*wr);ctx.stroke();
-      }
-      ctx.lineWidth=1.6;
-      ctx.beginPath();ctx.moveTo(bkx-wr*1.2,bky);ctx.lineTo(bkx,bky-wr*1.1);ctx.lineTo(bkx+wr*1.2,bky);ctx.stroke();
-      ctx.beginPath();ctx.moveTo(bkx,bky-wr*1.1);ctx.lineTo(bkx-wr*.4,bky);ctx.stroke();
-      ctx.fillStyle='#e07030';
-      ctx.beginPath(); ctx.arc(bkx+wr*.25,bky-wr*1.65,wr*.45,0,Math.PI*2); ctx.fill();
-    }
-
-    canvas._raf=requestAnimationFrame(frame);
-  }
-  frame();
-}
-
 function renderDashboard(){
   // Twin disclaimer
-  var lastCtxUpdate=S.ctx&&S.ctx._updated?S.ctx._updated:null;
-  var daysSince=lastCtxUpdate?Math.floor((Date.now()-new Date(lastCtxUpdate))/86400000):null;
-  var disc=document.getElementById('twin-disclaimer');
-  if(disc){
-    if(!S.twinSummary)
-      disc.innerHTML='<div class="alert alert-warn mb14">⚠ El Resumen del Digital Twin está vacío. <button class="btn btn-ghost btn-xs" onclick="go('twin-summary')">Configurar →</button></div>';
-    else if(daysSince!==null&&daysSince>(S.cfg.twinDays||90))
-      disc.innerHTML='<div class="alert alert-warn mb14">⚠ El Digital Twin no se actualiza hace <strong>'+daysSince+' días</strong>.</div>';
-    else disc.innerHTML='';
+  const lastCtxUpdate = S.ctx?._updated;
+  const daysSince = lastCtxUpdate ? Math.floor((Date.now()-new Date(lastCtxUpdate))/86400000) : null;
+  const disc = document.getElementById('twin-disclaimer');
+  if(!S.twinSummary){
+    disc.innerHTML=`<div class="alert alert-warn mb14">⚠ El Resumen del Digital Twin está vacío. <button class="btn btn-ghost btn-xs" onclick="go('twin-summary')">Configurar →</button></div>`;
+  } else if(daysSince !== null && daysSince > (S.cfg.twinDays||90)){
+    disc.innerHTML=`<div class="alert alert-warn mb14">⚠ El Digital Twin no se actualiza hace <strong>${daysSince} días</strong>. Considera revisar el contexto y la madurez. <button class="btn btn-ghost btn-xs" onclick="go('contexto')">Revisar →</button></div>`;
+  } else {
+    disc.innerHTML='';
   }
 
-  var score=calcHealthScore();
-  var m=healthMeta(score);
+  // KRIs
+  const globalScore = calcGlobalScore();
+  document.getElementById('kri-madurez').textContent = globalScore>0 ? globalScore.toFixed(1) : '—';
+  const crits = S.hits.filter(h=>h.level==='critical' && !S.actionPlans.find(p=>p.hit_id===h.id && p.status!=='open')).length;
+  document.getElementById('kri-criticos').textContent = crits;
+  document.getElementById('kri-planes').textContent = S.actionPlans.filter(p=>p.status!=='closed').length;
+  document.getElementById('kri-sync').textContent = S.lastSync ? fmtTime(S.lastSync) : '—';
 
-  var hsv=document.getElementById('health-score-val');
-  if(hsv){hsv.textContent=score+'%';hsv.style.color=m.color;}
-  drawHealthGauge(score);
+  // Radar
+  drawRadar('radar-dash', getDimScores());
+  renderRadarLegend('radar-legend-dash', true);
 
-  var sl=document.getElementById('city-status-lbl');
-  if(sl){sl.textContent=m.label;sl.style.color=m.color;}
+  // Narrative
+  const narrative = S.twinSummary ?
+    `<em>Twin activo.</em> Madurez global: ${globalScore.toFixed(1)}/5. ${S.hits.filter(h=>h.level==='critical').length} hits críticos · ${S.actionPlans.filter(p=>p.status!=='closed').length} planes abiertos.` :
+    'Configura el Digital Twin para ver el análisis contextualizado.';
+  document.getElementById('dash-narrative').innerHTML = narrative;
 
-  renderDashKpiBar();
-  renderDashKriPanel();
+  // Recent hits
+  const dh = document.getElementById('dash-hits');
+  const recent = S.hits.slice(0,4);
+  dh.innerHTML = recent.length ? recent.map(h=>miniHit(h)).join('') :
+    `<div class="empty"><div class="empty-icon">⟁</div><div class="empty-sub">Sin hits · ejecuta el workflow en GitHub</div></div>`;
 
-  var st=document.getElementById('dash-sync-time');
-  if(st) st.textContent=S.lastSync?fmtTime(S.lastSync):'—';
-
-  drawCity(score);
-  loadDashCharts();
-
-  var dh=document.getElementById('dash-hits');
-  if(dh){
-    var recent=S.hits.slice(0,4);
-    dh.innerHTML=recent.length?recent.map(miniHit).join('')
-      :'<div class="empty"><div class="empty-icon">⟁</div><div class="empty-sub">Sin hits · ejecuta el workflow en GitHub</div></div>';
-  }
+  // Planes
+  const dp = document.getElementById('dash-planes');
+  const open = S.actionPlans.filter(p=>p.status!=='closed').slice(0,4);
+  dp.innerHTML = open.length ? open.map(p=>miniPlan(p)).join('') :
+    `<div class="empty"><div class="empty-sub">Sin planes abiertos</div></div>`;
 }
 
 function miniHit(h){
@@ -3144,68 +2744,9 @@ function renderBriefPlaceholder(){
   }
 }
 
-async function generateBrief(){
-  const key=S.cfg.mistralKey;
-  if(!key){showAlert('brief-alert','Configura la API key de Mistral','err');return;}
-  const btn=document.getElementById('brief-gen-btn');
-  btn.innerHTML='<span class="spin"></span> Generando...'; btn.disabled=true;
+</script>
 
-  const globalScore=calcGlobalScore();
-  const scores=getDimScores();
-  const topHits=S.hits.filter(h=>h.level==='critical'||h.level==='warning').slice(0,3);
-  const openPlans=S.actionPlans.filter(p=>p.status!=='closed');
 
-  const prompt=`Eres el Compliance Officer de "${S.ctx?.name||'la organización'}". Genera un BRIEF EJECUTIVO en español para presentar al Comité de Cumplimiento o Consejo de Administración.
-
-DATOS DEL TWIN:
-- Organización: ${S.ctx?.name} · ${S.ctx?.sector} · ${S.ctx?.size}
-- Madurez global: ${globalScore.toFixed(1)}/5
-- Por dimensión: ${DIMS.map((d,i)=>`${d.label}: ${scores[i].toFixed(1)}`).join(', ')}
-- Hits críticos/alertas recientes: ${topHits.map(h=>h.title).join(' | ')||'Ninguno'}
-- Planes abiertos: ${openPlans.length}
-
-RESUMEN DEL TWIN:
-${S.twinSummary?.slice(0,500)||'No disponible'}
-
-El brief debe incluir:
-1. Estado actual del modelo de compliance (2-3 frases)
-2. Top 3 eventos regulatorios de este período y su impacto
-3. Gaps prioritarios del modelo (dimensiones con menor madurez)
-4. Planes de acción en curso
-5. Recomendación clave para el próximo período
-
-Formato: claro, ejecutivo, con datos concretos. Máximo 400 palabras.`;
-
-  try{
-    const result=await callMistral(prompt, 800);
-    const now=new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'long',year:'numeric'});
-    document.getElementById('brief-content').innerHTML=`
-      <div class="brief-page" id="brief-printable">
-        <div class="brief-header">
-          <div>
-            <div class="brief-logo">CDT · Compliance Digital Twin</div>
-            <div style="font-size:11px;color:#666;margin-top:3px">${S.ctx?.name||'Organización'} · ${S.ctx?.sector||''}</div>
-          </div>
-          <div class="brief-date"><div style="font-size:11px;color:#666">Brief Ejecutivo</div><div style="font-weight:700;margin-top:2px">${now}</div></div>
-        </div>
-        <div class="brief-kri-row">
-          <div class="brief-kri"><div class="brief-kri-val" style="color:#16a34a">${globalScore.toFixed(1)}</div><div class="brief-kri-label">Madurez /5.0</div></div>
-          <div class="brief-kri"><div class="brief-kri-val" style="color:#dc2626">${S.hits.filter(h=>h.level==='critical').length}</div><div class="brief-kri-label">Hits Críticos</div></div>
-          <div class="brief-kri"><div class="brief-kri-val" style="color:#d97706">${openPlans.length}</div><div class="brief-kri-label">Planes Abiertos</div></div>
-          <div class="brief-kri"><div class="brief-kri-val" style="color:#2563eb">${S.hits.length}</div><div class="brief-kri-label">Hits Monitorizados</div></div>
-        </div>
-        <div style="white-space:pre-wrap;font-size:12px;line-height:1.7;color:#222">${result}</div>
-        <div style="margin-top:24px;padding-top:12px;border-top:1px solid #ddd;font-size:10px;color:#999">Generado automáticamente por CDT — Compliance Digital Twin · ${now}</div>
-      </div>`;
-  }catch(e){showAlert('brief-alert','Error: '+e.message,'err');}
-  btn.textContent='✦ Generar con IA'; btn.disabled=false;
-}
-
-function printBrief(){
-  const content=document.getElementById('brief-printable');
-  if(!content){alert('Genera el brief primero');return;}
-  const w=window.open('','_blank');
-  w.document.write(`<html><head><title>Brief Ejecutivo CDT</title><style>body{font-family:Georgia,serif;padding:40px;max-width:780px;margin:0 auto}@media print{body{padding:20px}}</style></head><body>${content.outerHTML}
 <!-- MODAL CONTROL -->
 <div class="overlay" id="modal-ctrl">
   <div class="modal modal-lg">
@@ -3407,6 +2948,8 @@ function printBrief(){
 </body></html>`);
   w.document.close(); w.print();
 }
+
+<script>
 
 // ═══════════════════════════════════════════════════════════════
 // HISTORIAL MADUREZ
@@ -3876,16 +3419,21 @@ async function bulkSetStatus(val){
 }
 
 async function bulkDelete(){
+  if(!ctrlSelectedIds.size) return;
   if(!confirm(`¿Eliminar ${ctrlSelectedIds.size} controles seleccionados? Esta acción no se puede deshacer.`)) return;
-  let deleted=0;
-  for(const id of [...ctrlSelectedIds]){
-    const i=S.controls.findIndex(c=>c.id===id);
-    if(i>=0){ if(S.controls[i]._fsId) await fsDelete('controls',S.controls[i]._fsId); S.controls.splice(i,1); deleted++; }
-  }
-  lsSet('controls',S.controls);
+
+  // Optimistic UI: eliminar del estado y renderizar INMEDIATAMENTE
+  const idsToDelete = [...ctrlSelectedIds];
+  const toDelete = S.controls.filter(c => idsToDelete.includes(c.id));
+  S.controls = S.controls.filter(c => !idsToDelete.includes(c.id));
+  lsSet('controls', S.controls);
   ctrlSelectedIds.clear();
   renderControls(); renderCtrlStats();
-  showAlert('ctrl-alert',`✓ ${deleted} controles eliminados`,'ok');
+  showAlert('ctrl-alert', `✓ ${toDelete.length} controles eliminados`, 'ok');
+
+  // Borrar en Firestore en background (no bloquea la UI)
+  const delPromises = toDelete.filter(c => c._fsId).map(c => fsDelete('controls', c._fsId).catch(()=>{}));
+  await Promise.all(delPromises);
 }
 
 function renderCtrlStats(){
@@ -3917,17 +3465,20 @@ async function importControls(input){
     const ws=wb.Sheets[wb.SheetNames[0]];
     const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
     
-    // Find header row (look for row with "título" or "title")
+    // Normalize helper: quita tildes para comparar sin acentos
+    const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+
+    // Find header row (look for row with "titulo" or "title" — sin tilde)
     let headerRow=-1;
     for(let i=0;i<Math.min(rows.length,6);i++){
-      const r=rows[i].map(c=>String(c).toLowerCase());
-      if(r.some(c=>c.includes('título')||c.includes('titulo')||c.includes('title'))){
+      const r=rows[i].map(c=>norm(c));
+      if(r.some(c=>c.includes('titulo')||c.includes('title'))){
         headerRow=i; break;
       }
     }
     if(headerRow<0){showAlert('ctrl-alert','No se encontró la fila de cabeceras. Usa la plantilla descargable.','err');input.value='';return;}
     
-    const headers=rows[headerRow].map(h=>String(h).toLowerCase().trim().replace(/[*]/g,'').trim());
+    const headers=rows[headerRow].map(h=>norm(h).replace(/[*]/g,''));
     
     // Smart column detection
     const findCol=(terms)=>{ for(const t of terms){ const i=headers.findIndex(h=>h.includes(t)); if(i>=0) return i; } return -1; };
@@ -4852,15 +4403,18 @@ async function openDeepDive(hitId){
   if(!hit) return;
   ddCurrentHitId = hitId;
 
-  // Set header
-  document.getElementById('dd-hit-title').textContent = hit.title||'';
-  const inhPill = document.getElementById('dd-inh-pill');
-  const resPill = document.getElementById('dd-res-pill');
+  // Set header — guard against drawer not yet in DOM
+  const titleEl  = document.getElementById('dd-hit-title');
+  const inhPill  = document.getElementById('dd-inh-pill');
+  const resPill  = document.getElementById('dd-res-pill');
+  const dateMeta = document.getElementById('dd-date-meta');
+  if(!titleEl || !inhPill || !resPill){ console.error('Drawer elements not found'); return; }
+  titleEl.textContent = hit.title||'';
   inhPill.textContent = 'INHERENTE ' + levelLabel(hit.inherent_level||'');
   inhPill.className = 'tag tag-'+(hit.inherent_level||'info');
   resPill.textContent = 'RESIDUAL ' + levelLabel(hit.residual_level||'');
   resPill.className = 'tag tag-'+(hit.residual_level||'info');
-  document.getElementById('dd-date-meta').textContent = fmtDate(hit.raw_date||hit.fetched_at||'');
+  if(dateMeta) dateMeta.textContent = fmtDate(hit.raw_date||hit.fetched_at||'');
   document.getElementById('dd-export-btn').style.display='none';
 
   openDrawer();
