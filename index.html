@@ -126,8 +126,8 @@ select.fi{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 .hit-detail-row{margin-bottom:6px}
 .hit-detail-label{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:2px}
 .hit-detail-val{font-size:10.5px;color:var(--text-dim);line-height:1.5}
-.score-bar{height:2px;background:var(--border2);border-radius:2px;margin-top:5px}
-.score-fill{height:100%;border-radius:2px;transition:width .5s}
+./* score-bar removed */
+/* score-fill removed */
 
 /* RADAR */
 .radar-wrap{display:flex;align-items:center;gap:24px}
@@ -285,8 +285,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     <div class="nav-item" data-view="twin-summary" onclick="go('twin-summary')"><span class="icon">✦</span>Resumen Ejecutivo Twin</div>
 
     <div class="nav-group" style="margin-top:10px">⟁ Monitor Activo</div>
-    <div class="nav-item" data-view="hits" onclick="go('hits')"><span class="icon">⚡</span>Hits Detectados<span class="nav-badge nb-danger" id="badge-hits">0</span></div>
-    <div class="nav-item" data-view="planes" onclick="go('planes')"><span class="icon">◉</span>Planes de Acción<span class="nav-badge nb-warn" id="badge-planes">0</span></div>
+    <div class="nav-item" data-view="hits" onclick="go('hits')"><span class="icon">⚡</span>Monitorización de Hits<span class="nav-badge nb-danger" id="badge-hits">0</span></div>
     <div class="nav-item" data-view="brief" onclick="go('brief')"><span class="icon">▤</span>Brief Ejecutivo</div>
     <div class="nav-item" data-view="sentencias" onclick="go('sentencias')"><span class="icon">⚖</span>Sentencias<span class="nav-badge nb-accent" id="badge-sent">0</span></div>
     <div class="nav-item" data-view="fuentes" onclick="go('fuentes')"><span class="icon">📡</span>Fuentes & Búsquedas</div>
@@ -531,7 +530,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   <!-- HITS -->
   <div class="view" id="view-hits">
     <div class="ph">
-      <div class="ph-left"><div class="ph-title">Monitor de Hits</div><div class="ph-sub">Funnel de relevancia · Filtrado por keywords → Impacto en tu empresa</div></div>
+      <div class="ph-left"><div class="ph-title">Monitorización de Hits</div><div class="ph-sub">Funnel de relevancia · Filtrado por keywords → Impacto en tu empresa</div></div>
       <div class="ph-actions">
         <button class="btn btn-ghost btn-sm" id="batch-reanalyze-btn" onclick="batchReAnalyze()" title="Re-analiza todos los hits pendientes contra tu Digital Twin">⟳ Re-evaluar todos</button>
         <button class="btn btn-ghost btn-sm" onclick="syncHits()">Sync</button>
@@ -539,47 +538,61 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     </div>
     <div id="hits-alert" style="margin-bottom:10px"></div>
 
-    <!-- Funnel -->
+    <!-- Funnel: Analizados → Impactos → Planes de Acción -->
     <div class="funnel-bar mb14">
       <div class="funnel-step active" id="funnel-all" onclick="setHitFunnel('all')">
         <div class="funnel-count text-accent" id="funnel-count-all">0</div>
-        <div class="funnel-label">Recibidos</div>
-        <div style="font-size:9px;color:var(--text-muted);margin-top:2px">keywords match</div>
+        <div class="funnel-label">Analizados</div>
+        <div style="font-size:9px;color:var(--text-muted);margin-top:2px">total recibidos</div>
       </div>
       <div class="funnel-arrow">→</div>
-      <div class="funnel-step" id="funnel-company" onclick="setHitFunnel('company')">
-        <div class="funnel-count" id="funnel-count-company" style="color:var(--danger)">0</div>
-        <div class="funnel-label">Tu empresa</div>
-        <div style="font-size:9px;color:var(--text-muted);margin-top:2px">impacto confirmado IA</div>
+      <div class="funnel-step" id="funnel-company" onclick="setHitFunnel('impacts')">
+        <div class="funnel-count" id="funnel-count-company" style="color:var(--warn)">0</div>
+        <div class="funnel-label">Impactos</div>
+        <div style="font-size:9px;color:var(--text-muted);margin-top:2px">inherente medio o alto</div>
+      </div>
+      <div class="funnel-arrow">→</div>
+      <div class="funnel-step" id="funnel-plans" onclick="setHitFunnel('plans')">
+        <div class="funnel-count" id="funnel-count-plans" style="color:var(--accent)">0</div>
+        <div class="funnel-label">Planes de Acción</div>
+        <div style="font-size:9px;color:var(--text-muted);margin-top:2px">en seguimiento</div>
       </div>
     </div>
 
-    <!-- Filters -->
+    <!-- Dual filters: inherente + residual + source + search -->
     <div class="flex ic gap8 mb14 flex-wrap">
-      <select class="fi" style="width:130px" id="hit-filter-level" onchange="renderHits()">
-        <option value="">Nivel</option><option value="critical">Crítico</option><option value="warning">Alerta</option><option value="info">Info</option>
+      <select class="fi" style="width:145px" id="hit-filter-inh" onchange="renderHits()">
+        <option value="">Inherente</option>
+        <option value="alto">Alto</option>
+        <option value="medio">Medio</option>
+        <option value="bajo">Bajo</option>
+        <option value="irrelevant">No aplica</option>
+      </select>
+      <select class="fi" style="width:145px" id="hit-filter-res" onchange="renderHits()">
+        <option value="">Residual</option>
+        <option value="alto">Alto</option>
+        <option value="medio">Medio</option>
+        <option value="bajo">Bajo</option>
+        <option value="irrelevant">No aplica</option>
       </select>
       <select class="fi" style="width:140px" id="hit-filter-source" onchange="renderHits()">
         <option value="">Fuente</option><option value="BOE">BOE</option><option value="BORME">BORME</option><option value="NewsAPI">NewsAPI</option><option value="Sentencia">Sentencia</option>
       </select>
-      <input type="text" class="fi" id="hit-search" placeholder="Buscar en hits..." style="max-width:220px" oninput="renderHits()">
+      <input type="text" class="fi" id="hit-search" placeholder="Buscar en hits..." style="max-width:200px" oninput="renderHits()">
       <span id="hit-count" style="font-size:10px;color:var(--text-muted);margin-left:auto"></span>
     </div>
 
     <div id="hits-list"></div>
-  </div>
-
-  <!-- PLANES DE ACCIÓN -->
-  <div class="view" id="view-planes">
-    <div class="ph">
-      <div class="ph-left"><div class="ph-title">Planes de Acción</div><div class="ph-sub">Seguimiento y cierre con mejora documentada</div></div>
-      <div class="ph-actions">
+    <!-- Plans panel (inside hits view) -->
+    <div id="hits-plans-panel" style="display:none">
+      <div class="ph" style="margin-top:20px">
+        <div class="ph-left"><div class="ph-title" style="font-size:16px">Planes de Acción</div><div class="ph-sub">Seguimiento activo de impactos con plan abierto</div></div>
         <select class="fi" style="width:140px" id="ap-filter" onchange="renderPlanes()">
           <option value="">Todos</option><option value="open">Abiertos</option><option value="progress">En curso</option><option value="closed">Cerrados</option>
         </select>
       </div>
+      <div id="planes-list"></div>
     </div>
-    <div id="planes-list"></div>
   </div>
 
   <!-- BRIEF EJECUTIVO -->
@@ -1104,7 +1117,16 @@ async function syncAll(){
     if(ts){ S.twinSummary = ts.text||''; lsSet('ts', ts.text||''); }
     S.actionPlans = plans || [];
     if(ctrls && ctrls.length) S.controls = ctrls;
-    if(cfg){ S.remoteCfg = {...S.remoteCfg,...cfg}; }
+    if(cfg){
+      S.remoteCfg = {...S.remoteCfg,...cfg};
+      // Restore API keys from Firestore if not already in localStorage
+      if(cfg.mistralKey && !S.cfg.mistralKey) S.cfg.mistralKey = cfg.mistralKey;
+      if(cfg.mistralModel && !S.cfg.mistralModel) S.cfg.mistralModel = cfg.mistralModel;
+      if(cfg.newsapiKey && !S.cfg.newsapiKey) S.cfg.newsapiKey = cfg.newsapiKey;
+      if(cfg.repo && !S.cfg.repo) S.cfg.repo = cfg.repo;
+      // Merge full config if localStorage has nothing
+      if(!lsGet('cfg')) { S.cfg = {...S.cfg,...cfg}; lsSet('cfg',S.cfg); }
+    }
 
     // Hits: try Firestore first, fallback to GitHub raw JSON
     const fsHits = await fsList('hits');
@@ -1133,31 +1155,36 @@ async function syncAll(){
 }
 
 // ── Auto-analyze pending hits in background ───────────────────────────────────
+// Only processes hits that have NEVER been analyzed (_analyzed flag not set)
+// Once analyzed + saved to Firestore, a hit is never re-evaluated automatically
 async function autoAnalyzePending(){
   if(!S.cfg.mistralKey){ return; }
   if(!S.ctx || !S.ctx.name){ return; }
 
+  // ONLY hits that have never been analyzed (no _analyzed flag AND no inherent_level)
   const pending = S.hits.filter(h =>
-    !h.inherent_level && h.level !== 'irrelevant'
+    !h._analyzed &&
+    !h.inherent_level &&
+    !h.false_positive
   );
   if(pending.length === 0) return;
 
-  console.log('[AutoAnalyze] ' + pending.length + ' hits pendientes de evaluacion RAG');
-  setStatus('Evaluando ' + pending.length + ' hits con IA...');
+  console.log('[AutoAnalyze] ' + pending.length + ' hits nuevos sin evaluar');
+  setStatus('Evaluando ' + pending.length + ' hits nuevos...');
 
   let done = 0;
   for(const hit of pending.slice(0, 20)){
     try{
-      await reAnalyzeHit(hit.id);
+      await reAnalyzeHit(hit.id, true);
       done++;
-      if(done % 3 === 0) setStatus('Evaluando hits... ' + done + '/' + Math.min(pending.length, 20));
-      await new Promise(r => setTimeout(r, 600));
+      if(done % 5 === 0) setStatus('Evaluando... ' + done + '/' + Math.min(pending.length, 20));
+      await new Promise(r => setTimeout(r, 800));
     }catch(e){
       console.warn('[AutoAnalyze] Error en hit', hit.id, e.message);
     }
   }
 
-  setStatus('Sync OK ' + fmtTime(S.lastSync));
+  setStatus('Sync ✓ ' + fmtTime(S.lastSync));
   console.log('[AutoAnalyze] Completado: ' + done + ' hits evaluados');
 }
 
@@ -1287,10 +1314,12 @@ function miniPlan(p){
 }
 
 function updateBadges(){
-  const crits = S.hits.filter(h=>h.level==='critical').length;
-  document.getElementById('badge-hits').textContent = crits;
-  const openPlans = S.actionPlans.filter(p=>p.status!=='closed').length;
-  document.getElementById('badge-planes').textContent = openPlans;
+  // Badge = residual ALTO count (requiring immediate action)
+  const highRisk = S.hits.filter(h=>{
+    const r=h.inherent_level||''; return r==='alto'||r==='critical';
+  }).length;
+  const badgeHits=document.getElementById('badge-hits');
+  if(badgeHits) badgeHits.textContent=highRisk;
   const sents = (S.sentences||[]).length;
   const badgeSent=document.getElementById('badge-sent'); if(badgeSent) badgeSent.textContent=sents;
   updateFunnelCounts();
@@ -1716,16 +1745,46 @@ async function saveTwinSummary(){
 // ═══════════════════════════════════════════════════════════════
 // HITS
 // ═══════════════════════════════════════════════════════════════
+// Helper: is this hit an impact? inherente medio or alto
+function isImpact(h){
+  const lvl = h.inherent_level||'';
+  return lvl==='alto'||lvl==='medio'||lvl==='critical'||lvl==='warning';
+}
+
 function renderHits(){
-  const lv     = document.getElementById('hit-filter-level')?.value||'';
+  const inh    = document.getElementById('hit-filter-inh')?.value||'';
+  const res    = document.getElementById('hit-filter-res')?.value||'';
   const src    = document.getElementById('hit-filter-source')?.value||'';
   const search = (document.getElementById('hit-search')?.value||'').toLowerCase();
 
   let hits = S.hits;
+
   // Funnel filter
-  if(hitFunnel==='company') hits=hits.filter(h=>h.company_impact||h.is_sentencia||h.level==='critical');
-  // Additional filters
-  if(lv) hits=hits.filter(h=>h.level===lv);
+  if(hitFunnel==='impacts'){
+    hits = hits.filter(h => isImpact(h));
+  } else if(hitFunnel==='plans'){
+    // Show plans panel, hide hits list
+    document.getElementById('hits-list').style.display='none';
+    document.getElementById('hits-plans-panel').style.display='';
+    renderPlanes();
+    updateFunnelCounts();
+    return;
+  }
+
+  document.getElementById('hits-list').style.display='';
+  document.getElementById('hits-plans-panel').style.display='none';
+
+  // Dual level filters
+  if(inh) hits=hits.filter(h=>{
+    const l=h.inherent_level||h.level||'';
+    const norm={critical:'alto',warning:'medio',info:'bajo'}[l]||l;
+    return norm===inh;
+  });
+  if(res) hits=hits.filter(h=>{
+    const l=h.residual_level||h.level||'';
+    const norm={critical:'alto',warning:'medio',info:'bajo'}[l]||l;
+    return norm===res;
+  });
   if(src) hits=hits.filter(h=>(h.source||'').includes(src)||(h.is_sentencia&&src==='Sentencia'));
   if(search) hits=hits.filter(h=>((h.title||'')+(h.summary||'')+(h.twin_analysis||'')).toLowerCase().includes(search));
 
@@ -1734,15 +1793,25 @@ function renderHits(){
   if(el) el.textContent=`${hits.length} hits`;
   const container = document.getElementById('hits-list');
   if(!container) return;
+
+  // In impacts funnel: hits needing action shown first
+  if(hitFunnel==='impacts'){
+    hits.sort((a,b)=>{
+      const aAction = a._action_taken ? 1 : 0;
+      const bAction = b._action_taken ? 1 : 0;
+      return aAction - bAction;
+    });
+  }
+
   container.innerHTML = hits.length ? hits.map(h=>hitCard(h)).join('') :
-    `<div class="empty"><div class="empty-icon">⟁</div><div class="empty-title">Sin hits${hitFunnel==='company'?' con impacto en tu empresa':''}</div><div class="empty-sub">${hitFunnel==='company'?'Los hits analizados por IA aparecerán aquí':'Ejecuta el workflow en GitHub Actions o añade sentencias'}</div></div>`;
+    `<div class="empty"><div class="empty-icon">⟁</div><div class="empty-title">Sin hits${hitFunnel==='impacts'?' con impacto':''}</div><div class="empty-sub">${hitFunnel==='impacts'?'Los hits con riesgo inherente medio o alto aparecerán aquí':'Ejecuta el workflow en GitHub Actions o añade sentencias'}</div></div>`;
 }
 
 function hitCard(h){
   const hasDetail = h.summary||h.twin_analysis||h.recommended_action;
   const hasAp = S.actionPlans.find(p=>p.hit_id===h.id);
   return `
-  <div class="hit ${h.level||'info'}">
+  <div class="hit ${({alto:'critical',medio:'warning',bajo:'info',critical:'critical',warning:'warning',info:'info',irrelevant:'irrelevant'})[h.inherent_level||h.level||'info']||'info'}">
     <div class="hit-head">
       ${h.inherent_level ? `
         <div class="risk-dual">
@@ -1755,7 +1824,7 @@ function hitCard(h){
             <span class="risk-pill-label">RESIDUAL</span>
             <span class="risk-pill-val tag tag-${h.residual_level||h.level||'info'}">${levelLabel(h.residual_level||h.level)}</span>
           </div>
-          ${h.rag_fragments_used>0?`<span class="rag-badge">⬡ RAG</span>`:''}
+          ${h.rag_fragments_used>0?`<span class="rag-badge" title="Análisis enriquecido con contexto del Digital Twin">⬡ Twin</span>`:''}
         </div>
       ` : `<span class="tag tag-${h.level||'info'}">${levelLabel(h.level)}</span>`}
       ${h.is_sentencia?'<span class="sent-tag">SENTENCIA</span>':''}<span class="hit-source">${esc((h.source||'').split('·')[0].trim())}</span>
@@ -1763,13 +1832,20 @@ function hitCard(h){
     </div>
     <div class="hit-title">${esc(h.title)}</div>
     ${h.summary?`<div class="hit-summary">${esc(h.summary)}</div>`:''}
-    <div class="score-bar mt6"><div class="score-fill" style="width:${h.relevance_score||0}%;background:${levelColor(h.level)}"></div></div>
-    <div class="flex gap6 mt6">
+    ${h.relevance_score?`<div style="font-size:8px;color:var(--text-muted);margin-top:4px">Relevancia: ${h.relevance_score}/100</div>`:''}
+    <div class="flex gap6 mt6" style="flex-wrap:wrap">
       ${hasDetail?`<button class="btn btn-ghost btn-xs" onclick="toggleHitDetail('hd-${h.id}')">Ver análisis ↓</button>`:''}
       ${h.link?`<a href="${h.link}" target="_blank" class="btn btn-ghost btn-xs">Fuente ↗</a>`:''}
-      <button class="btn btn-ghost btn-xs" onclick="reAnalyzeHit('${h.id}')" title="Re-analizar contra tu Digital Twin" id="reanalyze-${h.id}">⟳ Re-evaluar</button>
-      ${hasAp?`<span class="btn btn-warn btn-xs">◉ Plan abierto</span>`:
-        `<button class="btn btn-ghost btn-xs" onclick="openApFromHit('${h.id}','${esc(h.title).replace(/'/g,"\\'")}')">+ Plan de acción</button>`}
+      <button class="btn btn-ghost btn-xs" onclick="reAnalyzeHit('${h.id}')" title="Re-analizar manualmente contra el Twin" id="reanalyze-${h.id}">⟳ Re-evaluar</button>
+      ${h._discarded?
+        `<span class="btn btn-xs" style="background:rgba(122,150,170,.1);color:var(--text-dim);cursor:default" title="${esc(h._discard_reason||'')}">✗ Descartado</span>`:
+        hasAp?
+          `<span class="btn btn-warn btn-xs" onclick="setHitFunnel('plans')" style="cursor:pointer">◉ Ver plan →</span>`:
+          isImpact(h)?`
+          <button class="btn btn-ghost btn-xs" onclick="discardHit('${h.id}')">✗ Descartar</button>
+          <button class="btn btn-primary btn-xs" onclick="openApFromHit('${h.id}','${esc(h.title).replace(/'/g,"\\'")}')">+ Abrir Plan</button>`:
+          `<button class="btn btn-ghost btn-xs" onclick="openApFromHit('${h.id}','${esc(h.title).replace(/'/g,"\\'")}')">+ Plan de acción</button>`
+      }
     </div>
     ${hasDetail?`
     <div class="hit-extra" id="hd-${h.id}">
@@ -2916,7 +2992,7 @@ function loadConfig(){
   if(document.getElementById('cfg-impact-threshold')) document.getElementById('cfg-impact-threshold').value=S.cfg.impactThreshold||50;
 }
 
-function saveConfig(){
+async function saveConfig(){
   S.cfg={
     mistralKey: document.getElementById('cfg-mistral-key').value.trim(),
     mistralModel: document.getElementById('cfg-mistral-model').value,
@@ -2925,12 +3001,14 @@ function saveConfig(){
     impactThreshold: parseInt(document.getElementById('cfg-impact-threshold')?.value)||50,
     repo: document.getElementById('cfg-repo').value.trim(),
     twinDays: parseInt(document.getElementById('cfg-twin-days').value)||90,
-    pineconeKey: 'server-side', // key is in Vercel env vars
+    pineconeKey: 'server-side',
     pineconeHost: document.getElementById('cfg-pinecone-host')?.value?.trim()||'https://digitaltwin-xm7jklu.svc.aped-4627-b74a.pinecone.io',
     pineconeIndex: document.getElementById('cfg-pinecone-index')?.value?.trim()||'digitaltwin',
   };
-  lsSet('cfg',S.cfg);
-  showAlert('config-alert','✓ Configuración guardada localmente (nunca en GitHub ni Firestore)','ok');
+  lsSet('cfg', S.cfg);
+  // Also persist to Firestore so keys survive across devices/sessions
+  await fsSet('config', 'main', S.cfg).catch(()=>{});
+  showAlert('config-alert','✓ Configuración guardada y sincronizada entre dispositivos','ok');
 }
 
 async function testMistral(){
@@ -3664,15 +3742,28 @@ function renderSentencias(){
 function setHitFunnel(level){
   hitFunnel=level;
   document.querySelectorAll('.funnel-step').forEach(s=>s.classList.remove('active'));
-  document.getElementById('funnel-'+level)?.classList.add('active');
+  // Map funnel level to DOM element id
+  const domId = {all:'funnel-all', impacts:'funnel-company', plans:'funnel-plans'}[level]||('funnel-'+level);
+  document.getElementById(domId)?.classList.add('active');
   renderHits();
 }
 
 function updateFunnelCounts(){
-  const all=S.hits.length;
-  const company=S.hits.filter(h=>h.company_impact||h.is_sentencia||h.level==='critical').length;
+  const all = S.hits.length;
+  const impacts = S.hits.filter(h=>isImpact(h)).length;
+  const plans = S.actionPlans.filter(p=>p.status!=='closed').length;
   document.getElementById('funnel-count-all').textContent=all;
-  document.getElementById('funnel-count-company').textContent=company;
+  document.getElementById('funnel-count-company').textContent=impacts;
+  const fp = document.getElementById('funnel-count-plans');
+  if(fp) fp.textContent=plans;
+
+  // Badge in nav = residual ALTO count (the ones that need immediate action)
+  const highRisk = S.hits.filter(h=>{
+    const r=h.residual_level||'';
+    return r==='alto'||r==='critical';
+  }).length;
+  const badge = document.getElementById('badge-hits');
+  if(badge) badge.textContent=highRisk;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -3884,7 +3975,27 @@ async function syncTwinToPinecone(){
 // RAG HIT ANALYSIS — Inherent + Residual Risk
 // ════════════════════════════════════════════════════════════════
 
-async function reAnalyzeHit(hitId){
+
+// ── Discard a hit with reason ─────────────────────────────────────────────────
+async function discardHit(hitId){
+  const reason = prompt('¿Por qué no es relevante este hit para tu empresa?\n(Se guardará como justificación del descarte)');
+  if(reason === null) return; // cancelled
+  const idx = S.hits.findIndex(h=>h.id===hitId);
+  if(idx<0) return;
+  S.hits[idx]._discarded = true;
+  S.hits[idx]._discard_reason = reason || 'Descartado manualmente';
+  S.hits[idx]._action_taken = 'discarded';
+  lsSet('hits', S.hits);
+  if(S.hits[idx]._fsId){
+    await fsUpdate('hits', S.hits[idx]._fsId, {
+      _discarded: true,
+      _discard_reason: S.hits[idx]._discard_reason,
+      _action_taken: 'discarded',
+    }).catch(()=>{});
+  }
+  renderHits();
+}
+async function reAnalyzeHit(hitId, silent=false){
   if(!S.cfg.mistralKey){ showAlert('hits-alert','Configura la API key de Mistral','err'); return; }
   if(!S.ctx?.name && !S.twinSummary){ showAlert('hits-alert','Primero completa el Contexto Organizacional del Twin','err'); return; }
 
@@ -3982,8 +4093,19 @@ Devuelve SOLO este JSON:
     const clean = raw.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
     const analysis = JSON.parse(clean.match(/\{[\s\S]*\}/)?.[0]||'{}');
 
+    // Enforce residual ≤ inherent (methodological constraint)
+    const levelOrder = {irrelevant:0, bajo:1, info:1, medio:2, warning:2, alto:3, critical:3};
+    const inhOrder = levelOrder[analysis.inherent_level] || 0;
+    const resOrderRaw = levelOrder[analysis.residual_level] || 0;
+    if(resOrderRaw > inhOrder){
+      // Residual cannot exceed inherent — cap it
+      const capMap = {0:'irrelevant',1:'bajo',2:'medio',3:'alto'};
+      analysis.residual_level = capMap[inhOrder] || analysis.inherent_level;
+      analysis.residual_score = Math.min(analysis.residual_score||0, analysis.inherent_score||0);
+      console.warn('[Risk] Residual capped to inherent level for hit', hitId);
+    }
     // Map residual level to display level
-    const finalLevel = analysis.residual_level || 'info';
+    const finalLevel = analysis.residual_level || 'bajo';
     const company_impact = analysis.inherent_level !== 'irrelevant' && analysis.inherent_score > 15;
 
     // Update hit in state
@@ -4014,6 +4136,7 @@ Devuelve SOLO este JSON:
         recommended_action:analysis.gaps_identified || '',
         rag_fragments_used:retrievedFragments.length,
         _reanalyzed:       new Date().toISOString(),
+        _analyzed:         true,
       };
       lsSet('hits', S.hits);
       if(S.hits[idx]._fsId){
@@ -4035,6 +4158,7 @@ Devuelve SOLO este JSON:
           false_positive:     !company_impact,
           rag_fragments_used: retrievedFragments.length,
           _reanalyzed:        new Date().toISOString(),
+          _analyzed:          true,
         }).catch(()=>{});
       }
     }
@@ -4042,7 +4166,7 @@ Devuelve SOLO este JSON:
     updateFunnelCounts();
     updateBadges();
     renderHits();
-    showRiskToast(hitId, analysis, company_impact, retrievedFragments.length);
+    if(!silent) showRiskToast(hitId, analysis, company_impact, retrievedFragments.length);
 
   }catch(e){
     if(btn){ btn.innerHTML='⟳ Re-evaluar'; btn.disabled=false; }
