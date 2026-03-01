@@ -2743,68 +2743,9 @@ function renderBriefPlaceholder(){
   }
 }
 
-async function generateBrief(){
-  const key=S.cfg.mistralKey;
-  if(!key){showAlert('brief-alert','Configura la API key de Mistral','err');return;}
-  const btn=document.getElementById('brief-gen-btn');
-  btn.innerHTML='<span class="spin"></span> Generando...'; btn.disabled=true;
+</script>
 
-  const globalScore=calcGlobalScore();
-  const scores=getDimScores();
-  const topHits=S.hits.filter(h=>h.level==='critical'||h.level==='warning').slice(0,3);
-  const openPlans=S.actionPlans.filter(p=>p.status!=='closed');
 
-  const prompt=`Eres el Compliance Officer de "${S.ctx?.name||'la organización'}". Genera un BRIEF EJECUTIVO en español para presentar al Comité de Cumplimiento o Consejo de Administración.
-
-DATOS DEL TWIN:
-- Organización: ${S.ctx?.name} · ${S.ctx?.sector} · ${S.ctx?.size}
-- Madurez global: ${globalScore.toFixed(1)}/5
-- Por dimensión: ${DIMS.map((d,i)=>`${d.label}: ${scores[i].toFixed(1)}`).join(', ')}
-- Hits críticos/alertas recientes: ${topHits.map(h=>h.title).join(' | ')||'Ninguno'}
-- Planes abiertos: ${openPlans.length}
-
-RESUMEN DEL TWIN:
-${S.twinSummary?.slice(0,500)||'No disponible'}
-
-El brief debe incluir:
-1. Estado actual del modelo de compliance (2-3 frases)
-2. Top 3 eventos regulatorios de este período y su impacto
-3. Gaps prioritarios del modelo (dimensiones con menor madurez)
-4. Planes de acción en curso
-5. Recomendación clave para el próximo período
-
-Formato: claro, ejecutivo, con datos concretos. Máximo 400 palabras.`;
-
-  try{
-    const result=await callMistral(prompt, 800);
-    const now=new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'long',year:'numeric'});
-    document.getElementById('brief-content').innerHTML=`
-      <div class="brief-page" id="brief-printable">
-        <div class="brief-header">
-          <div>
-            <div class="brief-logo">CDT · Compliance Digital Twin</div>
-            <div style="font-size:11px;color:#666;margin-top:3px">${S.ctx?.name||'Organización'} · ${S.ctx?.sector||''}</div>
-          </div>
-          <div class="brief-date"><div style="font-size:11px;color:#666">Brief Ejecutivo</div><div style="font-weight:700;margin-top:2px">${now}</div></div>
-        </div>
-        <div class="brief-kri-row">
-          <div class="brief-kri"><div class="brief-kri-val" style="color:#16a34a">${globalScore.toFixed(1)}</div><div class="brief-kri-label">Madurez /5.0</div></div>
-          <div class="brief-kri"><div class="brief-kri-val" style="color:#dc2626">${S.hits.filter(h=>h.level==='critical').length}</div><div class="brief-kri-label">Hits Críticos</div></div>
-          <div class="brief-kri"><div class="brief-kri-val" style="color:#d97706">${openPlans.length}</div><div class="brief-kri-label">Planes Abiertos</div></div>
-          <div class="brief-kri"><div class="brief-kri-val" style="color:#2563eb">${S.hits.length}</div><div class="brief-kri-label">Hits Monitorizados</div></div>
-        </div>
-        <div style="white-space:pre-wrap;font-size:12px;line-height:1.7;color:#222">${result}</div>
-        <div style="margin-top:24px;padding-top:12px;border-top:1px solid #ddd;font-size:10px;color:#999">Generado automáticamente por CDT — Compliance Digital Twin · ${now}</div>
-      </div>`;
-  }catch(e){showAlert('brief-alert','Error: '+e.message,'err');}
-  btn.textContent='✦ Generar con IA'; btn.disabled=false;
-}
-
-function printBrief(){
-  const content=document.getElementById('brief-printable');
-  if(!content){alert('Genera el brief primero');return;}
-  const w=window.open('','_blank');
-  w.document.write(`<html><head><title>Brief Ejecutivo CDT</title><style>body{font-family:Georgia,serif;padding:40px;max-width:780px;margin:0 auto}@media print{body{padding:20px}}</style></head><body>${content.outerHTML}
 <!-- MODAL CONTROL -->
 <div class="overlay" id="modal-ctrl">
   <div class="modal modal-lg">
@@ -3006,6 +2947,8 @@ function printBrief(){
 </body></html>`);
   w.document.close(); w.print();
 }
+
+<script>
 
 // ═══════════════════════════════════════════════════════════════
 // HISTORIAL MADUREZ
