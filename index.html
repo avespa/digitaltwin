@@ -364,11 +364,12 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
             <div>
               <div style="font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase">Health Score</div>
               <div id="health-score-val" style="font-family:var(--font-ui);font-size:28px;font-weight:800;color:var(--accent);line-height:1">100</div>
+              <div id="health-score-sub" style="font-size:8px;color:var(--text-muted);margin-top:2px"></div>
             </div>
             <canvas id="health-gauge" width="52" height="52"></canvas>
           </div>
-        </div>
-        <div id="city-status-label" style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);backdrop-filter:blur(8px);border:1px solid var(--border2);border-radius:6px;padding:5px 14px;font-size:10px;letter-spacing:1px;color:var(--accent);text-transform:uppercase;white-space:nowrap"></div>
+          <div id="health-breakdown" style="margin-top:5px;font-size:8px;display:flex;flex-wrap:wrap;gap:4px;max-width:360px;line-height:1.5"></div>
+        </div> style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);backdrop-filter:blur(8px);border:1px solid var(--border2);border-radius:6px;padding:5px 14px;font-size:10px;letter-spacing:1px;color:var(--accent);text-transform:uppercase;white-space:nowrap"></div>
       </div>
 
       <!-- Panel KPIs secundarios -->
@@ -409,15 +410,15 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
       <div class="card" style="padding:12px">
         <div style="font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">📈 Health Score — 30 días</div>
-        <canvas id="chart-health" height="90"></canvas>
+        <canvas id="chart-health" height="60"></canvas>
       </div>
       <div class="card" style="padding:12px">
         <div style="font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">📊 Hits vs Impactos</div>
-        <canvas id="chart-hits" height="90"></canvas>
+        <canvas id="chart-hits" height="60"></canvas>
       </div>
       <div class="card" style="padding:12px">
         <div style="font-size:9px;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">🎯 Evolución Madurez</div>
-        <canvas id="chart-madurez" height="90"></canvas>
+        <canvas id="chart-madurez" height="60"></canvas>
       </div>
     </div>
   </div>
@@ -983,6 +984,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
 
 <script>
 let hitFunnel = 'all'; // declared at top to avoid TDZ in renderHits
+let importPreviewRows = []; // declared here to avoid TDZ when modal HTML fires onchange
 // ═══════════════════════════════════════════════════════════════
 // FIREBASE INIT
 // ═══════════════════════════════════════════════════════════════
@@ -1414,36 +1416,41 @@ function renderAll(){
 // ── Health Score ─────────────────────────────────────────────
 function calcHealthScore(){
   let score = 100;
-  const hits = S.hits || [];
+  const hits  = S.hits || [];
   const plans = S.actionPlans || [];
   const ctrls = S.controls || [];
 
-  // Impactos residual ALTO sin plan: -12 cada uno (max -48)
+  // Impactos residual ALTO sin plan de acción: -15 c/u (max -45)
   const critNoplan = hits.filter(h =>
     (h.residual_level==='alto'||h.residual_level==='critical') &&
     !plans.find(p => p.hit_id===h.id && p.status!=='closed')
   );
-  score -= Math.min(critNoplan.length * 12, 48);
+  score -= Math.min(critNoplan.length * 15, 45);
 
-  // Impactos inherente MEDIO/ALTO sin analizar: -5 (max -20)
+  // Impactos inherente MEDIO/ALTO sin analizar: -4 c/u (max -20)
   const unanalyzed = hits.filter(h => isImpact(h) && !h._analyzed && !h.inherent_level);
-  score -= Math.min(unanalyzed.length * 5, 20);
+  score -= Math.min(unanalyzed.length * 4, 20);
 
-  // Planes vencidos (abiertos con due_date pasada): -8 (max -24)
+  // Planes vencidos (abiertos, due_date pasada): -8 c/u (max -24)
   const now = Date.now();
-  const overdue = plans.filter(p => p.status!=='closed' && p.due_date && new Date(p.due_date)<now);
+  const overdue = plans.filter(p =>
+    p.status!=='closed' && p.due_date && new Date(p.due_date) < now
+  );
   score -= Math.min(overdue.length * 8, 24);
 
-  // Controles sin ejecutar: hasta -15 proporcional
+  // Controles sin ejecutar: penalización proporcional hasta -10
+  // (suavizado: solo se penaliza si >50% sin ejecutar)
   if(ctrls.length > 0){
-    const noExec = ctrls.filter(c => c.executed !== 'Sí').length;
-    score -= Math.round((noExec / ctrls.length) * 15);
+    const noExecRatio = ctrls.filter(c => c.executed !== 'Sí').length / ctrls.length;
+    if(noExecRatio > 0.5){
+      score -= Math.round((noExecRatio - 0.5) * 20); // max -10
+    }
   }
 
-  // Controles ejecutados este mes: +2 (max +10)
+  // Bonus: controles ejecutados este mes: +2 c/u (max +8)
   const thisMonth = new Date(); thisMonth.setDate(1); thisMonth.setHours(0,0,0,0);
   const execRecent = ctrls.filter(c => c.exec_date && new Date(c.exec_date) >= thisMonth);
-  score += Math.min(execRecent.length * 2, 10);
+  score += Math.min(execRecent.length * 2, 8);
 
   return Math.max(0, Math.min(100, Math.round(score)));
 }
@@ -1541,226 +1548,412 @@ function renderSecondaryKpis(){
 
   const sy = document.getElementById('dash-sync-time');
   if(sy) sy.textContent = S.lastSync ? fmtTime(S.lastSync) : '—';
+
+  // Health score breakdown (shown as subtitle under score)
+  const hsBreakdown = document.getElementById('health-breakdown');
+  if(hsBreakdown){
+    const hits  = S.hits||[], plans = S.actionPlans||[], ctrls = S.controls||[];
+    const critNoplan = hits.filter(h=>(h.residual_level==='alto'||h.residual_level==='critical')&&!plans.find(p=>p.hit_id===h.id&&p.status!=='closed'));
+    const unanalyzed = hits.filter(h=>isImpact(h)&&!h._analyzed&&!h.inherent_level);
+    const now=Date.now();
+    const overdue=plans.filter(p=>p.status!=='closed'&&p.due_date&&new Date(p.due_date)<now);
+    const noExecRatio=ctrls.length?ctrls.filter(c=>c.executed!=='Sí').length/ctrls.length:0;
+    const parts=[];
+    if(critNoplan.length) parts.push(`<span style="color:var(--danger)">▼ ${critNoplan.length} críticos sin plan</span>`);
+    if(unanalyzed.length) parts.push(`<span style="color:var(--warn)">▼ ${unanalyzed.length} sin analizar</span>`);
+    if(overdue.length)    parts.push(`<span style="color:var(--warn)">▼ ${overdue.length} planes vencidos</span>`);
+    if(noExecRatio>0.5)   parts.push(`<span style="color:var(--text-muted)">▼ ${Math.round(noExecRatio*100)}% ctrls sin ejecutar</span>`);
+    if(!parts.length)     parts.push(`<span style="color:var(--accent)">✓ Sin penalizaciones activas</span>`);
+    hsBreakdown.innerHTML = parts.join(' · ');
+  }
 }
 
-// ── Ciudad Pixel Art 16-bit ───────────────────────────────────
+// ── Ciudad Pixel Art 16-bit — SVG detallado ───────────────────
+// ── Ciudad Pixel Art 16-bit — SVG detallado ───────────────────
 let cityAnimFrame = null;
 let cityTick = 0;
 
 function drawCity(score){
   const canvas = document.getElementById('city-canvas');
   if(!canvas) return;
-  if(cityAnimFrame) cancelAnimationFrame(cityAnimFrame);
+  if(cityAnimFrame){ cancelAnimationFrame(cityAnimFrame); cityAnimFrame=null; }
 
-  // Match canvas resolution to actual displayed size
   const rect = canvas.getBoundingClientRect();
   const dpr = window.devicePixelRatio||1;
-  canvas.width  = Math.round(rect.width  * dpr) || 800;
-  canvas.height = Math.round(rect.height * dpr) || 300;
+  canvas.width  = Math.round(rect.width  * dpr) || 900;
+  canvas.height = Math.round(rect.height * dpr) || 320;
   const W = canvas.width, H = canvas.height;
+  const S2 = W/900;
 
   const hl = healthLabel(score);
-  const isDay = document.documentElement.getAttribute('data-theme') === 'light';
+  const isLight = document.documentElement.getAttribute('data-theme')==='light';
 
-  function animate(){
-    cityTick++;
+  // Pedestrian / bike state
+  let ped1X = -30, ped2X = W+30, bikeX = -50;
+
+  function px(x){ return x*S2; }
+  function py(y){ return H - y*S2; }
+
+  // ── Building definitions (16-bit style, varied colours) ──────
+  // Each: {x,w,h, color, roofColor, winColor, style}
+  const BLDGS = [
+    // Far background (lighter, smaller — depth)
+    {x:20,  w:55, h:130, color:'#3a4a5a', roof:'#2d3a47', win:'#ffd060', accent:'#506070', style:'simple'},
+    {x:100, w:40, h:100, color:'#4a3828', roof:'#3a2a1e', win:'#ffb840', accent:'#6a4838', style:'simple'},
+    {x:730, w:50, h:120, color:'#2e4438', roof:'#223328', win:'#90e890', accent:'#3e5e48', style:'simple'},
+    {x:800, w:60, h:110, color:'#3a3050', roof:'#2a2040', win:'#c0a0ff', accent:'#504870', style:'simple'},
+
+    // Midground buildings (main skyline)
+    {x:30,  w:70, h:190, color:'#4a6880', roof:'#3a5060', win:'#ffd060', accent:'#5a7890', style:'flat',   antenna:true},
+    {x:120, w:55, h:155, color:'#7a4030', roof:'#5a2820', win:'#ffa060', accent:'#8a5040', style:'stepped'},
+    {x:185, w:85, h:240, color:'#3d5875', roof:'#2d4050', win:'#a0d4ff', accent:'#507090', style:'tower',  antenna:true},
+    {x:285, w:65, h:170, color:'#6a5038', roof:'#4a3828', win:'#ffd080', accent:'#806040', style:'flat'},
+    {x:365, w:95, h:260, color:'#485060', roof:'#363a48', win:'#80c8ff', accent:'#586880', style:'tower',  antenna:true, crown:true},
+    {x:478, w:72, h:200, color:'#506838', roof:'#385028', win:'#b8f0a0', accent:'#608840', style:'flat'},
+    {x:562, w:58, h:155, color:'#7a3838', roof:'#5a2828', win:'#ffc0a0', accent:'#8a4848', style:'stepped'},
+    {x:635, w:90, h:225, color:'#405870', roof:'#304050', win:'#a0e0ff', accent:'#507080', style:'tower',  antenna:true},
+    {x:743, w:65, h:175, color:'#584838', roof:'#403030', win:'#ffc870', accent:'#705848', style:'flat'},
+    {x:820, w:70, h:205, color:'#384858', roof:'#283848', win:'#90d4ff', accent:'#485868', style:'tower',  antenna:true},
+  ];
+
+  function drawBuilding(ctx, b, tick, score){
+    const bx=px(b.x), by=py(b.h+40), bw=px(b.w), bh=px(b.h);
+    const ground=py(40);
+
+    // Shadow
+    ctx.fillStyle='rgba(0,0,0,.2)';
+    ctx.fillRect(bx+px(4), by+bh, bw, px(4));
+
+    // Main body
+    ctx.fillStyle=b.color;
+    ctx.fillRect(bx, by, bw, bh);
+
+    // Stepped roof variant
+    if(b.style==='stepped'){
+      ctx.fillStyle=b.roof;
+      ctx.fillRect(bx+px(5), by-px(12), bw-px(10), px(14));
+      ctx.fillRect(bx+px(10), by-px(22), bw-px(20), px(12));
+    } else if(b.style==='tower'){
+      ctx.fillStyle=b.roof;
+      ctx.fillRect(bx, by-px(8), bw, px(10));
+      ctx.fillStyle=b.accent;
+      ctx.fillRect(bx, by, bw, px(8)); // dark band
+    } else {
+      ctx.fillStyle=b.roof;
+      ctx.fillRect(bx, by-px(6), bw, px(8));
+    }
+
+    // Accent stripe
+    ctx.fillStyle=b.accent;
+    ctx.fillRect(bx, by+px(4), bw, px(4));
+
+    // Antenna
+    if(b.antenna){
+      ctx.fillStyle=isLight?'#667788':'#506070';
+      ctx.fillRect(bx+bw/2-px(1.5), by-px(b.style==='stepped'?28:14)-px(24), px(3), px(24));
+      const blink = Math.sin(tick*0.06+b.x)>0.3;
+      ctx.fillStyle=blink?'#ef4444':'rgba(239,68,68,.3)';
+      ctx.beginPath(); ctx.arc(bx+bw/2, by-px(b.style==='stepped'?28:14)-px(24), px(2.5),0,Math.PI*2); ctx.fill();
+    }
+
+    // Crown / decorative top
+    if(b.crown){
+      ctx.fillStyle=isLight?'#d4aa40':'#b89020';
+      for(let t=0;t<5;t++){
+        ctx.fillRect(bx+px(t*(b.w/5))+px(1), by-px(14), px(b.w/5-2), px(8));
+      }
+    }
+
+    // Windows grid
+    const winRows = Math.floor(b.h/18);
+    const winCols = Math.max(2, Math.floor(b.w/12));
+    const winW=px(6), winH=px(7);
+    const cellW = bw/winCols, cellH = bh/winRows;
+    for(let r=0;r<winRows-1;r++){
+      for(let c=0;c<winCols;c++){
+        const wx = bx + c*cellW + (cellW-winW)/2;
+        const wy = by + r*cellH + (cellH-winH)/2 + px(8);
+        // Lit state based on health
+        const seed = (b.x*7+r*13+c*5)%20;
+        const litThreshold = score>80 ? 18 : score>50 ? Math.round(score/6) : score>20 ? 4 : 1;
+        const lit = seed < litThreshold;
+        if(lit){
+          ctx.fillStyle = isLight?'rgba(255,200,100,.85)':'#ffd060';
+          ctx.fillRect(wx,wy,winW,winH);
+          if(!isLight){
+            // Warm glow reflection below window
+            ctx.fillStyle='rgba(255,180,40,.12)';
+            ctx.fillRect(wx-px(1),wy+winH,winW+px(2),px(3));
+          }
+        } else {
+          ctx.fillStyle = isLight?'rgba(0,0,50,.25)':'rgba(0,0,20,.7)';
+          ctx.fillRect(wx,wy,winW,winH);
+        }
+        // Window frame
+        ctx.strokeStyle=isLight?'rgba(0,0,0,.1)':'rgba(255,255,255,.05)';
+        ctx.lineWidth=0.5; ctx.strokeRect(wx,wy,winW,winH);
+      }
+    }
+
+    // Ground floor: shop front / entrance
+    ctx.fillStyle=b.accent;
+    ctx.fillRect(bx, ground-px(20), bw, px(20));
+    // Door
+    const dw=px(8), dh=px(14), dx=bx+bw/2-dw/2;
+    ctx.fillStyle=isLight?'#334455':'#0a1520';
+    ctx.fillRect(dx, ground-px(14), dw, dh);
+    // Door handle
+    ctx.fillStyle='#aaaaaa';
+    ctx.fillRect(dx+dw-px(3), ground-px(8), px(2), px(3));
+
+    // Smoke from chimney (score < 60)
+    if(score<60 && b.h>170){
+      const smokeX = bx+bw*0.3;
+      const smokeBase = by - px(b.style==='stepped'?30:14) - px(4);
+      for(let s=0;s<5;s++){
+        const age = (tick*0.7+s*12)%55;
+        const alpha = ((60-score)/60) * 0.5 * (1-age/55);
+        const radius = px(3+age*0.35);
+        const dx2 = Math.sin(s*2.1+tick*0.02)*px(age*0.2);
+        ctx.fillStyle=`rgba(100,100,100,${alpha.toFixed(2)})`;
+        ctx.beginPath(); ctx.arc(smokeX+dx2, smokeBase-px(age*0.8), radius,0,Math.PI*2); ctx.fill();
+      }
+    }
+  }
+
+  function drawScene(tick){
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0,0,W,H);
-    const S2 = W/800; // scale factor
 
-    // ── SKY ──────────────────────────────────────────────────
-    const skyGrad = ctx.createLinearGradient(0,0,0,H*0.65);
-    if(isDay){
-      skyGrad.addColorStop(0, score>=50?'#87ceeb':'#607d8b');
-      skyGrad.addColorStop(1, score>=50?'#b0e0f0':'#90a4ae');
+    // ── SKY ─────────────────────────────────────────────────
+    const skyGrad = ctx.createLinearGradient(0,0,0,py(40));
+    if(isLight){
+      skyGrad.addColorStop(0, score>=50?'#7ec8e3':'#7090a0');
+      skyGrad.addColorStop(1, score>=50?'#b8e4f4':'#9ab0bb');
     } else {
-      skyGrad.addColorStop(0, score>=50?'#0a0f1a':'#1a0a0a');
-      skyGrad.addColorStop(1, score>=50?'#0d1520':'#2a0a0a');
+      skyGrad.addColorStop(0, score>=50?'#060c18':'#180808');
+      skyGrad.addColorStop(1, score>=50?'#0d1628':'#281010');
     }
-    ctx.fillStyle = skyGrad; ctx.fillRect(0,0,W,H*0.65);
+    ctx.fillStyle=skyGrad; ctx.fillRect(0,0,W,py(40));
 
     // Stars (night)
-    if(!isDay){
-      ctx.fillStyle='rgba(255,255,255,.8)';
-      const stars=[[50,30],[120,15],[200,40],[320,10],[450,25],[580,18],[700,35],[760,12],[80,55],[380,48]];
-      stars.forEach(([x,y])=>{
-        const twinkle = Math.sin(cityTick*0.05 + x) * 0.4 + 0.6;
-        ctx.globalAlpha = twinkle;
-        ctx.fillRect(x*S2, y*S2, 1.5*S2, 1.5*S2);
+    if(!isLight){
+      const starSeeds=[[50,50],[130,20],[220,55],[340,18],[480,38],[600,22],[710,50],[780,15],[90,75],[410,65],[550,80]];
+      starSeeds.forEach(([sx,sy])=>{
+        const twinkle=Math.sin(tick*0.04+sx*0.1)*0.4+0.6;
+        ctx.globalAlpha=twinkle; ctx.fillStyle='#ffffff';
+        ctx.fillRect(px(sx),py(H/S2-sy*0.4),px(1.5),px(1.5));
       });
-      ctx.globalAlpha = 1;
+      ctx.globalAlpha=1;
     }
 
-    // Sun / Moon
-    if(isDay){
-      ctx.fillStyle='#FFD700';
-      ctx.beginPath(); ctx.arc(720*S2, 45*S2, 18*S2, 0, Math.PI*2); ctx.fill();
+    // Sun or Moon
+    if(isLight){
+      const sunY=py(H/S2-60);
+      const grad=ctx.createRadialGradient(px(780),sunY,0,px(780),sunY,px(28));
+      grad.addColorStop(0,'#fff7a0'); grad.addColorStop(0.6,'#FFD700'); grad.addColorStop(1,'transparent');
+      ctx.fillStyle=grad; ctx.beginPath(); ctx.arc(px(780),sunY,px(28),0,Math.PI*2); ctx.fill();
     } else {
       ctx.fillStyle='#ddeeff';
-      ctx.beginPath(); ctx.arc(720*S2, 45*S2, 14*S2, 0, Math.PI*2); ctx.fill();
-      ctx.fillStyle=isDay?'#b0e0f0':'#0a0f1a';
-      ctx.beginPath(); ctx.arc(728*S2, 40*S2, 11*S2, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(px(780),py(H/S2-60),px(14),0,Math.PI*2); ctx.fill();
+      ctx.fillStyle=score>=50?'#060c18':'#180808';
+      ctx.beginPath(); ctx.arc(px(793),py(H/S2-67),px(11),0,Math.PI*2); ctx.fill();
     }
 
-    // Clouds (day only, drift slowly)
-    if(isDay && score>=30){
-      const cloudOffset = (cityTick * 0.3) % (W+120*S2);
-      [[100,40,60],[300,25,80],[600,50,50]].forEach(([cx,cy,cw])=>{
-        const x = ((cx*S2 + cloudOffset) % (W + 120*S2)) - 60*S2;
-        ctx.fillStyle='rgba(255,255,255,.85)';
-        ctx.beginPath(); ctx.ellipse(x,cy*S2,cw*S2*0.5,12*S2,0,0,Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.ellipse(x+20*S2,cy*S2-8*S2,cw*S2*0.35,10*S2,0,0,Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.ellipse(x-20*S2,cy*S2-4*S2,cw*S2*0.3,9*S2,0,0,Math.PI*2); ctx.fill();
+    // Clouds
+    if(isLight && score>=30){
+      [[100,75,70],[320,85,90],[620,70,65]].forEach(([cx,cy,cw],ci)=>{
+        const ox=(tick*0.25+ci*200)%(W/S2+200)-50;
+        const x=px(ox), y=py(H/S2-cy);
+        ctx.fillStyle=score<50?'rgba(150,160,170,.9)':'rgba(255,255,255,.9)';
+        ctx.beginPath(); ctx.ellipse(x,y,px(cw*0.5),px(13),0,0,Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(x+px(22),y-px(9),px(cw*0.38),px(11),0,0,Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(x-px(18),y-px(5),px(cw*0.32),px(10),0,0,Math.PI*2); ctx.fill();
       });
     }
 
     // Rain (score < 50)
-    if(score < 50){
-      ctx.strokeStyle='rgba(100,150,200,.3)';
+    if(score<50){
+      ctx.strokeStyle=isLight?'rgba(80,100,140,.35)':'rgba(100,140,200,.25)';
       ctx.lineWidth=1;
-      for(let r=0;r<30;r++){
-        const rx = (r*73 + cityTick*2) % W;
-        const ry = (r*53 + cityTick*4) % (H*0.65);
-        ctx.beginPath(); ctx.moveTo(rx,ry); ctx.lineTo(rx-2*S2,ry+8*S2); ctx.stroke();
+      for(let r=0;r<35;r++){
+        const rx=(r*97+tick*3)%W, ry=(r*67+tick*5)%(py(40));
+        ctx.beginPath(); ctx.moveTo(rx,ry); ctx.lineTo(rx-px(2),ry+px(9)); ctx.stroke();
       }
     }
 
-    // ── GROUND ───────────────────────────────────────────────
-    ctx.fillStyle = isDay ? '#4a5240' : '#1a2010';
-    ctx.fillRect(0, H*0.65, W, H*0.35);
+    // ── GROUND ──────────────────────────────────────────────
+    // Grass/pavement
+    ctx.fillStyle=isLight?'#5a6e48':'#1e2a14';
+    ctx.fillRect(0,py(40),W,py(40)-py(0));
+
+    // Sidewalk
+    ctx.fillStyle=isLight?'#c8c0b0':'#2a2828';
+    ctx.fillRect(0,py(38),W,px(14));
 
     // Road
-    ctx.fillStyle = isDay ? '#555' : '#222';
-    ctx.fillRect(0, H*0.78, W, H*0.08);
-    // Road lines
-    ctx.fillStyle='rgba(255,255,200,.4)';
-    for(let d=0;d<W;d+=60*S2){
-      const dx = (d + cityTick) % W;
-      ctx.fillRect(dx, H*0.815, 30*S2, 2*S2);
+    ctx.fillStyle=isLight?'#606060':'#1a1a1a';
+    ctx.fillRect(0,py(24),W,px(20));
+
+    // Road markings (static dashes)
+    ctx.fillStyle='rgba(255,240,150,.5)';
+    for(let d=0;d<W;d+=px(55)){
+      ctx.fillRect(d,py(15),px(30),px(3));
     }
 
-    // ── BUILDINGS ────────────────────────────────────────────
-    const buildings = [
-      {x:50, w:80, h:180, floors:9, color:isDay?'#4a6080':'#1a2535'},  // rascacielos izq
-      {x:150,w:60, h:130, floors:7, color:isDay?'#5a6070':'#1e2830'},
-      {x:240,w:100,h:220, floors:11,color:isDay?'#3d5570':'#162030'},  // rascacielos centro
-      {x:370,w:70, h:150, floors:8, color:isDay?'#506070':'#1c2835'},
-      {x:460,w:90, h:190, floors:10,color:isDay?'#405060':'#182233'},
-      {x:580,w:65, h:140, floors:7, color:isDay?'#4a5868':'#1a2530'},
-      {x:670,w:85, h:170, floors:9, color:isDay?'#384860':'#141e2a'},
-    ];
+    // Kerb line
+    ctx.fillStyle=isLight?'#aaa090':'#444040';
+    ctx.fillRect(0,py(38),W,px(2));
+    ctx.fillRect(0,py(24),W,px(2));
 
-    buildings.forEach((b,bi)=>{
-      const bx=b.x*S2, bw=b.w*S2, bh=b.h*S2;
-      const by=H*0.65-bh+4*S2;
+    // ── BUILDINGS ───────────────────────────────────────────
+    // Back row (depth effect - slightly transparent)
+    ctx.globalAlpha=0.6;
+    BLDGS.slice(0,4).forEach(b=>drawBuilding(ctx,b,tick,score));
+    ctx.globalAlpha=1;
+    // Front row
+    BLDGS.slice(4).forEach(b=>drawBuilding(ctx,b,tick,score));
 
-      // Building body
-      ctx.fillStyle=b.color;
-      ctx.fillRect(bx, by, bw, bh);
+    // ── DOME ────────────────────────────────────────────────
+    const domeX=W/2, domeY=py(40), domeRx=W*0.53, domeRy=H*0.92;
+    const domeCol=hl.color;
 
-      // Building outline (pixel art feel)
-      ctx.strokeStyle=isDay?'rgba(0,0,0,.2)':'rgba(255,255,255,.05)';
-      ctx.lineWidth=1; ctx.strokeRect(bx,by,bw,bh);
+    // Inner glow fill
+    const fillAlpha=score>=80?0.03:score>=50?0.05:0.07;
+    ctx.fillStyle=domeCol.replace(')',`,${fillAlpha})`).replace('rgb','rgba')||`rgba(0,229,160,${fillAlpha})`;
+    ctx.beginPath(); ctx.ellipse(domeX,domeY,domeRx,domeRy,0,Math.PI,Math.PI*2); ctx.fill();
 
-      // Antenna on tall buildings
-      if(b.h>160){
-        ctx.fillStyle=isDay?'#8090a0':'#304050';
-        ctx.fillRect(bx+bw/2-1.5*S2, by-18*S2, 3*S2, 18*S2);
-        // Blinking light
-        const blink = Math.sin(cityTick*0.08+bi)>0;
-        ctx.fillStyle=blink?'#ef4444':'rgba(239,68,68,.3)';
-        ctx.beginPath(); ctx.arc(bx+bw/2,by-18*S2,2.5*S2,0,Math.PI*2); ctx.fill();
-      }
-
-      // Windows grid
-      const floorH = bh/b.floors;
-      const winW=5*S2, winH=6*S2, colW=10*S2;
-      const cols = Math.floor((bw-8*S2)/colW);
-      for(let f=0;f<b.floors-1;f++){
-        for(let c=0;c<cols;c++){
-          const wx = bx+4*S2+c*colW;
-          const wy = by+4*S2+f*floorH;
-          // Window lit or dark depends on health + randomish pattern
-          const lit = score>70
-            ? true
-            : score>40
-              ? ((bi*7+f*3+c*5)%10) < Math.round(score/15)
-              : ((bi*7+f*3+c*5)%10) < 2;
-          if(lit){
-            // Night: warm yellow glow; Day: reflective blue
-            ctx.fillStyle = isDay ? 'rgba(180,210,240,.7)' : '#ffd060';
-            ctx.fillRect(wx,wy,winW,winH);
-            if(!isDay){
-              ctx.fillStyle='rgba(255,200,50,.3)';
-              ctx.fillRect(wx-1*S2,wy+winH,winW+2*S2,2*S2);
-            }
-          } else {
-            ctx.fillStyle=isDay?'rgba(0,0,0,.3)':'rgba(0,0,0,.6)';
-            ctx.fillRect(wx,wy,winW,winH);
-          }
-        }
-      }
-
-      // Smoke (bad score)
-      if(score<60 && bi%2===0){
-        const smokeAlpha = (60-score)/60*0.5;
-        const smokeX = bx+bw/2;
-        const smokeY = by - 5*S2;
-        for(let s=0;s<4;s++){
-          const sOff = (cityTick*0.8+s*15)%50;
-          const sAlpha = smokeAlpha*(1-sOff/50);
-          const sRadius = (4+sOff*0.5)*S2;
-          ctx.fillStyle=`rgba(80,80,80,${sAlpha.toFixed(2)})`;
-          ctx.beginPath();
-          ctx.arc(smokeX+Math.sin(s*1.5)*4*S2, smokeY-sOff*S2, sRadius, 0, Math.PI*2);
-          ctx.fill();
-        }
-      }
+    // Dome rim — multi-layer glow
+    [0.15,0.35,1].forEach((a,li)=>{
+      const lw=[6,3,1.5][li]*S2;
+      const alpha=score<20?(a*(0.5+Math.sin(tick*0.12)*0.5)):a;
+      ctx.globalAlpha=alpha;
+      ctx.beginPath(); ctx.ellipse(domeX,domeY,domeRx,domeRy,0,Math.PI,Math.PI*2);
+      ctx.strokeStyle=domeCol; ctx.lineWidth=lw; ctx.stroke();
     });
-
-    // ── DOME (CÚPULA) ─────────────────────────────────────────
-    const domeX=W/2, domeY=H*0.65+2*S2, domeR=320*S2;
-    const domeScore01 = score/100;
-    const domeColor = hl.color;
-
-    // Dome glow
-    const glowA = score>=80 ? 0.15 : score>=50 ? 0.10 : 0.06;
-    const glowGrad = ctx.createRadialGradient(domeX,domeY,domeR*0.6,domeX,domeY,domeR);
-    glowGrad.addColorStop(0, `${domeColor}00`);
-    glowGrad.addColorStop(0.8, `${domeColor}${Math.round(glowA*255).toString(16).padStart(2,'0')}`);
-    glowGrad.addColorStop(1, `${domeColor}00`);
-    ctx.beginPath(); ctx.arc(domeX,domeY,domeR,Math.PI,Math.PI*2); ctx.fillStyle=glowGrad; ctx.fill();
-
-    // Dome arc
-    const pulseW = score>=80 ? 2+Math.sin(cityTick*0.05)*0.8 : score>=50 ? 2 : 1.5;
-    ctx.beginPath(); ctx.arc(domeX,domeY,domeR,Math.PI,Math.PI*2);
-    ctx.strokeStyle=domeColor;
-    ctx.lineWidth=(pulseW)*S2;
-    ctx.globalAlpha = score<20 ? 0.5+Math.sin(cityTick*0.15)*0.5 : 1; // flicker if critical
-    ctx.stroke();
     ctx.globalAlpha=1;
 
-    // Dome cracks (score < 30)
-    if(score<30){
-      ctx.strokeStyle='rgba(239,68,68,.6)';
-      ctx.lineWidth=1.5*S2;
-      const cracks=[[domeX-50*S2,domeY-180*S2],[domeX+80*S2,domeY-220*S2]];
-      cracks.forEach(([cx,cy])=>{
+    // Dome cracks (score < 35)
+    if(score<35){
+      ctx.strokeStyle='rgba(239,68,68,.7)'; ctx.lineWidth=px(1.5);
+      [[domeX-px(60),domeY-domeRy*0.5],[domeX+px(80),domeY-domeRy*0.65]].forEach(([cx,cy])=>{
         ctx.beginPath(); ctx.moveTo(cx,cy);
-        ctx.lineTo(cx+12*S2,cy+20*S2); ctx.lineTo(cx+5*S2,cy+35*S2); ctx.stroke();
+        ctx.lineTo(cx+px(10),cy+px(18)); ctx.lineTo(cx+px(4),cy+px(30)); ctx.stroke();
       });
     }
 
-    // Lightning (score < 20)
-    if(score<20 && cityTick%40<3){
-      ctx.strokeStyle='rgba(255,200,0,.9)'; ctx.lineWidth=2*S2;
+    // Lightning (critical)
+    if(score<20 && tick%50<4){
+      ctx.strokeStyle='rgba(255,220,50,.9)'; ctx.lineWidth=px(2);
       ctx.beginPath();
-      ctx.moveTo(domeX-20*S2,domeY-200*S2);
-      ctx.lineTo(domeX-30*S2,domeY-160*S2);
-      ctx.lineTo(domeX-15*S2,domeY-140*S2);
+      ctx.moveTo(domeX-px(30),domeY-domeRy*0.7);
+      ctx.lineTo(domeX-px(45),domeY-domeRy*0.55);
+      ctx.lineTo(domeX-px(35),domeY-domeRy*0.4);
       ctx.stroke();
     }
 
+    // ── PEDESTRIANS & BIKE ──────────────────────────────────
+    const sidewalkY = py(32);
+
+    // Pedestrian 1 (walks right)
+    ped1X += 0.4*S2;
+    if(ped1X > W+px(20)) ped1X = -px(20);
+    drawPed(ctx, ped1X, sidewalkY, tick, '#e0a070', false);
+
+    // Pedestrian 2 (walks left)
+    ped2X -= 0.3*S2;
+    if(ped2X < -px(20)) ped2X = W+px(20);
+    drawPed(ctx, ped2X, sidewalkY, tick, '#70a0d0', true);
+
+    // Bike (faster, on road level)
+    bikeX += 1.2*S2;
+    if(bikeX > W+px(30)) bikeX = -px(30);
+    drawBike(ctx, bikeX, py(30), tick);
+
+    // Occasional car (low health)
+    if(score < 70){
+      const carX = (tick*1.8*S2)%(W+px(80))-px(40);
+      drawCar(ctx, carX, py(22), score);
+    }
+  }
+
+  // ── Pedestrian sprite ──────────────────────────────────────
+  function drawPed(ctx, x, y, tick, skinColor, flipX){
+    const step=Math.sin(tick*0.18)*3*S2;
+    ctx.save();
+    if(flipX){ ctx.translate(x,0); ctx.scale(-1,1); ctx.translate(-x,0); }
+    // Body
+    ctx.fillStyle='#4060a0'; ctx.fillRect(x-px(2.5),y-px(12),px(5),px(7));
+    // Head
+    ctx.fillStyle=skinColor; ctx.beginPath(); ctx.arc(x,y-px(15),px(3.5),0,Math.PI*2); ctx.fill();
+    // Legs
+    ctx.fillStyle='#303050';
+    ctx.fillRect(x-px(2.5),y-px(5),px(2),px(5)+step);
+    ctx.fillRect(x+px(0.5),y-px(5),px(2),px(5)-step);
+    // Arms
+    ctx.fillStyle=skinColor;
+    ctx.fillRect(x-px(4.5),y-px(11),px(2),px(5)-step*0.5);
+    ctx.fillRect(x+px(2.5),y-px(11),px(2),px(5)+step*0.5);
+    ctx.restore();
+  }
+
+  // ── Bike sprite ────────────────────────────────────────────
+  function drawBike(ctx, x, y, tick){
+    const wheelR=px(5);
+    // Wheels
+    ctx.strokeStyle='#888'; ctx.lineWidth=px(1.5);
+    ctx.beginPath(); ctx.arc(x-px(7),y,wheelR,0,Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(x+px(7),y,wheelR,0,Math.PI*2); ctx.stroke();
+    // Wheel spokes (rotation)
+    const angle=tick*0.15;
+    ctx.strokeStyle='#666'; ctx.lineWidth=px(0.8);
+    [-1,1].forEach(side=>{
+      const wx=x+side*px(7);
+      ctx.beginPath();
+      ctx.moveTo(wx+Math.cos(angle)*wheelR,y+Math.sin(angle)*wheelR);
+      ctx.lineTo(wx-Math.cos(angle)*wheelR,y-Math.sin(angle)*wheelR);
+      ctx.stroke();
+    });
+    // Frame
+    ctx.strokeStyle='#e05020'; ctx.lineWidth=px(1.5);
+    ctx.beginPath();
+    ctx.moveTo(x-px(7),y); ctx.lineTo(x,y-px(7)); ctx.lineTo(x+px(7),y);
+    ctx.moveTo(x,y-px(7)); ctx.lineTo(x-px(3),y-px(12));
+    ctx.stroke();
+    // Rider
+    ctx.fillStyle='#40c080';
+    ctx.fillRect(x-px(3),y-px(18),px(6),px(6));
+    ctx.fillStyle='#d08050';
+    ctx.beginPath(); ctx.arc(x,y-px(21),px(3),0,Math.PI*2); ctx.fill();
+    // Helmet
+    ctx.fillStyle='#e0e020';
+    ctx.beginPath(); ctx.arc(x,y-px(21),px(3.5),Math.PI,Math.PI*2); ctx.fill();
+  }
+
+  // ── Car sprite ─────────────────────────────────────────────
+  function drawCar(ctx, x, y, score){
+    const carColor=score<50?'#c03030':'#3060c0';
+    ctx.fillStyle=carColor;
+    ctx.fillRect(x,y-px(8),px(28),px(8));
+    ctx.fillRect(x+px(5),y-px(14),px(18),px(7));
+    // Windows
+    ctx.fillStyle='rgba(180,220,255,.7)';
+    ctx.fillRect(x+px(6),y-px(13),px(7),px(5));
+    ctx.fillRect(x+px(15),y-px(13),px(6),px(5));
+    // Wheels
+    ctx.fillStyle='#222';
+    ctx.beginPath(); ctx.arc(x+px(6),y,px(3.5),0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x+px(22),y,px(3.5),0,Math.PI*2); ctx.fill();
+    // Headlights (night)
+    if(document.documentElement.getAttribute('data-theme')!=='light'){
+      ctx.fillStyle='rgba(255,255,180,.8)';
+      ctx.fillRect(x+px(26),y-px(6),px(4),px(3));
+    }
+  }
+
+  function animate(){
+    cityTick++;
+    drawScene(cityTick);
     cityAnimFrame = requestAnimationFrame(animate);
   }
   animate();
@@ -1916,6 +2109,19 @@ function renderDashboard(){
   // Health score display
   const hsv = document.getElementById('health-score-val');
   if(hsv){ hsv.textContent = score; hsv.style.color = hl.color; }
+
+  // Health score breakdown subtitle
+  const hss = document.getElementById('health-score-sub');
+  if(hss){
+    const hits  = S.hits||[], plans = S.actionPlans||[], ctrls = S.controls||[];
+    const critN = hits.filter(h=>(h.residual_level==='alto'||h.residual_level==='critical')&&!plans.find(p=>p.hit_id===h.id&&p.status!=='closed')).length;
+    const noExecPct = ctrls.length ? Math.round(ctrls.filter(c=>c.executed!=='Sí').length/ctrls.length*100) : 0;
+    const parts=[];
+    if(critN>0) parts.push(`${critN} imp. crit.`);
+    if(noExecPct>0) parts.push(`${noExecPct}% ctrls sin exec.`);
+    hss.textContent = parts.length ? parts.join(' · ') : 'Sin penalizaciones';
+  }
+
   drawGauge('health-gauge', score);
 
   // City status label
@@ -4009,7 +4215,7 @@ function renderCtrlStats(){
 }
 
 // ── Excel Import/Export ──────────────────────────────────────────────────────
-let importPreviewRows = []; // {row, parsed, isDup, dupOf, selected, errors}
+// importPreviewRows declared at top of first script block to avoid TDZ
 
 function downloadCtrlTemplate(){
   const a=document.createElement('a');
