@@ -17,21 +17,6 @@
   --text:#dce8f0;--text-muted:#3d5468;--text-dim:#7a96aa;
   --font-ui:'Syne',sans-serif;--font-mono:'DM Mono',monospace;
 }
-/* LIGHT MODE */
-body.day{
-  --bg:#f0f4f8;--surface:#ffffff;--surface2:#e8eef4;--surface3:#dce6ee;
-  --border:#cbd8e4;--border2:#b0c4d6;
-  --accent:#00b07a;--accent2:#0055cc;--warn:#d97706;--danger:#dc2626;--purple:#7c3aed;
-  --text:#0d1f2d;--text-muted:#7a96aa;--text-dim:#3d5468;
-}
-body.day::after{background:none}
-body.day .fi{background:var(--surface2)}
-body.day code{background:var(--surface2);color:var(--accent)}
-body.day .twin-summary-box{background:var(--surface2)}
-body.day .hit-twin-box{background:var(--surface2)}
-body.day .mel{background:var(--surface2)}
-body.day .dd-block{background:var(--surface2)}
-body.day select.fi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237a96aa'/%3E%3C/svg%3E");background-color:var(--surface2);background-repeat:no-repeat;background-position:right 10px center}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
 body{background:var(--bg);color:var(--text);font-family:var(--font-mono);overflow:hidden}
@@ -342,7 +327,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   <div class="topbar">
     <div class="topbar-title" id="tb-title">Dashboard & KRIs</div>
     <div class="topbar-meta" id="tb-meta"></div>
-    <button class="btn btn-ghost" onclick="toggleDayNight()" id="theme-btn" title="Cambiar modo día/noche" style="font-size:13px">🌙</button>
     <button class="btn btn-ghost" onclick="syncAll()" id="sync-btn" title="Sincroniza datos con Firestore y GitHub. Actualiza hits, controles y configuración.">⟳ Sync</button>
     <button class="btn btn-primary" onclick="go('analisis')">+ Análisis</button>
   </div>
@@ -1165,9 +1149,43 @@ async function syncAll(){
     // Hits: try Firestore first, fallback to GitHub raw JSON
     const fsHits = await fsList('hits');
     if(fsHits && fsHits.length > 0){
-      S.hits = fsHits;
+      // Always keep Firestore as base (includes externally-published sentencias)
+      // Then try to enrich with GitHub data if available
+      const fsMap = {};
+      fsHits.forEach(h => { fsMap[h.id||h.link] = h; });
+      try{
+        const repo = S.cfg.repo || 'avespa/digitaltwin';
+        const url = `https://raw.githubusercontent.com/${repo}/main/data/hits.json?t=${Date.now()}`;
+        const r = await fetch(url);
+        if(r.ok){
+          const ghData = await r.json();
+          const ghHits = ghData.hits || [];
+          const merged = ghHits.map(ghHit => {
+            const key = ghHit.id || ghHit.link;
+            const fsHit = fsMap[key];
+            if(fsHit && fsHit._analyzed) return { ...ghHit, ...fsHit, id: ghHit.id||fsHit.id };
+            return fsHit ? { ...fsHit, ...ghHit, id: ghHit.id||fsHit.id } : ghHit;
+          });
+          // Always add Firestore-only hits (sentencias published externally, etc.)
+          fsHits.forEach(fh => {
+            const key = fh.id||fh.link;
+            if(!ghHits.find(gh=>(gh.id||gh.link)===key)) merged.push(fh);
+          });
+          S.hits = merged;
+          // Write new GitHub hits to Firestore
+          const newGhHits = ghHits.filter(h=>!fsMap[h.id||h.link]);
+          for(const hit of newGhHits.slice(0,50)){
+            const docId = await fsAdd('hits', hit);
+            const idx = S.hits.findIndex(h=>(h.id||h.link)===(hit.id||hit.link));
+            if(idx>=0 && docId) S.hits[idx]._fsId = docId;
+          }
+        } else {
+          S.hits = fsHits;
+        }
+      }catch(e){
+        S.hits = fsHits; // GitHub unavailable — use Firestore (includes sentencias)
+      }
     } else {
-      // Fetcher writes to GitHub — read directly from raw
       await syncHitsFromGitHub();
     }
 
@@ -1214,6 +1232,7 @@ async function autoAnalyzePending(){
   if(!S.ctx || !S.ctx.name){ return; }
 
   // ONLY hits that have never been analyzed (no _analyzed flag AND no inherent_level)
+  // Include sentencias published externally (is_sentencia=true) that also lack analysis
   const pending = S.hits.filter(h =>
     !h._analyzed &&
     !h.inherent_level &&
@@ -1295,7 +1314,7 @@ async function syncHits(){
     // Try to get newer hits from GitHub and merge
     try{
       const repo = S.cfg.repo || 'avespa/digitaltwin';
-      const url = `https://raw.githubusercontent.com/\${repo}/main/data/hits.json?t=\${Date.now()}`;
+      const url = `https://raw.githubusercontent.com/${repo}/main/data/hits.json?t=${Date.now()}`;
       const r = await fetch(url);
       if(r.ok){
         const data = await r.json();
@@ -4299,7 +4318,7 @@ function showRiskToast(hitId, analysis, company_impact, ragCount){
 // ── Batch re-analysis ────────────────────────────────────────────────────────
 async function batchReAnalyze(){
   if(!S.cfg.mistralKey){ go('config'); return; }
-  const toProcess = S.hits.filter(h=>!h._reanalyzed && !h.is_sentencia).slice(0,15);
+  const toProcess = S.hits.filter(h=>!h._reanalyzed).slice(0,15);
   if(!toProcess.length){ showAlert('hits-alert','Todos los hits ya han sido evaluados','info'); return; }
 
   const btn = document.getElementById('batch-reanalyze-btn');
@@ -4652,25 +4671,6 @@ ${dd.recommended_action?`<h2>5. Acción Recomendada</h2><p>${dd.recommended_acti
 function buildDeepDiveMarkdown(hit, dd){
   return `# Análisis Profundo: ${hit.title}\n\n${dd.inherent_analysis||''}\n\n## Acción\n${dd.recommended_action||''}`;
 }
-
-// ── Day / Night mode ──────────────────────────────────────────────────────────
-function toggleDayNight(){
-  const isDay = document.body.classList.toggle('day');
-  document.getElementById('theme-btn').textContent = isDay ? '☀️' : '🌙';
-  try{ localStorage.setItem('cdt-theme', isDay ? 'day' : 'night'); }catch(e){}
-}
-(function(){
-  try{
-    if(localStorage.getItem('cdt-theme')==='day'){
-      document.body.classList.add('day');
-      // btn may not exist yet; set after DOM ready
-      document.addEventListener('DOMContentLoaded',()=>{
-        const b=document.getElementById('theme-btn');
-        if(b) b.textContent='☀️';
-      });
-    }
-  }catch(e){}
-})();
 
 </script>
 </body>
