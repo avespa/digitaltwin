@@ -1713,66 +1713,52 @@ function renderCocFeed(){
   }).join('');
 }
 
-// ── Hex Threat Map ───────────────────────────────────────────────
-// Particles pool
-let _hexParticles = [];
-let _hexRipples   = [];
-let _hexInitDone  = false;
+// ── Neural Network Twin Map ──────────────────────────────────────
+let _nnParticles  = [];
+let _nnLastSpawn  = 0;
 
 function _isDay(){ return document.body.classList.contains('day'); }
 
-function _hexTheme(){
-  if(_isDay()) return {
-    bg0:'#e8f0f8', bg1:'#d0dcea',
-    gridLine:'rgba(60,100,140,0.12)',
-    hexStroke:'rgba(60,100,140,0.25)',
-    hexFill:'rgba(220,232,244,0.6)',
-    labelCol:'rgba(20,50,80,0.7)',
-    scoreCol:'rgba(10,35,65,0.9)',
-    glowMul: 0.7,
-    scanCol:'rgba(60,100,140,0.018)',
-    starCol: null,
-    statusAlpha: 0.85,
-  };
-  return {
-    bg0:'#06090f', bg1:'#0a1018',
-    gridLine:'rgba(0,229,160,0.06)',
-    hexStroke:'rgba(0,229,160,0.22)',
-    hexFill:'rgba(10,25,35,0.75)',
-    labelCol:'rgba(180,210,230,0.75)',
-    scoreCol:'rgba(220,240,255,0.95)',
-    glowMul: 1.0,
-    scanCol:'rgba(0,229,160,0.014)',
-    starCol:'rgba(200,220,240,0.55)',
-    statusAlpha: 0.85,
+function _nnTheme(){
+  const day = _isDay();
+  return day ? {
+    bg0:'#edf2f7', bg1:'#dde6f0',
+    nodeStroke: 'rgba(40,80,130,0.35)',
+    nodeFill:   'rgba(210,225,242,0.85)',
+    edgeBase:   'rgba(80,130,200,0.12)',
+    labelCol:   'rgba(20,45,80,0.75)',
+    scanCol:    null,
+    dotCol:     'rgba(60,100,150,0.12)',
+    glowMul:    0.6,
+    statusBg:   'rgba(220,232,244,0.8)',
+  } : {
+    bg0:'#060a10', bg1:'#0b1220',
+    nodeStroke: 'rgba(0,229,160,0.28)',
+    nodeFill:   'rgba(8,20,32,0.88)',
+    edgeBase:   'rgba(0,229,160,0.07)',
+    labelCol:   'rgba(160,200,220,0.65)',
+    scanCol:    'rgba(0,229,160,0.012)',
+    dotCol:     'rgba(0,229,160,0.055)',
+    glowMul:    1.0,
+    statusBg:   'rgba(10,20,32,0.75)',
   };
 }
 
-// Dim color by score
-function _dimColor(sc){
-  if(sc<=0)  return '#3a5060';
-  if(sc>=4)  return '#00e5a0';
-  if(sc>=3)  return '#eab308';
-  if(sc>=2)  return '#f59e0b';
-  return '#ef4444';
-}
-function _dimColorRgb(sc){
-  if(sc<=0)  return [58,80,96];
+// Map score → color triple
+function _nc(sc){
+  if(sc<=0)  return [55,80,100];
   if(sc>=4)  return [0,229,160];
-  if(sc>=3)  return [234,179,8];
+  if(sc>=3)  return [100,210,140];
   if(sc>=2)  return [245,158,11];
-  return [239,68,68];
+  return [239,100,68];
 }
-
-function _hexPath(ctx, cx, cy, r){
-  ctx.beginPath();
-  for(let i=0;i<6;i++){
-    const a = Math.PI/180*(60*i - 30);
-    const x = cx + r*Math.cos(a);
-    const y = cy + r*Math.sin(a);
-    i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-  }
-  ctx.closePath();
+// Soft label: only red at score 0, otherwise green gradient
+function _ncLabel(sc){
+  if(sc<=0) return 'rgba(120,140,160,0.6)';
+  if(sc>=4) return 'rgba(0,229,160,0.9)';
+  if(sc>=3) return 'rgba(100,210,140,0.9)';
+  if(sc>=2) return 'rgba(245,158,11,0.85)';
+  return 'rgba(239,100,68,0.85)';
 }
 
 function drawCocBuilding(){
@@ -1781,12 +1767,12 @@ function drawCocBuilding(){
   const container = document.getElementById('coc-building');
   const W = container.clientWidth  || 600;
   const H = container.clientHeight || 400;
-  if(canvas.width!==W)  canvas.width  = W;
+  if(canvas.width !==W) canvas.width  = W;
   if(canvas.height!==H) canvas.height = H;
 
   const ctx   = canvas.getContext('2d');
   const T     = Date.now();
-  const th    = _hexTheme();
+  const th    = _nnTheme();
   const day   = _isDay();
   const scores= getDimScores();
   const crits = S.hits.filter(h=>{
@@ -1804,264 +1790,241 @@ function drawCocBuilding(){
   ctx.fillStyle = bgG;
   ctx.fillRect(0,0,W,H);
 
-  // ── Dot grid ───────────────────────────────────────────────────
-  const gS = 28;
-  ctx.fillStyle = th.gridLine;
-  for(let gx=gS/2; gx<W; gx+=gS)
-    for(let gy=gS/2; gy<H; gy+=gS){
-      ctx.beginPath(); ctx.arc(gx,gy,0.8,0,Math.PI*2); ctx.fill();
+  // Dot grid
+  ctx.fillStyle = th.dotCol;
+  const gs = 30;
+  for(let gx=gs/2;gx<W;gx+=gs)
+    for(let gy=gs/2;gy<H;gy+=gs){
+      ctx.beginPath(); ctx.arc(gx,gy,0.9,0,Math.PI*2); ctx.fill();
     }
 
-  // ── Scanlines ──────────────────────────────────────────────────
-  if(!day){
-    ctx.fillStyle = th.scanCol;
-    for(let sy=0; sy<H; sy+=3) ctx.fillRect(0,sy,W,1);
+  // Scanlines (night only)
+  if(th.scanCol){
+    ctx.fillStyle=th.scanCol;
+    for(let sy=0;sy<H;sy+=3) ctx.fillRect(0,sy,W,1);
   }
 
-  // ── Stars (night only) ─────────────────────────────────────────
-  if(!day && th.starCol){
-    ctx.fillStyle = th.starCol;
-    for(let i=0;i<55;i++){
-      const sx = ((Math.sin(i*127.3)*0.5+0.5)*W);
-      const sy = ((Math.cos(i*83.7)*0.5+0.5)*H*0.55);
-      const sr = i%7===0 ? 1.3 : 0.65;
-      const tw = 0.4 + 0.6*Math.abs(Math.sin(T/1200+i));
-      ctx.globalAlpha = tw;
-      ctx.beginPath(); ctx.arc(sx,sy,sr,0,Math.PI*2); ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-  }
-
-  // ── Hex layout ────────────────────────────────────────────────
-  // 7 hexagons: 3 top row + 4 bottom row  (or auto layout)
-  const N = DIMS.length; // 7
-  const hexR  = Math.min(W, H) * 0.155;
-  const hexH  = hexR * Math.sqrt(3);
-  const hexW  = hexR * 2;
-  const colW  = hexW * 0.87;
-  const rowH  = hexH;
-
-  // Layout: 3 + 4  (staggered)
-  const layout = [
-    // row 0 (top, 3 hexes)
-    {row:0, col:0, dimIdx:0},
-    {row:0, col:1, dimIdx:1},
-    {row:0, col:2, dimIdx:2},
-    // row 1 (bottom, 4 hexes, offset)
-    {row:1, col:0, dimIdx:3},
-    {row:1, col:1, dimIdx:4},
-    {row:1, col:2, dimIdx:5},
-    {row:1, col:3, dimIdx:6},
+  // ── Network layout ─────────────────────────────────────────────
+  // 3 layers: INPUT (2 nodes) → HIDDEN (3 nodes) → OUTPUT (2 nodes)
+  // Each layer maps to ISO dims: [ctx,lid] [plan,sop,op] [ev,mej]
+  const layerDefs = [
+    { nodes:[0,1] },          // layer 0 — Contexto, Liderazgo
+    { nodes:[2,3,4] },        // layer 1 — Planificación, Soporte, Operación
+    { nodes:[5,6] },          // layer 2 — Evaluación, Mejora
   ];
 
-  // Center the layout
-  const totalW0 = 3*colW;
-  const totalW1 = 3.5*colW; // 4 cols, offset by 0.5
-  const totalW  = Math.max(totalW0, totalW1);
-  const totalH  = rowH + hexH*0.5 + hexR*0.25;
-  const offX    = (W - totalW)/2 + hexR*0.1;
-  const offY    = (H - totalH)/2 + hexR*0.1;
+  const padX = W * 0.12;
+  const padY = H * 0.14;
+  const usableW = W - padX*2;
+  const usableH = H - padY*2;
 
-  const hexCenters = layout.map(({row,col,dimIdx})=>{
-    const x = offX + col*colW + (row===1 ? colW*0.5 : 0) + hexR;
-    const y = offY + row*(rowH*0.82) + hexR;
-    return {x, y, dimIdx};
-  });
+  // Compute node positions
+  const nodeR = Math.min(usableW/5.5, usableH/4.5, 44);
 
-  // ── Connection lines between hexes ────────────────────────────
-  const connections = [
-    [0,1],[1,2],[3,4],[4,5],[5,6],
-    [0,3],[1,4],[2,5],[1,3],[2,4],[1,5]
-  ];
-  connections.forEach(([a,b])=>{
-    if(a>=hexCenters.length||b>=hexCenters.length) return;
-    const ha = hexCenters[a], hb = hexCenters[b];
-    const sc = Math.min(scores[ha.dimIdx]||0, scores[hb.dimIdx]||0);
-    const [r,g,gr] = _dimColorRgb(sc);
-    const pulse = 0.15 + 0.08*Math.sin(T/900 + a*0.7 + b*1.1);
-    ctx.strokeStyle = `rgba(${r},${g},${gr},${pulse*th.glowMul})`;
-    ctx.lineWidth = 1;
-    ctx.setLineDash([4,8]);
-    ctx.beginPath();
-    ctx.moveTo(ha.x, ha.y);
-    ctx.lineTo(hb.x, hb.y);
-    ctx.stroke();
-  });
-  ctx.setLineDash([]);
+  const nodePos = [];
+  const layerX  = layerDefs.map((_,li)=> padX + (li/(layerDefs.length-1))*usableW );
 
-  // ── Threat particles ──────────────────────────────────────────
-  // Spawn new particles for critical dims
-  if(crits > 0 && _hexParticles.length < 40){
-    const critHexes = hexCenters.filter(h=>{
-      const lv = scores[h.dimIdx]||0; return lv>0 && lv<3;
+  layerDefs.forEach((layer, li)=>{
+    const n = layer.nodes.length;
+    layer.nodes.forEach((dimIdx, ni)=>{
+      const y = padY + ((ni+0.5)/n)*usableH;
+      nodePos[dimIdx] = { x:layerX[li], y, layer:li, dimIdx };
     });
-    if(critHexes.length){
-      const src = critHexes[Math.floor(Math.random()*critHexes.length)];
-      const dst = hexCenters[Math.floor(Math.random()*hexCenters.length)];
-      _hexParticles.push({
-        x:src.x, y:src.y, tx:dst.x, ty:dst.y,
-        t:0, speed:0.003+Math.random()*0.004,
-        col:[239,68,68], r:2.5+Math.random()*1.5
+  });
+
+  // ── Draw edges ──────────────────────────────────────────────────
+  // Connect every node in layer i to every node in layer i+1
+  layerDefs.forEach((layer, li)=>{
+    if(li >= layerDefs.length-1) return;
+    const nextLayer = layerDefs[li+1];
+    layer.nodes.forEach(srcIdx=>{
+      nextLayer.nodes.forEach(dstIdx=>{
+        const s = nodePos[srcIdx], d = nodePos[dstIdx];
+        const sc = Math.min(scores[srcIdx]||0, scores[dstIdx]||0);
+        const [r,g,gr] = _nc(sc);
+        const pulse = 0.5+0.5*Math.sin(T/1400 + srcIdx*0.6 + dstIdx*0.9);
+        const alpha = (sc>0 ? 0.10+0.08*pulse : 0.04) * th.glowMul;
+
+        // Edge glow (wider, transparent)
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(d.x, d.y);
+        ctx.strokeStyle=`rgba(${r},${g},${gr},${alpha*0.5})`;
+        ctx.lineWidth=4;
+        ctx.stroke();
+        // Edge core
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(d.x, d.y);
+        ctx.strokeStyle=`rgba(${r},${g},${gr},${alpha*1.8})`;
+        ctx.lineWidth=1.2;
+        ctx.stroke();
       });
-    }
-  }
-  // Normal flow particles
-  if(_hexParticles.length < 15 && globalS > 0){
-    const i1 = Math.floor(Math.random()*hexCenters.length);
-    let i2 = (i1+1+Math.floor(Math.random()*3))%hexCenters.length;
-    const h1=hexCenters[i1], h2=hexCenters[i2];
-    const sc = scores[h1.dimIdx]||0;
-    const [r,g,gr] = _dimColorRgb(sc);
-    _hexParticles.push({
-      x:h1.x, y:h1.y, tx:h2.x, ty:h2.y,
-      t:0, speed:0.005+Math.random()*0.003,
-      col:[r,g,gr], r:1.8+Math.random()
     });
-  }
-
-  // Draw and update particles
-  _hexParticles = _hexParticles.filter(p=>{
-    p.t = Math.min(1, p.t + p.speed);
-    const px = p.x + (p.tx-p.x)*p.t;
-    const py = p.y + (p.ty-p.y)*p.t;
-    const alpha = p.t<0.15 ? p.t/0.15 : p.t>0.85 ? (1-p.t)/0.15 : 1;
-    const [r,g,gr] = p.col;
-    // Glow
-    const glw = ctx.createRadialGradient(px,py,0,px,py,p.r*3);
-    glw.addColorStop(0,`rgba(${r},${g},${gr},${alpha*0.6*th.glowMul})`);
-    glw.addColorStop(1,`rgba(${r},${g},${gr},0)`);
-    ctx.fillStyle=glw; ctx.beginPath(); ctx.arc(px,py,p.r*3,0,Math.PI*2); ctx.fill();
-    // Core
-    ctx.fillStyle=`rgba(${r},${g},${gr},${alpha*th.glowMul})`;
-    ctx.beginPath(); ctx.arc(px,py,p.r,0,Math.PI*2); ctx.fill();
-    return p.t < 1;
   });
 
-  // ── Draw hexagons ─────────────────────────────────────────────
-  hexCenters.forEach(({x,y,dimIdx})=>{
+  // ── Particles ────────────────────────────────────────────────────
+  const now = Date.now();
+  if(now - _nnLastSpawn > (crits>0 ? 280 : 480)){
+    _nnLastSpawn = now;
+    // Pick a random edge
+    const li = Math.floor(Math.random()*(layerDefs.length-1));
+    const srcIdx = layerDefs[li].nodes[Math.floor(Math.random()*layerDefs[li].nodes.length)];
+    const dstIdx = layerDefs[li+1].nodes[Math.floor(Math.random()*layerDefs[li+1].nodes.length)];
+    const s = nodePos[srcIdx], d = nodePos[dstIdx];
+    const sc = scores[srcIdx]||0;
+    const [r,g,gr] = crits>0 && sc<2 ? [239,80,60] : _nc(sc);
+    _nnParticles.push({
+      sx:s.x, sy:s.y, dx:d.x, dy:d.y,
+      t:0, speed: 0.006+Math.random()*0.006,
+      r,g,gr, size: crits>0&&sc<2 ? 3.5 : 2.2
+    });
+  }
+  _nnParticles = _nnParticles.filter(p=>{
+    p.t = Math.min(1, p.t+p.speed);
+    const px = p.sx+(p.dx-p.sx)*p.t;
+    const py = p.sy+(p.dy-p.sy)*p.t;
+    const a  = p.t<0.12 ? p.t/0.12 : p.t>0.88 ? (1-p.t)/0.12 : 1;
+    // Glow
+    const glw=ctx.createRadialGradient(px,py,0,px,py,p.size*3.5);
+    glw.addColorStop(0,`rgba(${p.r},${p.g},${p.gr},${a*0.55*th.glowMul})`);
+    glw.addColorStop(1,`rgba(${p.r},${p.g},${p.gr},0)`);
+    ctx.fillStyle=glw; ctx.beginPath(); ctx.arc(px,py,p.size*3.5,0,Math.PI*2); ctx.fill();
+    // Core
+    ctx.fillStyle=`rgba(${p.r},${p.g},${p.gr},${a*th.glowMul})`;
+    ctx.beginPath(); ctx.arc(px,py,p.size,0,Math.PI*2); ctx.fill();
+    return p.t<1;
+  });
+
+  // ── Draw nodes ────────────────────────────────────────────────
+  nodePos.forEach(({x,y,dimIdx})=>{
     const dim = DIMS[dimIdx];
     const sc  = scores[dimIdx]||0;
-    const [r,g,gr] = _dimColorRgb(sc);
-    const col = _dimColor(sc);
-    const innerR = hexR * 0.88;
+    const [r,g,gr] = _nc(sc);
+    const pulse = 0.5+0.5*Math.sin(T/1000+dimIdx*0.75);
 
-    // Outer glow ring
-    const glowPulse = 0.5 + 0.5*Math.sin(T/1100 + dimIdx*0.8);
-    const glowA = (sc>0 ? 0.08 + 0.05*glowPulse : 0.03) * th.glowMul;
-    const glw = ctx.createRadialGradient(x,y,innerR*0.6,x,y,innerR*1.3);
-    glw.addColorStop(0,`rgba(${r},${g},${gr},${glowA*1.5})`);
+    // Outer glow
+    const glowR = nodeR * (sc>0 ? 1.5+0.12*pulse : 1.2);
+    const glowA = (sc>0 ? 0.12+0.06*pulse : 0.03) * th.glowMul;
+    const glw=ctx.createRadialGradient(x,y,nodeR*0.4,x,y,glowR);
+    glw.addColorStop(0,`rgba(${r},${g},${gr},${glowA*1.4})`);
     glw.addColorStop(1,`rgba(${r},${g},${gr},0)`);
     ctx.fillStyle=glw;
-    _hexPath(ctx,x,y,innerR*1.4);
-    ctx.fill();
+    ctx.beginPath(); ctx.arc(x,y,glowR,0,Math.PI*2); ctx.fill();
 
-    // Hex fill
-    _hexPath(ctx,x,y,innerR);
-    const fillG = ctx.createRadialGradient(x,y-innerR*0.2,0,x,y,innerR);
-    const fillA = day ? 0.75 : 0.70;
-    fillG.addColorStop(0, sc>0 ? `rgba(${r},${g},${gr},${0.18*th.glowMul})` : th.hexFill);
-    fillG.addColorStop(1, day ? 'rgba(200,218,235,0.55)' : 'rgba(8,18,28,0.80)');
-    ctx.fillStyle = fillG;
-    ctx.fill();
+    // Node fill
+    const fillG=ctx.createRadialGradient(x,y-nodeR*0.25,nodeR*0.1,x,y,nodeR);
+    fillG.addColorStop(0, sc>0?`rgba(${r},${g},${gr},${0.22*th.glowMul})`:(day?'rgba(195,215,235,0.8)':'rgba(10,22,35,0.92)'));
+    fillG.addColorStop(1, day?'rgba(200,218,238,0.6)':'rgba(5,14,24,0.94)');
+    ctx.beginPath(); ctx.arc(x,y,nodeR,0,Math.PI*2);
+    ctx.fillStyle=fillG; ctx.fill();
 
-    // Hex stroke
-    _hexPath(ctx,x,y,innerR);
-    ctx.strokeStyle = sc>0 ? `rgba(${r},${g},${gr},${(0.5+0.2*Math.sin(T/800+dimIdx))*th.glowMul})` : th.hexStroke;
-    ctx.lineWidth = sc>0 ? 1.5 : 1;
+    // Node stroke
+    const strokeA = (sc>0 ? 0.55+0.2*pulse : 0.2) * th.glowMul;
+    ctx.beginPath(); ctx.arc(x,y,nodeR,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(${r},${g},${gr},${strokeA})`;
+    ctx.lineWidth = sc>0 ? 1.8 : 1;
     ctx.stroke();
 
-    // Critical hex: animated red border flash
-    if(sc>0 && sc<2){
-      _hexPath(ctx,x,y,innerR);
-      const flash = 0.4+0.4*Math.sin(T/300+dimIdx);
-      ctx.strokeStyle=`rgba(239,68,68,${flash*th.glowMul})`;
-      ctx.lineWidth=2.5;
-      ctx.stroke();
-    }
-
-    // Inner fill progress arc (score ring)
+    // Score arc ring
     if(sc>0){
-      const arcAngle = (sc/5)*(Math.PI*2);
-      const arcStart = -Math.PI/2;
+      const arcSpan = (sc/5)*Math.PI*2;
       ctx.beginPath();
-      ctx.arc(x,y,innerR*0.42,arcStart,arcStart+arcAngle);
-      ctx.strokeStyle=`rgba(${r},${g},${gr},${0.55*th.glowMul})`;
-      ctx.lineWidth=2.5;
-      ctx.lineCap='round';
-      ctx.stroke();
-      ctx.lineCap='butt';
-      // Track
+      ctx.arc(x,y,nodeR*0.62,-Math.PI/2,-Math.PI/2+arcSpan);
+      ctx.strokeStyle=`rgba(${r},${g},${gr},${0.6*th.glowMul})`;
+      ctx.lineWidth=3; ctx.lineCap='round'; ctx.stroke();
+      // track
       ctx.beginPath();
-      ctx.arc(x,y,innerR*0.42,arcStart+arcAngle,arcStart+Math.PI*2);
-      ctx.strokeStyle=`rgba(${r},${g},${gr},${0.12*th.glowMul})`;
-      ctx.lineWidth=2.5;
-      ctx.stroke();
+      ctx.arc(x,y,nodeR*0.62,-Math.PI/2+arcSpan,-Math.PI/2+Math.PI*2);
+      ctx.strokeStyle=`rgba(${r},${g},${gr},${0.10*th.glowMul})`;
+      ctx.lineWidth=3; ctx.lineCap='butt'; ctx.stroke();
     }
 
-    // Icon
-    ctx.font = `${Math.round(innerR*0.38)}px sans-serif`;
+    // Icon — centered
+    const iconSize = Math.round(nodeR*0.46);
+    ctx.font=`${iconSize}px sans-serif`;
     ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillStyle = sc>0 ? `rgba(${r},${g},${gr},0.9)` : (day?'rgba(80,110,140,0.5)':'rgba(100,140,160,0.4)');
-    ctx.fillText(dim.icon, x, y - innerR*0.14);
+    ctx.fillStyle = sc>0 ? `rgba(${r},${g},${gr},0.85)` : (day?'rgba(100,140,180,0.45)':'rgba(80,120,150,0.4)');
+    ctx.fillText(dim.icon, x, sc>0 ? y-nodeR*0.18 : y);
 
-    // Score number
+    // Score — below icon, inside node
     if(sc>0){
-      ctx.font = `bold ${Math.round(innerR*0.28)}px 'DM Mono',monospace`;
-      ctx.fillStyle = `rgba(${r},${g},${gr},${0.95*th.glowMul})`;
-      ctx.fillText(sc.toFixed(1), x, y + innerR*0.28);
+      ctx.font=`bold ${Math.round(nodeR*0.32)}px 'DM Mono',monospace`;
+      ctx.fillStyle=`rgba(${r},${g},${gr},${0.92*th.glowMul})`;
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(sc.toFixed(1), x, y+nodeR*0.30);
     }
 
-    // Dim label below hex
-    ctx.font = `${Math.round(innerR*0.22)}px 'DM Mono',monospace`;
-    ctx.fillStyle = th.labelCol;
-    ctx.fillText(dim.label.toUpperCase(), x, y + innerR + 13);
+    // Label — OUTSIDE the node, with safe clearance
+    const labelY = y + nodeR + 14;
+    if(labelY + 10 < H){ // only draw if fits
+      ctx.font=`${Math.round(nodeR*0.24)}px 'DM Mono',monospace`;
+      ctx.fillStyle = _ncLabel(sc);
+      ctx.textAlign='center'; ctx.textBaseline='top';
+      ctx.fillText(dim.label.toUpperCase(), x, labelY);
+    }
   });
 
-  // ── Ripples on critical hexes ─────────────────────────────────
-  if(crits > 0){
-    hexCenters.forEach(({x,y,dimIdx})=>{
-      const sc = scores[dimIdx]||0;
-      if(sc>0 && sc<3){
-        const rPhase = (T/1200 + dimIdx*0.4) % 1;
-        const rR = hexR*(0.95 + rPhase*0.6);
-        const rA = (1-rPhase)*0.35*th.glowMul;
-        _hexPath(ctx,x,y,rR);
-        ctx.strokeStyle=`rgba(239,68,68,${rA})`;
-        ctx.lineWidth=2;
-        ctx.stroke();
+  // ── Layer labels (vertical, left side) ─────────────────────────
+  const layerLabels = ['CONTEXTO\n& LIDERAZGO', 'OPERACIÓN\nCORE', 'EVALUACIÓN\n& MEJORA'];
+  layerDefs.forEach((layer, li)=>{
+    const lx = layerX[li];
+    const ys = layer.nodes.map(di=>nodePos[di].y);
+    const midY = (Math.min(...ys)+Math.max(...ys))/2;
+    // Small dot above layer
+    ctx.beginPath(); ctx.arc(lx, padY*0.45, 3, 0, Math.PI*2);
+    ctx.fillStyle=day?'rgba(60,100,150,0.2)':'rgba(0,229,160,0.18)';
+    ctx.fill();
+    // Vertical tick line
+    ctx.beginPath(); ctx.moveTo(lx,padY*0.55); ctx.lineTo(lx,padY*0.75);
+    ctx.strokeStyle=day?'rgba(60,100,150,0.15)':'rgba(0,229,160,0.12)';
+    ctx.lineWidth=1; ctx.stroke();
+  });
+
+  // ── Critical alert pulse overlay (rings from critical nodes) ──
+  if(crits>0){
+    nodePos.forEach(({x,y,dimIdx})=>{
+      const sc=scores[dimIdx]||0;
+      if(sc>0 && sc<2){
+        const phase=((T/1000)+dimIdx*0.4)%1;
+        ctx.beginPath();
+        ctx.arc(x,y,nodeR*(1.1+phase*0.7),0,Math.PI*2);
+        ctx.strokeStyle=`rgba(239,80,60,${(1-phase)*0.4*th.glowMul})`;
+        ctx.lineWidth=1.5; ctx.stroke();
       }
     });
   }
 
-  // ── Status label ──────────────────────────────────────────────
+  // ── Status bar at bottom ────────────────────────────────────────
   const statusTxt = crits>0
-    ? `⚠ ${crits} AMENAZA${crits>1?'S':''} ACTIVA${crits>1?'S':''}`
-    : globalS>=4 ? '✓ SISTEMA PROTEGIDO'
-    : globalS>=3 ? '◎ ESTADO ACEPTABLE'
-    : globalS>0  ? '△ GAPS DETECTADOS'
-    : '○ SIN DATOS DE MADUREZ';
-  const [sr,sg,sgr] = crits>0?[239,68,68]:globalS>=4?[0,229,160]:globalS>=3?[234,179,8]:[245,158,11];
+    ? `⚠  ${crits} AMENAZA${crits>1?'S':''} ACTIVA${crits>1?'S':''}`
+    : globalS>=4 ? '✓  SISTEMA PROTEGIDO'
+    : globalS>=3 ? '◎  ESTADO ACEPTABLE'
+    : globalS>0  ? '△  GAPS IDENTIFICADOS'
+    : '○  SIN DATOS — configura el Digital Twin';
 
-  ctx.font=`bold ${Math.round(Math.min(W,H)*0.028)}px 'DM Mono',monospace`;
+  const [sr,sg,sgr] = crits>0?[239,80,60]:globalS>=4?[0,229,160]:globalS>=3?[100,210,140]:[245,158,11];
+  const sFontSize = Math.round(Math.min(W,H)*0.026);
+  ctx.font=`bold ${sFontSize}px 'DM Mono',monospace`;
   ctx.textAlign='center'; ctx.textBaseline='alphabetic';
-  ctx.fillStyle=`rgba(${sr},${sg},${sgr},${th.statusAlpha})`;
-  ctx.fillText(statusTxt, W/2, H-18);
+  ctx.fillStyle=`rgba(${sr},${sg},${sgr},0.82)`;
+  ctx.fillText(statusTxt, W/2, H-14);
 
   ctx.globalAlpha=1;
 }
 
-// Animate the hex map
+// Animate the neural map
 let _cocAnimFrame = null;
 function startCocAnimation(){
   cancelAnimationFrame(_cocAnimFrame);
   function frame(){
-    const v = document.getElementById('view-dashboard');
-    if(v && (v.classList.contains('active') || v.classList.contains('coc-fullscreen'))){
+    const v=document.getElementById('view-dashboard');
+    if(v&&(v.classList.contains('active')||v.classList.contains('coc-fullscreen'))){
       drawCocBuilding();
     }
-    _cocAnimFrame = requestAnimationFrame(frame);
+    _cocAnimFrame=requestAnimationFrame(frame);
   }
-  _cocAnimFrame = requestAnimationFrame(frame);
+  _cocAnimFrame=requestAnimationFrame(frame);
 }
 
 
