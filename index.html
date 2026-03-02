@@ -1000,6 +1000,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
 
 <script>
 let hitFunnel = 'all'; // declared at top to avoid TDZ in renderHits
+const PC_PROXY = '/api/pinecone'; // declared here to avoid TDZ — used in pcCall which is called from renderDashboard
 // ═══════════════════════════════════════════════════════════════
 // FIREBASE INIT
 // ═══════════════════════════════════════════════════════════════
@@ -4251,7 +4252,6 @@ function updateFunnelCounts(){
 // ── Pinecone via Vercel proxy ────────────────────────────────────────────────
 // API key lives in Vercel env var PINECONE_API_KEY — never sent from browser
 // Proxy handles: embed text → upsert vector | embed query → search
-const PC_PROXY = '/api/pinecone';
 
 function pcKey(){ return true; } // key is server-side
 
