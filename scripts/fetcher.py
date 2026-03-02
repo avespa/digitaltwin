@@ -1,9 +1,10 @@
 """
 CDT - Compliance Digital Twin
-Fetcher v3 — Búsquedas NewsAPI mejoradas + keywords configurables
+Fetcher v4 — Fixes: IDs estables, seen_ids separado, umbral permisivo
 """
 
 import os
+import re
 import json
 import time
 import hashlib
@@ -18,43 +19,42 @@ from pathlib import Path
 MISTRAL_API_KEY     = os.environ.get("MISTRAL_API_KEY", "")
 MISTRAL_MODEL       = os.environ.get("MISTRAL_MODEL", "mistral-small-latest")
 NEWSAPI_KEY         = os.environ.get("NEWSAPI_KEY", "")
-RELEVANCE_THRESHOLD = int(os.environ.get("RELEVANCE_THRESHOLD", "60"))
+RELEVANCE_THRESHOLD = int(os.environ.get("RELEVANCE_THRESHOLD", "35"))  # FIX: bajado de 60 a 35
 
-DATA_DIR      = Path(__file__).parent.parent / "data"
-HITS_FILE     = DATA_DIR / "hits.json"
-CONFIG_FILE   = DATA_DIR / "config.json"   # Configuración editable desde la app
+DATA_DIR   = Path(__file__).parent.parent / "data"
+HITS_FILE  = DATA_DIR / "hits.json"
+SEEN_FILE  = DATA_DIR / "seen_ids.json"   # FIX: archivo separado de IDs vistos
+CONFIG_FILE = DATA_DIR / "config.json"
 DATA_DIR.mkdir(exist_ok=True)
 
+MAX_HITS_STORED = 500   # FIX: subido de 200 a 500
+MAX_SEEN_IDS    = 10000 # Máximo de IDs a recordar en seen_ids.json
+
 # ─────────────────────────────────────────────
-# CONFIGURACIÓN POR DEFECTO (editable desde app)
+# CONFIGURACIÓN POR DEFECTO
 # ─────────────────────────────────────────────
 DEFAULT_CONFIG = {
     "newsapi_queries": [
-        # Sanciones y multas regulatorias
         '(multa OR sanción OR "expediente sancionador") AND (empresa OR sociedad) AND España',
-        # Organismos reguladores españoles
         '(CNMC OR AEPD OR CNMV OR "Banco de España" OR SEPI) AND (resolución OR sanción OR investigación)',
-        # Compliance y ética empresarial
         '("compliance" OR "cumplimiento normativo" OR "canal de denuncias" OR "blanqueo de capitales" OR "corrupción empresarial") AND España',
-        # Penal empresarial
         '("responsabilidad penal" OR "persona jurídica" OR "delito corporativo" OR "fraude empresarial") AND (sentencia OR condena OR imputado)',
-        # Protección de datos
         '("protección de datos" OR RGPD OR "brecha de seguridad") AND (sanción OR multa OR AEPD)',
     ],
-    "newsapi_sources": "",   # Vacío = todos los medios en español. Ej: "el-mundo,expansion"
-    "custom_keywords": [     # Keywords adicionales del usuario para filtro previo
+    "newsapi_sources": "",
+    "custom_keywords": [
         "compliance", "multa", "sanción", "corrupción", "blanqueo",
         "RGPD", "CNMC", "AEPD", "CNMV", "fraude", "soborno",
     ],
     "rss_enabled": {
-        "BOE_disposiciones": True,
-        "BOE_justicia": True,
-        "BOE_anuncios": True,
-        "BOE_derecho_penal": True,
-        "BOE_derecho_mercantil": True,
-        "BOE_sistema_financiero": True,
+        "BOE_disposiciones":        True,
+        "BOE_justicia":             True,
+        "BOE_anuncios":             True,
+        "BOE_derecho_penal":        True,
+        "BOE_derecho_mercantil":    True,
+        "BOE_sistema_financiero":   True,
         "BOE_tribunal_constitucional": True,
-        "BORME_general": True,
+        "BORME_general":            True,
     }
 }
 
@@ -62,41 +62,16 @@ DEFAULT_CONFIG = {
 # FUENTES RSS
 # ─────────────────────────────────────────────
 RSS_SOURCES = {
-    "BOE_disposiciones": {
-        "url": "https://www.boe.es/rss/boe.php?s=1",
-        "name": "BOE - Disposiciones generales",
-    },
-    "BOE_justicia": {
-        "url": "https://www.boe.es/rss/boe.php?s=4",
-        "name": "BOE - Administración de Justicia",
-    },
-    "BOE_anuncios": {
-        "url": "https://www.boe.es/rss/boe.php?s=5B",
-        "name": "BOE - Anuncios oficiales",
-    },
-    "BOE_derecho_penal": {
-        "url": "https://www.boe.es/rss/canal_leg.php?l=l&c=113",
-        "name": "BOE - Legislación Derecho Penal",
-    },
-    "BOE_derecho_mercantil": {
-        "url": "https://www.boe.es/rss/canal_leg.php?l=l&c=112",
-        "name": "BOE - Legislación Derecho Mercantil",
-    },
-    "BOE_sistema_financiero": {
-        "url": "https://www.boe.es/rss/canal_leg.php?l=l&c=127",
-        "name": "BOE - Sistema Financiero",
-    },
-    "BOE_tribunal_constitucional": {
-        "url": "https://www.boe.es/rss/canal.php?c=tc",
-        "name": "BOE - Tribunal Constitucional",
-    },
-    "BORME_general": {
-        "url": "https://www.boe.es/rss/borme.php",
-        "name": "BORME - Registro Mercantil",
-    },
+    "BOE_disposiciones":         {"url": "https://www.boe.es/rss/boe.php?s=1",          "name": "BOE - Disposiciones generales"},
+    "BOE_justicia":              {"url": "https://www.boe.es/rss/boe.php?s=4",          "name": "BOE - Administración de Justicia"},
+    "BOE_anuncios":              {"url": "https://www.boe.es/rss/boe.php?s=5B",         "name": "BOE - Anuncios oficiales"},
+    "BOE_derecho_penal":         {"url": "https://www.boe.es/rss/canal_leg.php?l=l&c=113", "name": "BOE - Legislación Derecho Penal"},
+    "BOE_derecho_mercantil":     {"url": "https://www.boe.es/rss/canal_leg.php?l=l&c=112", "name": "BOE - Legislación Derecho Mercantil"},
+    "BOE_sistema_financiero":    {"url": "https://www.boe.es/rss/canal_leg.php?l=l&c=127", "name": "BOE - Sistema Financiero"},
+    "BOE_tribunal_constitucional": {"url": "https://www.boe.es/rss/canal.php?c=tc",    "name": "BOE - Tribunal Constitucional"},
+    "BORME_general":             {"url": "https://www.boe.es/rss/borme.php",            "name": "BORME - Registro Mercantil"},
 }
 
-# Keywords base (siempre activas, no editables)
 BASE_KEYWORDS = [
     "corrupción", "soborno", "cohecho", "malversación", "blanqueo",
     "financiación del terrorismo", "multa", "sanción", "infracción grave",
@@ -109,17 +84,74 @@ BASE_KEYWORDS = [
 
 
 # ─────────────────────────────────────────────
+# HELPERS — IDs ESTABLES
+# ─────────────────────────────────────────────
+def normalize_title(title: str) -> str:
+    """Normaliza un título para comparación robusta."""
+    t = title.strip().lower()
+    t = re.sub(r'\s+', ' ', t)
+    # Eliminar puntuación final variable
+    t = re.sub(r'[.,;:!?]+$', '', t)
+    return t
+
+
+def article_id(article: dict) -> str:
+    """
+    FIX v4: ID basado en título normalizado, no en URL.
+    La URL del BOE puede tener parámetros variables entre ejecuciones;
+    el título es estable y suficientemente único para deduplicar.
+    Si hay link, lo añadimos como tiebreaker solo si el título es muy corto.
+    """
+    title = normalize_title(article.get("title", ""))
+    if len(title) < 20 and article.get("link"):
+        # Título muy corto — añadir dominio del link para diferenciar
+        link = article.get("link", "")
+        domain = re.sub(r'https?://(www\.)?', '', link).split('/')[0]
+        raw = (title + domain).encode()
+    else:
+        raw = title.encode()
+    return hashlib.md5(raw).hexdigest()[:12]
+
+
+# ─────────────────────────────────────────────
+# PERSISTENCIA — SEEN IDS (FIX v4)
+# ─────────────────────────────────────────────
+def load_seen_ids() -> set:
+    """
+    FIX v4: Carga el histórico completo de IDs ya procesados.
+    Independiente del límite de hits almacenados — nunca perdemos
+    la memoria de qué artículos ya vimos.
+    """
+    if SEEN_FILE.exists():
+        try:
+            with open(SEEN_FILE, "r", encoding="utf-8") as f:
+                return set(json.load(f))
+        except Exception:
+            pass
+    # Fallback: cargar IDs desde hits.json existente (migración desde v3)
+    stored = load_existing_hits()
+    return {h.get("id") for h in stored.get("hits", []) if h.get("id")}
+
+
+def save_seen_ids(seen: set):
+    """Persiste el set de IDs vistos, manteniendo un máximo para no crecer indefinidamente."""
+    ids_list = list(seen)
+    if len(ids_list) > MAX_SEEN_IDS:
+        # Conservar los más recientes (asumiendo orden de inserción aproximado)
+        ids_list = ids_list[-MAX_SEEN_IDS:]
+    with open(SEEN_FILE, "w", encoding="utf-8") as f:
+        json.dump(ids_list, f)
+
+
+# ─────────────────────────────────────────────
 # CARGA DE CONFIGURACIÓN
 # ─────────────────────────────────────────────
 def load_config() -> dict:
-    """Carga config.json si existe, si no usa los valores por defecto."""
     if CONFIG_FILE.exists():
         try:
             with open(CONFIG_FILE, "r", encoding="utf-8") as f:
                 saved = json.load(f)
-                # Merge con defaults para no perder claves nuevas
-                merged = {**DEFAULT_CONFIG, **saved}
-                return merged
+                return {**DEFAULT_CONFIG, **saved}
         except Exception:
             pass
     return DEFAULT_CONFIG.copy()
@@ -128,6 +160,13 @@ def load_config() -> dict:
 # ─────────────────────────────────────────────
 # INGESTA
 # ─────────────────────────────────────────────
+def clean_html(text: str) -> str:
+    text = re.sub(r"<[^>]+>", " ", text)
+    for ent, rep in [("&amp;","&"),("&lt;","<"),("&gt;",">"),("&nbsp;"," "),("&#39;","'"),("&quot;",'"')]:
+        text = text.replace(ent, rep)
+    return re.sub(r"\s+", " ", text).strip()
+
+
 def fetch_rss(url: str, source_name: str) -> list[dict]:
     articles = []
     try:
@@ -138,7 +177,7 @@ def fetch_rss(url: str, source_name: str) -> list[dict]:
         resp = requests.get(url, headers=headers, timeout=20)
         resp.raise_for_status()
 
-        if "html" in resp.headers.get("Content-Type","") and b"<rss" not in resp.content[:500]:
+        if "html" in resp.headers.get("Content-Type", "") and b"<rss" not in resp.content[:500]:
             print(f"  [{source_name}] Respuesta HTML inesperada")
             return []
 
@@ -204,23 +243,10 @@ def fetch_newsapi(query: str, sources: str = "", label: str = "NewsAPI") -> list
     return articles
 
 
-def clean_html(text: str) -> str:
-    import re
-    text = re.sub(r"<[^>]+>", " ", text)
-    for ent, rep in [("&amp;","&"),("&lt;","<"),("&gt;",">"),("&nbsp;"," "),("&#39;","'"),("&quot;",'"')]:
-        text = text.replace(ent, rep)
-    return re.sub(r"\s+", " ", text).strip()
-
-
 def is_relevant(article: dict, keywords: list[str]) -> bool:
     text = (article["title"] + " " + article["description"]).lower()
     all_kw = BASE_KEYWORDS + keywords
     return any(kw.lower() in text for kw in all_kw)
-
-
-def article_id(article: dict) -> str:
-    raw = (article.get("title","") + article.get("link","")).encode()
-    return hashlib.md5(raw).hexdigest()[:12]
 
 
 # ─────────────────────────────────────────────
@@ -285,7 +311,7 @@ def analyze_with_mistral(article: dict) -> dict | None:
 
 
 # ─────────────────────────────────────────────
-# PERSISTENCIA
+# PERSISTENCIA — HITS
 # ─────────────────────────────────────────────
 def load_existing_hits() -> dict:
     if HITS_FILE.exists():
@@ -309,12 +335,16 @@ def save_hits(data: dict):
 # ─────────────────────────────────────────────
 def main():
     print("=" * 60)
-    print(f"CDT Fetcher v3 — {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
+    print(f"CDT Fetcher v4 — {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
     print("=" * 60)
 
-    cfg          = load_config()
-    stored       = load_existing_hits()
-    existing_ids = {h.get("id") for h in stored.get("hits", [])}
+    cfg      = load_config()
+    stored   = load_existing_hits()
+
+    # FIX v4: usar seen_ids.json en lugar de IDs del hits.json truncado
+    seen_ids = load_seen_ids()
+    print(f"\n📚 IDs históricos conocidos: {len(seen_ids)}")
+
     all_articles = []
     new_hits     = []
     processed    = 0
@@ -337,36 +367,54 @@ def main():
             )
             time.sleep(1)
 
-    # ── FILTRO ────────────────────────────────
-    custom_kw    = cfg.get("custom_keywords", [])
+    # ── FILTRO DE KEYWORDS ────────────────────
+    custom_kw = cfg.get("custom_keywords", [])
     print(f"\n🔍 Filtrando {len(all_articles)} artículos...")
-    relevant     = [a for a in all_articles if is_relevant(a, custom_kw)]
+    relevant  = [a for a in all_articles if is_relevant(a, custom_kw)]
+
+    # Deduplicar usando IDs estables + seen_ids histórico
     new_articles = []
-    seen         = set()
+    seen_this_run = set()
+    duplicates    = 0
     for art in relevant:
         aid = article_id(art)
-        if aid not in existing_ids and aid not in seen:
-            art["id"] = aid
-            new_articles.append(art)
-            seen.add(aid)
+        art["id"] = aid
+        if aid in seen_ids or aid in seen_this_run:
+            duplicates += 1
+            continue
+        new_articles.append(art)
+        seen_this_run.add(aid)
 
-    print(f"   → {len(relevant)} relevantes | {len(new_articles)} nuevos")
+    print(f"   → {len(relevant)} relevantes | {duplicates} ya vistos | {len(new_articles)} nuevos a analizar")
 
     # ── ANÁLISIS MISTRAL ──────────────────────
     if new_articles and MISTRAL_API_KEY:
-        print(f"\n🤖 Analizando {min(len(new_articles),30)} artículos...")
-        for i, article in enumerate(new_articles[:30]):
-            print(f"  [{i+1}] {article['title'][:70]}...")
+        batch = new_articles[:30]
+        print(f"\n🤖 Analizando {len(batch)} artículos (umbral: {RELEVANCE_THRESHOLD})...")
+        for i, article in enumerate(batch):
+            print(f"  [{i+1}/{len(batch)}] {article['title'][:70]}...")
             analysis  = analyze_with_mistral(article)
             processed += 1
 
-            if not analysis or analysis.get("level") == "irrelevant":
-                print(f"    → Descartado (irrelevante)")
+            # FIX v4: marcar como visto SIEMPRE, incluso si se descarta
+            # Así no re-analizamos el mismo artículo en la próxima ejecución
+            seen_ids.add(article["id"])
+
+            if not analysis:
+                print(f"    → Error de análisis, marcado como visto")
                 continue
 
+            level = analysis.get("level", "info")
             score = analysis.get("relevance_score", 0)
+
+            if level == "irrelevant":
+                print(f"    → Irrelevante (descartado)")
+                continue
+
+            # FIX v4: umbral más permisivo (35 en lugar de 60)
+            # El filtro fino lo hace el RAG de la app con contexto de empresa
             if score < RELEVANCE_THRESHOLD:
-                print(f"    → Score {score} < umbral {RELEVANCE_THRESHOLD}")
+                print(f"    → Score {score} < umbral {RELEVANCE_THRESHOLD} (descartado)")
                 continue
 
             new_hits.append({
@@ -376,8 +424,8 @@ def main():
                 "source":             article["source"],
                 "raw_date":           article["date"],
                 "fetched_at":         datetime.now(timezone.utc).isoformat(),
-                "level":              analysis.get("level", "info"),
-                "relevance_score":    analysis.get("relevance_score", 0),
+                "level":              level,
+                "relevance_score":    score,
                 "risks":              analysis.get("risks", []),
                 "norms_affected":     analysis.get("norms_affected", []),
                 "summary":            analysis.get("summary", ""),
@@ -385,12 +433,13 @@ def main():
                 "financial_impact":   analysis.get("financial_impact", ""),
                 "recommended_action": analysis.get("recommended_action", ""),
             })
-            print(f"    ✓ [{analysis['level'].upper()}] Score: {score}")
+            print(f"    ✓ [{level.upper()}] Score: {score}")
             time.sleep(1.2)
 
     elif not MISTRAL_API_KEY:
         print("\n⚠️  Sin Mistral — guardando artículos sin análisis IA")
         for art in new_articles[:30]:
+            seen_ids.add(art["id"])
             new_hits.append({
                 "id":              art["id"],
                 "title":           art["title"],
@@ -404,22 +453,31 @@ def main():
             })
 
     # ── GUARDAR ───────────────────────────────
-    all_hits = (new_hits + stored.get("hits", []))[:200]
-    stats    = {
+    # FIX v4: límite subido a 500 hits
+    all_hits = (new_hits + stored.get("hits", []))[:MAX_HITS_STORED]
+
+    stats = {
         "total_hits":       len(all_hits),
         "critical_count":   sum(1 for h in all_hits if h.get("level") == "critical"),
         "warning_count":    sum(1 for h in all_hits if h.get("level") == "warning"),
         "info_count":       sum(1 for h in all_hits if h.get("level") == "info"),
         "new_this_run":     len(new_hits),
         "articles_checked": processed or len(new_articles),
-        "sources_active":   [s["name"] for k,s in RSS_SOURCES.items() if rss_enabled.get(k,True)],
+        "seen_ids_total":   len(seen_ids),
+        "sources_active":   [s["name"] for k, s in RSS_SOURCES.items() if rss_enabled.get(k, True)],
         "queries_active":   cfg.get("newsapi_queries", []),
     }
+
     save_hits({"hits": all_hits, "stats": stats, "last_updated": None})
+
+    # FIX v4: persistir seen_ids después de cada ejecución
+    save_seen_ids(seen_ids)
+    print(f"✓ Guardado: {SEEN_FILE} ({len(seen_ids)} IDs)")
 
     print(f"\n{'='*60}")
     print(f"✅ {len(new_hits)} hits nuevos | Total: {len(all_hits)}")
     print(f"   Críticos: {stats['critical_count']} | Alertas: {stats['warning_count']} | Info: {stats['info_count']}")
+    print(f"   IDs históricos: {len(seen_ids)} | Artículos analizados: {processed}")
     print(f"{'='*60}")
 
 
