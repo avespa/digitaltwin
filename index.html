@@ -17,6 +17,21 @@
   --text:#dce8f0;--text-muted:#3d5468;--text-dim:#7a96aa;
   --font-ui:'Syne',sans-serif;--font-mono:'DM Mono',monospace;
 }
+/* LIGHT MODE */
+body.day{
+  --bg:#f0f4f8;--surface:#ffffff;--surface2:#e8eef4;--surface3:#dce6ee;
+  --border:#cbd8e4;--border2:#b0c4d6;
+  --accent:#00b07a;--accent2:#0055cc;--warn:#d97706;--danger:#dc2626;--purple:#7c3aed;
+  --text:#0d1f2d;--text-muted:#7a96aa;--text-dim:#3d5468;
+}
+body.day::after{background:none}
+body.day .fi{background:var(--surface2)}
+body.day code{background:var(--surface2);color:var(--accent)}
+body.day .twin-summary-box{background:var(--surface2)}
+body.day .hit-twin-box{background:var(--surface2)}
+body.day .mel{background:var(--surface2)}
+body.day .dd-block{background:var(--surface2)}
+body.day select.fi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237a96aa'/%3E%3C/svg%3E");background-color:var(--surface2);background-repeat:no-repeat;background-position:right 10px center}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
 body{background:var(--bg);color:var(--text);font-family:var(--font-mono);overflow:hidden}
@@ -327,42 +342,102 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   <div class="topbar">
     <div class="topbar-title" id="tb-title">Dashboard & KRIs</div>
     <div class="topbar-meta" id="tb-meta"></div>
+    <button class="btn btn-ghost" onclick="toggleDayNight()" id="theme-btn" title="Cambiar modo día/noche" style="font-size:13px">🌙</button>
     <button class="btn btn-ghost" onclick="syncAll()" id="sync-btn" title="Sincroniza datos con Firestore y GitHub. Actualiza hits, controles y configuración.">⟳ Sync</button>
     <button class="btn btn-primary" onclick="go('analisis')">+ Análisis</button>
   </div>
 
   <div class="page">
 
-  <!-- DASHBOARD -->
+  <!-- DASHBOARD — COMPLIANCE OPERATIONS CENTER -->
   <div class="view active" id="view-dashboard">
-    <div id="twin-disclaimer"></div>
-    <div class="kri-grid">
-      <div class="kri" style="--c:var(--accent)"><div class="kri-label">Madurez Global</div><div class="kri-val" id="kri-madurez">—</div><div class="kri-sub">/5.0 puntos</div></div>
-      <div class="kri" style="--c:var(--danger)"><div class="kri-label">Hits Críticos</div><div class="kri-val" id="kri-criticos">0</div><div class="kri-sub">sin plan de acción</div></div>
-      <div class="kri" style="--c:var(--warn)"><div class="kri-label">Planes Abiertos</div><div class="kri-val" id="kri-planes">0</div><div class="kri-sub">requieren atención</div></div>
-      <div class="kri" style="--c:var(--accent2)"><div class="kri-label">Última Sync</div><div class="kri-val" style="font-size:14px;padding-top:4px" id="kri-sync">—</div><div class="kri-sub">actualización hits</div></div>
+  <style>
+  #coc-wrap{display:grid;grid-template-columns:1fr 300px;grid-template-rows:auto 1fr auto;gap:10px;height:calc(100vh - 52px - 44px);min-height:480px}
+  #coc-header{grid-column:1/-1;display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:9px 16px}
+  #coc-org{font-family:var(--font-ui);font-size:17px;font-weight:800;color:var(--accent);flex:1}
+  #coc-org span{font-size:9px;font-weight:400;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:1px}
+  #coc-clock{font-family:var(--font-mono);font-size:12px;color:var(--text-dim);text-align:right}
+  #coc-clock span{font-size:8.5px;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase;display:block}
+  .coc-pill{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;border:1px solid;flex-shrink:0}
+  .coc-pill .pd{width:6px;height:6px;border-radius:50%;animation:pulse 2s infinite}
+  .pill-ok{color:var(--accent);border-color:rgba(0,229,160,.3);background:rgba(0,229,160,.06)}.pill-ok .pd{background:var(--accent)}
+  .pill-warn{color:var(--warn);border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.06)}.pill-warn .pd{background:var(--warn)}
+  .pill-crit{color:var(--danger);border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.06)}.pill-crit .pd{background:var(--danger)}
+  #btn-coc-fs{background:transparent;border:1px solid var(--border);color:var(--text-muted);border-radius:4px;padding:4px 9px;cursor:pointer;font-size:10px;font-family:var(--font-mono);transition:all .15s}
+  #btn-coc-fs:hover{color:var(--text);border-color:var(--border2)}
+  #coc-building{grid-column:1;grid-row:2;background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;position:relative}
+  #coc-bcanvas{width:100%;height:100%;display:block}
+  #coc-right{grid-column:2;grid-row:2;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+  .ckri{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0;position:relative;overflow:hidden}
+  .ckri::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--kc,var(--accent))}
+  .ckri-n{font-family:var(--font-ui);font-size:24px;font-weight:800;color:var(--kc,var(--accent));line-height:1;min-width:40px}
+  .ckri-l{font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:2px}
+  .ckri-s{font-size:9.5px;color:var(--text-dim)}
+  #coc-feed{background:var(--surface);border:1px solid var(--border);border-radius:6px;flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+  .coc-feed-hd{padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;flex-shrink:0}
+  .coc-feed-lbl{font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);flex:1}
+  #coc-feed-list{flex:1;overflow-y:auto;padding:6px}
+  .cfi{padding:7px 9px;margin-bottom:5px;border-radius:3px;border-left:3px solid var(--border2);background:var(--surface2);cursor:pointer;transition:border-color .15s}
+  .cfi:hover{border-left-color:var(--accent)}.cfi.crit{border-left-color:var(--danger)}.cfi.warn{border-left-color:var(--warn)}.cfi.info{border-left-color:var(--accent2)}
+  .cfi-t{font-size:9.5px;line-height:1.4;color:var(--text);margin-bottom:2px}
+  .cfi-m{font-size:8px;color:var(--text-muted);display:flex;gap:5px;align-items:center}
+  .cfi-lv{font-size:7px;font-weight:700;letter-spacing:.8px;padding:1px 4px;border-radius:2px;text-transform:uppercase}
+  #coc-dimbar{grid-column:1/-1;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 16px;display:flex;gap:8px;align-items:stretch}
+  .cdim{flex:1;min-width:0}
+  .cdim-lbl{font-size:7.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cdim-bar{height:5px;background:var(--border2);border-radius:3px;overflow:hidden;margin-bottom:3px}
+  .cdim-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+  .cdim-sc{font-family:var(--font-ui);font-size:10px;font-weight:700}
+  #view-dashboard.coc-fullscreen{position:fixed;inset:0;z-index:9000;background:var(--bg);padding:10px;overflow:hidden}
+  #view-dashboard.coc-fullscreen #coc-wrap{height:calc(100vh - 20px)}
+  </style>
+
+  <div id="coc-wrap">
+
+    <!-- HEADER -->
+    <div id="coc-header">
+      <div id="coc-org"><span>Compliance Operations Center</span><span id="coc-orgname">Digital Twin</span></div>
+      <div id="coc-pill-wrap"></div>
+      <div id="coc-clock"><span>Hora local</span><span id="coc-time">—</span></div>
+      <button id="btn-coc-fs" onclick="toggleCocFs()">⛶ Pantalla completa</button>
     </div>
 
-    <div class="g2" style="margin-bottom:16px">
-      <div class="card">
-        <div class="card-title"><span class="card-title-left">📡 Radar de Madurez</span><button class="btn btn-ghost btn-xs" onclick="go('madurez')">Ver detalle →</button></div>
-        <div class="radar-wrap">
-          <canvas id="radar-dash" width="200" height="200"></canvas>
-          <div class="radar-legend" id="radar-legend-dash"></div>
+    <!-- BUILDING CANVAS -->
+    <div id="coc-building"><canvas id="coc-bcanvas"></canvas></div>
+
+    <!-- RIGHT PANEL -->
+    <div id="coc-right">
+      <div class="ckri" style="--kc:var(--accent)">
+        <div class="ckri-n" id="coc-kri-m">—</div>
+        <div><div class="ckri-l">Madurez Global</div><div class="ckri-s">ISO 37301 · /5.0</div></div>
+      </div>
+      <div class="ckri" style="--kc:var(--danger)">
+        <div class="ckri-n" id="coc-kri-c">0</div>
+        <div><div class="ckri-l">Amenazas activas</div><div class="ckri-s" id="coc-kri-cs">impacto crítico/alto</div></div>
+      </div>
+      <div class="ckri" style="--kc:var(--warn)">
+        <div class="ckri-n" id="coc-kri-p">0</div>
+        <div><div class="ckri-l">Planes abiertos</div><div class="ckri-s">en seguimiento activo</div></div>
+      </div>
+      <div class="ckri" style="--kc:var(--accent2)">
+        <div class="ckri-n" id="coc-kri-h">0</div>
+        <div><div class="ckri-l">Hits monitorizados</div><div class="ckri-s" id="coc-kri-hs">última actualización</div></div>
+      </div>
+      <div id="coc-feed">
+        <div class="coc-feed-hd">
+          <span class="coc-feed-lbl">⚡ Amenazas recientes</span>
+          <button class="btn btn-ghost btn-xs" onclick="go('hits')">Ver todo →</button>
         </div>
-        <div id="dash-narrative" style="margin-top:12px;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:4px;font-size:10.5px;color:var(--text-dim);line-height:1.6"></div>
-      </div>
-      <div class="card">
-        <div class="card-title"><span class="card-title-left">⚡ Últimos Hits</span><button class="btn btn-ghost btn-xs" onclick="go('hits')">Ver todos →</button></div>
-        <div id="dash-hits"></div>
+        <div id="coc-feed-list"></div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-title"><span class="card-title-left">◉ Planes de Acción Activos</span><button class="btn btn-ghost btn-xs" onclick="go('planes')">Ver todos →</button></div>
-      <div id="dash-planes"></div>
-    </div>
+    <!-- ISO DIMENSION BAR -->
+    <div id="coc-dimbar"></div>
+
   </div>
+  </div>
+
 
   <!-- CONTEXTO ORGANIZACIONAL -->
   <div class="view" id="view-contexto">
@@ -1149,43 +1224,9 @@ async function syncAll(){
     // Hits: try Firestore first, fallback to GitHub raw JSON
     const fsHits = await fsList('hits');
     if(fsHits && fsHits.length > 0){
-      // Always keep Firestore as base (includes externally-published sentencias)
-      // Then try to enrich with GitHub data if available
-      const fsMap = {};
-      fsHits.forEach(h => { fsMap[h.id||h.link] = h; });
-      try{
-        const repo = S.cfg.repo || 'avespa/digitaltwin';
-        const url = `https://raw.githubusercontent.com/${repo}/main/data/hits.json?t=${Date.now()}`;
-        const r = await fetch(url);
-        if(r.ok){
-          const ghData = await r.json();
-          const ghHits = ghData.hits || [];
-          const merged = ghHits.map(ghHit => {
-            const key = ghHit.id || ghHit.link;
-            const fsHit = fsMap[key];
-            if(fsHit && fsHit._analyzed) return { ...ghHit, ...fsHit, id: ghHit.id||fsHit.id };
-            return fsHit ? { ...fsHit, ...ghHit, id: ghHit.id||fsHit.id } : ghHit;
-          });
-          // Always add Firestore-only hits (sentencias published externally, etc.)
-          fsHits.forEach(fh => {
-            const key = fh.id||fh.link;
-            if(!ghHits.find(gh=>(gh.id||gh.link)===key)) merged.push(fh);
-          });
-          S.hits = merged;
-          // Write new GitHub hits to Firestore
-          const newGhHits = ghHits.filter(h=>!fsMap[h.id||h.link]);
-          for(const hit of newGhHits.slice(0,50)){
-            const docId = await fsAdd('hits', hit);
-            const idx = S.hits.findIndex(h=>(h.id||h.link)===(hit.id||hit.link));
-            if(idx>=0 && docId) S.hits[idx]._fsId = docId;
-          }
-        } else {
-          S.hits = fsHits;
-        }
-      }catch(e){
-        S.hits = fsHits; // GitHub unavailable — use Firestore (includes sentencias)
-      }
+      S.hits = fsHits;
     } else {
+      // Fetcher writes to GitHub — read directly from raw
       await syncHitsFromGitHub();
     }
 
@@ -1232,7 +1273,6 @@ async function autoAnalyzePending(){
   if(!S.ctx || !S.ctx.name){ return; }
 
   // ONLY hits that have never been analyzed (no _analyzed flag AND no inherent_level)
-  // Include sentencias published externally (is_sentencia=true) that also lack analysis
   const pending = S.hits.filter(h =>
     !h._analyzed &&
     !h.inherent_level &&
@@ -1314,7 +1354,7 @@ async function syncHits(){
     // Try to get newer hits from GitHub and merge
     try{
       const repo = S.cfg.repo || 'avespa/digitaltwin';
-      const url = `https://raw.githubusercontent.com/${repo}/main/data/hits.json?t=${Date.now()}`;
+      const url = `https://raw.githubusercontent.com/\${repo}/main/data/hits.json?t=\${Date.now()}`;
       const r = await fetch(url);
       if(r.ok){
         const data = await r.json();
@@ -1372,7 +1412,7 @@ function restoreLocal(){
 }
 
 // ═══════════════════════════════════════════════════════════════
-// DASHBOARD
+// DASHBOARD — COMPLIANCE OPERATIONS CENTER
 // ═══════════════════════════════════════════════════════════════
 function renderAll(){
   renderDashboard();
@@ -1381,48 +1421,374 @@ function renderAll(){
   updateBadges();
 }
 
-function renderDashboard(){
-  // Twin disclaimer
-  const lastCtxUpdate = S.ctx?._updated;
-  const daysSince = lastCtxUpdate ? Math.floor((Date.now()-new Date(lastCtxUpdate))/86400000) : null;
-  const disc = document.getElementById('twin-disclaimer');
-  if(!S.twinSummary){
-    disc.innerHTML=`<div class="alert alert-warn mb14">⚠ El Resumen del Digital Twin está vacío. <button class="btn btn-ghost btn-xs" onclick="go('twin-summary')">Configurar →</button></div>`;
-  } else if(daysSince !== null && daysSince > (S.cfg.twinDays||90)){
-    disc.innerHTML=`<div class="alert alert-warn mb14">⚠ El Digital Twin no se actualiza hace <strong>${daysSince} días</strong>. Considera revisar el contexto y la madurez. <button class="btn btn-ghost btn-xs" onclick="go('contexto')">Revisar →</button></div>`;
+// ── Clock ────────────────────────────────────────────────────────
+let _cocClockInterval = null;
+function startCocClock(){
+  clearInterval(_cocClockInterval);
+  function tick(){
+    const el = document.getElementById('coc-time');
+    if(!el) return;
+    const now = new Date();
+    el.textContent = now.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  }
+  tick();
+  _cocClockInterval = setInterval(tick, 1000);
+}
+
+// ── Fullscreen ───────────────────────────────────────────────────
+function toggleCocFs(){
+  const view = document.getElementById('view-dashboard');
+  const btn  = document.getElementById('btn-coc-fs');
+  const fs   = view.classList.toggle('coc-fullscreen');
+  btn.textContent = fs ? '✕ Salir pantalla completa' : '⛶ Pantalla completa';
+  setTimeout(()=>{ drawCocBuilding(); }, 100);
+}
+
+// ── Status pill ──────────────────────────────────────────────────
+function renderCocPill(crits, openPlans, daysSince, twinDays){
+  const wrap = document.getElementById('coc-pill-wrap');
+  if(!wrap) return;
+  let cls='pill-ok', label='SISTEMA OPERATIVO';
+  if(crits>0){ cls='pill-crit'; label=`${crits} AMENAZA${crits>1?'S':''} CRÍTICA${crits>1?'S':''}`; }
+  else if(openPlans>0 || (daysSince!==null && daysSince>(twinDays||90))){ cls='pill-warn'; label='ATENCIÓN REQUERIDA'; }
+  wrap.innerHTML=`<div class="coc-pill ${cls}"><span class="pd"></span>${label}</div>`;
+}
+
+// ── ISO dimension bar ────────────────────────────────────────────
+function renderCocDimBar(scores){
+  const bar = document.getElementById('coc-dimbar');
+  if(!bar) return;
+  bar.innerHTML = DIMS.map((d,i)=>{
+    const s = scores[i]||0;
+    const pct = s/5*100;
+    const col = s>=4?'var(--accent)':s>=3?'#eab308':s>=2?'var(--warn)':s>0?'var(--danger)':d.color;
+    return `<div class="cdim" title="${d.label}: ${s>0?s.toFixed(1)+'/5':'Sin datos'}">
+      <div class="cdim-lbl">${d.icon} ${d.label}</div>
+      <div class="cdim-bar"><div class="cdim-fill" style="width:${pct}%;background:${col}"></div></div>
+      <div class="cdim-sc" style="color:${col}">${s>0?s.toFixed(1):'—'}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── Feed ─────────────────────────────────────────────────────────
+function renderCocFeed(){
+  const el = document.getElementById('coc-feed-list');
+  if(!el) return;
+  const hits = S.hits
+    .filter(h=>!h.false_positive && !h._discarded)
+    .slice(0,12);
+  if(!hits.length){
+    el.innerHTML=`<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:10px">Sin amenazas detectadas</div>`;
+    return;
+  }
+  el.innerHTML = hits.map(h=>{
+    const lv = h.inherent_level||h.level||'info';
+    const cls = {critical:'crit',warning:'warn',alto:'crit',medio:'warn',info:'info',bajo:'info'}[lv]||'info';
+    const lvLabel = {critical:'CRÍTICO',warning:'MEDIO',alto:'CRÍTICO',medio:'MEDIO',info:'BAJO',bajo:'BAJO'}[lv]||lv.toUpperCase();
+    const lvCol = {crit:'var(--danger)',warn:'var(--warn)',info:'var(--accent2)'}[cls];
+    const src = (h.source||'').split('·')[0].trim().slice(0,12);
+    return `<div class="cfi ${cls}" onclick="go('hits')">
+      <div class="cfi-t">${esc((h.title||'').slice(0,72))}${(h.title||'').length>72?'…':''}</div>
+      <div class="cfi-m">
+        <span class="cfi-lv" style="background:${lvCol}20;color:${lvCol}">${lvLabel}</span>
+        <span>${src}</span>
+        <span style="margin-left:auto">${fmtDate(h.raw_date||h.fetched_at||'')}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Building Canvas ──────────────────────────────────────────────
+function drawCocBuilding(){
+  const canvas = document.getElementById('coc-bcanvas');
+  if(!canvas) return;
+  const container = document.getElementById('coc-building');
+  canvas.width  = container.clientWidth  || 600;
+  canvas.height = container.clientHeight || 400;
+  const W = canvas.width, H = canvas.height;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+
+  const scores  = getDimScores();
+  const crits   = S.hits.filter(h=>(h.inherent_level||h.level||'')===('critical')||h.inherent_level==='alto').length;
+  const openP   = S.actionPlans.filter(p=>p.status!=='closed').length;
+  const globalS = calcGlobalScore();
+
+  // Sky gradient
+  const skyGrad = ctx.createLinearGradient(0,0,0,H*0.7);
+  const hasCrit = crits>0;
+  if(hasCrit){
+    skyGrad.addColorStop(0,'#1a0505');
+    skyGrad.addColorStop(1,'#0c1117');
   } else {
-    disc.innerHTML='';
+    skyGrad.addColorStop(0,'#050d12');
+    skyGrad.addColorStop(1,'#0c1117');
+  }
+  ctx.fillStyle=skyGrad;
+  ctx.fillRect(0,0,W,H);
+
+  // Stars (only no-crit mode)
+  if(!hasCrit){
+    ctx.fillStyle='rgba(220,232,240,0.5)';
+    for(let i=0;i<60;i++){
+      const sx=Math.abs(Math.sin(i*137.5)*W);
+      const sy=Math.abs(Math.cos(i*97.3)*H*0.6);
+      const sr=Math.random()<0.2?1.2:0.6;
+      ctx.beginPath();ctx.arc(sx,sy,sr,0,Math.PI*2);ctx.fill();
+    }
   }
 
-  // KRIs
+  // Scanlines subtle
+  ctx.fillStyle='rgba(0,229,160,0.004)';
+  for(let y=0;y<H;y+=4){ ctx.fillRect(0,y,W,1); }
+
+  // Ground
+  ctx.fillStyle='#0c1117';
+  ctx.fillRect(0,H*0.78,W,H*0.22);
+  ctx.strokeStyle='rgba(0,229,160,0.12)';
+  ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(0,H*0.78);ctx.lineTo(W,H*0.78);ctx.stroke();
+
+  // Distant city silhouette
+  ctx.fillStyle='rgba(10,20,30,0.8)';
+  const bgs = [0.04,0.06,0.04,0.07,0.05,0.08,0.06,0.05,0.04,0.07,0.06,0.08,0.05,0.07,0.04,0.06];
+  let bx=0;
+  for(let i=0;i<bgs.length;i++){
+    const bw=W/bgs.length;
+    const bh=bgs[i]*H;
+    ctx.fillRect(bx, H*0.78-bh, bw+1, bh);
+    bx+=bw;
+  }
+
+  // Main corporate building
+  const floors = DIMS.length; // 7 floors
+  const bW = Math.min(W*0.38, 260);
+  const bX = (W - bW)/2;
+  const floorH = Math.min((H*0.68)/floors, 55);
+  const bH = floorH * floors;
+  const bY = H*0.78 - bH;
+
+  // Building shadow
+  ctx.fillStyle='rgba(0,0,0,0.4)';
+  ctx.fillRect(bX+8, bY+8, bW, bH);
+
+  // Building main body
+  const bGrad = ctx.createLinearGradient(bX,0,bX+bW,0);
+  bGrad.addColorStop(0,'#0d1820');
+  bGrad.addColorStop(0.5,'#111f2a');
+  bGrad.addColorStop(1,'#0a1520');
+  ctx.fillStyle=bGrad;
+  ctx.fillRect(bX, bY, bW, bH);
+
+  // Building border
+  ctx.strokeStyle='rgba(0,229,160,0.2)';
+  ctx.lineWidth=1;
+  ctx.strokeRect(bX,bY,bW,bH);
+
+  // Floors
+  for(let f=0;f<floors;f++){
+    const dim = DIMS[f];
+    const sc  = scores[f]||0;
+    const fy  = bY + f*floorH;
+    const dimCrits = S.hits.filter(h=>{
+      const lv=h.inherent_level||h.level||'';
+      return (lv==='critical'||lv==='alto') && !h.false_positive;
+    }).length;
+
+    // Floor separator
+    ctx.strokeStyle='rgba(0,229,160,0.08)';
+    ctx.lineWidth=1;
+    if(f>0){
+      ctx.beginPath();ctx.moveTo(bX,fy);ctx.lineTo(bX+bW,fy);ctx.stroke();
+    }
+
+    // Floor health color
+    const fCol = sc>=4?'rgba(0,229,160,0.18)':sc>=3?'rgba(234,179,8,0.15)':sc>=2?'rgba(245,158,11,0.18)':sc>0?'rgba(239,68,68,0.2)':'rgba(30,50,65,0.3)';
+    ctx.fillStyle=fCol;
+    ctx.fillRect(bX+1,fy+1,bW-2,floorH-1);
+
+    // Windows row
+    const winCols = 4;
+    const winW = 14, winH = 10;
+    const winPadX = (bW - winCols*(winW+8)) / 2;
+    for(let w=0;w<winCols;w++){
+      const wx = bX + winPadX + w*(winW+8);
+      const wy = fy + (floorH-winH)/2;
+      const winOn = sc>0 && (w < Math.ceil(sc/5*winCols));
+      const winCol = sc>=4?'rgba(0,229,160,':sc>=3?'rgba(234,179,8,':sc>=2?'rgba(245,158,11,':sc>0?'rgba(239,68,68,':'rgba(20,40,55,';
+      // Window glow bg
+      if(winOn && sc>0){
+        ctx.fillStyle=winCol+'0.06)';
+        ctx.fillRect(wx-4,wy-4,winW+8,winH+8);
+      }
+      ctx.fillStyle=winOn?(winCol+'0.9)'):'rgba(8,18,26,0.9)';
+      ctx.fillRect(wx,wy,winW,winH);
+      if(winOn){
+        ctx.strokeStyle=winCol+'0.5)';
+        ctx.lineWidth=0.5;
+        ctx.strokeRect(wx,wy,winW,winH);
+      }
+    }
+
+    // Floor label (right side)
+    ctx.fillStyle=sc>0?'rgba(220,232,240,0.5)':'rgba(100,140,160,0.3)';
+    ctx.font=`${Math.max(8,floorH*0.22)}px DM Mono,monospace`;
+    ctx.textAlign='right';
+    ctx.textBaseline='middle';
+    ctx.fillText(dim.label, bX+bW-8, fy+floorH/2);
+
+    // Score badge
+    if(sc>0){
+      const sc2=sc>=4?'rgba(0,229,160,0.9)':sc>=3?'rgba(234,179,8,0.9)':sc>=2?'rgba(245,158,11,0.9)':'rgba(239,68,68,0.9)';
+      ctx.fillStyle=sc2;
+      ctx.font=`bold ${Math.max(9,floorH*0.25)}px Syne,sans-serif`;
+      ctx.textAlign='left';
+      ctx.fillText(sc.toFixed(1), bX+8, fy+floorH/2);
+    }
+
+    // Critical alert flash on floor
+    if(hasCrit && f===4){ // Operacion floor
+      const alpha = 0.06 + 0.04*Math.sin(Date.now()/400);
+      ctx.fillStyle=`rgba(239,68,68,${alpha})`;
+      ctx.fillRect(bX+1,fy+1,bW-2,floorH-1);
+    }
+  }
+
+  // Rooftop antenna
+  const antX = bX + bW/2;
+  const antY = bY;
+  ctx.strokeStyle='rgba(0,229,160,0.4)';
+  ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(antX,antY);ctx.lineTo(antX,antY-24);ctx.stroke();
+  // Antenna pulse dot
+  const pulseR = 3 + Math.sin(Date.now()/600)*1.5;
+  const pulseAlpha = 0.6+0.4*Math.sin(Date.now()/600);
+  ctx.beginPath();
+  ctx.arc(antX,antY-24,pulseR,0,Math.PI*2);
+  ctx.fillStyle=hasCrit?`rgba(239,68,68,${pulseAlpha})`:`rgba(0,229,160,${pulseAlpha})`;
+  ctx.fill();
+  if(!hasCrit){
+    ctx.beginPath();
+    ctx.arc(antX,antY-24,pulseR+4,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(0,229,160,${pulseAlpha*0.3})`;
+    ctx.lineWidth=1;
+    ctx.stroke();
+  }
+
+  // Attack particles (if crits)
+  if(hasCrit){
+    const t = Date.now()/1000;
+    for(let i=0;i<Math.min(crits*3,12);i++){
+      const px = bX + bW*0.15 + (bW*0.7)*(Math.abs(Math.sin(t*0.7+i*2.3))%1);
+      const progress = ((t*0.4+i*0.37)%1);
+      const py = H*0.1 + (bY-H*0.1)*progress;
+      const alpha = progress<0.3?progress/0.3:progress>0.8?(1-progress)/0.2:1;
+      ctx.beginPath();
+      ctx.arc(px,py,2,0,Math.PI*2);
+      ctx.fillStyle=`rgba(239,68,68,${alpha*0.8})`;
+      ctx.fill();
+      // Trail
+      ctx.strokeStyle=`rgba(239,68,68,${alpha*0.3})`;
+      ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px,py-8);ctx.stroke();
+    }
+  }
+
+  // Side buildings
+  const sideW = (W-bW)/2 - 30;
+  const sides = [
+    {x:20,           w:sideW,   hRatio:0.35, col:'#0a1520'},
+    {x:40,           w:sideW*0.5, hRatio:0.25, col:'#0d1a24'},
+    {x:bX+bW+20,     w:sideW,   hRatio:0.40, col:'#0a1520'},
+    {x:bX+bW+30,     w:sideW*0.6, hRatio:0.28, col:'#0d1a24'},
+  ];
+  sides.forEach(s=>{
+    const sh=H*s.hRatio;
+    const sy=H*0.78-sh;
+    ctx.fillStyle=s.col;
+    ctx.fillRect(s.x,sy,s.w,sh);
+    ctx.strokeStyle='rgba(0,229,160,0.06)';
+    ctx.lineWidth=0.5;
+    ctx.strokeRect(s.x,sy,s.w,sh);
+    // Random lit windows
+    const wRows=Math.floor(sh/14);
+    const wCols=Math.floor(s.w/12);
+    for(let r=0;r<wRows;r++){
+      for(let c=0;c<wCols;c++){
+        if(Math.abs(Math.sin(s.x+r*13+c*7))<0.35){
+          ctx.fillStyle='rgba(0,229,160,0.15)';
+          ctx.fillRect(s.x+4+c*11,sy+5+r*13,7,6);
+        }
+      }
+    }
+  });
+
+  // Floor labels on left side (floating)
+  ctx.textAlign='right';
+  ctx.font='8px DM Mono,monospace';
+  for(let f=0;f<floors;f++){
+    const sc=scores[f]||0;
+    const fy=bY+f*floorH+floorH/2;
+    const col=sc>=4?'rgba(0,229,160,0.6)':sc>=3?'rgba(234,179,8,0.6)':sc>=2?'rgba(245,158,11,0.6)':sc>0?'rgba(239,68,68,0.6)':'rgba(60,90,110,0.4)';
+    ctx.fillStyle=col;
+    ctx.fillText(DIMS[f].icon, bX-8, fy);
+  }
+
+  // Status overlay text
+  ctx.textAlign='center';
+  ctx.font='bold 11px Syne,sans-serif';
+  const statusCol = hasCrit?'rgba(239,68,68,0.8)':globalS>=4?'rgba(0,229,160,0.7)':globalS>=3?'rgba(234,179,8,0.7)':'rgba(245,158,11,0.7)';
+  ctx.fillStyle=statusCol;
+  const statusTxt = hasCrit?`${crits} AMENAZA${crits>1?'S':''} ACTIVA${crits>1?'S':''}`:globalS>=4?'SISTEMA PROTEGIDO':globalS>=3?'ESTADO ACEPTABLE':'GAPS DETECTADOS';
+  ctx.fillText(statusTxt, W/2, H*0.82);
+  ctx.font='9px DM Mono,monospace';
+  ctx.fillStyle='rgba(100,140,160,0.5)';
+  const orgName = S.ctx?.name||'';
+  if(orgName) ctx.fillText(orgName.toUpperCase(), W/2, H*0.87);
+}
+
+// Animate the building
+let _cocAnimFrame = null;
+function startCocAnimation(){
+  cancelAnimationFrame(_cocAnimFrame);
+  function frame(){
+    if(document.getElementById('view-dashboard')?.classList.contains('active')||
+       document.getElementById('view-dashboard')?.classList.contains('coc-fullscreen')){
+      drawCocBuilding();
+    }
+    _cocAnimFrame = requestAnimationFrame(frame);
+  }
+  _cocAnimFrame = requestAnimationFrame(frame);
+}
+
+function renderDashboard(){
   const globalScore = calcGlobalScore();
-  document.getElementById('kri-madurez').textContent = globalScore>0 ? globalScore.toFixed(1) : '—';
-  const crits = S.hits.filter(h=>h.level==='critical' && !S.actionPlans.find(p=>p.hit_id===h.id && p.status!=='open')).length;
-  document.getElementById('kri-criticos').textContent = crits;
-  document.getElementById('kri-planes').textContent = S.actionPlans.filter(p=>p.status!=='closed').length;
-  document.getElementById('kri-sync').textContent = S.lastSync ? fmtTime(S.lastSync) : '—';
+  const crits = S.hits.filter(h=>{
+    const lv=h.inherent_level||h.level||'';
+    return (lv==='critical'||lv==='alto') && !h.false_positive && !h._discarded;
+  }).length;
+  const openPlans = S.actionPlans.filter(p=>p.status!=='closed').length;
+  const lastCtxUpdate = S.ctx?._updated;
+  const daysSince = lastCtxUpdate ? Math.floor((Date.now()-new Date(lastCtxUpdate))/86400000) : null;
 
-  // Radar
-  drawRadar('radar-dash', getDimScores());
-  renderRadarLegend('radar-legend-dash', true);
+  // Org name
+  const on = document.getElementById('coc-orgname');
+  if(on) on.textContent = S.ctx?.name || 'Digital Twin';
 
-  // Narrative
-  const narrative = S.twinSummary ?
-    `<em>Twin activo.</em> Madurez global: ${globalScore.toFixed(1)}/5. ${S.hits.filter(h=>h.level==='critical').length} hits críticos · ${S.actionPlans.filter(p=>p.status!=='closed').length} planes abiertos.` :
-    'Configura el Digital Twin para ver el análisis contextualizado.';
-  document.getElementById('dash-narrative').innerHTML = narrative;
+  // KRIs
+  const km = document.getElementById('coc-kri-m'); if(km) km.textContent = globalScore>0?globalScore.toFixed(1):'—';
+  const kc = document.getElementById('coc-kri-c'); if(kc) kc.textContent = crits;
+  const kcs = document.getElementById('coc-kri-cs'); if(kcs) kcs.textContent = crits===0?'sin amenazas activas':`${crits} impacto${crits>1?'s':''} sin cerrar`;
+  const kp = document.getElementById('coc-kri-p'); if(kp) kp.textContent = openPlans;
+  const kh = document.getElementById('coc-kri-h'); if(kh) kh.textContent = S.hits.length;
+  const khs = document.getElementById('coc-kri-hs');
+  if(khs) khs.textContent = S.lastSync ? 'sync: '+fmtTime(S.lastSync) : 'sin sincronizar';
 
-  // Recent hits
-  const dh = document.getElementById('dash-hits');
-  const recent = S.hits.slice(0,4);
-  dh.innerHTML = recent.length ? recent.map(h=>miniHit(h)).join('') :
-    `<div class="empty"><div class="empty-icon">⟁</div><div class="empty-sub">Sin hits · ejecuta el workflow en GitHub</div></div>`;
-
-  // Planes
-  const dp = document.getElementById('dash-planes');
-  const open = S.actionPlans.filter(p=>p.status!=='closed').slice(0,4);
-  dp.innerHTML = open.length ? open.map(p=>miniPlan(p)).join('') :
-    `<div class="empty"><div class="empty-sub">Sin planes abiertos</div></div>`;
+  renderCocPill(crits, openPlans, daysSince, S.cfg?.twinDays||90);
+  renderCocFeed();
+  renderCocDimBar(getDimScores());
+  startCocClock();
+  startCocAnimation();
 }
 
 function miniHit(h){
@@ -1444,7 +1810,6 @@ function miniPlan(p){
 }
 
 function updateBadges(){
-  // Badge = residual ALTO count (requiring immediate action)
   const highRisk = S.hits.filter(h=>{
     const r=h.inherent_level||''; return r==='alto'||r==='critical';
   }).length;
@@ -1454,6 +1819,7 @@ function updateBadges(){
   const badgeSent=document.getElementById('badge-sent'); if(badgeSent) badgeSent.textContent=sents;
   updateFunnelCounts();
 }
+
 
 // ═══════════════════════════════════════════════════════════════
 // CONTEXTO ORGANIZACIONAL
@@ -4318,7 +4684,7 @@ function showRiskToast(hitId, analysis, company_impact, ragCount){
 // ── Batch re-analysis ────────────────────────────────────────────────────────
 async function batchReAnalyze(){
   if(!S.cfg.mistralKey){ go('config'); return; }
-  const toProcess = S.hits.filter(h=>!h._reanalyzed).slice(0,15);
+  const toProcess = S.hits.filter(h=>!h._reanalyzed && !h.is_sentencia).slice(0,15);
   if(!toProcess.length){ showAlert('hits-alert','Todos los hits ya han sido evaluados','info'); return; }
 
   const btn = document.getElementById('batch-reanalyze-btn');
@@ -4671,6 +5037,25 @@ ${dd.recommended_action?`<h2>5. Acción Recomendada</h2><p>${dd.recommended_acti
 function buildDeepDiveMarkdown(hit, dd){
   return `# Análisis Profundo: ${hit.title}\n\n${dd.inherent_analysis||''}\n\n## Acción\n${dd.recommended_action||''}`;
 }
+
+// ── Day / Night mode ──────────────────────────────────────────────────────────
+function toggleDayNight(){
+  const isDay = document.body.classList.toggle('day');
+  document.getElementById('theme-btn').textContent = isDay ? '☀️' : '🌙';
+  try{ localStorage.setItem('cdt-theme', isDay ? 'day' : 'night'); }catch(e){}
+}
+(function(){
+  try{
+    if(localStorage.getItem('cdt-theme')==='day'){
+      document.body.classList.add('day');
+      // btn may not exist yet; set after DOM ready
+      document.addEventListener('DOMContentLoaded',()=>{
+        const b=document.getElementById('theme-btn');
+        if(b) b.textContent='☀️';
+      });
+    }
+  }catch(e){}
+})();
 
 </script>
 </body>
