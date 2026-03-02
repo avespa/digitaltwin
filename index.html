@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -353,7 +352,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   <!-- DASHBOARD — COMPLIANCE OPERATIONS CENTER -->
   <div class="view active" id="view-dashboard">
   <style>
-  #coc-wrap{display:grid;grid-template-columns:1fr 300px;grid-template-rows:auto 1fr auto;gap:10px;height:calc(100vh - 52px - 44px);min-height:480px}
+  #coc-wrap{display:grid;grid-template-columns:1fr;grid-template-rows:auto 1fr auto;gap:10px;height:calc(100vh - 52px - 44px);min-height:480px}
   #coc-header{grid-column:1/-1;display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:9px 16px}
   #coc-org{font-family:var(--font-ui);font-size:17px;font-weight:800;color:var(--accent);flex:1}
   #coc-org span{font-size:9px;font-weight:400;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:1px}
@@ -366,11 +365,16 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   .pill-crit{color:var(--danger);border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.06)}.pill-crit .pd{background:var(--danger)}
   #btn-coc-fs{background:transparent;border:1px solid var(--border);color:var(--text-muted);border-radius:4px;padding:4px 9px;cursor:pointer;font-size:10px;font-family:var(--font-mono);transition:all .15s}
   #btn-coc-fs:hover{color:var(--text);border-color:var(--border2)}
-  #coc-building{grid-column:1;grid-row:2;background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;position:relative}
+  /* Splitter layout — replaces fixed grid columns */
+  #coc-body{grid-column:1/-1;display:flex;gap:0;min-height:0;flex:1;overflow:hidden}
+  #coc-building{flex:1;min-width:180px;background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;position:relative}
   #coc-bcanvas{width:100%;height:100%;display:block}
-  #coc-right{grid-column:2;grid-row:2;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+  #coc-splitter{width:6px;cursor:col-resize;background:transparent;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background .15s;border-radius:3px;margin:0 2px}
+  #coc-splitter:hover,#coc-splitter.dragging{background:var(--border2)}
+  #coc-splitter::after{content:'';display:block;width:2px;height:32px;background:var(--border2);border-radius:2px}
+  #coc-right{width:300px;min-width:140px;max-width:600px;display:flex;flex-direction:column;gap:8px;overflow:hidden;flex-shrink:0}
   .ckri{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0;position:relative;overflow:hidden}
-  .ckri::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--kc,var(--accent))}
+  .ckri::before{content:\'\';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--kc,var(--accent))}
   .ckri-n{font-family:var(--font-ui);font-size:24px;font-weight:800;color:var(--kc,var(--accent));line-height:1;min-width:40px}
   .ckri-l{font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:2px}
   .ckri-s{font-size:9.5px;color:var(--text-dim)}
@@ -391,6 +395,8 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   .cdim-sc{font-family:var(--font-ui);font-size:10px;font-weight:700}
   #view-dashboard.coc-fullscreen{position:fixed;inset:0;z-index:9000;background:var(--bg);padding:10px;overflow:hidden}
   #view-dashboard.coc-fullscreen #coc-wrap{height:calc(100vh - 20px)}
+  /* Override grid for body row */
+  #coc-wrap{grid-template-rows:auto 1fr auto}
   </style>
 
   <div id="coc-wrap">
@@ -403,33 +409,34 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
       <button id="btn-coc-fs" onclick="toggleCocFs()">⛶ Pantalla completa</button>
     </div>
 
-    <!-- BUILDING CANVAS -->
-    <div id="coc-building"><canvas id="coc-bcanvas"></canvas></div>
-
-    <!-- RIGHT PANEL -->
-    <div id="coc-right">
-      <div class="ckri" style="--kc:var(--accent)">
-        <div class="ckri-n" id="coc-kri-m">—</div>
-        <div><div class="ckri-l">Madurez Global</div><div class="ckri-s">ISO 37301 · /5.0</div></div>
-      </div>
-      <div class="ckri" style="--kc:var(--danger)">
-        <div class="ckri-n" id="coc-kri-c">0</div>
-        <div><div class="ckri-l">Amenazas activas</div><div class="ckri-s" id="coc-kri-cs">impacto crítico/alto</div></div>
-      </div>
-      <div class="ckri" style="--kc:var(--warn)">
-        <div class="ckri-n" id="coc-kri-p">0</div>
-        <div><div class="ckri-l">Planes abiertos</div><div class="ckri-s">en seguimiento activo</div></div>
-      </div>
-      <div class="ckri" style="--kc:var(--accent2)">
-        <div class="ckri-n" id="coc-kri-h">0</div>
-        <div><div class="ckri-l">Hits monitorizados</div><div class="ckri-s" id="coc-kri-hs">última actualización</div></div>
-      </div>
-      <div id="coc-feed">
-        <div class="coc-feed-hd">
-          <span class="coc-feed-lbl">⚡ Amenazas recientes</span>
-          <button class="btn btn-ghost btn-xs" onclick="go('hits')">Ver todo →</button>
+    <!-- BODY: pixel art + splitter + KRI panel -->
+    <div id="coc-body">
+      <div id="coc-building"><canvas id="coc-bcanvas"></canvas></div>
+      <div id="coc-splitter" title="Arrastra para redimensionar"></div>
+      <div id="coc-right">
+        <div class="ckri" style="--kc:var(--accent)">
+          <div class="ckri-n" id="coc-kri-m">—</div>
+          <div><div class="ckri-l">Madurez Global</div><div class="ckri-s">ISO 37301 · /5.0</div></div>
         </div>
-        <div id="coc-feed-list"></div>
+        <div class="ckri" style="--kc:var(--danger)">
+          <div class="ckri-n" id="coc-kri-c">0</div>
+          <div><div class="ckri-l">Amenazas activas</div><div class="ckri-s" id="coc-kri-cs">impacto crítico/alto</div></div>
+        </div>
+        <div class="ckri" style="--kc:var(--warn)">
+          <div class="ckri-n" id="coc-kri-p">0</div>
+          <div><div class="ckri-l">Planes abiertos</div><div class="ckri-s">en seguimiento activo</div></div>
+        </div>
+        <div class="ckri" style="--kc:var(--accent2)">
+          <div class="ckri-n" id="coc-kri-h">0</div>
+          <div><div class="ckri-l">Hits monitorizados</div><div class="ckri-s" id="coc-kri-hs">última actualización</div></div>
+        </div>
+        <div id="coc-feed">
+          <div class="coc-feed-hd">
+            <span class="coc-feed-lbl">⚡ Amenazas recientes</span>
+            <button class="btn btn-ghost btn-xs" onclick="go(\'hits\')">Ver todo →</button>
+          </div>
+          <div id="coc-feed-list"></div>
+        </div>
       </div>
     </div>
 
@@ -1660,6 +1667,48 @@ function toggleCocFs(){
   setTimeout(()=>{ drawCocBuilding(); }, 100);
 }
 
+// ── Draggable splitter ───────────────────────────────────────────
+(function initSplitter(){
+  let dragging=false, startX=0, startBldW=0, startRightW=0;
+  function onReady(){
+    const spl   = document.getElementById('coc-splitter');
+    const body  = document.getElementById('coc-body');
+    const bld   = document.getElementById('coc-building');
+    const right = document.getElementById('coc-right');
+    if(!spl||!bld||!right) return;
+
+    spl.addEventListener('mousedown', e=>{
+      dragging   = true;
+      startX     = e.clientX;
+      startBldW  = bld.getBoundingClientRect().width;
+      startRightW= right.getBoundingClientRect().width;
+      spl.classList.add('dragging');
+      document.body.style.cursor='col-resize';
+      document.body.style.userSelect='none';
+      e.preventDefault();
+    });
+    document.addEventListener('mousemove', e=>{
+      if(!dragging) return;
+      const dx    = e.clientX - startX;
+      const total = startBldW + startRightW;
+      const newBld= Math.max(180, Math.min(total-140, startBldW+dx));
+      const newRt = total - newBld;
+      bld.style.flex   = 'none';
+      bld.style.width  = newBld+'px';
+      right.style.width= newRt+'px';
+    });
+    document.addEventListener('mouseup', ()=>{
+      if(!dragging) return;
+      dragging=false;
+      spl.classList.remove('dragging');
+      document.body.style.cursor='';
+      document.body.style.userSelect='';
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',onReady);
+  else onReady();
+})();
+
 // ── Status pill ──────────────────────────────────────────────────
 function renderCocPill(crits, openPlans, daysSince, twinDays){
   const wrap = document.getElementById('coc-pill-wrap');
@@ -1948,30 +1997,28 @@ function _spawnCityParticle(x1,y1,x2,y2,col,T){
 // ── Main city layout definition ───────────────────────────────────
 // 7 ISO 37301 dimensions → 3 districts of buildings on a 9×7 grid
 // Grid: 0=road, 1-7=building dimIdx, T=tree, W=water, P=plaza
+// ── City grid: exactly ONE cell per ISO 37301 dimension (1-7) ───
+// Compact 7×5 grid. 0=road/ground, 1-7=building, T=tree placeholder
+// Layout: 3 columns of districts separated by roads
+// Col:  0    1    2    3    4    5    6
 const CITY_GRID = [
-// col: 0   1   2   3   4   5   6   7   8
-  [ 0,  0,  0,  0,  0,  0,  0,  0,  0], // row 0
-  [ 0,  1,  1,  0,  3,  3,  0,  6,  0], // row 1
-  [ 0,  1,  1,  0,  3,  4,  0,  6,  0], // row 2
-  [ 0,  0,  0,  0,  0,  4,  0,  0,  0], // row 3
-  [ 0,  2,  0,  5,  5,  0,  0,  7,  0], // row 4
-  [ 0,  2,  0,  5,  0,  0,  0,  7,  0], // row 5
-  [ 0,  0,  0,  0,  0,  0,  0,  0,  0], // row 6
+  [ 0,   0,   0,   0,   0,   0,   0 ], // row 0 — road top
+  [ 0,   1,   0,   3,   0,   6,   0 ], // row 1 — Contexto | Planif | Evaluac
+  [ 0,   0,   0,   0,   0,   0,   0 ], // row 2 — road mid
+  [ 0,   2,   0,   4,   0,   7,   0 ], // row 3 — Liderazgo | Soporte | Mejora
+  [ 0,   0,   0,   0,   0,   0,   0 ], // row 4 — road mid
+  [ 0,   0,   0,   5,   0,   0,   0 ], // row 5 — Operación (central, hero building)
+  [ 0,   0,   0,   0,   0,   0,   0 ], // row 6 — road bottom
 ];
-// Road positions for markings
-const ROAD_ROWS = [0,3,6];
-const ROAD_COLS = [0,3,6,8];
+const ROAD_ROWS = [0,2,4,6];
+const ROAD_COLS = [0,2,4,6];
 
-// Tree positions
-const TREE_POS = [[0,1],[0,5],[0,7],[1,7],[2,7],[3,0],[3,7],[3,8],[4,6],[5,6],[6,1],[6,3],[6,5],[6,7]];
-
-// ── Building footprint sizes (grid cells per dim) ─────────────────
-const DIM_FOOTPRINT = {
-  1:{gx:1,gy:1}, 2:{gx:1,gy:1},
-  3:{gx:1,gy:1}, 4:{gx:1,gy:1},
-  5:{gx:1,gy:1}, 6:{gx:1,gy:1},
-  7:{gx:1,gy:1},
-};
+// Trees: only on empty non-road cells
+const TREE_POS = [
+  [1,0],[1,2],[1,4],[1,6],
+  [3,0],[3,2],[3,4],[3,6],
+  [5,0],[5,1],[5,2],[5,4],[5,5],[5,6],
+];
 
 // ── Render ────────────────────────────────────────────────────────
 function drawCocBuilding(){
@@ -2112,35 +2159,82 @@ function drawCocBuilding(){
     _drawRoof(ctx,x,y,TX,TY,h,sc,T,day);
   });
 
-  // ── Pass 5: Labels (floating, above each building) ─────────────
+  // ── Pass 5: Labels — clean tooltip card above each building ──────
   buildCalls.forEach(({x,y,h,sc,dimIdx})=>{
-    const dim=DIMS[dimIdx];
-    const hPx=h*TY*0.55;
-    const labelY=y-hPx-TY*0.5;
+    const dim  = DIMS[dimIdx];
+    const hPx  = h * TY * 0.55;
+    const [r,g,gr] = sc>=4?[0,229,160]:sc>=3?[100,210,130]:sc>=2?[245,158,11]:sc>0?[239,100,68]:[100,130,150];
 
-    // Only show if there's space above
-    if(labelY<12) return;
+    // Card sits directly above building top, with small gap
+    const cardGap  = 6;
+    const iconSize = Math.max(14, Math.round(TY * 0.62));
+    const fontSize = Math.max(8,  Math.round(TY * 0.30));
+    const lineH    = fontSize + 2;
+    const cardPadX = 8, cardPadY = 5;
+    // Label: short name (up to 10 chars)
+    const shortLabel = dim.label.length > 10 ? dim.label.slice(0,9)+'…' : dim.label;
+    ctx.font = `${fontSize}px 'DM Mono',monospace`;
+    const textW = ctx.measureText(shortLabel.toUpperCase()).width;
+    const scoreW = sc>0 ? ctx.measureText(sc.toFixed(1)).width + 2 : 0;
+    const cardW = Math.max(textW, scoreW) + cardPadX*2 + iconSize + 6;
+    const cardH = iconSize + cardPadY*2;
+    const cardX = x - cardW/2;
+    const cardY = y - hPx - cardGap - cardH;
+
+    // Skip if card goes off-screen top
+    if(cardY < 2) return;
+
+    // Card background — rounded rect
+    const bgAlpha = day ? 0.82 : 0.78;
+    ctx.globalAlpha = bgAlpha;
+    ctx.fillStyle   = day ? 'rgba(230,240,252,0.92)' : 'rgba(8,18,30,0.90)';
+    ctx.beginPath();
+    ctx.roundRect(cardX, cardY, cardW, cardH, 5);
+    ctx.fill();
+
+    // Card border (colored by score)
+    ctx.globalAlpha = 0.7;
+    ctx.strokeStyle = `rgba(${r},${g},${gr},0.6)`;
+    ctx.lineWidth   = 1.2;
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // Left color bar
+    ctx.fillStyle = `rgba(${r},${g},${gr},0.9)`;
+    ctx.beginPath();
+    ctx.roundRect(cardX, cardY, 3, cardH, [5,0,0,5]);
+    ctx.fill();
 
     // Icon
-    ctx.font=`${Math.round(TY*0.65)}px sans-serif`;
-    ctx.textAlign='center'; ctx.textBaseline='bottom';
-    ctx.fillText(dim.icon, x, labelY);
+    ctx.font = `${iconSize}px sans-serif`;
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(dim.icon, cardX + 8, cardY + cardH/2);
 
-    // Score badge
+    // Dimension name
+    const txtX = cardX + 8 + iconSize + 5;
+    ctx.font = `600 ${fontSize}px 'DM Mono',monospace`;
+    ctx.fillStyle = day ? 'rgba(20,45,80,0.85)' : 'rgba(200,220,240,0.88)';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(shortLabel.toUpperCase(), txtX, cardY + cardH/2 - (sc>0 ? lineH*0.28 : 0));
+
+    // Score (smaller, below name)
     if(sc>0){
-      const [r,g,gr]=sc>=4?[0,229,160]:sc>=3?[100,210,130]:sc>=2?[245,158,11]:[239,100,68];
-      const bW=TY*1.2, bH=TY*0.55;
-      // Badge bg
-      ctx.fillStyle=`rgba(${r},${g},${gr},0.18)`;
-      ctx.beginPath();
-      ctx.roundRect(x-bW/2, labelY-bH-TY*0.6, bW, bH, 3);
-      ctx.fill();
-      // Badge text
-      ctx.font=`bold ${Math.round(TY*0.4)}px 'DM Mono',monospace`;
-      ctx.fillStyle=`rgba(${r},${g},${gr},0.95)`;
-      ctx.textAlign='center'; ctx.textBaseline='middle';
-      ctx.fillText(sc.toFixed(1), x, labelY-bH/2-TY*0.6+bH/2);
+      ctx.font = `bold ${Math.max(7,fontSize-1)}px 'DM Mono',monospace`;
+      ctx.fillStyle = `rgba(${r},${g},${gr},0.95)`;
+      ctx.fillText(sc.toFixed(1)+'/5', txtX, cardY + cardH/2 + lineH*0.38);
+    } else {
+      ctx.font = `${Math.max(7,fontSize-1)}px 'DM Mono',monospace`;
+      ctx.fillStyle = day?'rgba(120,140,160,0.6)':'rgba(80,110,130,0.6)';
+      ctx.fillText('sin datos', txtX, cardY + cardH/2 + lineH*0.38);
     }
+
+    // Connector line from card bottom to building top
+    ctx.strokeStyle = `rgba(${r},${g},${gr},0.25)`;
+    ctx.lineWidth = 1; ctx.setLineDash([2,3]);
+    ctx.beginPath();
+    ctx.moveTo(x, cardY + cardH);
+    ctx.lineTo(x, y - hPx);
+    ctx.stroke(); ctx.setLineDash([]);
   });
 
   // ── Critical alert flash (screen edge) ──────────────────────────
