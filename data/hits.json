@@ -1,6 +1,298 @@
 {
   "hits": [
     {
+      "id": "5070811b4340",
+      "title": "Sala Segunda. Sentencia 187/2025, de 15 de diciembre de 2025. Recurso de amparo 285-2023. Promovido por don Nikita Bakutin en relación con las resoluciones dictadas por las salas de lo contencioso-administrativo del Tribunal Supremo y del Tribunal Superior de Justicia de Cataluña y un juzgado de lo contencioso-administrativo de Barcelona, que desestimaron su impugnación de la resolución administrativa sancionadora que decretó su expulsión del territorio nacional. Vulneración de los derechos a la tutela judicial efectiva y a la legalidad sancionadora: aplicación irrazonable de la norma sancionadora que, anteponiendo la expulsión a la multa, infringió la garantía material del derecho (STC 47/2023).",
+      "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-1753",
+      "source": "BOE - Tribunal Constitucional",
+      "raw_date": "Sat, 24 Jan 2026 00:00:00 +0100",
+      "fetched_at": "2026-03-02T07:16:18.276879+00:00",
+      "level": "warning",
+      "relevance_score": 65,
+      "risks": [
+        "Vulneración de derechos fundamentales",
+        "Inconsistencia en la aplicación de sanciones administrativas"
+      ],
+      "norms_affected": [
+        "Constitución Española (art. 24 y 25)",
+        "Ley 39/2015 de Procedimiento Administrativo Común"
+      ],
+      "summary": "El Tribunal Constitucional anula una resolución administrativa que impuso una sanción de expulsión del territorio nacional, considerando que vulneró los derechos a la tutela judicial efectiva y a la legalidad sancionadora al anteponer la expulsión a la multa sin justificación suficiente.",
+      "vulnerability": "Falta de criterios claros y proporcionales en la aplicación de sanciones administrativas, especialmente en casos que afectan a derechos fundamentales.",
+      "financial_impact": "Multa estimada entre 50.000€ y 500.000€ para empresas que apliquen sanciones administrativas sin seguir los principios de proporcionalidad y legalidad.",
+      "recommended_action": "Revisar los protocolos de aplicación de sanciones administrativas para garantizar que sean proporcionales y respeten los derechos fundamentales, así como actualizar los manuales de compliance con la jurisprudencia del Tribunal Constitucional."
+    },
+    {
+      "id": "37e9f922a307",
+      "title": "Las búsquedas de Google podrían cambiar para siempre para evitar multas en Europa",
+      "link": "https://www.adslzone.net/noticias/internet/busquedas-google-cambian-multas-europa/",
+      "source": "NewsAPI-Q1 · Adslzone.net",
+      "raw_date": "2026-02-27T11:06:07Z",
+      "fetched_at": "2026-03-02T07:16:22.137521+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Multas por incumplimiento de normativa antimonopolio",
+        "Cambios regulatorios en el sector tecnológico",
+        "Pérdida de reputación corporativa"
+      ],
+      "norms_affected": [
+        "Reglamento General de Protección de Datos (RGPD)",
+        "Normativa de la Comisión Nacional de los Mercados y la Competencia (CNMC)",
+        "Reglamento General de Protección de Datos (RGPD)"
+      ],
+      "summary": "Google podría enfrentar multas significativas en Europa por incumplimiento de normativas antimonopolio. La empresa está considerando cambios en sus resultados de búsqueda para evitar sanciones. Esto afecta directamente a las empresas españolas que dependen de Google para su visibilidad en línea.",
+      "vulnerability": "Falta de un programa de compliance robusto que asegure el cumplimiento de las normativas antimonopolio y de protección de datos en todas las operaciones de la empresa.",
+      "financial_impact": "Multas que podrían superar los 500.000€ para empresas españolas medianas que no cumplan con las normativas antimonopolio y de protección de datos.",
+      "recommended_action": "Implementar un programa de compliance específico para el cumplimiento de las normativas antimonopolio y de protección de datos, incluyendo auditorías internas y capacitación continua para los empleados."
+    },
+    {
+      "id": "75006a0071db",
+      "title": "La CNMC acusa a Apple y Amazon de incumplir la sanción por cláusulas anticompetitivas",
+      "link": "https://www.actualidadiphone.com/la-cnmc-acusa-a-apple-y-amazon-de-incumplir-la-sancion-por-clausulas-anticompetitivas/",
+      "source": "NewsAPI-Q1 · Actualidadiphone.com",
+      "raw_date": "2026-02-26T08:03:47Z",
+      "fetched_at": "2026-03-02T07:16:25.001124+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Multa por incumplimiento de sanción",
+        "Expediente sancionador abierto",
+        "Daño reputacional"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 2019/1150"
+      ],
+      "summary": "La CNMC acusa a Apple y Amazon de no cumplir con la sanción de 2023 por cláusulas anticompetitivas, abriendo la puerta a un nuevo expediente. Esto puede resultar en multas adicionales y daño reputacional.",
+      "vulnerability": "Falta de supervisión efectiva del cumplimiento de sanciones regulatorias",
+      "financial_impact": "Multa estimada entre 50K€ y 500K€ para empresas españolas en situación similar",
+      "recommended_action": "Revisar y fortalecer los procesos de cumplimiento de sanciones regulatorias y realizar auditorías periódicas"
+    },
+    {
+      "id": "dc304a308083",
+      "title": "Vox cuestiona el discurso de Page sobre corrupción tras la imputación de la exconsejera Charo Arévalo",
+      "link": "https://www.abc.es/espana/castilla-la-mancha/vox-cuestiona-discurso-page-sobre-corrupcion-tras-20260227171109-nt.html",
+      "source": "NewsAPI-Q2 · Www.abc.es",
+      "raw_date": "2026-02-27T16:11:14Z",
+      "fetched_at": "2026-03-02T07:16:31.369936+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Daño reputacional",
+        "Posibles sanciones por incumplimiento de normativas anticorrupción"
+      ],
+      "norms_affected": [
+        "ISO 37001",
+        "Ley 19/2013 de transparencia, acceso a la información pública y buen gobierno"
+      ],
+      "summary": "Vox cuestiona el discurso del presidente de Castilla-La Mancha sobre la lucha contra la corrupción tras la imputación de una exconsejera por presunto amaño de contratos.",
+      "vulnerability": "Falta de controles efectivos en la adjudicación de contratos públicos y en la prevención de conflictos de interés.",
+      "financial_impact": "Multa entre 50K€ y 500K€ por incumplimiento de normativas anticorrupción y de transparencia.",
+      "recommended_action": "Revisar y fortalecer los protocolos de adjudicación de contratos y prevención de conflictos de interés, asegurando la transparencia y el cumplimiento normativo."
+    },
+    {
+      "id": "0b11810f1577",
+      "title": "Vocento sale de pérdidas y reformula las cuentas de 2024 tras detectar un fraude interno de casi seis millones de euros",
+      "link": "https://www.libertaddigital.com/libremercado/2026-02-27/vocento-sale-de-perdidas-y-reformula-las-cuentas-de-2024-tras-detectar-un-fraude-interno-de-casi-seis-millones-de-euros-7366399/",
+      "source": "NewsAPI-Q2 · Libertaddigital.com",
+      "raw_date": "2026-02-27T15:45:10Z",
+      "fetched_at": "2026-03-02T07:16:35.029335+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Fraude interno",
+        "Falsedad contable",
+        "Daño reputacional"
+      ],
+      "norms_affected": [
+        "Código Penal (Art. 257-261)",
+        "Ley de Sociedades de Capital (Art. 347-351)",
+        "ISO 37001"
+      ],
+      "summary": "Vocento detectó un fraude interno de casi seis millones de euros, lo que obligó a reformular las cuentas de 2024. La deuda financiera neta se redujo un 72%, pero el fraude afecta la integridad financiera y la confianza en los informes contables.",
+      "vulnerability": "Falta de controles internos efectivos para prevenir y detectar fraudes financieros.",
+      "financial_impact": "Pérdida de confianza en los mercados, posibles sanciones regulatorias y costes legales que podrían ascender a cientos de miles de euros.",
+      "recommended_action": "Implementar un sistema de gestión anticorrupción conforme a la ISO 37001 y realizar una auditoría interna exhaustiva para identificar y corregir vulnerabilidades en los controles financieros."
+    },
+    {
+      "id": "3ef4e948a4df",
+      "title": "El PP llamará a declarar al Senado a Montero por la SEPI y Pardo de Vera tras el informe de la UCO",
+      "link": "https://www.abc.es/espana/pp-llamara-declarar-senado-montero-sepi-pardo-20260227134022-nt.html",
+      "source": "NewsAPI-Q2 · Www.abc.es",
+      "raw_date": "2026-02-27T12:40:29Z",
+      "fetched_at": "2026-03-02T07:16:39.838915+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Riesgo reputacional",
+        "Riesgo legal y regulatorio"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Código Penal español"
+      ],
+      "summary": "El PP convoca a declarar a la ministra de Hacienda por presuntos casos de corrupción en la SEPI, lo que podría afectar a la reputación y cumplimiento normativo del gobierno.",
+      "vulnerability": "Falta de controles internos efectivos en la gestión de empresas públicas y prevención de conflictos de interés.",
+      "financial_impact": "Multas potenciales entre 50K€ y 500K€, además de costes legales y pérdida de confianza inversora.",
+      "recommended_action": "Revisar y fortalecer los protocolos de prevención de corrupción y conflictos de interés en entidades públicas, asegurando transparencia y auditorías independientes."
+    },
+    {
+      "id": "aa0b9d23c963",
+      "title": "Ibai Llanos, investigado por la CNMC tras un descuido publicitario con Coca-Cola",
+      "link": "https://es.gizmodo.com/ibai-llanos-investigado-por-la-cnmc-tras-un-descuido-publicitario-con-coca-cola-2000223322",
+      "source": "NewsAPI-Q2 · Gizmodo.com",
+      "raw_date": "2026-02-27T12:15:34Z",
+      "fetched_at": "2026-03-02T07:16:43.320490+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Publicidad encubierta",
+        "Incumplimiento de normativa de competencia"
+      ],
+      "norms_affected": [
+        "Ley 34/2002 de Servicios de la Sociedad de la Información y de Comercio Electrónico",
+        "Ley 15/2007 de Defensa de la Competencia"
+      ],
+      "summary": "Ibai Llanos está siendo investigado por la CNMC por posible publicidad encubierta con Coca-Cola, lo que podría afectar a su reputación y a la de sus patrocinadores.",
+      "vulnerability": "Falta de transparencia en colaboraciones publicitarias y ausencia de protocolos de compliance en marketing de influencers.",
+      "financial_impact": "Multa estimada entre 50.000€ y 500.000€ para el streamer y sus colaboradores.",
+      "recommended_action": "Revisar y actualizar políticas de publicidad encubierta, implementar formación en compliance para influencers y colaboradores, y auditar todas las campañas publicitarias recientes."
+    },
+    {
+      "id": "ad15365c1562",
+      "title": "El PP abre una nueva comisión de investigación en el Senado sobre la corrupción en la SEPI y cita a la vicepresidenta Montero",
+      "link": "https://www.elespanol.com/espana/politica/20260227/pp-abre-nueva-comision-investigacion-senado-corrupcion-sepi-cita-vicepresidenta-montero/1003744148769_0.html",
+      "source": "NewsAPI-Q2 · Elespanol.com",
+      "raw_date": "2026-02-27T12:08:58Z",
+      "fetched_at": "2026-03-02T07:16:47.652813+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Daño reputacional",
+        "Posibles sanciones regulatorias",
+        "Impacto en la confianza de los inversores"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "ISO 37001:2016 Sistemas de gestión anticorrupción",
+        "Código Penal español (artículos relacionados con corrupción)"
+      ],
+      "summary": "El PP abre una nueva comisión de investigación en el Senado sobre corrupción en la SEPI, citando a la vicepresidenta Montero y a la expresidenta de Adif. Plus Ultra prescindió y volvió a fichar a un directivo vinculado a una investigación judicial.",
+      "vulnerability": "Falta de controles efectivos en la selección y contratación de altos cargos, así como en la gestión de conflictos de interés.",
+      "financial_impact": "Entre 50.000€ y 500.000€ en multas y costes legales para empresas españolas medias involucradas en casos similares.",
+      "recommended_action": "Revisar y fortalecer los protocolos de compliance en la selección de personal y gestión de conflictos de interés, asegurando la independencia y transparencia en los procesos de contratación."
+    },
+    {
+      "id": "667330ad2c77",
+      "title": "Una cámara instalada en la cafetería del Hospital de Bellvitge pone en alerta a los trabajadores: “Nos sentimos controlados”",
+      "link": "https://www.eldiario.es/catalunya/camara-instalada-cafeteria-hospital-bellvitge-pone-alerta-trabajadores-sentimos-controlados_1_13017723.html",
+      "source": "NewsAPI-Q5 · Eldiario.es",
+      "raw_date": "2026-02-26T21:13:09Z",
+      "fetched_at": "2026-03-02T07:16:55.908172+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Vigilancia no autorizada de trabajadores",
+        "Incumplimiento de normativa de protección de datos"
+      ],
+      "norms_affected": [
+        "RGPD",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales"
+      ],
+      "summary": "La instalación de una cámara en la cafetería del Hospital de Bellvitge sin consentimiento de los trabajadores ha generado alerta y un expediente sancionador por parte de la Autoridad Catalana de Protección de Datos, con una multa de hasta 20.000 euros.",
+      "vulnerability": "Falta de evaluación de impacto y consentimiento previo para la instalación de dispositivos de vigilancia en áreas comunes de trabajadores.",
+      "financial_impact": "Multa de hasta 20.000 euros para una empresa española media.",
+      "recommended_action": "Realizar una auditoría de cumplimiento de normativa de protección de datos y obtener el consentimiento explícito de los trabajadores para la instalación de dispositivos de vigilancia."
+    },
+    {
+      "id": "f6108832ad27",
+      "title": "El Tribunal Supremo rechaza anular la condena a García Ortiz: el exfiscal general ya puede acudir al Constitucional",
+      "link": "https://www.elespanol.com/espana/tribunales/20260226/tribunal-supremo-rechaza-anular-condena-garcia-ortiz-exfiscal-general-puede-acudir-constitucional/1003744147061_0.html",
+      "source": "NewsAPI-Q5 · Elespanol.com",
+      "raw_date": "2026-02-26T12:59:24Z",
+      "fetched_at": "2026-03-02T07:16:59.259470+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Riesgo reputacional",
+        "Riesgo legal"
+      ],
+      "norms_affected": [
+        "Código Penal español",
+        "Ley de Enjuiciamiento Criminal"
+      ],
+      "summary": "El Tribunal Supremo confirma la condena al exfiscal general García Ortiz, descartando vulneración de derechos fundamentales. La pareja de Ayuso utiliza este caso para defenderse en un fraude fiscal.",
+      "vulnerability": "Falta de protocolos de compliance para prevenir y gestionar riesgos legales y reputacionales en casos de alto perfil.",
+      "financial_impact": "Multas y costes legales pueden superar los 200.000€ para empresas relacionadas.",
+      "recommended_action": "Revisar y actualizar los protocolos de compliance para garantizar la protección de derechos fundamentales y la transparencia en procesos legales."
+    },
+    {
+      "id": "c7eb7f894e23",
+      "title": "Reino Unido multa a Reddit con casi $20 millones por uso de datos de menores",
+      "link": "https://www.nacion.com/economia/reino-unido-multa-a-reddit-con-casi-20-millones/J5Q2VWPZIRCHDDMHK73IXKCM74/story/",
+      "source": "NewsAPI-Q5 · Nacion.com",
+      "raw_date": "2026-02-24T18:21:40Z",
+      "fetched_at": "2026-03-02T07:17:03.383198+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Exposición de menores a contenidos inapropiados",
+        "Fallo en verificación de edad"
+      ],
+      "norms_affected": [
+        "RGPD"
+      ],
+      "summary": "El regulador británico multó a Reddit por fallos en la verificación de edad, exponiendo a menores a contenidos inapropiados. La multa asciende a casi 20 millones de dólares.",
+      "vulnerability": "Falta de controles robustos de verificación de edad y protección de datos de menores",
+      "financial_impact": "Multa de hasta 500.000€ para una empresa española media",
+      "recommended_action": "Implementar sistemas de verificación de edad robustos y auditorías periódicas de protección de datos de menores"
+    },
+    {
+      "id": "c354db83ab85",
+      "title": "El Reino Unido multa a Reddit con 14,5 millones de libras por tratar indebidamente los datos de menores [eng]",
+      "link": "https://www.meneame.net/m/actualidad/reino-unido-multa-reddit-14-5-millones-libras-tratar-datos-eng",
+      "source": "NewsAPI-Q5 · Meneame.net",
+      "raw_date": "2026-02-24T18:04:59Z",
+      "fetched_at": "2026-03-02T07:17:06.700497+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Tratamiento ilícito de datos de menores",
+        "Posible sanción similar en España"
+      ],
+      "norms_affected": [
+        "RGPD",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales"
+      ],
+      "summary": "Reddit multada en Reino Unido por no obtener consentimiento paterno para tratar datos de menores. La normativa española exige requisitos similares.",
+      "vulnerability": "Falta de controles para verificar la edad y consentimiento paterno en el tratamiento de datos de menores.",
+      "financial_impact": "Multa estimada entre 15-50 millones de euros en caso de incumplimiento similar en España.",
+      "recommended_action": "Revisar y actualizar políticas de tratamiento de datos de menores, implementando verificaciones de edad y consentimiento paterno."
+    },
+    {
+      "id": "9398892e8caf",
+      "title": "Golpe financiero al chavismo: Suiza congela fortuna de 880mdd a Nicolás Maduro y su entorno",
+      "link": "https://www.tribuna.com.mx/mundo/2026/2/23/golpe-financiero-al-chavismo-suiza-congela-fortuna-de-880mdd-nicolas-maduro-su-entorno-430354.html",
+      "source": "NewsAPI-Q5 · Tribuna.com.mx",
+      "raw_date": "2026-02-23T12:00:00Z",
+      "fetched_at": "2026-03-02T07:17:11.404564+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Sanciones internacionales",
+        "Blanqueo de capitales"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Reglamento UE 2021/821"
+      ],
+      "summary": "Suiza congela 880 millones de dólares vinculados a Nicolás Maduro y su entorno por sospechas de blanqueo de capitales. La medida se basa en legislaciones internacionales contra el blanqueo y busca evitar la transferencia de estos fondos.",
+      "vulnerability": "Falta de diligencia debida en transacciones internacionales y controles de origen de fondos.",
+      "financial_impact": "Multas de hasta 500.000€ por incumplimiento de normativa de prevención de blanqueo en empresas españolas.",
+      "recommended_action": "Revisar y actualizar los protocolos de diligencia debida y controles de origen de fondos en transacciones internacionales."
+    },
+    {
       "id": "d4d9ed490a75",
       "title": "Aquel investigado 12-0 del Barcelona B al Eldense no se considera corrupción deportiva",
       "link": "https://www.marca.com/futbol/opinion/2026/02/26/investigado-12-0-barcelona-b-eldense-considera-corrupcion-deportiva.html",
@@ -651,12 +943,13 @@
     }
   ],
   "stats": {
-    "total_hits": 29,
-    "critical_count": 11,
-    "warning_count": 18,
+    "total_hits": 42,
+    "critical_count": 12,
+    "warning_count": 30,
     "info_count": 0,
-    "new_this_run": 0,
-    "articles_checked": 3,
+    "new_this_run": 13,
+    "articles_checked": 18,
+    "seen_ids_total": 47,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -675,5 +968,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-02T07:03:26.412536+00:00"
+  "last_updated": "2026-03-02T07:17:14.658098+00:00"
 }
