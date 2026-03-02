@@ -998,6 +998,211 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   </div>
 </div>
 
+
+<!-- MODAL CONTROL -->
+<div class="overlay" id="modal-ctrl">
+  <div class="modal modal-lg">
+    <div class="modal-title" id="ctrl-modal-title">Control de Compliance</div>
+    <button class="modal-x" onclick="closeModal('modal-ctrl')">✕</button>
+    <div class="g2">
+      <div>
+        <div class="fg"><label class="fl">ID *</label><input type="text" class="fi" id="ctrl-id" placeholder="C-001"></div>
+        <div class="fg"><label class="fl">Título *</label><input type="text" class="fi" id="ctrl-title" placeholder="Revisión contratos proveedores..."></div>
+        <div class="fg"><label class="fl">Descripción</label><textarea class="fi" id="ctrl-desc" rows="3" placeholder="Descripción detallada del control..."></textarea></div>
+        <div class="g2">
+          <div class="fg"><label class="fl">Responsable *</label><input type="text" class="fi" id="ctrl-owner" placeholder="CCO / Dpto. Legal"></div>
+          <div class="fg"><label class="fl">Estado</label>
+            <select class="fi" id="ctrl-status"><option>Activo</option><option>Inactivo</option><option>En revisión</option></select>
+          </div>
+        </div>
+        <div class="fg"><label class="fl">Riesgo asociado *</label><input type="text" class="fi" id="ctrl-risk" placeholder="Riesgo de terceros / Due diligence..."></div>
+        <div class="fg"><label class="fl">Evidencia requerida</label><textarea class="fi" id="ctrl-evidence" rows="2" placeholder="Qué documentos o registros prueban la ejecución..."></textarea></div>
+        <div class="fg"><label class="fl">Comentarios</label><textarea class="fi" id="ctrl-comments" rows="2" placeholder="Notas adicionales..."></textarea></div>
+      </div>
+      <div>
+        <div class="g2">
+          <div class="fg"><label class="fl">Frecuencia *</label>
+            <select class="fi" id="ctrl-freq">
+              <option>diario</option><option>semanal</option><option>mensual</option>
+              <option>trimestral</option><option>semestral</option><option>anual</option><option>ad-hoc</option>
+            </select>
+          </div>
+          <div class="fg"><label class="fl">Naturaleza *</label>
+            <select class="fi" id="ctrl-nature"><option>Preventivo</option><option>Detectivo</option></select>
+          </div>
+        </div>
+        <div class="fg"><label class="fl">Tipo *</label>
+          <select class="fi" id="ctrl-type"><option>Manual</option><option>Automático</option></select>
+        </div>
+        <div class="fg"><label class="fl">Elementos ISO 37301 vinculados</label>
+          <div id="ctrl-iso-checks" style="display:flex;flex-direction:column;gap:4px;max-height:180px;overflow-y:auto;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:8px"></div>
+          <div class="fhint">Selección múltiple — vinculado automáticamente por IA al guardar</div>
+        </div>
+        <div class="divider"></div>
+        <div class="fg">
+          <label class="fl">Ejecutado</label>
+          <div class="flex ic gap12">
+            <label class="flex ic gap6" style="cursor:pointer;font-size:11px"><input type="radio" name="ctrl-exec" value="Sí" id="ctrl-exec-yes"> Sí</label>
+            <label class="flex ic gap6" style="cursor:pointer;font-size:11px"><input type="radio" name="ctrl-exec" value="No" id="ctrl-exec-no" checked> No</label>
+          </div>
+        </div>
+        <div class="fg"><label class="fl">Fecha última ejecución</label><input type="date" class="fi" id="ctrl-exec-date"></div>
+        <div class="divider"></div>
+        <div id="ctrl-exec-history-wrap">
+          <div class="fl mb8">Historial de ejecuciones</div>
+          <div id="ctrl-exec-history"></div>
+          <div class="flex gap6 mt6">
+            <input type="date" class="fi" id="new-exec-date" style="flex:1">
+            <input type="text" class="fi" id="new-exec-by" placeholder="Ejecutado por" style="flex:1">
+            <select class="fi" id="new-exec-result" style="width:100px"><option>OK</option><option>Con observaciones</option><option>Fallido</option></select>
+            <button class="btn btn-ghost btn-xs" onclick="addExecRecord()">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap8 mt14" style="justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('modal-ctrl')">Cancelar</button>
+      <button class="btn btn-danger btn-xs" id="ctrl-delete-btn" style="display:none" onclick="deleteControl()">Eliminar</button>
+      <button class="btn btn-purple btn-sm" onclick="suggestIsoLinks()">✦ Sugerir vínculos ISO</button>
+      <button class="btn btn-primary" onclick="saveControl()">Guardar control</button>
+    </div>
+    <div id="ctrl-modal-alert" style="margin-top:8px"></div>
+  </div>
+</div>
+
+<!-- MODAL SENTENCIA -->
+<div class="overlay" id="modal-sent">
+  <div class="modal modal-lg">
+    <div class="modal-title" id="sent-modal-title">Nueva Sentencia / Jurisprudencia</div>
+    <button class="modal-x" onclick="closeModal('modal-sent')">✕</button>
+    <div class="g2">
+      <div>
+        <div class="fg"><label class="fl">Referencia ECLI / Número</label><input type="text" class="fi" id="sent-ref" placeholder="ECLI:ES:TS:2024:1234"></div>
+        <div class="fg"><label class="fl">Tribunal</label><input type="text" class="fi" id="sent-court" placeholder="Tribunal Supremo — Sala de lo Penal"></div>
+        <div class="g2">
+          <div class="fg"><label class="fl">Fecha</label><input type="date" class="fi" id="sent-date"></div>
+          <div class="fg"><label class="fl">Sala / Materia</label>
+            <select class="fi" id="sent-sala">
+              <option>Civil</option><option>Penal</option><option>Contencioso-Administrativo</option>
+              <option>Social</option><option>Mercantil</option><option>Otro</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg"><label class="fl">Partes (demandante vs. demandado)</label><input type="text" class="fi" id="sent-parties" placeholder="Ministerio Fiscal vs. Empresa X"></div>
+        <div class="fg"><label class="fl">Texto / Resumen de la sentencia *</label>
+          <textarea class="fi" id="sent-text" rows="10" placeholder="Pega aquí el texto de la sentencia o su resumen. La IA lo analizará para extraer implicaciones de compliance..."></textarea>
+        </div>
+      </div>
+      <div>
+        <div class="fg"><label class="fl">Análisis IA</label></div>
+        <div id="sent-analysis-box" style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:12px;min-height:200px;font-size:10.5px;color:var(--text-muted);line-height:1.7">
+          Haz clic en "Analizar con IA" para obtener el análisis de compliance.
+        </div>
+        <button class="btn btn-purple btn-sm mt10" style="width:100%" onclick="analyzeSentencia()" id="sent-analyze-btn">✦ Analizar con IA</button>
+        <div id="sent-analysis-fields" style="display:none;margin-top:12px">
+          <div class="fg"><label class="fl">Nivel de impacto (IA)</label>
+            <select class="fi" id="sent-impact"><option value="critical">Alto — Crítico</option><option value="warning">Medio — Alerta</option><option value="info">Bajo — Informativo</option></select>
+          </div>
+          <div class="fg"><label class="fl">Resumen ejecutivo (editable)</label>
+            <textarea class="fi" id="sent-summary" rows="3"></textarea>
+          </div>
+          <div class="fg"><label class="fl">Implicaciones para empresas españolas</label>
+            <textarea class="fi" id="sent-implications" rows="3"></textarea>
+          </div>
+          <div class="fg"><label class="fl">Propuesta de control sugerida</label>
+            <textarea class="fi" id="sent-ctrl-proposal" rows="2" placeholder="Control propuesto para mitigar el riesgo identificado..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="sent-alert"></div>
+    <div class="flex gap8 mt14" style="justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('modal-sent')">Cancelar</button>
+      <button class="btn btn-primary" id="sent-publish-btn" onclick="publishSentencia()" style="display:none">Publicar al feed →</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL IMPORT CONTROLES -->
+<div class="overlay" id="modal-import">
+  <div class="modal" style="max-width:900px;width:95vw">
+    <div class="modal-title">Importar Controles — Revisión previa</div>
+    <button class="modal-x" onclick="closeModal('modal-import')">✕</button>
+    
+    <div id="import-step1">
+      <!-- Column mapping -->
+      <div class="card mb10" style="padding:10px 14px" id="import-col-map-wrap">
+        <div class="fl mb8">Mapeo de columnas detectado <span style="color:var(--text-muted);font-size:9px">— ajusta si es necesario</span></div>
+        <div id="import-col-map" class="g2" style="font-size:10px"></div>
+      </div>
+
+      <!-- Stats -->
+      <div class="flex ic gap14 mb10" style="font-size:10.5px">
+        <span id="import-stat-total" style="color:var(--text-dim)"></span>
+        <span id="import-stat-new" style="color:var(--accent)"></span>
+        <span id="import-stat-dup" style="color:var(--warn)"></span>
+        <span id="import-stat-error" style="color:var(--danger)"></span>
+        <div style="margin-left:auto;display:flex;gap:8px">
+          <button class="btn btn-ghost btn-xs" onclick="importSelectAll(true)">✓ Seleccionar todos los nuevos</button>
+          <button class="btn btn-ghost btn-xs" onclick="importSelectAll(false)">✗ Deseleccionar todos</button>
+        </div>
+      </div>
+
+      <!-- Preview table -->
+      <div style="overflow-x:auto;max-height:420px;border:1px solid var(--border);border-radius:5px">
+        <table class="ctrl-table" id="import-preview-table">
+          <thead>
+            <tr>
+              <th style="width:32px"><input type="checkbox" id="import-check-all" onchange="importToggleAll(this.checked)"></th>
+              <th>Estado</th><th>ID</th><th>Título</th><th>Responsable</th>
+              <th>Naturaleza</th><th>Frecuencia</th><th>Riesgo</th><th>Duplicado de</th>
+            </tr>
+          </thead>
+          <tbody id="import-preview-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="import-alert" style="margin-top:10px"></div>
+    <div class="flex gap8 mt14" style="justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('modal-import')">Cancelar</button>
+      <button class="btn btn-primary" onclick="confirmImport()" id="import-confirm-btn">Importar seleccionados →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Deepdive Drawer ──────────────────────────────────────── -->
+<div class="drawer-overlay" id="dd-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="dd-drawer">
+  <div class="drawer-head">
+    <div style="flex:1">
+      <div id="dd-hit-title" style="font-size:13px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:6px"></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <span id="dd-inh-pill" class="tag"></span>
+        <span style="color:var(--text-muted);font-size:10px">→</span>
+        <span id="dd-res-pill" class="tag"></span>
+        <span id="dd-date-meta" class="dd-meta"></span>
+      </div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body" id="dd-body">
+    <div class="empty" style="padding:40px 0">
+      <div class="empty-icon">✦</div>
+      <div class="empty-title">Cargando análisis...</div>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost btn-sm" id="dd-export-btn" onclick="exportDeepDiveWord()" style="display:none">⬇ Exportar Word</button>
+    <span id="dd-analyzed-at" style="font-size:9px;color:var(--text-muted);margin-left:auto"></span>
+  </div>
+</div>
+
+
+// ═══════════════════════════════════════════════════════════════
+// HISTORIAL MADUREZ
+// ═══════════════════════════════════════════════════════════════
+
 <script>
 let hitFunnel = 'all'; // declared at top to avoid TDZ in renderHits
 const PC_PROXY = '/api/pinecone'; // declared here to avoid TDZ
@@ -1549,7 +1754,7 @@ function drawCocBuilding(){
   }
 
   // Scanlines subtle
-  ctx.fillStyle='rgba(0,229,160,0.004)';
+  ctx.fillStyle='rgba(0,229,160,0.012)';
   for(let y=0;y<H;y+=4){ ctx.fillRect(0,y,W,1); }
 
   // Ground
@@ -1560,7 +1765,7 @@ function drawCocBuilding(){
   ctx.beginPath();ctx.moveTo(0,H*0.78);ctx.lineTo(W,H*0.78);ctx.stroke();
 
   // Distant city silhouette
-  ctx.fillStyle='rgba(10,20,30,0.8)';
+  ctx.fillStyle='rgba(15,30,45,0.85)';
   const bgs = [0.04,0.06,0.04,0.07,0.05,0.08,0.06,0.05,0.04,0.07,0.06,0.08,0.05,0.07,0.04,0.06];
   let bx=0;
   for(let i=0;i<bgs.length;i++){
@@ -1584,9 +1789,9 @@ function drawCocBuilding(){
 
   // Building main body
   const bGrad = ctx.createLinearGradient(bX,0,bX+bW,0);
-  bGrad.addColorStop(0,'#0d1820');
-  bGrad.addColorStop(0.5,'#111f2a');
-  bGrad.addColorStop(1,'#0a1520');
+  bGrad.addColorStop(0,'#132030');
+  bGrad.addColorStop(0.5,'#1a2e3d');
+  bGrad.addColorStop(1,'#102535');
   ctx.fillStyle=bGrad;
   ctx.fillRect(bX, bY, bW, bH);
 
@@ -1613,7 +1818,7 @@ function drawCocBuilding(){
     }
 
     // Floor health color
-    const fCol = sc>=4?'rgba(0,229,160,0.18)':sc>=3?'rgba(234,179,8,0.15)':sc>=2?'rgba(245,158,11,0.18)':sc>0?'rgba(239,68,68,0.2)':'rgba(30,50,65,0.3)';
+    const fCol = sc>=4?'rgba(0,229,160,0.32)':sc>=3?'rgba(234,179,8,0.28)':sc>=2?'rgba(245,158,11,0.30)':sc>0?'rgba(239,68,68,0.30)':'rgba(40,65,85,0.5)';
     ctx.fillStyle=fCol;
     ctx.fillRect(bX+1,fy+1,bW-2,floorH-1);
 
@@ -1628,10 +1833,10 @@ function drawCocBuilding(){
       const winCol = sc>=4?'rgba(0,229,160,':sc>=3?'rgba(234,179,8,':sc>=2?'rgba(245,158,11,':sc>0?'rgba(239,68,68,':'rgba(20,40,55,';
       // Window glow bg
       if(winOn && sc>0){
-        ctx.fillStyle=winCol+'0.06)';
+        ctx.fillStyle=winCol+'0.15)';
         ctx.fillRect(wx-4,wy-4,winW+8,winH+8);
       }
-      ctx.fillStyle=winOn?(winCol+'0.9)'):'rgba(8,18,26,0.9)';
+      ctx.fillStyle=winOn?(winCol+'0.9)'):'rgba(15,30,45,0.9)';
       ctx.fillRect(wx,wy,winW,winH);
       if(winOn){
         ctx.strokeStyle=winCol+'0.5)';
@@ -1641,7 +1846,7 @@ function drawCocBuilding(){
     }
 
     // Floor label (right side)
-    ctx.fillStyle=sc>0?'rgba(220,232,240,0.5)':'rgba(100,140,160,0.3)';
+    ctx.fillStyle=sc>0?'rgba(220,232,240,0.85)':'rgba(100,140,160,0.4)';
     ctx.font=`${Math.max(8,floorH*0.22)}px DM Mono,monospace`;
     ctx.textAlign='right';
     ctx.textBaseline='middle';
@@ -1725,8 +1930,8 @@ function drawCocBuilding(){
     const wCols=Math.floor(s.w/12);
     for(let r=0;r<wRows;r++){
       for(let c=0;c<wCols;c++){
-        if(Math.abs(Math.sin(s.x+r*13+c*7))<0.35){
-          ctx.fillStyle='rgba(0,229,160,0.15)';
+        if(Math.abs(Math.sin(s.x+r*13+c*7))<0.45){
+          ctx.fillStyle='rgba(0,229,160,0.25)';
           ctx.fillRect(s.x+4+c*11,sy+5+r*13,7,6);
         }
       }
@@ -1740,6 +1945,7 @@ function drawCocBuilding(){
     const sc=scores[f]||0;
     const fy=bY+f*floorH+floorH/2;
     const col=sc>=4?'rgba(0,229,160,0.6)':sc>=3?'rgba(234,179,8,0.6)':sc>=2?'rgba(245,158,11,0.6)':sc>0?'rgba(239,68,68,0.6)':'rgba(60,90,110,0.4)';
+    ctx.globalAlpha=0.9;
     ctx.fillStyle=col;
     ctx.fillText(DIMS[f].icon, bX-8, fy);
   }
@@ -3156,213 +3362,8 @@ function renderBriefPlaceholder(){
 
 
 
-</script>
 
-<!-- MODAL CONTROL -->
-<div class="overlay" id="modal-ctrl">
-  <div class="modal modal-lg">
-    <div class="modal-title" id="ctrl-modal-title">Control de Compliance</div>
-    <button class="modal-x" onclick="closeModal('modal-ctrl')">✕</button>
-    <div class="g2">
-      <div>
-        <div class="fg"><label class="fl">ID *</label><input type="text" class="fi" id="ctrl-id" placeholder="C-001"></div>
-        <div class="fg"><label class="fl">Título *</label><input type="text" class="fi" id="ctrl-title" placeholder="Revisión contratos proveedores..."></div>
-        <div class="fg"><label class="fl">Descripción</label><textarea class="fi" id="ctrl-desc" rows="3" placeholder="Descripción detallada del control..."></textarea></div>
-        <div class="g2">
-          <div class="fg"><label class="fl">Responsable *</label><input type="text" class="fi" id="ctrl-owner" placeholder="CCO / Dpto. Legal"></div>
-          <div class="fg"><label class="fl">Estado</label>
-            <select class="fi" id="ctrl-status"><option>Activo</option><option>Inactivo</option><option>En revisión</option></select>
-          </div>
-        </div>
-        <div class="fg"><label class="fl">Riesgo asociado *</label><input type="text" class="fi" id="ctrl-risk" placeholder="Riesgo de terceros / Due diligence..."></div>
-        <div class="fg"><label class="fl">Evidencia requerida</label><textarea class="fi" id="ctrl-evidence" rows="2" placeholder="Qué documentos o registros prueban la ejecución..."></textarea></div>
-        <div class="fg"><label class="fl">Comentarios</label><textarea class="fi" id="ctrl-comments" rows="2" placeholder="Notas adicionales..."></textarea></div>
-      </div>
-      <div>
-        <div class="g2">
-          <div class="fg"><label class="fl">Frecuencia *</label>
-            <select class="fi" id="ctrl-freq">
-              <option>diario</option><option>semanal</option><option>mensual</option>
-              <option>trimestral</option><option>semestral</option><option>anual</option><option>ad-hoc</option>
-            </select>
-          </div>
-          <div class="fg"><label class="fl">Naturaleza *</label>
-            <select class="fi" id="ctrl-nature"><option>Preventivo</option><option>Detectivo</option></select>
-          </div>
-        </div>
-        <div class="fg"><label class="fl">Tipo *</label>
-          <select class="fi" id="ctrl-type"><option>Manual</option><option>Automático</option></select>
-        </div>
-        <div class="fg"><label class="fl">Elementos ISO 37301 vinculados</label>
-          <div id="ctrl-iso-checks" style="display:flex;flex-direction:column;gap:4px;max-height:180px;overflow-y:auto;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:8px"></div>
-          <div class="fhint">Selección múltiple — vinculado automáticamente por IA al guardar</div>
-        </div>
-        <div class="divider"></div>
-        <div class="fg">
-          <label class="fl">Ejecutado</label>
-          <div class="flex ic gap12">
-            <label class="flex ic gap6" style="cursor:pointer;font-size:11px"><input type="radio" name="ctrl-exec" value="Sí" id="ctrl-exec-yes"> Sí</label>
-            <label class="flex ic gap6" style="cursor:pointer;font-size:11px"><input type="radio" name="ctrl-exec" value="No" id="ctrl-exec-no" checked> No</label>
-          </div>
-        </div>
-        <div class="fg"><label class="fl">Fecha última ejecución</label><input type="date" class="fi" id="ctrl-exec-date"></div>
-        <div class="divider"></div>
-        <div id="ctrl-exec-history-wrap">
-          <div class="fl mb8">Historial de ejecuciones</div>
-          <div id="ctrl-exec-history"></div>
-          <div class="flex gap6 mt6">
-            <input type="date" class="fi" id="new-exec-date" style="flex:1">
-            <input type="text" class="fi" id="new-exec-by" placeholder="Ejecutado por" style="flex:1">
-            <select class="fi" id="new-exec-result" style="width:100px"><option>OK</option><option>Con observaciones</option><option>Fallido</option></select>
-            <button class="btn btn-ghost btn-xs" onclick="addExecRecord()">+</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="flex gap8 mt14" style="justify-content:flex-end">
-      <button class="btn btn-ghost" onclick="closeModal('modal-ctrl')">Cancelar</button>
-      <button class="btn btn-danger btn-xs" id="ctrl-delete-btn" style="display:none" onclick="deleteControl()">Eliminar</button>
-      <button class="btn btn-purple btn-sm" onclick="suggestIsoLinks()">✦ Sugerir vínculos ISO</button>
-      <button class="btn btn-primary" onclick="saveControl()">Guardar control</button>
-    </div>
-    <div id="ctrl-modal-alert" style="margin-top:8px"></div>
-  </div>
-</div>
-
-<!-- MODAL SENTENCIA -->
-<div class="overlay" id="modal-sent">
-  <div class="modal modal-lg">
-    <div class="modal-title" id="sent-modal-title">Nueva Sentencia / Jurisprudencia</div>
-    <button class="modal-x" onclick="closeModal('modal-sent')">✕</button>
-    <div class="g2">
-      <div>
-        <div class="fg"><label class="fl">Referencia ECLI / Número</label><input type="text" class="fi" id="sent-ref" placeholder="ECLI:ES:TS:2024:1234"></div>
-        <div class="fg"><label class="fl">Tribunal</label><input type="text" class="fi" id="sent-court" placeholder="Tribunal Supremo — Sala de lo Penal"></div>
-        <div class="g2">
-          <div class="fg"><label class="fl">Fecha</label><input type="date" class="fi" id="sent-date"></div>
-          <div class="fg"><label class="fl">Sala / Materia</label>
-            <select class="fi" id="sent-sala">
-              <option>Civil</option><option>Penal</option><option>Contencioso-Administrativo</option>
-              <option>Social</option><option>Mercantil</option><option>Otro</option>
-            </select>
-          </div>
-        </div>
-        <div class="fg"><label class="fl">Partes (demandante vs. demandado)</label><input type="text" class="fi" id="sent-parties" placeholder="Ministerio Fiscal vs. Empresa X"></div>
-        <div class="fg"><label class="fl">Texto / Resumen de la sentencia *</label>
-          <textarea class="fi" id="sent-text" rows="10" placeholder="Pega aquí el texto de la sentencia o su resumen. La IA lo analizará para extraer implicaciones de compliance..."></textarea>
-        </div>
-      </div>
-      <div>
-        <div class="fg"><label class="fl">Análisis IA</label></div>
-        <div id="sent-analysis-box" style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:12px;min-height:200px;font-size:10.5px;color:var(--text-muted);line-height:1.7">
-          Haz clic en "Analizar con IA" para obtener el análisis de compliance.
-        </div>
-        <button class="btn btn-purple btn-sm mt10" style="width:100%" onclick="analyzeSentencia()" id="sent-analyze-btn">✦ Analizar con IA</button>
-        <div id="sent-analysis-fields" style="display:none;margin-top:12px">
-          <div class="fg"><label class="fl">Nivel de impacto (IA)</label>
-            <select class="fi" id="sent-impact"><option value="critical">Alto — Crítico</option><option value="warning">Medio — Alerta</option><option value="info">Bajo — Informativo</option></select>
-          </div>
-          <div class="fg"><label class="fl">Resumen ejecutivo (editable)</label>
-            <textarea class="fi" id="sent-summary" rows="3"></textarea>
-          </div>
-          <div class="fg"><label class="fl">Implicaciones para empresas españolas</label>
-            <textarea class="fi" id="sent-implications" rows="3"></textarea>
-          </div>
-          <div class="fg"><label class="fl">Propuesta de control sugerida</label>
-            <textarea class="fi" id="sent-ctrl-proposal" rows="2" placeholder="Control propuesto para mitigar el riesgo identificado..."></textarea>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="sent-alert"></div>
-    <div class="flex gap8 mt14" style="justify-content:flex-end">
-      <button class="btn btn-ghost" onclick="closeModal('modal-sent')">Cancelar</button>
-      <button class="btn btn-primary" id="sent-publish-btn" onclick="publishSentencia()" style="display:none">Publicar al feed →</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL IMPORT CONTROLES -->
-<div class="overlay" id="modal-import">
-  <div class="modal" style="max-width:900px;width:95vw">
-    <div class="modal-title">Importar Controles — Revisión previa</div>
-    <button class="modal-x" onclick="closeModal('modal-import')">✕</button>
-    
-    <div id="import-step1">
-      <!-- Column mapping -->
-      <div class="card mb10" style="padding:10px 14px" id="import-col-map-wrap">
-        <div class="fl mb8">Mapeo de columnas detectado <span style="color:var(--text-muted);font-size:9px">— ajusta si es necesario</span></div>
-        <div id="import-col-map" class="g2" style="font-size:10px"></div>
-      </div>
-
-      <!-- Stats -->
-      <div class="flex ic gap14 mb10" style="font-size:10.5px">
-        <span id="import-stat-total" style="color:var(--text-dim)"></span>
-        <span id="import-stat-new" style="color:var(--accent)"></span>
-        <span id="import-stat-dup" style="color:var(--warn)"></span>
-        <span id="import-stat-error" style="color:var(--danger)"></span>
-        <div style="margin-left:auto;display:flex;gap:8px">
-          <button class="btn btn-ghost btn-xs" onclick="importSelectAll(true)">✓ Seleccionar todos los nuevos</button>
-          <button class="btn btn-ghost btn-xs" onclick="importSelectAll(false)">✗ Deseleccionar todos</button>
-        </div>
-      </div>
-
-      <!-- Preview table -->
-      <div style="overflow-x:auto;max-height:420px;border:1px solid var(--border);border-radius:5px">
-        <table class="ctrl-table" id="import-preview-table">
-          <thead>
-            <tr>
-              <th style="width:32px"><input type="checkbox" id="import-check-all" onchange="importToggleAll(this.checked)"></th>
-              <th>Estado</th><th>ID</th><th>Título</th><th>Responsable</th>
-              <th>Naturaleza</th><th>Frecuencia</th><th>Riesgo</th><th>Duplicado de</th>
-            </tr>
-          </thead>
-          <tbody id="import-preview-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div id="import-alert" style="margin-top:10px"></div>
-    <div class="flex gap8 mt14" style="justify-content:flex-end">
-      <button class="btn btn-ghost" onclick="closeModal('modal-import')">Cancelar</button>
-      <button class="btn btn-primary" onclick="confirmImport()" id="import-confirm-btn">Importar seleccionados →</button>
-    </div>
-  </div>
-</div>
-
-<!-- ── Deepdive Drawer ──────────────────────────────────────── -->
-<div class="drawer-overlay" id="dd-overlay" onclick="closeDrawer()"></div>
-<div class="drawer" id="dd-drawer">
-  <div class="drawer-head">
-    <div style="flex:1">
-      <div id="dd-hit-title" style="font-size:13px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:6px"></div>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-        <span id="dd-inh-pill" class="tag"></span>
-        <span style="color:var(--text-muted);font-size:10px">→</span>
-        <span id="dd-res-pill" class="tag"></span>
-        <span id="dd-date-meta" class="dd-meta"></span>
-      </div>
-    </div>
-    <button class="drawer-close" onclick="closeDrawer()">✕</button>
-  </div>
-  <div class="drawer-body" id="dd-body">
-    <div class="empty" style="padding:40px 0">
-      <div class="empty-icon">✦</div>
-      <div class="empty-title">Cargando análisis...</div>
-    </div>
-  </div>
-  <div class="drawer-foot">
-    <button class="btn btn-ghost btn-sm" id="dd-export-btn" onclick="exportDeepDiveWord()" style="display:none">⬇ Exportar Word</button>
-    <span id="dd-analyzed-at" style="font-size:9px;color:var(--text-muted);margin-left:auto"></span>
-  </div>
-</div>
-
-
-// ═══════════════════════════════════════════════════════════════
-// HISTORIAL MADUREZ
-// ═══════════════════════════════════════════════════════════════
-
-<script>
+// ─── (continued from second script block) ───
 
 async function openHistory(){
   const history=await fsList('maturity_history','_created','desc');
@@ -3545,8 +3546,6 @@ setInterval(syncAll, 15*60*1000); // auto-sync cada 15 min
 // ═══════════════════════════════════════════════════════════════
 // CONTROLES DE COMPLIANCE
 // ═══════════════════════════════════════════════════════════════
-let currentCtrlId = null;
-let ctrlExecHistory = [];
 
 // Levenshtein distance for fuzzy duplicate detection
 function levenshtein(a, b){
@@ -3729,8 +3728,6 @@ async function saveControls(){
   showAlert('ctrl-alert',ok?`✓ ${S.controls.length} controles guardados`:'Error parcial','ok');
 }
 
-let ctrlSelectedIds = new Set();
-let ctrlFilteredList = [];
 
 function renderControls(){
   const search=(document.getElementById('ctrl-search')?.value||'').toLowerCase();
@@ -4071,8 +4068,6 @@ function exportControls(){
 // ═══════════════════════════════════════════════════════════════
 // SENTENCIAS / JURISPRUDENCIA
 // ═══════════════════════════════════════════════════════════════
-let currentSentId = null;
-let lastSentAnalysis = null;
 
 function openSentModal(id){
   currentSentId=id;
@@ -4725,7 +4720,6 @@ function buildTwinContext(){
 // ═══════════════════════════════════════════════════════════════
 // DEEPDIVE DRAWER
 // ═══════════════════════════════════════════════════════════════
-let ddCurrentHitId = null;
 
 function openDrawer(){
   document.getElementById('dd-overlay').classList.add('open');
