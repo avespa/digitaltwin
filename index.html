@@ -1000,7 +1000,16 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
 
 <script>
 let hitFunnel = 'all'; // declared at top to avoid TDZ in renderHits
-const PC_PROXY = '/api/pinecone'; // declared here to avoid TDZ — used in pcCall which is called from renderDashboard
+const PC_PROXY = '/api/pinecone'; // declared here to avoid TDZ
+let importPreviewRows = []; // TDZ-safe: declared in block 1, used across both script blocks
+let currentCtrlId = null;
+let ctrlExecHistory = [];
+let ctrlSelectedIds = new Set();
+let ctrlFilteredList = [];
+let currentSentId = null;
+let lastSentAnalysis = null;
+let ddCurrentHitId = null;
+
 // ═══════════════════════════════════════════════════════════════
 // FIREBASE INIT
 // ═══════════════════════════════════════════════════════════════
@@ -2045,7 +2054,6 @@ function setScore(elemId, score, dimId){
   renderMatScoresSummary();
   drawRadar('radar-mat', getDimScores());
   renderRadarLegend('radar-legend-mat', false);
-  drawRadar('radar-dash', getDimScores());
   // Auto-vectorize updated element
   if(pcKey()){
     const _elem = DIMS.flatMap(d=>d.elements).find(e=>e.id===elemId);
@@ -3145,8 +3153,10 @@ function renderBriefPlaceholder(){
   }
 }
 
-</script>
 
+
+
+</script>
 
 <!-- MODAL CONTROL -->
 <div class="overlay" id="modal-ctrl">
@@ -3346,15 +3356,14 @@ function renderBriefPlaceholder(){
     <span id="dd-analyzed-at" style="font-size:9px;color:var(--text-muted);margin-left:auto"></span>
   </div>
 </div>
-</body></html>`);
-  w.document.close(); w.print();
-}
 
-<script>
 
 // ═══════════════════════════════════════════════════════════════
 // HISTORIAL MADUREZ
 // ═══════════════════════════════════════════════════════════════
+
+<script>
+
 async function openHistory(){
   const history=await fsList('maturity_history','_created','desc');
   document.getElementById('history-list').innerHTML=history.length?
@@ -3529,8 +3538,7 @@ function showAlert(containerId, msg, type){
 // ═══════════════════════════════════════════════════════════════
 restoreLocal();
 renderAll();
-drawRadar('radar-dash', getDimScores());
-renderRadarLegend('radar-legend-dash', true);
+// radar-dash removed — new COC dashboard uses canvas building instead
 syncAll();
 setInterval(syncAll, 15*60*1000); // auto-sync cada 15 min
 
@@ -3846,7 +3854,7 @@ function renderCtrlStats(){
 }
 
 // ── Excel Import/Export ──────────────────────────────────────────────────────
-let importPreviewRows = []; // {row, parsed, isDup, dupOf, selected, errors}
+// importPreviewRows declared at top of script 1 to avoid TDZ
 
 function downloadCtrlTemplate(){
   const a=document.createElement('a');
