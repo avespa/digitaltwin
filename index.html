@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -1713,308 +1714,463 @@ function renderCocFeed(){
   }).join('');
 }
 
-// ── Neural Network Twin Map ──────────────────────────────────────
-let _nnParticles  = [];
-let _nnLastSpawn  = 0;
+// ── SimCity Isometric Twin City ──────────────────────────────────
+// Pure Canvas 2D isometric engine — no external deps
+// Grid: tile size TX×TY, isometric projection
 
 function _isDay(){ return document.body.classList.contains('day'); }
 
-function _nnTheme(){
-  const day = _isDay();
-  return day ? {
-    bg0:'#edf2f7', bg1:'#dde6f0',
-    nodeStroke: 'rgba(40,80,130,0.35)',
-    nodeFill:   'rgba(210,225,242,0.85)',
-    edgeBase:   'rgba(80,130,200,0.12)',
-    labelCol:   'rgba(20,45,80,0.75)',
-    scanCol:    null,
-    dotCol:     'rgba(60,100,150,0.12)',
-    glowMul:    0.6,
-    statusBg:   'rgba(220,232,244,0.8)',
-  } : {
-    bg0:'#060a10', bg1:'#0b1220',
-    nodeStroke: 'rgba(0,229,160,0.28)',
-    nodeFill:   'rgba(8,20,32,0.88)',
-    edgeBase:   'rgba(0,229,160,0.07)',
-    labelCol:   'rgba(160,200,220,0.65)',
-    scanCol:    'rgba(0,229,160,0.012)',
-    dotCol:     'rgba(0,229,160,0.055)',
-    glowMul:    1.0,
-    statusBg:   'rgba(10,20,32,0.75)',
+// ── Isometric helpers ─────────────────────────────────────────────
+// Grid coords (gx, gy) → screen (sx, sy)
+function _iso(gx, gy, TX, TY, ox, oy){
+  return {
+    x: ox + (gx - gy) * TX/2,
+    y: oy + (gx + gy) * TY/2,
   };
 }
 
-// Map score → color triple
-function _nc(sc){
-  if(sc<=0)  return [55,80,100];
-  if(sc>=4)  return [0,229,160];
-  if(sc>=3)  return [100,210,140];
-  if(sc>=2)  return [245,158,11];
-  return [239,100,68];
-}
-// Soft label: only red at score 0, otherwise green gradient
-function _ncLabel(sc){
-  if(sc<=0) return 'rgba(120,140,160,0.6)';
-  if(sc>=4) return 'rgba(0,229,160,0.9)';
-  if(sc>=3) return 'rgba(100,210,140,0.9)';
-  if(sc>=2) return 'rgba(245,158,11,0.85)';
-  return 'rgba(239,100,68,0.85)';
+// ── Color palette ─────────────────────────────────────────────────
+const _PAL = {
+  // Ground tiles
+  roadDark:  '#1a1f2e', roadLight: '#d0d8e0',
+  grass:     '#1a2e1a', grassL:    '#c8e8c0',
+  water:     '#0a1a2e', waterL:    '#b0d0f0',
+
+  // Building faces by score
+  faces: {
+    high:  { top:'#00c87a', left:'#007a4a', right:'#005a36' },
+    med3:  { top:'#6ec87a', left:'#3a7a40', right:'#2a5a2e' },
+    med2:  { top:'#d4a017', left:'#8a6610', right:'#5a420a' },
+    low:   { top:'#c84040', left:'#7a2020', right:'#5a1818' },
+    none:  { top:'#2a3a4a', left:'#1a2530', right:'#121c24' },
+  },
+
+  // Window colors
+  winOn:  ['#ffe8a0','#a0e0ff','#c0ffc0','#ffc0a0'],
+  winOff: '#0a1018',
+  winOffL:'#c0ccd8',
+
+  // Road markings
+  mark: '#2a3050', markL: '#b0b8c0',
+
+  // Trees
+  trunkD:'#3a2010', trunkL:'#8a6040',
+  leafD: ['#1a5a1a','#2a7a2a','#1a4a2a'],
+  leafL: ['#60c060','#80d060','#50b050'],
+};
+
+function _sc2face(sc){
+  if(sc<=0) return _PAL.faces.none;
+  if(sc>=4) return _PAL.faces.high;
+  if(sc>=3) return _PAL.faces.med3;
+  if(sc>=2) return _PAL.faces.med2;
+  return _PAL.faces.low;
 }
 
+// ── Draw one isometric cube ───────────────────────────────────────
+function _drawBlock(ctx, sx, sy, TX, TY, h, face, alpha=1){
+  const hPx = h * TY * 0.55; // height in pixels
+  ctx.globalAlpha = alpha;
+
+  // Top face (rhombus)
+  ctx.beginPath();
+  ctx.moveTo(sx,          sy - hPx);
+  ctx.lineTo(sx + TX/2,   sy - hPx + TY/2);
+  ctx.lineTo(sx,          sy - hPx + TY);
+  ctx.lineTo(sx - TX/2,   sy - hPx + TY/2);
+  ctx.closePath();
+  ctx.fillStyle = face.top; ctx.fill();
+  // Top edge highlight
+  ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+  ctx.lineWidth = 0.5; ctx.stroke();
+
+  // Left face
+  ctx.beginPath();
+  ctx.moveTo(sx - TX/2, sy - hPx + TY/2);
+  ctx.lineTo(sx,        sy - hPx + TY);
+  ctx.lineTo(sx,        sy + TY);       // bottom
+  ctx.lineTo(sx - TX/2, sy + TY/2);
+  ctx.closePath();
+  ctx.fillStyle = face.left; ctx.fill();
+
+  // Right face
+  ctx.beginPath();
+  ctx.moveTo(sx + TX/2, sy - hPx + TY/2);
+  ctx.lineTo(sx,        sy - hPx + TY);
+  ctx.lineTo(sx,        sy + TY);
+  ctx.lineTo(sx + TX/2, sy + TY/2);
+  ctx.closePath();
+  ctx.fillStyle = face.right; ctx.fill();
+
+  // Edge lines
+  ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+  ctx.lineWidth = 0.8;
+  // Top outline
+  ctx.beginPath();
+  ctx.moveTo(sx, sy-hPx);
+  ctx.lineTo(sx+TX/2, sy-hPx+TY/2);
+  ctx.lineTo(sx, sy-hPx+TY);
+  ctx.lineTo(sx-TX/2, sy-hPx+TY/2);
+  ctx.closePath(); ctx.stroke();
+  // Vertical edges
+  [[sx-TX/2,sy-hPx+TY/2,sx-TX/2,sy+TY/2],
+   [sx,sy-hPx+TY,sx,sy+TY],
+   [sx+TX/2,sy-hPx+TY/2,sx+TX/2,sy+TY/2]].forEach(([x1,y1,x2,y2])=>{
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  });
+
+  ctx.globalAlpha = 1;
+}
+
+// ── Draw windows on left/right faces ─────────────────────────────
+function _drawWindows(ctx, sx, sy, TX, TY, h, sc, T, dimIdx, day){
+  const hPx = h * TY * 0.55;
+  const wW = TX*0.13, wH = TY*0.18;
+  const cols = Math.max(1, Math.floor(TX*0.3/( wW*2.2)));
+  const rows = Math.max(1, Math.min(h, Math.floor(hPx*0.65/(wH*2.0))));
+  const onColor = _PAL.winOn[dimIdx % _PAL.winOn.length];
+  const offColor = day ? _PAL.winOffL : _PAL.winOff;
+
+  // Windows on left face
+  for(let r=0; r<rows; r++){
+    for(let c=0; c<cols; c++){
+      // Left face: slant down-left
+      const t = (r+0.7)/(rows+0.5);
+      const u = (c+0.7)/(cols+0.5);
+      // Base point on left face
+      const bx = sx - TX/2*u;
+      const by = sy - hPx + TY/2*u + hPx*t;
+      const lit = (Math.sin(dimIdx*7.3+r*3.1+c*5.7) > (1 - sc/5*0.8 - 0.15));
+      const blink = lit && sc<2 && (Math.floor(T/600+r+c)%2===0);
+      ctx.fillStyle = blink ? '#ff6060' : lit ? onColor : offColor;
+      ctx.fillRect(bx-wW/2, by-wH/2, wW, wH);
+    }
+  }
+  // Windows on right face
+  for(let r=0; r<rows; r++){
+    for(let c=0; c<cols; c++){
+      const t = (r+0.7)/(rows+0.5);
+      const u = (c+0.7)/(cols+0.5);
+      const bx = sx + TX/2*u;
+      const by = sy - hPx + TY/2*u + hPx*t;
+      const lit = (Math.sin(dimIdx*9.1+r*4.3+c*6.1) > (1 - sc/5*0.8 - 0.15));
+      const blink = lit && sc<2 && (Math.floor(T/700+r+c+1)%2===0);
+      ctx.fillStyle = blink ? '#ff6060' : lit ? onColor : offColor;
+      ctx.fillRect(bx-wW/2, by-wH/2, wW, wH);
+    }
+  }
+}
+
+// ── Draw antenna / roof detail ────────────────────────────────────
+function _drawRoof(ctx, sx, sy, TX, TY, h, sc, T, day){
+  const hPx = h * TY * 0.55;
+  const topY = sy - hPx;
+  // Antenna
+  const aH = TY*0.4;
+  ctx.strokeStyle = day ? '#8090a0' : '#405060';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(sx, topY); ctx.lineTo(sx, topY - aH); ctx.stroke();
+  // Antenna tip pulse
+  const pulse = 0.5+0.5*Math.sin(T/600 + sc);
+  const tipCol = sc>=4?`rgba(0,229,160,${pulse})`:sc>=2?`rgba(245,158,11,${pulse})`:`rgba(239,68,68,${pulse})`;
+  ctx.fillStyle = sc>0 ? tipCol : (day?'rgba(100,120,140,0.5)':'rgba(60,80,100,0.5)');
+  ctx.beginPath(); ctx.arc(sx, topY-aH, 2.5, 0, Math.PI*2); ctx.fill();
+
+  // AC units on top (small blocks)
+  if(h>=2){
+    [[TX*0.15,TY*0.08],[- TX*0.15,TY*0.08]].forEach(([dx,dy])=>{
+      ctx.fillStyle = day?'#b0bcc8':'#1e2c38';
+      ctx.fillRect(sx+dx-TX*0.06, topY+dy-TY*0.06, TX*0.12, TY*0.08);
+    });
+  }
+}
+
+// ── Draw a pixel-art tree ─────────────────────────────────────────
+function _drawTree(ctx, sx, sy, TY, seed, day){
+  const h = TY*0.35 + TY*0.15*(seed%3)/2;
+  const trunk = day? _PAL.trunkL : _PAL.trunkD;
+  const leaf  = day? _PAL.leafL[seed%3] : _PAL.leafD[seed%3];
+  // Trunk
+  ctx.fillStyle=trunk;
+  ctx.fillRect(sx-2, sy-h*0.55, 4, h*0.55);
+  // Canopy (3 stacked rects, pixel art)
+  [[8,6,0],[10,5,-h*0.15],[7,4,-h*0.28]].forEach(([w,ht,dy])=>{
+    ctx.fillStyle=leaf;
+    ctx.fillRect(sx-w/2, sy-h+dy-ht, w, ht);
+  });
+}
+
+// ── Draw ground tile ──────────────────────────────────────────────
+function _drawTile(ctx, sx, sy, TX, TY, type, day){
+  const colors = {
+    road:  day?_PAL.roadLight:_PAL.roadDark,
+    grass: day?_PAL.grassL:_PAL.grass,
+    water: day?_PAL.waterL:_PAL.water,
+    plaza: day?'#c8c0b0':'#1e2030',
+  };
+  ctx.beginPath();
+  ctx.moveTo(sx,        sy);
+  ctx.lineTo(sx+TX/2,   sy+TY/2);
+  ctx.lineTo(sx,        sy+TY);
+  ctx.lineTo(sx-TX/2,   sy+TY/2);
+  ctx.closePath();
+  ctx.fillStyle = colors[type]||colors.road;
+  ctx.fill();
+  // Tile border
+  ctx.strokeStyle = day?'rgba(0,0,0,0.06)':'rgba(0,0,0,0.35)';
+  ctx.lineWidth=0.5; ctx.stroke();
+}
+
+// ── Road markings ─────────────────────────────────────────────────
+function _drawRoadMark(ctx, sx, sy, TX, TY, dir, day){
+  ctx.strokeStyle = day?_PAL.markL:_PAL.mark;
+  ctx.lineWidth=1; ctx.setLineDash([TY*0.12,TY*0.12]);
+  ctx.beginPath();
+  if(dir==='h'){
+    ctx.moveTo(sx-TX*0.3,sy+TY*0.5); ctx.lineTo(sx+TX*0.3,sy+TY*0.5);
+  } else {
+    ctx.moveTo(sx,sy+TY*0.25); ctx.lineTo(sx,sy+TY*0.75);
+  }
+  ctx.stroke(); ctx.setLineDash([]);
+}
+
+// ── Data flow cable (animated dashes between buildings) ───────────
+let _cityParticles = [];
+let _cityLastT = 0;
+
+function _spawnCityParticle(x1,y1,x2,y2,col,T){
+  _cityParticles.push({x:x1,y:y1,tx:x2,ty:y2,t:0,
+    speed:0.007+Math.random()*0.005,
+    col, T0:T});
+}
+
+// ── Main city layout definition ───────────────────────────────────
+// 7 ISO 37301 dimensions → 3 districts of buildings on a 9×7 grid
+// Grid: 0=road, 1-7=building dimIdx, T=tree, W=water, P=plaza
+const CITY_GRID = [
+// col: 0   1   2   3   4   5   6   7   8
+  [ 0,  0,  0,  0,  0,  0,  0,  0,  0], // row 0
+  [ 0,  1,  1,  0,  3,  3,  0,  6,  0], // row 1
+  [ 0,  1,  1,  0,  3,  4,  0,  6,  0], // row 2
+  [ 0,  0,  0,  0,  0,  4,  0,  0,  0], // row 3
+  [ 0,  2,  0,  5,  5,  0,  0,  7,  0], // row 4
+  [ 0,  2,  0,  5,  0,  0,  0,  7,  0], // row 5
+  [ 0,  0,  0,  0,  0,  0,  0,  0,  0], // row 6
+];
+// Road positions for markings
+const ROAD_ROWS = [0,3,6];
+const ROAD_COLS = [0,3,6,8];
+
+// Tree positions
+const TREE_POS = [[0,1],[0,5],[0,7],[1,7],[2,7],[3,0],[3,7],[3,8],[4,6],[5,6],[6,1],[6,3],[6,5],[6,7]];
+
+// ── Building footprint sizes (grid cells per dim) ─────────────────
+const DIM_FOOTPRINT = {
+  1:{gx:1,gy:1}, 2:{gx:1,gy:1},
+  3:{gx:1,gy:1}, 4:{gx:1,gy:1},
+  5:{gx:1,gy:1}, 6:{gx:1,gy:1},
+  7:{gx:1,gy:1},
+};
+
+// ── Render ────────────────────────────────────────────────────────
 function drawCocBuilding(){
   const canvas = document.getElementById('coc-bcanvas');
   if(!canvas) return;
   const container = document.getElementById('coc-building');
-  const W = container.clientWidth  || 600;
-  const H = container.clientHeight || 400;
+  const W = container.clientWidth  || 640;
+  const H = container.clientHeight || 420;
   if(canvas.width !==W) canvas.width  = W;
   if(canvas.height!==H) canvas.height = H;
 
   const ctx   = canvas.getContext('2d');
   const T     = Date.now();
-  const th    = _nnTheme();
   const day   = _isDay();
   const scores= getDimScores();
   const crits = S.hits.filter(h=>{
     const lv=h.inherent_level||h.level||'';
-    return (lv==='critical'||lv==='alto') && !h.false_positive && !h._discarded;
+    return (lv==='critical'||lv==='alto')&&!h.false_positive&&!h._discarded;
   }).length;
   const globalS = calcGlobalScore();
 
   ctx.clearRect(0,0,W,H);
 
-  // ── Background ─────────────────────────────────────────────────
-  const bgG = ctx.createLinearGradient(0,0,W,H);
-  bgG.addColorStop(0, th.bg0);
-  bgG.addColorStop(1, th.bg1);
-  ctx.fillStyle = bgG;
-  ctx.fillRect(0,0,W,H);
+  // Background
+  ctx.fillStyle = day
+    ? 'linear-gradient' // fallback
+    : '#060a10';
+  const bg = ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0, day?'#dce8f2':'#07090f');
+  bg.addColorStop(1, day?'#c8d8ea':'#0b1220');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
 
-  // Dot grid
-  ctx.fillStyle = th.dotCol;
-  const gs = 30;
-  for(let gx=gs/2;gx<W;gx+=gs)
-    for(let gy=gs/2;gy<H;gy+=gs){
-      ctx.beginPath(); ctx.arc(gx,gy,0.9,0,Math.PI*2); ctx.fill();
+  // ── Tile sizing & origin ────────────────────────────────────────
+  const ROWS = CITY_GRID.length;
+  const COLS = CITY_GRID[0].length;
+  // Fit isometric grid into canvas
+  const maxTX = Math.floor(W / (COLS * 0.7));
+  const TX = Math.max(32, Math.min(72, maxTX));
+  const TY = Math.round(TX * 0.52);
+
+  // Origin: center the grid horizontally, push up to leave room for tallest building
+  const gridW = (COLS + ROWS) * TX/2;
+  const gridH = (COLS + ROWS) * TY/2;
+  const ox = W/2;
+  const oy = H*0.14 + TY;
+
+  // ── Pass 1: Ground tiles ────────────────────────────────────────
+  for(let row=0; row<ROWS; row++){
+    for(let col=0; col<COLS; col++){
+      const {x,y} = _iso(col, row, TX, TY, ox, oy);
+      const cell  = CITY_GRID[row][col];
+      const isRoadRow = ROAD_ROWS.includes(row);
+      const isRoadCol = ROAD_COLS.includes(col);
+      let ttype = (isRoadRow||isRoadCol) ? 'road' : 'grass';
+      _drawTile(ctx, x, y, TX, TY, ttype, day);
+      // Road markings
+      if(isRoadRow && !isRoadCol) _drawRoadMark(ctx,x,y,TX,TY,'h',day);
+      if(isRoadCol && !isRoadRow) _drawRoadMark(ctx,x,y,TX,TY,'v',day);
     }
-
-  // Scanlines (night only)
-  if(th.scanCol){
-    ctx.fillStyle=th.scanCol;
-    for(let sy=0;sy<H;sy+=3) ctx.fillRect(0,sy,W,1);
   }
 
-  // ── Network layout ─────────────────────────────────────────────
-  // 3 layers: INPUT (2 nodes) → HIDDEN (3 nodes) → OUTPUT (2 nodes)
-  // Each layer maps to ISO dims: [ctx,lid] [plan,sop,op] [ev,mej]
-  const layerDefs = [
-    { nodes:[0,1] },          // layer 0 — Contexto, Liderazgo
-    { nodes:[2,3,4] },        // layer 1 — Planificación, Soporte, Operación
-    { nodes:[5,6] },          // layer 2 — Evaluación, Mejora
-  ];
+  // ── Collect building draw calls (sort back-to-front) ───────────
+  const buildCalls = [];
+  const buildingCenters = {}; // dimIdx → screen pos for cables
 
-  const padX = W * 0.12;
-  const padY = H * 0.14;
-  const usableW = W - padX*2;
-  const usableH = H - padY*2;
+  for(let row=0; row<ROWS; row++){
+    for(let col=0; col<COLS; col++){
+      const cell = CITY_GRID[row][col];
+      if(cell>=1 && cell<=7){
+        const dimIdx = cell-1;
+        const sc     = scores[dimIdx]||0;
+        const h      = sc>0 ? Math.max(1, Math.round(sc*1.2)) : 1;
+        const {x,y}  = _iso(col, row, TX, TY, ox, oy);
+        buildCalls.push({row,col,x,y,h,sc,dimIdx,sortKey:row+col});
+        if(!buildingCenters[dimIdx]){
+          buildingCenters[dimIdx]={x,y:y-h*TY*0.55*0.5};
+        }
+      }
+    }
+  }
 
-  // Compute node positions
-  const nodeR = Math.min(usableW/5.5, usableH/4.5, 44);
+  // Sort back-to-front (painter's algorithm)
+  buildCalls.sort((a,b)=>a.sortKey-b.sortKey);
 
-  const nodePos = [];
-  const layerX  = layerDefs.map((_,li)=> padX + (li/(layerDefs.length-1))*usableW );
-
-  layerDefs.forEach((layer, li)=>{
-    const n = layer.nodes.length;
-    layer.nodes.forEach((dimIdx, ni)=>{
-      const y = padY + ((ni+0.5)/n)*usableH;
-      nodePos[dimIdx] = { x:layerX[li], y, layer:li, dimIdx };
-    });
+  // ── Pass 2: Trees (behind buildings) ───────────────────────────
+  TREE_POS.forEach(([row,col],i)=>{
+    const {x,y} = _iso(col, row, TX, TY, ox, oy);
+    // only draw if not obscured by a building
+    const cell = CITY_GRID[row][col];
+    if(cell===0) _drawTree(ctx, x, y+TY, TY, i*3+row*7+col, day);
   });
 
-  // ── Draw edges ──────────────────────────────────────────────────
-  // Connect every node in layer i to every node in layer i+1
-  layerDefs.forEach((layer, li)=>{
-    if(li >= layerDefs.length-1) return;
-    const nextLayer = layerDefs[li+1];
-    layer.nodes.forEach(srcIdx=>{
-      nextLayer.nodes.forEach(dstIdx=>{
-        const s = nodePos[srcIdx], d = nodePos[dstIdx];
-        const sc = Math.min(scores[srcIdx]||0, scores[dstIdx]||0);
-        const [r,g,gr] = _nc(sc);
-        const pulse = 0.5+0.5*Math.sin(T/1400 + srcIdx*0.6 + dstIdx*0.9);
-        const alpha = (sc>0 ? 0.10+0.08*pulse : 0.04) * th.glowMul;
-
-        // Edge glow (wider, transparent)
-        ctx.beginPath();
-        ctx.moveTo(s.x, s.y);
-        ctx.lineTo(d.x, d.y);
-        ctx.strokeStyle=`rgba(${r},${g},${gr},${alpha*0.5})`;
-        ctx.lineWidth=4;
-        ctx.stroke();
-        // Edge core
-        ctx.beginPath();
-        ctx.moveTo(s.x, s.y);
-        ctx.lineTo(d.x, d.y);
-        ctx.strokeStyle=`rgba(${r},${g},${gr},${alpha*1.8})`;
-        ctx.lineWidth=1.2;
-        ctx.stroke();
-      });
-    });
+  // ── Pass 3: Data cables (ground level connections) ──────────────
+  // Connect district pairs: 0↔2 (1&2 → 3&4), 2↔4 (3&4 → 5), etc.
+  const cablePairs = [[0,2],[1,3],[2,4],[3,5],[4,6]];
+  cablePairs.forEach(([a,b])=>{
+    const ca=buildingCenters[a], cb=buildingCenters[b];
+    if(!ca||!cb) return;
+    const sc=Math.min(scores[a]||0,scores[b]||0);
+    const [r,g,gr]=sc>=4?[0,229,160]:sc>=3?[100,210,130]:sc>=2?[245,158,11]:[150,80,80];
+    const pulse=0.3+0.15*Math.sin(T/900+a*0.5);
+    ctx.strokeStyle=`rgba(${r},${g},${gr},${pulse})`;
+    ctx.lineWidth=1; ctx.setLineDash([3,5]);
+    ctx.beginPath(); ctx.moveTo(ca.x,ca.y); ctx.lineTo(cb.x,cb.y); ctx.stroke();
+    ctx.setLineDash([]);
   });
 
   // ── Particles ────────────────────────────────────────────────────
-  const now = Date.now();
-  if(now - _nnLastSpawn > (crits>0 ? 280 : 480)){
-    _nnLastSpawn = now;
-    // Pick a random edge
-    const li = Math.floor(Math.random()*(layerDefs.length-1));
-    const srcIdx = layerDefs[li].nodes[Math.floor(Math.random()*layerDefs[li].nodes.length)];
-    const dstIdx = layerDefs[li+1].nodes[Math.floor(Math.random()*layerDefs[li+1].nodes.length)];
-    const s = nodePos[srcIdx], d = nodePos[dstIdx];
-    const sc = scores[srcIdx]||0;
-    const [r,g,gr] = crits>0 && sc<2 ? [239,80,60] : _nc(sc);
-    _nnParticles.push({
-      sx:s.x, sy:s.y, dx:d.x, dy:d.y,
-      t:0, speed: 0.006+Math.random()*0.006,
-      r,g,gr, size: crits>0&&sc<2 ? 3.5 : 2.2
-    });
+  if(T-_cityLastT>550){
+    _cityLastT=T;
+    const pairs=[[0,2],[2,4],[4,6],[1,3],[3,5]].filter(([a,b])=>buildingCenters[a]&&buildingCenters[b]);
+    if(pairs.length){
+      const [a,b]=pairs[Math.floor(Math.random()*pairs.length)];
+      const ca=buildingCenters[a],cb=buildingCenters[b];
+      const sc=scores[a]||0;
+      const [r,g,gr]=crits>0&&sc<2?[239,80,60]:sc>=4?[0,229,160]:sc>=3?[100,210,130]:[245,158,11];
+      _spawnCityParticle(ca.x,ca.y,cb.x,cb.y,`rgb(${r},${g},${gr})`,T);
+    }
   }
-  _nnParticles = _nnParticles.filter(p=>{
-    p.t = Math.min(1, p.t+p.speed);
-    const px = p.sx+(p.dx-p.sx)*p.t;
-    const py = p.sy+(p.dy-p.sy)*p.t;
-    const a  = p.t<0.12 ? p.t/0.12 : p.t>0.88 ? (1-p.t)/0.12 : 1;
-    // Glow
-    const glw=ctx.createRadialGradient(px,py,0,px,py,p.size*3.5);
-    glw.addColorStop(0,`rgba(${p.r},${p.g},${p.gr},${a*0.55*th.glowMul})`);
-    glw.addColorStop(1,`rgba(${p.r},${p.g},${p.gr},0)`);
-    ctx.fillStyle=glw; ctx.beginPath(); ctx.arc(px,py,p.size*3.5,0,Math.PI*2); ctx.fill();
-    // Core
-    ctx.fillStyle=`rgba(${p.r},${p.g},${p.gr},${a*th.glowMul})`;
-    ctx.beginPath(); ctx.arc(px,py,p.size,0,Math.PI*2); ctx.fill();
+  _cityParticles=_cityParticles.filter(p=>{
+    p.t=Math.min(1,p.t+p.speed);
+    const px=p.x+(p.tx-p.x)*p.t;
+    const py=p.y+(p.ty-p.y)*p.t;
+    const a=p.t<0.1?p.t/0.1:p.t>0.9?(1-p.t)/0.1:1;
+    const grd=ctx.createRadialGradient(px,py,0,px,py,5);
+    grd.addColorStop(0,p.col.replace('rgb','rgba').replace(')',`,${a*0.8})`));
+    grd.addColorStop(1,p.col.replace('rgb','rgba').replace(')',',0)'));
+    ctx.fillStyle=grd; ctx.beginPath(); ctx.arc(px,py,5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle=p.col; ctx.beginPath(); ctx.arc(px,py,2,0,Math.PI*2); ctx.fill();
     return p.t<1;
   });
 
-  // ── Draw nodes ────────────────────────────────────────────────
-  nodePos.forEach(({x,y,dimIdx})=>{
-    const dim = DIMS[dimIdx];
-    const sc  = scores[dimIdx]||0;
-    const [r,g,gr] = _nc(sc);
-    const pulse = 0.5+0.5*Math.sin(T/1000+dimIdx*0.75);
+  // ── Pass 4: Buildings ──────────────────────────────────────────
+  buildCalls.forEach(({x,y,h,sc,dimIdx})=>{
+    const face=_sc2face(sc);
+    _drawBlock(ctx,x,y,TX,TY,h,face);
+    _drawWindows(ctx,x,y,TX,TY,h,sc,T,dimIdx,day);
+    _drawRoof(ctx,x,y,TX,TY,h,sc,T,day);
+  });
 
-    // Outer glow
-    const glowR = nodeR * (sc>0 ? 1.5+0.12*pulse : 1.2);
-    const glowA = (sc>0 ? 0.12+0.06*pulse : 0.03) * th.glowMul;
-    const glw=ctx.createRadialGradient(x,y,nodeR*0.4,x,y,glowR);
-    glw.addColorStop(0,`rgba(${r},${g},${gr},${glowA*1.4})`);
-    glw.addColorStop(1,`rgba(${r},${g},${gr},0)`);
-    ctx.fillStyle=glw;
-    ctx.beginPath(); ctx.arc(x,y,glowR,0,Math.PI*2); ctx.fill();
+  // ── Pass 5: Labels (floating, above each building) ─────────────
+  buildCalls.forEach(({x,y,h,sc,dimIdx})=>{
+    const dim=DIMS[dimIdx];
+    const hPx=h*TY*0.55;
+    const labelY=y-hPx-TY*0.5;
 
-    // Node fill
-    const fillG=ctx.createRadialGradient(x,y-nodeR*0.25,nodeR*0.1,x,y,nodeR);
-    fillG.addColorStop(0, sc>0?`rgba(${r},${g},${gr},${0.22*th.glowMul})`:(day?'rgba(195,215,235,0.8)':'rgba(10,22,35,0.92)'));
-    fillG.addColorStop(1, day?'rgba(200,218,238,0.6)':'rgba(5,14,24,0.94)');
-    ctx.beginPath(); ctx.arc(x,y,nodeR,0,Math.PI*2);
-    ctx.fillStyle=fillG; ctx.fill();
+    // Only show if there's space above
+    if(labelY<12) return;
 
-    // Node stroke
-    const strokeA = (sc>0 ? 0.55+0.2*pulse : 0.2) * th.glowMul;
-    ctx.beginPath(); ctx.arc(x,y,nodeR,0,Math.PI*2);
-    ctx.strokeStyle=`rgba(${r},${g},${gr},${strokeA})`;
-    ctx.lineWidth = sc>0 ? 1.8 : 1;
-    ctx.stroke();
+    // Icon
+    ctx.font=`${Math.round(TY*0.65)}px sans-serif`;
+    ctx.textAlign='center'; ctx.textBaseline='bottom';
+    ctx.fillText(dim.icon, x, labelY);
 
-    // Score arc ring
+    // Score badge
     if(sc>0){
-      const arcSpan = (sc/5)*Math.PI*2;
+      const [r,g,gr]=sc>=4?[0,229,160]:sc>=3?[100,210,130]:sc>=2?[245,158,11]:[239,100,68];
+      const bW=TY*1.2, bH=TY*0.55;
+      // Badge bg
+      ctx.fillStyle=`rgba(${r},${g},${gr},0.18)`;
       ctx.beginPath();
-      ctx.arc(x,y,nodeR*0.62,-Math.PI/2,-Math.PI/2+arcSpan);
-      ctx.strokeStyle=`rgba(${r},${g},${gr},${0.6*th.glowMul})`;
-      ctx.lineWidth=3; ctx.lineCap='round'; ctx.stroke();
-      // track
-      ctx.beginPath();
-      ctx.arc(x,y,nodeR*0.62,-Math.PI/2+arcSpan,-Math.PI/2+Math.PI*2);
-      ctx.strokeStyle=`rgba(${r},${g},${gr},${0.10*th.glowMul})`;
-      ctx.lineWidth=3; ctx.lineCap='butt'; ctx.stroke();
-    }
-
-    // Icon — centered
-    const iconSize = Math.round(nodeR*0.46);
-    ctx.font=`${iconSize}px sans-serif`;
-    ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillStyle = sc>0 ? `rgba(${r},${g},${gr},0.85)` : (day?'rgba(100,140,180,0.45)':'rgba(80,120,150,0.4)');
-    ctx.fillText(dim.icon, x, sc>0 ? y-nodeR*0.18 : y);
-
-    // Score — below icon, inside node
-    if(sc>0){
-      ctx.font=`bold ${Math.round(nodeR*0.32)}px 'DM Mono',monospace`;
-      ctx.fillStyle=`rgba(${r},${g},${gr},${0.92*th.glowMul})`;
+      ctx.roundRect(x-bW/2, labelY-bH-TY*0.6, bW, bH, 3);
+      ctx.fill();
+      // Badge text
+      ctx.font=`bold ${Math.round(TY*0.4)}px 'DM Mono',monospace`;
+      ctx.fillStyle=`rgba(${r},${g},${gr},0.95)`;
       ctx.textAlign='center'; ctx.textBaseline='middle';
-      ctx.fillText(sc.toFixed(1), x, y+nodeR*0.30);
-    }
-
-    // Label — OUTSIDE the node, with safe clearance
-    const labelY = y + nodeR + 14;
-    if(labelY + 10 < H){ // only draw if fits
-      ctx.font=`${Math.round(nodeR*0.24)}px 'DM Mono',monospace`;
-      ctx.fillStyle = _ncLabel(sc);
-      ctx.textAlign='center'; ctx.textBaseline='top';
-      ctx.fillText(dim.label.toUpperCase(), x, labelY);
+      ctx.fillText(sc.toFixed(1), x, labelY-bH/2-TY*0.6+bH/2);
     }
   });
 
-  // ── Layer labels (vertical, left side) ─────────────────────────
-  const layerLabels = ['CONTEXTO\n& LIDERAZGO', 'OPERACIÓN\nCORE', 'EVALUACIÓN\n& MEJORA'];
-  layerDefs.forEach((layer, li)=>{
-    const lx = layerX[li];
-    const ys = layer.nodes.map(di=>nodePos[di].y);
-    const midY = (Math.min(...ys)+Math.max(...ys))/2;
-    // Small dot above layer
-    ctx.beginPath(); ctx.arc(lx, padY*0.45, 3, 0, Math.PI*2);
-    ctx.fillStyle=day?'rgba(60,100,150,0.2)':'rgba(0,229,160,0.18)';
-    ctx.fill();
-    // Vertical tick line
-    ctx.beginPath(); ctx.moveTo(lx,padY*0.55); ctx.lineTo(lx,padY*0.75);
-    ctx.strokeStyle=day?'rgba(60,100,150,0.15)':'rgba(0,229,160,0.12)';
-    ctx.lineWidth=1; ctx.stroke();
-  });
-
-  // ── Critical alert pulse overlay (rings from critical nodes) ──
+  // ── Critical alert flash (screen edge) ──────────────────────────
   if(crits>0){
-    nodePos.forEach(({x,y,dimIdx})=>{
-      const sc=scores[dimIdx]||0;
-      if(sc>0 && sc<2){
-        const phase=((T/1000)+dimIdx*0.4)%1;
-        ctx.beginPath();
-        ctx.arc(x,y,nodeR*(1.1+phase*0.7),0,Math.PI*2);
-        ctx.strokeStyle=`rgba(239,80,60,${(1-phase)*0.4*th.glowMul})`;
-        ctx.lineWidth=1.5; ctx.stroke();
-      }
-    });
+    const flash=0.04+0.03*Math.sin(T/300);
+    const grad=ctx.createRadialGradient(W/2,H/2,H*0.25,W/2,H/2,H*0.75);
+    grad.addColorStop(0,'rgba(239,68,68,0)');
+    grad.addColorStop(1,`rgba(239,68,68,${flash})`);
+    ctx.fillStyle=grad; ctx.fillRect(0,0,W,H);
   }
 
-  // ── Status bar at bottom ────────────────────────────────────────
-  const statusTxt = crits>0
-    ? `⚠  ${crits} AMENAZA${crits>1?'S':''} ACTIVA${crits>1?'S':''}`
-    : globalS>=4 ? '✓  SISTEMA PROTEGIDO'
-    : globalS>=3 ? '◎  ESTADO ACEPTABLE'
-    : globalS>0  ? '△  GAPS IDENTIFICADOS'
-    : '○  SIN DATOS — configura el Digital Twin';
-
-  const [sr,sg,sgr] = crits>0?[239,80,60]:globalS>=4?[0,229,160]:globalS>=3?[100,210,140]:[245,158,11];
-  const sFontSize = Math.round(Math.min(W,H)*0.026);
-  ctx.font=`bold ${sFontSize}px 'DM Mono',monospace`;
+  // ── Status bar ───────────────────────────────────────────────────
+  const statusTxt=crits>0
+    ?`⚠  ${crits} AMENAZA${crits>1?'S':''} ACTIVA${crits>1?'S':''}`
+    :globalS>=4?'✓  SISTEMA PROTEGIDO'
+    :globalS>=3?'◎  ESTADO ACEPTABLE'
+    :globalS>0 ?'△  GAPS IDENTIFICADOS'
+    :'○  SIN DATOS DE MADUREZ';
+  const [sr,sg,sgr]=crits>0?[239,68,68]:globalS>=4?[0,229,160]:globalS>=3?[100,210,130]:[245,158,11];
+  const fs=Math.round(Math.min(W,H)*0.026);
+  ctx.font=`bold ${fs}px 'DM Mono',monospace`;
   ctx.textAlign='center'; ctx.textBaseline='alphabetic';
-  ctx.fillStyle=`rgba(${sr},${sg},${sgr},0.82)`;
-  ctx.fillText(statusTxt, W/2, H-14);
+  ctx.fillStyle=`rgba(${sr},${sg},${sgr},0.85)`;
+  ctx.fillText(statusTxt, W/2, H-10);
 
   ctx.globalAlpha=1;
 }
 
-// Animate the neural map
-let _cocAnimFrame = null;
+// Animate
+let _cocAnimFrame=null;
 function startCocAnimation(){
   cancelAnimationFrame(_cocAnimFrame);
   function frame(){
