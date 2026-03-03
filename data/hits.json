@@ -1,6 +1,30 @@
 {
   "hits": [
     {
+      "id": "8f0ec3411307",
+      "title": "La CNMV multa con 1,5 M al Sabadell por no informar a minoristas sobre sus pagarés",
+      "link": "https://www.elconfidencial.com/empresas/2026-03-02/cnmv-multa-sabadell-informacion-minoristas-pagares_4312589/",
+      "source": "NewsAPI-Q2 · Elconfidencial.com",
+      "raw_date": "2026-03-02T11:53:00Z",
+      "fetched_at": "2026-03-03T13:04:36.555444+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Multa económica significativa",
+        "Daño reputacional",
+        "Falta de transparencia con clientes minoristas"
+      ],
+      "norms_affected": [
+        "Reglamento (UE) 2017/1129",
+        "Ley del Mercado de Valores",
+        "Normas de la CNMV sobre información a inversores"
+      ],
+      "summary": "La CNMV ha multado al Banco Sabadell con 1,5 millones de euros por no informar adecuadamente a los inversores minoristas sobre los costes implícitos y la desviación de valor en sus pagarés durante 2023. La falta de transparencia en la información financiera puede afectar la confianza de los inversores y la reputación del banco.",
+      "vulnerability": "Falta de controles de información y transparencia en productos financieros complejos para inversores minoristas",
+      "financial_impact": "Pérdida de 1,5 millones de euros en multa, más posibles pérdidas por daño reputacional y desconfianza de los clientes",
+      "recommended_action": "Implementar un sistema de alertas y controles para garantizar la transparencia en la información financiera proporcionada a los inversores minoristas, y revisar los protocolos de comunicación con clientes para cumplir con las normativas de la CNMV y la UE."
+    },
+    {
       "id": "bf568df69271",
       "title": "Orden ITU/153/2026, de 20 de febrero, por la que se modifica la Orden ICT/654/2022, de 10 de julio, por la que se crea el Comité Antifraude del Ministerio de Industria y Turismo y se determinan su composición y funciones.",
       "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-4971",
@@ -987,13 +1011,13 @@
     }
   ],
   "stats": {
-    "total_hits": 44,
-    "critical_count": 12,
+    "total_hits": 45,
+    "critical_count": 13,
     "warning_count": 32,
     "info_count": 0,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 49,
+    "new_this_run": 1,
+    "articles_checked": 2,
+    "seen_ids_total": 51,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -1012,5 +1036,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-03T09:47:30.043555+00:00"
+  "last_updated": "2026-03-03T13:04:38.810282+00:00"
 }
