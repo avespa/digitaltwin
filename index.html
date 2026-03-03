@@ -645,6 +645,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
       <div class="ph-left"><div class="ph-title">Monitorización de Hits</div><div class="ph-sub" id="hits-sync-info">Funnel de relevancia · Filtrado por keywords → Impacto en tu empresa</div></div>
       <div class="ph-actions">
         <button class="btn btn-ghost btn-sm" id="batch-reanalyze-btn" onclick="batchReAnalyze()" title="Re-analiza todos los hits pendientes contra tu Digital Twin">⟳ Re-evaluar todos</button>
+        <button class="btn btn-ghost btn-sm" onclick="cleanOldHits(30)" title="Elimina hits de más de 30 días (las sentencias no se eliminan)" style="color:var(--text-muted)">🗑 Limpiar &gt;30d</button>
         <button class="btn btn-ghost btn-sm" onclick="syncHits()">Sync</button>
       </div>
     </div>
@@ -695,6 +696,12 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
       </select>
       <select class="fi" style="width:140px" id="hit-filter-source" onchange="renderHits()">
         <option value="">Fuente</option><option value="BOE">BOE</option><option value="BORME">BORME</option><option value="NewsAPI">NewsAPI</option><option value="Sentencia">Sentencia</option>
+      </select>
+      <select class="fi" style="width:145px" id="hit-filter-days" onchange="renderHits()">
+        <option value="">Fecha: todo</option>
+        <option value="7">Últimos 7 días</option>
+        <option value="14">Últimos 14 días</option>
+        <option value="30">Últimos 30 días</option>
       </select>
       <input type="text" class="fi" id="hit-search" placeholder="Buscar en hits..." style="max-width:200px" oninput="renderHits()">
       <button class="btn btn-ghost btn-xs" onclick="resetAndRegroup()" style="color:var(--purple);border-color:rgba(139,92,246,.3)" title="Reagrupar noticias con IA">✦ Re-agrupar IA</button>
@@ -1602,10 +1609,15 @@ async function syncHits(){
           return fsHit ? { ...fsHit, ...ghHit, id: ghHit.id||fsHit.id } : ghHit;
         });
         // Add Firestore-only hits (sentencias, etc.) not in GitHub
+        // Only keep hits within retention window (30 days), sentencias always kept
+        const _retentionCutoff = new Date(Date.now() - 30 * 86400000).toISOString();
         fsHits.forEach(fh => {
           const key = fh.id||fh.link;
           if(!ghHits.find(gh=>(gh.id||gh.link)===key)){
-            merged.push(fh);
+            const hitDate = fh.raw_date||fh.fetched_at||fh._created||'';
+            if(fh.is_sentencia || !hitDate || hitDate >= _retentionCutoff){
+              merged.push(fh);
+            }
           }
         });
         S.hits = merged;
@@ -1627,9 +1639,33 @@ async function syncHits(){
   } else {
     await syncHitsFromGitHub();
   }
+  groupHitsLocally();
   lsSet('hits', S.hits);
   renderHits();
   updateBadges();
+}
+
+async function cleanOldHits(daysToKeep = 30){
+  const cutoff = new Date(Date.now() - daysToKeep * 86400000).toISOString();
+  const toDelete = S.hits.filter(h => {
+    if(h.is_sentencia) return false;
+    const hitDate = h.raw_date||h.fetched_at||h._created||'';
+    return hitDate && hitDate < cutoff;
+  });
+  if(!toDelete.length){
+    showAlert('hits-alert', 'No hay hits anteriores a ' + daysToKeep + ' días', 'ok');
+    return;
+  }
+  if(!confirm('¿Eliminar ' + toDelete.length + ' hits anteriores a los últimos ' + daysToKeep + ' días?\nLas sentencias no se eliminan. Esta acción no se puede deshacer.')) return;
+  showAlert('hits-alert', 'Limpiando ' + toDelete.length + ' hits antiguos...', 'ok');
+  const delIds = new Set(toDelete.map(h => h.id||h.link));
+  const delPromises = toDelete.filter(h => h._fsId).map(h => fsDelete('hits', h._fsId).catch(()=>{}));
+  await Promise.all(delPromises);
+  S.hits = S.hits.filter(h => !delIds.has(h.id||h.link));
+  lsSet('hits', S.hits);
+  renderHits();
+  updateBadges();
+  showAlert('hits-alert', '✓ ' + toDelete.length + ' hits eliminados', 'ok');
 }
 
 function restoreLocal(){
@@ -1748,6 +1784,134 @@ function renderCocDimBar(scores){
 // ── Feed ─────────────────────────────────────────────────────────
 function _normTitle(t){ return (t||'').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,55); }
 
+// ── Fast local entity-based grouping (no Mistral needed) ─────────
+// Groups hits that share ≥2 significant tokens AND are within 30 days.
+// Runs on ALL hits (resets previous grouping). Returns number of groups formed.
+function groupHitsLocally(){
+  const STOP = new Set([
+    'para','sobre','por','con','una','los','las','del','que','como','este','esta',
+    'pero','sus','sin','más','entre','ante','han','sido','puede','tras','caso',
+    'años','todo','toda','todos','todas','también','según','cuando','donde',
+    'desde','hasta','bajo','algo','muy','bien','solo','cada','gran','otro','otra',
+    'mismo','misma','tanto','mientras','contra','nuevo','nueva','dicho','dicha',
+    'aquel','aquella','ser','estar','haber','tener','hacer','decir','poder',
+    'dice','dijo','tiene','tuvo','será','siendo','porque','aunque','además',
+    'incluso','pese','parte','tras','cuya','cuyo','cuyas','cuyos','esta',
+    'estas','estos','menos','more','with','that','from','this','have','been'
+  ]);
+
+  function keyTokens(title){
+    return (title||'').toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^a-z0-9\s]/g,' ')
+      .split(/\s+/)
+      .filter(w => w.length > 3 && !STOP.has(w));
+  }
+
+  // Reset all existing grouping
+  S.hits.forEach(h => {
+    delete h._groupId; delete h._groupedUnder;
+    delete h._groupSize; delete h._groupIntl;
+    delete h._groupAvgSev; delete h._groupIds;
+  });
+
+  const candidates = S.hits.filter(h => !h.false_positive && !h._discarded);
+  if(candidates.length < 2) return 0;
+
+  // Pre-compute token sets
+  const tokenSets = candidates.map(h => new Set(keyTokens(h.title)));
+
+  // Inverted index: token → candidate indices
+  const index = new Map();
+  tokenSets.forEach((toks, i) => {
+    toks.forEach(tok => {
+      if(!index.has(tok)) index.set(tok, []);
+      index.get(tok).push(i);
+    });
+  });
+
+  // Tokens appearing in too many hits are generic noise — skip them
+  const maxFreq = Math.max(3, Math.ceil(candidates.length * 0.15));
+
+  // Union-Find
+  const parent = candidates.map((_, i) => i);
+  function find(x){ return parent[x]===x ? x : (parent[x]=find(parent[x])); }
+  function union(x, y){ parent[find(x)] = find(y); }
+
+  const TIME_MS = 30 * 86400000; // 30-day window
+  const checkedPairs = new Set();
+
+  index.forEach((idxArr, tok) => {
+    if(idxArr.length < 2 || idxArr.length > maxFreq) return;
+    for(let a = 0; a < idxArr.length; a++){
+      for(let b = a+1; b < idxArr.length; b++){
+        const ia = idxArr[a], ib = idxArr[b];
+        const pairKey = ia < ib ? ia+'_'+ib : ib+'_'+ia;
+        if(checkedPairs.has(pairKey)) continue;
+        checkedPairs.add(pairKey);
+
+        const ha = candidates[ia], hb = candidates[ib];
+        const da = new Date(ha.raw_date||ha.fetched_at||ha._created||0).getTime();
+        const db = new Date(hb.raw_date||hb.fetched_at||hb._created||0).getTime();
+        if(Math.abs(da - db) > TIME_MS) continue;
+
+        // Count shared significant tokens between this pair
+        let shared = 0;
+        tokenSets[ia].forEach(t => { if(tokenSets[ib].has(t)) shared++; });
+        if(shared >= 2) union(ia, ib);
+      }
+    }
+  });
+
+  // Collect groups
+  const groups = new Map();
+  candidates.forEach((_, i) => {
+    const root = find(i);
+    if(!groups.has(root)) groups.set(root, []);
+    groups.get(root).push(i);
+  });
+
+  const SEV_ORD = {alto:3, critical:3, warning:2, medio:2, info:1, bajo:1};
+  const INTL_KW = ['Reuters','Bloomberg','BBC','AFP','Financial Times','Wall Street Journal','Guardian','CNN'];
+  let groupCount = 0;
+
+  groups.forEach(indices => {
+    if(indices.length < 2) return;
+    groupCount++;
+    const groupHits = indices.map(i => candidates[i]);
+
+    // Winner: highest severity → highest relevance_score → most recent
+    const winner = groupHits.reduce((best, h) => {
+      const bSev = SEV_ORD[best.inherent_level||best.level||'info'] || 1;
+      const hSev = SEV_ORD[h.inherent_level||h.level||'info'] || 1;
+      if(hSev > bSev) return h;
+      if(hSev === bSev && (h.relevance_score||0) > (best.relevance_score||0)) return h;
+      return best;
+    });
+
+    const intlCount = groupHits.filter(h => INTL_KW.some(kw => (h.source||'').includes(kw))).length;
+    const avgSevNum = groupHits.reduce((s, h) => s + (SEV_ORD[h.inherent_level||h.level||'info']||1), 0) / groupHits.length;
+    const avgSev = avgSevNum >= 2.5 ? 'alto' : avgSevNum >= 1.5 ? 'medio' : 'bajo';
+
+    const wi = S.hits.findIndex(h => h.id === winner.id);
+    if(wi >= 0){
+      S.hits[wi]._groupId     = winner.id;
+      S.hits[wi]._groupSize   = groupHits.length;
+      S.hits[wi]._groupIntl   = intlCount;
+      S.hits[wi]._groupAvgSev = avgSev;
+      S.hits[wi]._groupIds    = groupHits.map(h => h.id);
+    }
+    groupHits.forEach(h => {
+      if(h.id === winner.id) return;
+      const idx = S.hits.findIndex(sh => sh.id === h.id);
+      if(idx >= 0) S.hits[idx]._groupedUnder = winner.id;
+    });
+  });
+
+  console.log('[groupHitsLocally] ' + groupCount + ' grupos formados de ' + candidates.length + ' hits');
+  return groupCount;
+}
+
 // ── Semantic deduplication via Mistral ───────────────────────────
 // Groups hits that cover the SAME real event (different sources/titles).
 // Sets on the winner: _groupId, _groupSize, _groupIntl, _groupAvgSev, _groupIds
@@ -1828,12 +1992,11 @@ async function groupHitsSemantically(){
 }
 
 function resetAndRegroup(){
-  S.hits.forEach(h=>{
-    delete h._groupId; delete h._groupedUnder; delete h._groupSize;
-    delete h._groupIntl; delete h._groupAvgSev; delete h._groupIds;
-  });
+  // Fast local pass first (no API, works on all hits retroactively)
+  groupHitsLocally();
   lsSet('hits', S.hits);
   renderHits();
+  // Mistral refinement in background (only if key available)
   groupHitsSemantically();
 }
 function renderCocFeed(){
@@ -3006,6 +3169,7 @@ function renderHits(){
   const inh    = document.getElementById('hit-filter-inh')?.value||'';
   const res    = document.getElementById('hit-filter-res')?.value||'';
   const src    = document.getElementById('hit-filter-source')?.value||'';
+  const days   = document.getElementById('hit-filter-days')?.value||'';
   const search = (document.getElementById('hit-search')?.value||'').toLowerCase();
 
   // Exclude semantic duplicates (only show the winner of each group)
@@ -3038,6 +3202,14 @@ function renderHits(){
     return norm===res;
   });
   if(src) hits=hits.filter(h=>(h.source||'').includes(src)||(h.is_sentencia&&src==='Sentencia'));
+  if(days){
+    const dayCutoff = new Date(Date.now() - parseInt(days) * 86400000).toISOString();
+    hits = hits.filter(h => {
+      if(h.is_sentencia) return true;
+      const d = h.raw_date||h.fetched_at||h._created||'';
+      return !d || d >= dayCutoff;
+    });
+  }
   if(search) hits=hits.filter(h=>((h.title||'')+(h.summary||'')+(h.twin_analysis||'')).toLowerCase().includes(search));
 
   updateFunnelCounts();
