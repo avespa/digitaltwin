@@ -3418,6 +3418,7 @@ function hitCard(h){
           <button class="btn btn-primary btn-xs" onclick="openApFromHit('${h.id}','${esc(h.title).replace(/'/g,"\\'")}')">+ Abrir Plan</button>`:
           `<button class="btn btn-ghost btn-xs" onclick="openApFromHit('${h.id}','${esc(h.title).replace(/'/g,"\\'")}')">+ Plan de acción</button>`
       }
+      <button class="btn btn-ghost btn-xs" onclick="deleteHitPermanently('${h.id}')" title="Eliminar definitivamente" style="margin-left:auto;color:var(--danger);opacity:.55;border-color:transparent" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.55'">🗑</button>
     </div>
     ${hasDetail?`
     <div class="hit-extra" id="hd-${h.id}">
@@ -5336,6 +5337,18 @@ async function discardHit(hitId){
   }
   renderHits();
 }
+async function deleteHitPermanently(hitId){
+  const idx = S.hits.findIndex(h => h.id === hitId);
+  if(idx < 0) return;
+  const h = S.hits[idx];
+  if(!confirm(`¿Eliminar este hit definitivamente?\n\n"${(h.title||'').slice(0,80)}"\n\nEsta acción no se puede deshacer.`)) return;
+  if(h._fsId) await fsDelete('hits', h._fsId).catch(()=>{});
+  S.hits.splice(idx, 1);
+  lsSet('hits', S.hits);
+  renderHits();
+  updateBadges();
+}
+
 async function reAnalyzeHit(hitId, silent=false){
   if(!S.cfg.mistralKey){ showAlert('hits-alert','Configura la API key de Mistral','err'); return; }
   if(!S.ctx?.name && !S.twinSummary){ showAlert('hits-alert','Primero completa el Contexto Organizacional del Twin','err'); return; }
