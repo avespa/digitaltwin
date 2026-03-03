@@ -1830,19 +1830,26 @@ function groupHitsLocally(){
     });
   });
 
-  // Tokens appearing in too many hits are generic noise — skip them
-  const maxFreq = Math.max(3, Math.ceil(candidates.length * 0.15));
-
   // Union-Find
   const parent = candidates.map((_, i) => i);
   function find(x){ return parent[x]===x ? x : (parent[x]=find(parent[x])); }
   function union(x, y){ parent[find(x)] = find(y); }
 
+  // Fast pass: identical normalised titles → always same group
+  const normMap = new Map();
+  candidates.forEach((h, i) => {
+    const k = (h.title||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();
+    if(normMap.has(k)) union(normMap.get(k), i);
+    else normMap.set(k, i);
+  });
+
   const TIME_MS = 30 * 86400000; // 30-day window
   const checkedPairs = new Set();
 
-  index.forEach((idxArr, tok) => {
-    if(idxArr.length < 2 || idxArr.length > maxFreq) return;
+  // NOTE: no maxFreq cap — tokens like "ibai" that appear in many hits
+  // are exactly the discriminator we want; MIN_SHARED≥2 prevents false positives
+  index.forEach((idxArr) => {
+    if(idxArr.length < 2) return;
     for(let a = 0; a < idxArr.length; a++){
       for(let b = a+1; b < idxArr.length; b++){
         const ia = idxArr[a], ib = idxArr[b];
@@ -4252,6 +4259,7 @@ function showAlert(containerId, msg, type){
 // INIT
 // ═══════════════════════════════════════════════════════════════
 restoreLocal();
+groupHitsLocally(); // deduplicate cached hits before first render
 renderAll();
 // radar-dash removed — new COC dashboard uses canvas building instead
 syncAll();
