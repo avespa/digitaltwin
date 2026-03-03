@@ -1742,12 +1742,17 @@ function renderCocDimBar(scores){
 }
 
 // ── Feed ─────────────────────────────────────────────────────────
+function _normTitle(t){ return (t||'').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,55); }
 function renderCocFeed(){
   const el = document.getElementById('coc-feed-list');
   if(!el) return;
-  const hits = S.hits
+  const lvOrd={critical:0,alto:0,warning:1,medio:1,high:1,info:2,bajo:2,low:2};
+  const seen = new Map();
+  S.hits
     .filter(h=>!h.false_positive && !h._discarded)
-    .slice(0,12);
+    .sort((a,b)=>(lvOrd[a.inherent_level||a.level||'info']||2)-(lvOrd[b.inherent_level||b.level||'info']||2))
+    .forEach(h=>{ const k=_normTitle(h.title); if(!seen.has(k)) seen.set(k,h); });
+  const hits = [...seen.values()].slice(0,12);
   if(!hits.length){
     el.innerHTML=`<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:10px">Sin amenazas detectadas</div>`;
     return;
@@ -2034,10 +2039,14 @@ function drawCocBuilding(){
   const container = document.getElementById('coc-building');
   const W = container.clientWidth  || 640;
   const H = container.clientHeight || 420;
-  if(canvas.width !==W) canvas.width  = W;
-  if(canvas.height!==H) canvas.height = H;
-
-  const ctx   = canvas.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio||1, 2);
+  const cW=Math.round(W*dpr), cH=Math.round(H*dpr);
+  if(canvas.width!==cW||canvas.height!==cH){
+    canvas.width=cW; canvas.height=cH;
+    canvas.style.width=W+'px'; canvas.style.height=H+'px';
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
   const T     = Date.now();
   const day   = _isDay();
   const scores= getDimScores();
@@ -2342,6 +2351,43 @@ function startCocAnimation(){
 }
 
 
+// ── Canvas hover tooltip ──────────────────────────────────────────────────
+function initCityHover(){
+  const cv  = document.getElementById('coc-bcanvas');
+  const tip = document.getElementById('coc-tooltip');
+  if(!cv || !tip || cv._hoverBound) return;
+  cv._hoverBound = true;
+  cv.addEventListener('mousemove', e=>{
+    if(!window._cityHitZones) return;
+    const rc = cv.getBoundingClientRect();
+    const mx = e.clientX - rc.left, my = e.clientY - rc.top;
+    let found = null;
+    for(const z of window._cityHitZones){
+      const dx = mx - z.x, dy = my - (z.y - z.hPx * 0.5);
+      if(Math.sqrt(dx*dx + dy*dy) < z.r){ found = z; break; }
+    }
+    if(found){
+      const dim = DIMS[found.dimIdx], sc = found.sc;
+      const [r,g,gr] = sc>=4?[0,229,160]:sc>=3?[100,210,130]:sc>=2?[245,158,11]:sc>0?[239,100,68]:[100,130,150];
+      const pct = sc > 0 ? (sc/5*100).toFixed(0) : 0;
+      tip.innerHTML = `<span class="tt-icon">${dim.icon}</span><div class="tt-name">${dim.label}</div><div class="tt-score" style="color:rgb(${r},${g},${gr})">${sc>0?sc.toFixed(1)+'/5':'sin datos'}</div><div class="tt-bar"><div class="tt-fill" style="width:${pct}%;background:rgb(${r},${g},${gr})"></div></div><div style="opacity:.6;font-size:8px;margin-top:2px">${dim.desc||''}</div>`;
+      let tx = mx + 14, ty = my - 20;
+      tip.style.display = 'block';
+      const tw = tip.offsetWidth, th = tip.offsetHeight;
+      if(tx + tw > rc.width  - 8) tx = mx - tw - 14;
+      if(ty + th > rc.height - 8) ty = rc.height - th - 8;
+      if(ty < 4) ty = 4;
+      tip.style.left = tx + 'px';
+      tip.style.top  = ty + 'px';
+      cv.style.cursor = 'pointer';
+    } else {
+      tip.style.display = 'none';
+      cv.style.cursor = 'default';
+    }
+  });
+  cv.addEventListener('mouseleave', ()=>{ tip.style.display = 'none'; });
+}
+
 // ── Health Score ───────────────────────────────────────────────────
 function calcHealthScore(){
   // Base 100
@@ -2429,6 +2475,7 @@ function renderDashboard(){
   renderHealthGauge();
   startCocClock();
   startCocAnimation();
+  setTimeout(initCityHover, 200);
 }
 
 function renderHealthGauge(){
