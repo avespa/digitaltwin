@@ -645,7 +645,6 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
       <div class="ph-left"><div class="ph-title">Monitorización de Hits</div><div class="ph-sub" id="hits-sync-info">Funnel de relevancia · Filtrado por keywords → Impacto en tu empresa</div></div>
       <div class="ph-actions">
         <button class="btn btn-ghost btn-sm" id="batch-reanalyze-btn" onclick="batchReAnalyze()" title="Re-analiza todos los hits pendientes contra tu Digital Twin">⟳ Re-evaluar todos</button>
-        <button class="btn btn-ghost btn-sm" onclick="deduplicateHits()" title="Detecta y elimina permanentemente los hits duplicados de Firestore" style="color:var(--text-muted)">⊕ Deduplicar</button>
         <button class="btn btn-ghost btn-sm" onclick="cleanOldHits(30)" title="Elimina hits de más de 30 días (las sentencias no se eliminan)" style="color:var(--text-muted)">🗑 Limpiar &gt;30d</button>
         <button class="btn btn-ghost btn-sm" onclick="syncHits()">Sync</button>
       </div>
@@ -1668,30 +1667,6 @@ async function cleanOldHits(daysToKeep = 30){
   renderHits();
   updateBadges();
   showAlert('hits-alert', '✓ ' + toDelete.length + ' hits eliminados', 'ok');
-}
-
-async function deduplicateHits(){
-  showAlert('hits-alert', 'Analizando duplicados...', 'ok');
-  groupHitsLocally();
-  const losers = S.hits.filter(h => h._groupedUnder);
-  if(!losers.length){
-    showAlert('hits-alert', 'No se encontraron duplicados', 'ok');
-    return;
-  }
-  if(!confirm('Se encontraron ' + losers.length + ' hits duplicados.\n¿Eliminarlos permanentemente de Firestore?\nEsta acción no se puede deshacer.')) {
-    showAlert('hits-alert', 'Cancelado', 'ok');
-    return;
-  }
-  showAlert('hits-alert', 'Eliminando ' + losers.length + ' duplicados de Firestore...', 'ok');
-  const delPromises = losers.filter(h => h._fsId).map(h => fsDelete('hits', h._fsId).catch(()=>{}));
-  await Promise.all(delPromises);
-  const loserIds = new Set(losers.map(h => h.id||h.link));
-  S.hits = S.hits.filter(h => !loserIds.has(h.id||h.link));
-  S.hits.forEach(h => { delete h._groupId; delete h._groupSize; delete h._groupIntl; delete h._groupAvgSev; delete h._groupIds; delete h._groupedUnder; });
-  lsSet('hits', S.hits);
-  renderHits();
-  updateBadges();
-  showAlert('hits-alert', '✓ ' + losers.length + ' duplicados eliminados permanentemente', 'ok');
 }
 
 function restoreLocal(){
