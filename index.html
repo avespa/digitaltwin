@@ -1488,6 +1488,9 @@ async function syncAll(){
     // Auto-analyze hits without RAG evaluation (silent background queue)
     autoAnalyzePending();
 
+    // Group semantic duplicates in background (only ungrouped hits, cached result)
+    groupHitsSemantically();
+
   }catch(e){
     setStatus('Error sync');
     console.error('syncAll error:', e);
@@ -1745,6 +1748,85 @@ function renderCocDimBar(scores){
 // ── Feed ─────────────────────────────────────────────────────────
 function _normTitle(t){ return (t||'').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,55); }
 
+// ── Semantic deduplication via Mistral ───────────────────────────
+// Groups hits that cover the SAME real event (different sources/titles).
+// Sets on the winner: _groupId, _groupSize, _groupIntl, _groupAvgSev, _groupIds
+// Sets on losers:    _groupedUnder = winner.id
+async function groupHitsSemantically(){
+  if(!S.cfg.mistralKey) return;
+
+  // Only process hits that have not yet been assigned to any group
+  const ungrouped = S.hits.filter(h => !h._groupId && !h._groupedUnder && !h.false_positive && !h._discarded);
+  if(ungrouped.length < 2) return;
+
+  const batch = ungrouped.slice(0, 120);
+  const titleList = batch.map((h, i) => `${i}: ${h.title}`).join('\n');
+
+  setStatus('Agrupando noticias similares con IA...');
+  try {
+    const prompt =
+      'Dado estos titulares de noticias compliance numerados, devuelve SOLO un array JSON agrupando los índices que traten el MISMO evento real concreto (misma multa, misma resolución, misma sentencia). NO agrupes si solo comparten tema genérico.\n\n' +
+      titleList +
+      '\n\nDevuelve SOLO JSON: [[0,3,7],[1,5],...] — incluye únicamente grupos con ≥2 elementos. Si no hay duplicados devuelve [].';
+
+    const raw = await callMistral(prompt, 500);
+    const match = raw.match(/\[[\s\S]*\]/);
+    if(!match) { setStatus('Sync ✓ '+fmtTime(S.lastSync)); return; }
+
+    let groups;
+    try { groups = JSON.parse(match[0]); } catch(e){ setStatus('Sync ✓ '+fmtTime(S.lastSync)); return; }
+    if(!Array.isArray(groups) || groups.length === 0){ setStatus('Sync ✓ '+fmtTime(S.lastSync)); return; }
+
+    const SEV_ORD = {alto:3, critical:3, warning:2, medio:2, info:1, bajo:1};
+    const INTL_KW = ['Reuters','Bloomberg','BBC','AFP','Financial Times','Wall Street Journal','Guardian','Times','International','Le Monde','CNN'];
+
+    groups.forEach(group => {
+      if(!Array.isArray(group) || group.length < 2) return;
+      const valid = group.filter(i => typeof i === 'number' && i >= 0 && i < batch.length);
+      if(valid.length < 2) return;
+
+      const groupHits = valid.map(i => batch[i]);
+
+      // Pick winner: highest severity, then highest relevance_score
+      const winner = groupHits.reduce((best, h) => {
+        const bSev = SEV_ORD[best.inherent_level||best.level||'info'] || 1;
+        const hSev = SEV_ORD[h.inherent_level||h.level||'info'] || 1;
+        if(hSev > bSev) return h;
+        if(hSev === bSev && (h.relevance_score||0) > (best.relevance_score||0)) return h;
+        return best;
+      });
+
+      const intlCount = groupHits.filter(h => INTL_KW.some(kw => (h.source||'').includes(kw))).length;
+      const avgSevNum = groupHits.reduce((s, h) => s + (SEV_ORD[h.inherent_level||h.level||'info']||1), 0) / groupHits.length;
+      const avgSev = avgSevNum >= 2.5 ? 'alto' : avgSevNum >= 1.5 ? 'medio' : 'bajo';
+
+      // Mark winner
+      const wi = S.hits.findIndex(h => h.id === winner.id);
+      if(wi >= 0){
+        S.hits[wi]._groupId   = winner.id;
+        S.hits[wi]._groupSize = groupHits.length;
+        S.hits[wi]._groupIntl = intlCount;
+        S.hits[wi]._groupAvgSev = avgSev;
+        S.hits[wi]._groupIds  = groupHits.map(h => h.id);
+      }
+
+      // Mark duplicates
+      groupHits.forEach(h => {
+        if(h.id === winner.id) return;
+        const idx = S.hits.findIndex(sh => sh.id === h.id);
+        if(idx >= 0) S.hits[idx]._groupedUnder = winner.id;
+      });
+    });
+
+    lsSet('hits', S.hits);
+    renderHits();
+    setStatus('Sync ✓ '+fmtTime(S.lastSync));
+  } catch(e) {
+    console.warn('[groupHitsSemantically]', e.message);
+    setStatus('Sync ✓ '+fmtTime(S.lastSync));
+  }
+}
+
 function resetAndRegroup(){
   S.hits.forEach(h=>{
     delete h._groupId; delete h._groupedUnder; delete h._groupSize;
@@ -1760,7 +1842,7 @@ function renderCocFeed(){
   const lvOrd={critical:0,alto:0,warning:1,medio:1,high:1,info:2,bajo:2,low:2};
   const seen = new Map();
   S.hits
-    .filter(h=>!h.false_positive && !h._discarded)
+    .filter(h=>!h.false_positive && !h._discarded && !h._groupedUnder)
     .sort((a,b)=>(lvOrd[a.inherent_level||a.level||'info']||2)-(lvOrd[b.inherent_level||b.level||'info']||2))
     .forEach(h=>{ const k=_normTitle(h.title); if(!seen.has(k)) seen.set(k,h); });
   const hits = [...seen.values()].slice(0,12);
@@ -2926,7 +3008,8 @@ function renderHits(){
   const src    = document.getElementById('hit-filter-source')?.value||'';
   const search = (document.getElementById('hit-search')?.value||'').toLowerCase();
 
-  let hits = S.hits;
+  // Exclude semantic duplicates (only show the winner of each group)
+  let hits = S.hits.filter(h => !h._groupedUnder);
 
   // Funnel filter
   if(hitFunnel==='impacts'){
