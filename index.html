@@ -1469,7 +1469,8 @@ async function syncAll(){
     }
 
     // Hits: try Firestore first, fallback to GitHub raw JSON
-    const fsHits = await fsList('hits');
+    const [fsHitsRaw, deletedIds] = await Promise.all([fsList('hits'), loadDeletedIds()]);
+    const fsHits = (fsHitsRaw||[]).filter(h => !deletedIds.has(h.id||h.link));
     if(fsHits && fsHits.length > 0){
       S.hits = fsHits;
     } else {
@@ -1597,7 +1598,8 @@ async function syncHitsFromGitHub(){
 
 async function syncHits(){
   // Always load Firestore first (has analyzed data), then merge GitHub
-  const fsHits = await fsList('hits');
+  const [fsHitsRaw, deletedIds] = await Promise.all([fsList('hits'), loadDeletedIds()]);
+  const fsHits = (fsHitsRaw||[]).filter(h => !deletedIds.has(h.id||h.link));
   if(fsHits && fsHits.length > 0){
     // Build map of Firestore hits
     const fsMap = {};
@@ -1609,7 +1611,7 @@ async function syncHits(){
       const r = await fetch(url);
       if(r.ok){
         const data = await r.json();
-        const ghHits = data.hits || [];
+        const ghHits = (data.hits || []).filter(h => !deletedIds.has(h.id||h.link));
         // Merge: Firestore data wins for analyzed hits, GitHub provides new ones
         const merged = ghHits.map(ghHit => {
           const key = ghHit.id || ghHit.link;
@@ -5343,12 +5345,33 @@ async function discardHit(hitId){
   }
   renderHits();
 }
+async function loadDeletedIds(){
+  try{
+    const doc = await db.collection('_meta').doc('deletedHits').get();
+    return new Set(doc.exists ? (doc.data().ids||[]) : []);
+  }catch(e){ return new Set(); }
+}
+
 async function deleteHitPermanently(hitId){
   const idx = S.hits.findIndex(h => h.id === hitId);
   if(idx < 0) return;
   const h = S.hits[idx];
   if(!confirm(`¿Eliminar este hit definitivamente?\n\n"${(h.title||'').slice(0,80)}"\n\nEsta acción no se puede deshacer.`)) return;
+
+  const key = h.id || h.link;
+
+  // 1. Añadir a blacklist permanente en Firestore (impide que vuelva del sync de GitHub)
+  try{
+    await db.collection('_meta').doc('deletedHits').set(
+      { ids: firebase.firestore.FieldValue.arrayUnion(key) },
+      { merge: true }
+    );
+  }catch(e){ console.warn('blacklist write failed', e); }
+
+  // 2. Borrar documento de la colección hits en Firestore
   if(h._fsId) await fsDelete('hits', h._fsId).catch(()=>{});
+
+  // 3. Eliminar de memoria y localStorage
   S.hits.splice(idx, 1);
   lsSet('hits', S.hits);
   renderHits();
