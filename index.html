@@ -414,7 +414,13 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
       <div id="coc-building"><canvas id="coc-bcanvas"></canvas></div>
       <div id="coc-splitter" title="Arrastra para redimensionar"></div>
       <div id="coc-right">
-        <div class="ckri" style="--kc:var(--accent)">
+        <!-- Health Score Gauge -->
+      <div id="coc-health-wrap" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px 14px;flex-shrink:0">
+        <div style="font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">Health Score</div>
+        <canvas id="coc-health-canvas" width="220" height="90" style="width:100%;height:auto;display:block"></canvas>
+        <div id="coc-health-detail" style="font-size:8px;color:var(--text-dim);line-height:1.6;margin-top:6px"></div>
+      </div>
+      <div class="ckri" style="--kc:var(--accent)">
           <div class="ckri-n" id="coc-kri-m">—</div>
           <div><div class="ckri-l">Madurez Global</div><div class="ckri-s">ISO 37301 · /5.0</div></div>
         </div>
@@ -2000,24 +2006,25 @@ function _spawnCityParticle(x1,y1,x2,y2,col,T){
 // ── City grid: exactly ONE cell per ISO 37301 dimension (1-7) ───
 // Compact 7×5 grid. 0=road/ground, 1-7=building, T=tree placeholder
 // Layout: 3 columns of districts separated by roads
-// Col:  0    1    2    3    4    5    6
+// Col:  0   1   2   3   4   5   6   7   8   9  10
 const CITY_GRID = [
-  [ 0,   0,   0,   0,   0,   0,   0 ], // row 0 — road top
-  [ 0,   1,   0,   3,   0,   6,   0 ], // row 1 — Contexto | Planif | Evaluac
-  [ 0,   0,   0,   0,   0,   0,   0 ], // row 2 — road mid
-  [ 0,   2,   0,   4,   0,   7,   0 ], // row 3 — Liderazgo | Soporte | Mejora
-  [ 0,   0,   0,   0,   0,   0,   0 ], // row 4 — road mid
-  [ 0,   0,   0,   5,   0,   0,   0 ], // row 5 — Operación (central, hero building)
-  [ 0,   0,   0,   0,   0,   0,   0 ], // row 6 — road bottom
+  [ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 ], // row 0  road
+  [ 0,  1,  0,  0,  0,  3,  0,  0,  0,  6,  0 ], // row 1  Contexto|Planif|Evaluac
+  [ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 ], // row 2  park
+  [ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 ], // row 3  road
+  [ 0,  2,  0,  0,  0,  4,  0,  0,  0,  7,  0 ], // row 4  Liderazgo|Soporte|Mejora
+  [ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 ], // row 5  park
+  [ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 ], // row 6  road
+  [ 0,  0,  0,  0,  0,  5,  0,  0,  0,  0,  0 ], // row 7  Operacion hero
+  [ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 ], // row 8  road
 ];
-const ROAD_ROWS = [0,2,4,6];
-const ROAD_COLS = [0,2,4,6];
-
-// Trees: only on empty non-road cells
+const ROAD_ROWS = [0,3,6,8];
+const ROAD_COLS = [0,3,6,10];
 const TREE_POS = [
-  [1,0],[1,2],[1,4],[1,6],
-  [3,0],[3,2],[3,4],[3,6],
-  [5,0],[5,1],[5,2],[5,4],[5,5],[5,6],
+  [2,1],[2,3],[2,5],[2,7],[2,9],
+  [5,1],[5,3],[5,7],[5,9],
+  [1,3],[1,7],[4,3],[4,7],
+  [7,1],[7,3],[7,7],[7,9],
 ];
 
 // ── Render ────────────────────────────────────────────────────────
@@ -2051,19 +2058,21 @@ function drawCocBuilding(){
   bg.addColorStop(1, day?'#c8d8ea':'#0b1220');
   ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
 
-  // ── Tile sizing & origin ────────────────────────────────────────
+  // ── Tile sizing & origin ────────────────────────────────────────────
   const ROWS = CITY_GRID.length;
   const COLS = CITY_GRID[0].length;
-  // Fit isometric grid into canvas
-  const maxTX = Math.floor(W / (COLS * 0.7));
-  const TX = Math.max(32, Math.min(72, maxTX));
+  // Reserve margins for outside labels
+  const topMargin  = 78;
+  const sideMargin = 125;
+  const botMargin  = 46;
+  const availW = W - sideMargin * 2;
+  const availH = H - topMargin - botMargin;
+  const fitByW = Math.floor(availW / ((COLS + ROWS) * 0.52));
+  const fitByH = Math.floor(availH / ((ROWS + COLS) * 0.27));
+  const TX = Math.max(22, Math.min(48, Math.min(fitByW, fitByH)));
   const TY = Math.round(TX * 0.52);
-
-  // Origin: center the grid horizontally, push up to leave room for tallest building
-  const gridW = (COLS + ROWS) * TX/2;
-  const gridH = (COLS + ROWS) * TY/2;
-  const ox = W/2;
-  const oy = H*0.14 + TY;
+  const ox = W / 2;
+  const oy = topMargin + (COLS + ROWS) * TY * 0.28;
 
   // ── Pass 1: Ground tiles ────────────────────────────────────────
   for(let row=0; row<ROWS; row++){
@@ -2159,83 +2168,138 @@ function drawCocBuilding(){
     _drawRoof(ctx,x,y,TX,TY,h,sc,T,day);
   });
 
-  // ── Pass 5: Labels — clean tooltip card above each building ──────
-  buildCalls.forEach(({x,y,h,sc,dimIdx})=>{
-    const dim  = DIMS[dimIdx];
-    const hPx  = h * TY * 0.55;
+  // ── Pass 5: Outside-grid callout labels ───────────────────────
+  // Row 1 (dims 0,2,5): label ABOVE the grid, at top margin
+  // Row 4 (dims 1,3,6): labels to LEFT (col 1,5) or RIGHT (col 9)
+  // Row 7 (dim 4)      : label BELOW the grid
+  buildCalls.forEach(({row, col, x, y, h, sc, dimIdx}) => {
+    const dim   = DIMS[dimIdx];
+    const hPx   = h * TY * 0.55;
+    const topY  = y - hPx;
     const [r,g,gr] = sc>=4?[0,229,160]:sc>=3?[100,210,130]:sc>=2?[245,158,11]:sc>0?[239,100,68]:[100,130,150];
 
-    // Card sits directly above building top, with small gap
-    const cardGap  = 6;
-    const iconSize = Math.max(14, Math.round(TY * 0.62));
-    const fontSize = Math.max(8,  Math.round(TY * 0.30));
-    const lineH    = fontSize + 2;
-    const cardPadX = 8, cardPadY = 5;
-    // Label: short name (up to 10 chars)
-    const shortLabel = dim.label.length > 10 ? dim.label.slice(0,9)+'…' : dim.label;
-    ctx.font = `${fontSize}px 'DM Mono',monospace`;
-    const textW = ctx.measureText(shortLabel.toUpperCase()).width;
-    const scoreW = sc>0 ? ctx.measureText(sc.toFixed(1)).width + 2 : 0;
-    const cardW = Math.max(textW, scoreW) + cardPadX*2 + iconSize + 6;
-    const cardH = iconSize + cardPadY*2;
-    const cardX = x - cardW/2;
-    const cardY = y - hPx - cardGap - cardH;
+    const fSize  = Math.max(9, Math.round(TX * 0.30));
+    const iconSz = fSize + 5;
+    const padX = 8, padY = 5;
 
-    // Skip if card goes off-screen top
-    if(cardY < 2) return;
+    ctx.font = `600 ${fSize}px 'DM Mono',monospace`;
+    const nameW = ctx.measureText(dim.label.toUpperCase()).width;
+    ctx.font = `${fSize-1}px 'DM Mono',monospace`;
+    const scoreStr  = sc > 0 ? sc.toFixed(1) + '/5' : 'sin datos';
+    const scoreW    = ctx.measureText(scoreStr).width;
+    const cardW     = Math.max(nameW, scoreW) + padX*2 + iconSz + 6;
+    const lineCount = 2;
+    const cardH     = lineCount * (fSize + 3) + padY * 2;
 
-    // Card background — rounded rect
-    const bgAlpha = day ? 0.82 : 0.78;
-    ctx.globalAlpha = bgAlpha;
-    ctx.fillStyle   = day ? 'rgba(230,240,252,0.92)' : 'rgba(8,18,30,0.90)';
-    ctx.beginPath();
-    ctx.roundRect(cardX, cardY, cardW, cardH, 5);
-    ctx.fill();
+    // Position depends on grid row
+    let cardX, cardY, anchorX, anchorY;
 
-    // Card border (colored by score)
-    ctx.globalAlpha = 0.7;
-    ctx.strokeStyle = `rgba(${r},${g},${gr},0.6)`;
-    ctx.lineWidth   = 1.2;
-    ctx.stroke();
-    ctx.globalAlpha = 1;
-
-    // Left color bar
-    ctx.fillStyle = `rgba(${r},${g},${gr},0.9)`;
-    ctx.beginPath();
-    ctx.roundRect(cardX, cardY, 3, cardH, [5,0,0,5]);
-    ctx.fill();
-
-    // Icon
-    ctx.font = `${iconSize}px sans-serif`;
-    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-    ctx.fillText(dim.icon, cardX + 8, cardY + cardH/2);
-
-    // Dimension name
-    const txtX = cardX + 8 + iconSize + 5;
-    ctx.font = `600 ${fontSize}px 'DM Mono',monospace`;
-    ctx.fillStyle = day ? 'rgba(20,45,80,0.85)' : 'rgba(200,220,240,0.88)';
-    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-    ctx.fillText(shortLabel.toUpperCase(), txtX, cardY + cardH/2 - (sc>0 ? lineH*0.28 : 0));
-
-    // Score (smaller, below name)
-    if(sc>0){
-      ctx.font = `bold ${Math.max(7,fontSize-1)}px 'DM Mono',monospace`;
-      ctx.fillStyle = `rgba(${r},${g},${gr},0.95)`;
-      ctx.fillText(sc.toFixed(1)+'/5', txtX, cardY + cardH/2 + lineH*0.38);
+    if (row === 1) {
+      // TOP: above the whole grid
+      cardX   = x - cardW / 2;
+      cardY   = 8;
+      anchorX = x;
+      anchorY = topY - 4;
+    } else if (row === 4) {
+      // SIDES: left for cols 1 & 5, right for col 9
+      if (col <= 5) {
+        cardX = 8;
+      } else {
+        cardX = W - cardW - 8;
+      }
+      cardY   = y - hPx / 2 - cardH / 2;
+      anchorX = x;
+      anchorY = topY + hPx * 0.4;
     } else {
-      ctx.font = `${Math.max(7,fontSize-1)}px 'DM Mono',monospace`;
-      ctx.fillStyle = day?'rgba(120,140,160,0.6)':'rgba(80,110,130,0.6)';
-      ctx.fillText('sin datos', txtX, cardY + cardH/2 + lineH*0.38);
+      // BOTTOM: below the grid (row 7)
+      cardX   = x - cardW / 2;
+      cardY   = H - botMargin + 4;
+      anchorX = x;
+      anchorY = y + TY * 0.6;
     }
 
-    // Connector line from card bottom to building top
-    ctx.strokeStyle = `rgba(${r},${g},${gr},0.25)`;
-    ctx.lineWidth = 1; ctx.setLineDash([2,3]);
-    ctx.beginPath();
-    ctx.moveTo(x, cardY + cardH);
-    ctx.lineTo(x, y - hPx);
-    ctx.stroke(); ctx.setLineDash([]);
+    // Clamp
+    cardX = Math.max(4, Math.min(W - cardW - 4, cardX));
+    cardY = Math.max(4, Math.min(H - cardH - 4, cardY));
+
+    // Callout line
+    const cardCX = cardX + cardW / 2, cardCY = cardY + cardH / 2;
+    const dx = anchorX - cardCX, dy = anchorY - cardCY;
+    const dist = Math.sqrt(dx*dx + dy*dy) || 1;
+    const lsx  = cardCX + dx/dist * (cardW/2 + 2);
+    const lsy  = cardCY + dy/dist * (cardH/2 + 2);
+
+    ctx.strokeStyle = `rgba(${r},${g},${gr},0.28)`;
+    ctx.lineWidth = 1; ctx.setLineDash([3,4]);
+    ctx.beginPath(); ctx.moveTo(lsx, lsy); ctx.lineTo(anchorX, anchorY); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Anchor dot
+    ctx.fillStyle = `rgba(${r},${g},${gr},0.55)`;
+    ctx.beginPath(); ctx.arc(anchorX, anchorY, 2.5, 0, Math.PI*2); ctx.fill();
+
+    // Card bg
+    ctx.globalAlpha = 0.90;
+    ctx.fillStyle = day ? 'rgba(225,236,250,0.96)' : 'rgba(5,13,25,0.93)';
+    ctx.beginPath(); ctx.roundRect(cardX, cardY, cardW, cardH, 5); ctx.fill();
+    ctx.strokeStyle = `rgba(${r},${g},${gr},0.50)`;
+    ctx.lineWidth = 1; ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // Accent bar
+    ctx.fillStyle = `rgba(${r},${g},${gr},0.85)`;
+    ctx.beginPath(); ctx.roundRect(cardX, cardY, 3, cardH, [5,0,0,5]); ctx.fill();
+
+    // Icon
+    ctx.font = `${iconSz}px sans-serif`;
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(dim.icon, cardX + 8, cardY + cardH * 0.38);
+
+    const txtX = cardX + 8 + iconSz + 5;
+
+    // Name
+    ctx.font = `600 ${fSize}px 'DM Mono',monospace`;
+    ctx.fillStyle = day ? 'rgba(12,30,60,0.90)' : 'rgba(200,220,242,0.92)';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(dim.label.toUpperCase(), txtX, cardY + cardH * 0.33);
+
+    // Score
+    ctx.font = `${fSize - 1}px 'DM Mono',monospace`;
+    ctx.fillStyle = `rgba(${r},${g},${gr},0.95)`;
+    ctx.fillText(scoreStr, txtX, cardY + cardH * 0.72);
   });
+
+  // ── Mini legend ──────────────────────────────────────────────────────
+  {
+    const cw=14, ch=8;
+    const legend=[
+      {top:'#ef4444',lt:'#7a2020',rt:'#5a1818',lbl:'BAJO (1-2)'},
+      {top:'#f59e0b',lt:'#8a6610',rt:'#5a420a',lbl:'MEDIO (2-4)'},
+      {top:'#00e5a0',lt:'#007a4a',rt:'#005a36',lbl:'ALTO (4-5)'},
+    ];
+    const lfs = Math.max(8, Math.round(TX*0.24));
+    ctx.font=`${lfs}px 'DM Mono',monospace`;
+    const itemW = legend.reduce((mx,it)=>Math.max(mx, ctx.measureText(it.lbl).width),0) + cw + 12;
+    let lx = 12, ly = H - 20;
+    legend.forEach(({top,lt,rt,lbl})=>{
+      const bx=lx+cw/2, by=ly-ch/2;
+      ctx.fillStyle=top;
+      ctx.beginPath(); ctx.moveTo(bx,by-ch); ctx.lineTo(bx+cw/2,by-ch/2); ctx.lineTo(bx,by); ctx.lineTo(bx-cw/2,by-ch/2); ctx.closePath(); ctx.fill();
+      ctx.fillStyle=lt;
+      ctx.beginPath(); ctx.moveTo(bx-cw/2,by-ch/2); ctx.lineTo(bx,by); ctx.lineTo(bx,by+ch); ctx.lineTo(bx-cw/2,by+ch/2); ctx.closePath(); ctx.fill();
+      ctx.fillStyle=rt;
+      ctx.beginPath(); ctx.moveTo(bx+cw/2,by-ch/2); ctx.lineTo(bx,by); ctx.lineTo(bx,by+ch); ctx.lineTo(bx+cw/2,by+ch/2); ctx.closePath(); ctx.fill();
+      ctx.font=`${lfs}px 'DM Mono',monospace`;
+      ctx.fillStyle=day?'rgba(40,60,90,0.65)':'rgba(150,185,210,0.65)';
+      ctx.textAlign='left'; ctx.textBaseline='middle';
+      ctx.fillText(lbl, lx+cw+4, ly);
+      lx += itemW + 6;
+    });
+    ctx.font=`${lfs}px 'DM Mono',monospace`;
+    ctx.fillStyle=day?'rgba(40,60,90,0.38)':'rgba(120,155,175,0.38)';
+    ctx.textAlign='right'; ctx.textBaseline='middle';
+    ctx.fillText('ALTURA = MADUREZ · VENTANAS = ACTIVIDAD', W-10, H-20);
+  }
 
   // ── Critical alert flash (screen edge) ──────────────────────────
   if(crits>0){
@@ -2278,6 +2342,64 @@ function startCocAnimation(){
 }
 
 
+// ── Health Score ───────────────────────────────────────────────────
+function calcHealthScore(){
+  // Base 100
+  // -15 per unattended critical hit (no false_positive, no plan linked)
+  // -10 per high residual hit with no action plan
+  // -8  per overdue action plan
+  // +2  per control executed this month (ctrlExecHistory within 30 days)
+  const now = Date.now();
+  const msMonth = 30*24*3600*1000;
+
+  const critHitsNoPlan = S.hits.filter(h=>{
+    const lv=h.inherent_level||h.level||'';
+    const isCrit=lv==='critical'||lv==='alto';
+    if(!isCrit||h.false_positive||h._discarded) return false;
+    const hasPlan=S.actionPlans.some(p=>
+      (p.hit_id===h.id||(p.description||'').includes(h.id)||p.title?.includes(h.title?.slice(0,30)||'__'))
+      && p.status!=='closed'
+    );
+    return !hasPlan;
+  }).length;
+
+  const highResidualNoPlan = S.hits.filter(h=>{
+    const rv=h.residual_level||h.inherent_level||h.level||'';
+    const isHigh=rv==='alto'||rv==='critical'||rv==='high';
+    if(!isHigh||h.false_positive||h._discarded) return false;
+    return !S.actionPlans.some(p=>p.status!=='closed'&&
+      (p.hit_id===h.id||(p.description||'').includes(h.id))
+    );
+  }).length;
+
+  const overdueP = S.actionPlans.filter(p=>{
+    if(p.status==='closed') return false;
+    if(!p.deadline) return false;
+    return new Date(p.deadline) < new Date();
+  }).length;
+
+  const ctrlThisMonth = (ctrlExecHistory||[]).filter(e=>{
+    return (now - new Date(e.date||e._created||0)) < msMonth;
+  }).length;
+
+  const score = Math.max(0, Math.min(100,
+    100
+    - critHitsNoPlan    * 15
+    - highResidualNoPlan * 10
+    - overdueP          * 8
+    + ctrlThisMonth     * 2
+  ));
+
+  return {
+    score: Math.round(score),
+    critHitsNoPlan,
+    highResidualNoPlan,
+    overdueP,
+    ctrlThisMonth,
+  };
+}
+
+
 function renderDashboard(){
   const globalScore = calcGlobalScore();
   const crits = S.hits.filter(h=>{
@@ -2304,8 +2426,88 @@ function renderDashboard(){
   renderCocPill(crits, openPlans, daysSince, S.cfg?.twinDays||90);
   renderCocFeed();
   renderCocDimBar(getDimScores());
+  renderHealthGauge();
   startCocClock();
   startCocAnimation();
+}
+
+function renderHealthGauge(){
+  const canvas = document.getElementById('coc-health-canvas');
+  if(!canvas) return;
+  const detail = document.getElementById('coc-health-detail');
+  const {score,critHitsNoPlan,highResidualNoPlan,overdueP,ctrlThisMonth} = calcHealthScore();
+  const day = _isDay();
+
+  // Scale canvas for sharpness
+  const W=canvas.offsetWidth||220, H=90;
+  canvas.width=W*2; canvas.height=H*2;
+  const ctx=canvas.getContext('2d');
+  ctx.scale(2,2);
+
+  ctx.clearRect(0,0,W,H);
+
+  // Gauge arc: semicircle, bottom center
+  const cx=W/2, cy=H-10, R=Math.min(W/2-12, H-16);
+  const startA=Math.PI, endA=0;
+  const scoreA = Math.PI + (score/100)*Math.PI;
+
+  // BG arc
+  ctx.beginPath(); ctx.arc(cx,cy,R,startA,endA);
+  ctx.strokeStyle=day?'rgba(60,100,140,0.12)':'rgba(0,229,160,0.10)';
+  ctx.lineWidth=10; ctx.lineCap='round'; ctx.stroke();
+
+  // Color gradient along arc
+  const [r,g,gr] = score>=70?[0,229,160]:score>=40?[245,158,11]:[239,68,68];
+  const grd = ctx.createLinearGradient(cx-R,cy,cx+R,cy);
+  grd.addColorStop(0,'rgba(239,68,68,0.9)');
+  grd.addColorStop(0.4,'rgba(245,158,11,0.9)');
+  grd.addColorStop(1,'rgba(0,229,160,0.9)');
+  ctx.beginPath(); ctx.arc(cx,cy,R,startA,scoreA);
+  ctx.strokeStyle=grd; ctx.lineWidth=10; ctx.lineCap='round'; ctx.stroke();
+
+  // Center number
+  ctx.font=`bold ${Math.round(R*0.52)}px 'DM Mono',monospace`;
+  ctx.fillStyle=`rgba(${r},${g},${gr},0.96)`;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(score, cx, cy-R*0.18);
+
+  // Label below number
+  ctx.font=`${Math.round(R*0.22)}px 'DM Mono',monospace`;
+  ctx.fillStyle=day?'rgba(40,70,110,0.55)':'rgba(140,180,210,0.55)';
+  ctx.fillText('/100', cx, cy-R*0.18+R*0.30);
+
+  // Tick marks at 0, 40, 70, 100
+  [0,40,70,100].forEach(v=>{
+    const a=Math.PI+(v/100)*Math.PI;
+    const x1=cx+R*0.88*Math.cos(a), y1=cy+R*0.88*Math.sin(a);
+    const x2=cx+R*1.05*Math.cos(a), y2=cy+R*1.05*Math.sin(a);
+    ctx.strokeStyle=day?'rgba(60,100,140,0.25)':'rgba(0,229,160,0.20)';
+    ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  });
+
+  // Pointer needle
+  const needleA = Math.PI+(score/100)*Math.PI;
+  ctx.strokeStyle=`rgba(${r},${g},${gr},0.8)`;
+  ctx.lineWidth=2; ctx.lineCap='round';
+  ctx.beginPath();
+  ctx.moveTo(cx,cy);
+  ctx.lineTo(cx+R*0.70*Math.cos(needleA), cy+R*0.70*Math.sin(needleA));
+  ctx.stroke();
+  ctx.fillStyle=day?'rgba(200,215,230,1)':'rgba(15,28,45,1)';
+  ctx.beginPath(); ctx.arc(cx,cy,4,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle=`rgba(${r},${g},${gr},0.9)`;
+  ctx.beginPath(); ctx.arc(cx,cy,2.5,0,Math.PI*2); ctx.fill();
+
+  // Detail breakdown
+  if(detail){
+    const items=[];
+    if(critHitsNoPlan>0)     items.push(`<span style="color:var(--danger)">-${critHitsNoPlan*15}</span> hits críticos sin plan`);
+    if(highResidualNoPlan>0) items.push(`<span style="color:var(--warn)">-${highResidualNoPlan*10}</span> residual alto sin plan`);
+    if(overdueP>0)           items.push(`<span style="color:var(--warn)">-${overdueP*8}</span> planes vencidos`);
+    if(ctrlThisMonth>0)      items.push(`<span style="color:var(--accent)">+${ctrlThisMonth*2}</span> controles ejecutados`);
+    detail.innerHTML = items.length ? items.join(' · ') : '<span style="opacity:.5">sin factores activos</span>';
+  }
 }
 
 function miniHit(h){
