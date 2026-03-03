@@ -2473,9 +2473,11 @@ function drawCocBuilding(){
   const fitByH = Math.floor(availH / ((ROWS + COLS) * 0.27));
   const TX = Math.max(22, Math.min(48, Math.min(fitByW, fitByH)));
   const TY = Math.round(TX * 0.52);
-  const oxOffset = ((COLS-1)-(ROWS-1))*TX/4;
-  const ox = W/2 - oxOffset;
-  const oy = topMargin + (COLS + ROWS) * TY * 0.28;
+  const oxOffset    = ((COLS-1)-(ROWS-1))*TX/4;
+  const ox          = W/2 - oxOffset;
+  const gridScreenH = (COLS + ROWS) * TY / 2;
+  const maxBuildH   = Math.round(6 * TY * 0.55);
+  const oy          = topMargin + Math.round((availH + maxBuildH - gridScreenH) / 2);
 
   // ── Pass 1: Ground tiles ────────────────────────────────────────
   for(let row=0; row<ROWS; row++){
