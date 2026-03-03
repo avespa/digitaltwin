@@ -1639,6 +1639,7 @@ async function syncHits(){
   } else {
     await syncHitsFromGitHub();
   }
+  groupHitsLocally();
   lsSet('hits', S.hits);
   renderHits();
   updateBadges();
@@ -1783,6 +1784,134 @@ function renderCocDimBar(scores){
 // ── Feed ─────────────────────────────────────────────────────────
 function _normTitle(t){ return (t||'').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,55); }
 
+// ── Fast local entity-based grouping (no Mistral needed) ─────────
+// Groups hits that share ≥2 significant tokens AND are within 30 days.
+// Runs on ALL hits (resets previous grouping). Returns number of groups formed.
+function groupHitsLocally(){
+  const STOP = new Set([
+    'para','sobre','por','con','una','los','las','del','que','como','este','esta',
+    'pero','sus','sin','más','entre','ante','han','sido','puede','tras','caso',
+    'años','todo','toda','todos','todas','también','según','cuando','donde',
+    'desde','hasta','bajo','algo','muy','bien','solo','cada','gran','otro','otra',
+    'mismo','misma','tanto','mientras','contra','nuevo','nueva','dicho','dicha',
+    'aquel','aquella','ser','estar','haber','tener','hacer','decir','poder',
+    'dice','dijo','tiene','tuvo','será','siendo','porque','aunque','además',
+    'incluso','pese','parte','tras','cuya','cuyo','cuyas','cuyos','esta',
+    'estas','estos','menos','more','with','that','from','this','have','been'
+  ]);
+
+  function keyTokens(title){
+    return (title||'').toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^a-z0-9\s]/g,' ')
+      .split(/\s+/)
+      .filter(w => w.length > 3 && !STOP.has(w));
+  }
+
+  // Reset all existing grouping
+  S.hits.forEach(h => {
+    delete h._groupId; delete h._groupedUnder;
+    delete h._groupSize; delete h._groupIntl;
+    delete h._groupAvgSev; delete h._groupIds;
+  });
+
+  const candidates = S.hits.filter(h => !h.false_positive && !h._discarded);
+  if(candidates.length < 2) return 0;
+
+  // Pre-compute token sets
+  const tokenSets = candidates.map(h => new Set(keyTokens(h.title)));
+
+  // Inverted index: token → candidate indices
+  const index = new Map();
+  tokenSets.forEach((toks, i) => {
+    toks.forEach(tok => {
+      if(!index.has(tok)) index.set(tok, []);
+      index.get(tok).push(i);
+    });
+  });
+
+  // Tokens appearing in too many hits are generic noise — skip them
+  const maxFreq = Math.max(3, Math.ceil(candidates.length * 0.15));
+
+  // Union-Find
+  const parent = candidates.map((_, i) => i);
+  function find(x){ return parent[x]===x ? x : (parent[x]=find(parent[x])); }
+  function union(x, y){ parent[find(x)] = find(y); }
+
+  const TIME_MS = 30 * 86400000; // 30-day window
+  const checkedPairs = new Set();
+
+  index.forEach((idxArr, tok) => {
+    if(idxArr.length < 2 || idxArr.length > maxFreq) return;
+    for(let a = 0; a < idxArr.length; a++){
+      for(let b = a+1; b < idxArr.length; b++){
+        const ia = idxArr[a], ib = idxArr[b];
+        const pairKey = ia < ib ? ia+'_'+ib : ib+'_'+ia;
+        if(checkedPairs.has(pairKey)) continue;
+        checkedPairs.add(pairKey);
+
+        const ha = candidates[ia], hb = candidates[ib];
+        const da = new Date(ha.raw_date||ha.fetched_at||ha._created||0).getTime();
+        const db = new Date(hb.raw_date||hb.fetched_at||hb._created||0).getTime();
+        if(Math.abs(da - db) > TIME_MS) continue;
+
+        // Count shared significant tokens between this pair
+        let shared = 0;
+        tokenSets[ia].forEach(t => { if(tokenSets[ib].has(t)) shared++; });
+        if(shared >= 2) union(ia, ib);
+      }
+    }
+  });
+
+  // Collect groups
+  const groups = new Map();
+  candidates.forEach((_, i) => {
+    const root = find(i);
+    if(!groups.has(root)) groups.set(root, []);
+    groups.get(root).push(i);
+  });
+
+  const SEV_ORD = {alto:3, critical:3, warning:2, medio:2, info:1, bajo:1};
+  const INTL_KW = ['Reuters','Bloomberg','BBC','AFP','Financial Times','Wall Street Journal','Guardian','CNN'];
+  let groupCount = 0;
+
+  groups.forEach(indices => {
+    if(indices.length < 2) return;
+    groupCount++;
+    const groupHits = indices.map(i => candidates[i]);
+
+    // Winner: highest severity → highest relevance_score → most recent
+    const winner = groupHits.reduce((best, h) => {
+      const bSev = SEV_ORD[best.inherent_level||best.level||'info'] || 1;
+      const hSev = SEV_ORD[h.inherent_level||h.level||'info'] || 1;
+      if(hSev > bSev) return h;
+      if(hSev === bSev && (h.relevance_score||0) > (best.relevance_score||0)) return h;
+      return best;
+    });
+
+    const intlCount = groupHits.filter(h => INTL_KW.some(kw => (h.source||'').includes(kw))).length;
+    const avgSevNum = groupHits.reduce((s, h) => s + (SEV_ORD[h.inherent_level||h.level||'info']||1), 0) / groupHits.length;
+    const avgSev = avgSevNum >= 2.5 ? 'alto' : avgSevNum >= 1.5 ? 'medio' : 'bajo';
+
+    const wi = S.hits.findIndex(h => h.id === winner.id);
+    if(wi >= 0){
+      S.hits[wi]._groupId     = winner.id;
+      S.hits[wi]._groupSize   = groupHits.length;
+      S.hits[wi]._groupIntl   = intlCount;
+      S.hits[wi]._groupAvgSev = avgSev;
+      S.hits[wi]._groupIds    = groupHits.map(h => h.id);
+    }
+    groupHits.forEach(h => {
+      if(h.id === winner.id) return;
+      const idx = S.hits.findIndex(sh => sh.id === h.id);
+      if(idx >= 0) S.hits[idx]._groupedUnder = winner.id;
+    });
+  });
+
+  console.log('[groupHitsLocally] ' + groupCount + ' grupos formados de ' + candidates.length + ' hits');
+  return groupCount;
+}
+
 // ── Semantic deduplication via Mistral ───────────────────────────
 // Groups hits that cover the SAME real event (different sources/titles).
 // Sets on the winner: _groupId, _groupSize, _groupIntl, _groupAvgSev, _groupIds
@@ -1863,12 +1992,11 @@ async function groupHitsSemantically(){
 }
 
 function resetAndRegroup(){
-  S.hits.forEach(h=>{
-    delete h._groupId; delete h._groupedUnder; delete h._groupSize;
-    delete h._groupIntl; delete h._groupAvgSev; delete h._groupIds;
-  });
+  // Fast local pass first (no API, works on all hits retroactively)
+  groupHitsLocally();
   lsSet('hits', S.hits);
   renderHits();
+  // Mistral refinement in background (only if key available)
   groupHitsSemantically();
 }
 function renderCocFeed(){
