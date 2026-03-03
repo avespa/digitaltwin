@@ -29,7 +29,9 @@ body.day .fi{background:var(--surface2)}
 body.day code{background:var(--surface2);color:var(--accent)}
 body.day .twin-summary-box{background:var(--surface2)}
 body.day .hit-twin-box{background:var(--surface2)}
-body.day .mel{background:var(--surface2)}
+body.day .mel{background:var(--surface);border-color:var(--border2)}
+body.day .score-btn{background:var(--surface);border-color:var(--border2);color:var(--text-dim)}
+body.day .score-btn:hover{background:#f0f7ff;border-color:var(--accent);color:var(--accent)}
 body.day .dd-block{background:var(--surface2)}
 body.day select.fi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237a96aa'/%3E%3C/svg%3E");background-color:var(--surface2);background-repeat:no-repeat;background-position:right 10px center}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -3168,6 +3170,7 @@ function drawRadar(canvasId, scores){
   const canvas = document.getElementById(canvasId);
   if(!canvas) return;
   const ctx2 = canvas.getContext('2d');
+  const day = _isDay();
   const W=canvas.width, H=canvas.height, cx=W/2, cy=H/2, r=Math.min(W,H)/2-22;
   const N=DIMS.length;
   ctx2.clearRect(0,0,W,H);
@@ -3182,7 +3185,7 @@ function drawRadar(canvasId, scores){
       i===0?ctx2.moveTo(x,y):ctx2.lineTo(x,y);
     }
     ctx2.closePath();
-    ctx2.strokeStyle = 'rgba(255,255,255,0.05)';
+    ctx2.strokeStyle = day ? 'rgba(0,30,60,0.10)' : 'rgba(255,255,255,0.05)';
     ctx2.lineWidth=1; ctx2.stroke();
   }
 
@@ -3192,7 +3195,7 @@ function drawRadar(canvasId, scores){
     ctx2.beginPath();
     ctx2.moveTo(cx,cy);
     ctx2.lineTo(cx+r*Math.cos(angle),cy+r*Math.sin(angle));
-    ctx2.strokeStyle='rgba(255,255,255,0.08)';
+    ctx2.strokeStyle = day ? 'rgba(0,30,60,0.14)' : 'rgba(255,255,255,0.08)';
     ctx2.lineWidth=1; ctx2.stroke();
   }
 
@@ -3205,8 +3208,8 @@ function drawRadar(canvasId, scores){
     i===0?ctx2.moveTo(x,y):ctx2.lineTo(x,y);
   });
   ctx2.closePath();
-  ctx2.fillStyle='rgba(0,229,160,0.1)';
-  ctx2.strokeStyle='rgba(0,229,160,0.7)';
+  ctx2.fillStyle = day ? 'rgba(0,176,122,0.13)' : 'rgba(0,229,160,0.1)';
+  ctx2.strokeStyle = day ? 'rgba(0,176,122,0.85)' : 'rgba(0,229,160,0.7)';
   ctx2.lineWidth=2; ctx2.fill(); ctx2.stroke();
 
   // Points
@@ -3220,7 +3223,7 @@ function drawRadar(canvasId, scores){
 
   // Labels
   ctx2.font='9px DM Mono, monospace';
-  ctx2.fillStyle='rgba(220,232,240,0.6)';
+  ctx2.fillStyle = day ? 'rgba(13,31,45,0.80)' : 'rgba(220,232,240,0.6)';
   ctx2.textAlign='center'; ctx2.textBaseline='middle';
   DIMS.forEach((d,i)=>{
     const angle=(i/N)*Math.PI*2-Math.PI/2;
