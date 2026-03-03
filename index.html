@@ -3875,7 +3875,7 @@ async function analyzeMaturitySequential(combinedText, docsToAnalyze){
   const allElements = DIMS.flatMap(d => d.elements);
   const totalElements = allElements.length;
   let processed = 0;
-  const results = {}; // {elemId: {score, evidence, gaps}}
+  const pendingChanges = []; // Collect changes for preview before applying
 
   // Register documents in bibliography
   const docDate = new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric'});
@@ -3918,6 +3918,8 @@ async function analyzeMaturitySequential(combinedText, docsToAnalyze){
     updateProgress(elem.label.slice(0,50));
 
     const existingEv = S.maturity?.['ev_'+elem.id] || '';
+    const existingScore = parseInt(S.maturity?.[elem.id])||0;
+    const dimLabel = DIMS.find(d=>d.elements.some(e=>e.id===elem.id))?.label||'';
     const prompt = `Eres un auditor experto en compliance ISO 37301. Evalúa el nivel de madurez del siguiente elemento basándote ESTRICTAMENTE en los criterios normativos.
 
 ELEMENTO: "${elem.label}"
@@ -3956,20 +3958,19 @@ Responde SOLO con JSON:
       }
 
       const score = parseInt(parsed.score)||0;
-      results[elem.id] = {score, evidence:parsed.evidence||'', gaps:parsed.gaps||''};
-
-      // Apply immediately to state
-      if(!S.maturity) S.maturity={};
-      if(score > 0) S.maturity[elem.id] = score;
-      if(parsed.evidence){
-        const existing = S.maturity['ev_'+elem.id]||'';
-        S.maturity['ev_'+elem.id] = parsed.evidence.length > (existing.length*0.8)
-          ? parsed.evidence
-          : existing ? existing+'\n\n[Doc IA '+docDate+']: '+parsed.evidence : parsed.evidence;
+      // Collect change for preview — do NOT apply to state yet
+      if(score > 0 || parsed.evidence){
+        pendingChanges.push({
+          id: elem.id,
+          label: elem.label,
+          dimLabel,
+          oldScore: existingScore,
+          newScore: score,
+          evidence: parsed.evidence||'',
+          gaps: parsed.gaps||'',
+          isNew: existingScore === 0,
+        });
       }
-      if(parsed.gaps) S.maturity['gap_'+elem.id] = parsed.gaps;
-
-      if(score > 0) docEntry.elements.push(elem.id);
 
     }catch(e){
       console.warn('Element analysis error:', elem.id, e.message);
@@ -3980,20 +3981,88 @@ Responde SOLO con JSON:
     await new Promise(r=>setTimeout(r,300));
   }
 
-  // Save bibliography entry
-  docEntry.summary = `Analizado ${docEntry.elements.length}/${totalElements} elementos con evidencia`;
-  if(!S.docBibliography) S.docBibliography=[];
-  S.docBibliography.push(docEntry);
-  lsSet('docBibliography', S.docBibliography);
-  await fsSet('maturity','current',S.maturity).catch(()=>{});
-
   // Remove progress UI
   const prog = document.getElementById('mat-seq-progress');
   if(prog) prog.remove();
 
-  // Refresh maturity view
+  // Store pending data globally so the apply function can access it
+  window._matPendingChanges = pendingChanges;
+  window._matPendingDocEntry = docEntry;
+  window._matPendingDocDate = docDate;
+
+  // Show preview of changes (same pattern as contexto organizacional)
+  _showMaturityChangePreview(pendingChanges, docEntry, docDate);
+}
+
+function _showMaturityChangePreview(pendingChanges, docEntry, docDate){
+  const matAlert = document.getElementById('mat-alert');
+  if(!matAlert) return;
+
+  const withScore = pendingChanges.filter(c => c.newScore > 0);
+
+  matAlert.innerHTML = `
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:12px;margin-bottom:10px">
+      <div class="alert alert-ok" style="margin-bottom:10px">✓ Análisis completado — ${withScore.length} elementos con evidencia en "${esc(docEntry.name)}"</div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:12px;max-height:320px;overflow-y:auto;margin-bottom:10px">
+        ${withScore.map(c => {
+          const color = c.isNew ? 'var(--accent)' : c.newScore > c.oldScore ? 'var(--ok,#4caf50)' : c.newScore < c.oldScore ? 'var(--warn)' : 'var(--text-muted)';
+          const tag = c.isNew ? 'NUEVO' : c.newScore > c.oldScore ? 'MEJORA' : c.newScore < c.oldScore ? 'BAJA' : 'SIN CAMBIO';
+          const scoreDisplay = c.isNew ? `${c.newScore}/5` : `${c.oldScore}/5 → ${c.newScore}/5`;
+          return `
+            <div style="margin-bottom:8px;padding:6px;border-left:2px solid ${color}">
+              <div class="flex ic gap8">
+                <div>
+                  <div style="font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:${color};margin-bottom:2px">${tag} — ${esc(c.label.slice(0,50))}</div>
+                  <div style="font-size:9px;color:var(--text-muted)">${esc(c.dimLabel)}</div>
+                </div>
+                <span style="font-family:var(--font-ui);font-weight:800;color:${color};margin-left:auto;white-space:nowrap">${scoreDisplay}</span>
+              </div>
+              ${c.evidence ? `<div style="font-size:9.5px;color:var(--text-dim);margin-top:4px;line-height:1.4">${esc(c.evidence.slice(0,120))}${c.evidence.length>120?'...':''}</div>` : ''}
+            </div>`;
+        }).join('')}
+      </div>
+      <div class="flex gap8">
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('mat-alert').innerHTML='';window._matPendingChanges=null;">Descartar</button>
+        <button class="btn btn-primary btn-sm" onclick="_applyMaturitySequentialResults()">Aplicar al assessment →</button>
+      </div>
+    </div>`;
+}
+
+async function _applyMaturitySequentialResults(){
+  const pendingChanges = window._matPendingChanges;
+  const docEntry = window._matPendingDocEntry;
+  const docDate = window._matPendingDocDate;
+
+  if(!pendingChanges?.length) return;
+
+  if(!S.maturity) S.maturity={};
+
+  for(const c of pendingChanges){
+    if(c.newScore > 0) S.maturity[c.id] = c.newScore;
+    if(c.evidence){
+      const existing = S.maturity['ev_'+c.id]||'';
+      S.maturity['ev_'+c.id] = c.evidence.length > (existing.length*0.8)
+        ? c.evidence
+        : existing ? existing+'\n\n[Doc IA '+docDate+']: '+c.evidence : c.evidence;
+    }
+    if(c.gaps) S.maturity['gap_'+c.id] = c.gaps;
+    if(c.newScore > 0) docEntry.elements.push(c.id);
+  }
+
+  const totalElements = DIMS.flatMap(d=>d.elements).length;
+  docEntry.summary = `Analizado ${docEntry.elements.length}/${totalElements} elementos con evidencia`;
+  if(!S.docBibliography) S.docBibliography=[];
+  S.docBibliography.push(docEntry);
+  lsSet('docBibliography', S.docBibliography);
+
+  await fsSet('maturity','current',S.maturity).catch(()=>{});
+
+  window._matPendingChanges = null;
+  window._matPendingDocEntry = null;
+  window._matPendingDocDate = null;
+
   renderMaturity();
-  showAlert('mat-alert', `✓ Análisis completado: ${docEntry.elements.length} elementos con evidencia. Fuente: "${docEntry.name}" (${docDate})`, 'ok');
+  showAlert('mat-alert', `✓ ${docEntry.elements.length} elementos actualizados desde "${esc(docEntry.name)}" (${docDate}) — revisa y guarda la versión`, 'ok');
 }
 
 function applyContextoJson(data, preview=false){
