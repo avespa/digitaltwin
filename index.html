@@ -5099,9 +5099,10 @@ function setHitFunnel(level){
 }
 
 function updateFunnelCounts(){
-  const all = S.hits.length;
-  const impacts = S.hits.filter(h=>isImpact(h)).length;
-  const residualAlto = S.hits.filter(h=>{
+  const visible = S.hits.filter(h=>!h._groupedUnder);
+  const all = visible.length;
+  const impacts = visible.filter(h=>isImpact(h)).length;
+  const residualAlto = visible.filter(h=>{
     const r=h.residual_level||'';
     return r==='alto'||r==='critical';
   }).length;
