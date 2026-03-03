@@ -1468,6 +1468,7 @@ async function syncAll(){
     }
 
     S.lastSync = new Date().toISOString();
+    groupHitsLocally(); // dedup retroactivo: agrupa antes de guardar y renderizar
     lsSet('hits', S.hits);
     lsSet('plans', S.actionPlans);
     renderAll();
@@ -1858,9 +1859,10 @@ function groupHitsLocally(){
         checkedPairs.add(pairKey);
 
         const ha = candidates[ia], hb = candidates[ib];
-        const da = new Date(ha.raw_date||ha.fetched_at||ha._created||0).getTime();
-        const db = new Date(hb.raw_date||hb.fetched_at||hb._created||0).getTime();
-        if(Math.abs(da - db) > TIME_MS) continue;
+        const da = new Date(ha.raw_date||ha.fetched_at||ha._created||'').getTime();
+        const db = new Date(hb.raw_date||hb.fetched_at||hb._created||'').getTime();
+        // Solo filtra por tiempo si ambos hits tienen fecha válida
+        if(da && db && Math.abs(da - db) > TIME_MS) continue;
 
         // Count shared significant tokens between this pair
         let shared = 0;
