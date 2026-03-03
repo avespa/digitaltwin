@@ -714,6 +714,15 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
       </select>
       <input type="text" class="fi" id="hit-search" placeholder="Buscar en hits..." style="max-width:200px" oninput="renderHits()">
       <button class="btn btn-ghost btn-xs" onclick="resetAndRegroup()" style="color:var(--purple);border-color:rgba(139,92,246,.3)" title="Reagrupar noticias con IA">✦ Re-agrupar IA</button>
+      <select class="fi" style="width:160px" id="hit-sort" onchange="renderHits()" title="Ordenar hits">
+        <option value="">Ordenar: defecto</option>
+        <option value="inh-desc">↓ Riesgo inherente</option>
+        <option value="inh-asc">↑ Riesgo inherente</option>
+        <option value="res-desc">↓ Riesgo residual</option>
+        <option value="res-asc">↑ Riesgo residual</option>
+        <option value="date-desc">↓ Más reciente</option>
+        <option value="date-asc">↑ Más antigua</option>
+      </select>
       <span id="hit-count" style="font-size:10px;color:var(--text-muted);margin-left:auto"></span>
     </div>
 
@@ -3364,13 +3373,21 @@ function renderHits(){
   const container = document.getElementById('hits-list');
   if(!container) return;
 
-  // In impacts funnel: hits needing action shown first
-  if(hitFunnel==='impacts'){
-    hits.sort((a,b)=>{
-      const aAction = a._action_taken ? 1 : 0;
-      const bAction = b._action_taken ? 1 : 0;
-      return aAction - bAction;
-    });
+  const sortVal = document.getElementById('hit-sort')?.value||'';
+  const SEV = {alto:3,critical:3,medio:2,warning:2,bajo:1,info:1};
+  const sevInh = h => SEV[h.inherent_level||h.level||'']||0;
+  const sevRes = h => SEV[h.residual_level||h.level||'']||0;
+  const hitDate = h => h.raw_date||h.fetched_at||h._created||'';
+
+  if(sortVal==='inh-desc') hits.sort((a,b)=>sevInh(b)-sevInh(a));
+  else if(sortVal==='inh-asc') hits.sort((a,b)=>sevInh(a)-sevInh(b));
+  else if(sortVal==='res-desc') hits.sort((a,b)=>sevRes(b)-sevRes(a));
+  else if(sortVal==='res-asc') hits.sort((a,b)=>sevRes(a)-sevRes(b));
+  else if(sortVal==='date-desc') hits.sort((a,b)=>hitDate(b).localeCompare(hitDate(a)));
+  else if(sortVal==='date-asc') hits.sort((a,b)=>hitDate(a).localeCompare(hitDate(b)));
+  else if(hitFunnel==='impacts'){
+    // default: hits needing action shown first
+    hits.sort((a,b)=>(a._action_taken?1:0)-(b._action_taken?1:0));
   }
 
   container.innerHTML = hits.length ? hits.map(h=>hitCard(h)).join('') :
@@ -3418,7 +3435,7 @@ function hitCard(h){
           <button class="btn btn-primary btn-xs" onclick="openApFromHit('${h.id}','${esc(h.title).replace(/'/g,"\\'")}')">+ Abrir Plan</button>`:
           `<button class="btn btn-ghost btn-xs" onclick="openApFromHit('${h.id}','${esc(h.title).replace(/'/g,"\\'")}')">+ Plan de acción</button>`
       }
-      <button class="btn btn-ghost btn-xs" onclick="deleteHitPermanently('${h.id}')" title="Eliminar definitivamente" style="margin-left:auto;color:var(--danger);opacity:.55;border-color:transparent" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.55'">🗑</button>
+      <button class="btn btn-ghost btn-xs" onclick="deleteHitPermanently('${h.id}')" title="Eliminar definitivamente" style="margin-left:auto;color:var(--danger);opacity:.55;border-color:transparent;font-size:16px;padding:2px 6px;line-height:1" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.55'">🗑</button>
     </div>
     ${hasDetail?`
     <div class="hit-extra" id="hd-${h.id}">
