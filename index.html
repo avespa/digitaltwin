@@ -1862,11 +1862,21 @@ function groupHitsLocally(){
   function union(x, y){ parent[find(x)] = find(y); }
 
   // Fast pass: identical normalised titles → always same group
+  // Strip ALL non-alphanumeric chars for robustness against encoding/punctuation differences
   const normMap = new Map();
   candidates.forEach((h, i) => {
-    const k = (h.title||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();
+    const k = (h.title||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
     if(normMap.has(k)) union(normMap.get(k), i);
     else normMap.set(k, i);
+  });
+
+  // Near-duplicate pass: if first 80 normalised chars match → same story
+  const prefixMap = new Map();
+  candidates.forEach((h, i) => {
+    const k = (h.title||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim().slice(0, 80);
+    if(k.length < 20) return; // título demasiado corto para comparar prefijos
+    if(prefixMap.has(k)) union(prefixMap.get(k), i);
+    else prefixMap.set(k, i);
   });
 
   const TIME_MS = 30 * 86400000; // 30-day window
@@ -4287,6 +4297,7 @@ function showAlert(containerId, msg, type){
 // ═══════════════════════════════════════════════════════════════
 restoreLocal();
 groupHitsLocally(); // deduplicate cached hits before first render
+lsSet('hits', S.hits); // persiste agrupación antes de que syncAll machaque localStorage
 renderAll();
 // radar-dash removed — new COC dashboard uses canvas building instead
 syncAll();
