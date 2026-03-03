@@ -645,6 +645,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
       <div class="ph-left"><div class="ph-title">Monitorización de Hits</div><div class="ph-sub" id="hits-sync-info">Funnel de relevancia · Filtrado por keywords → Impacto en tu empresa</div></div>
       <div class="ph-actions">
         <button class="btn btn-ghost btn-sm" id="batch-reanalyze-btn" onclick="batchReAnalyze()" title="Re-analiza todos los hits pendientes contra tu Digital Twin">⟳ Re-evaluar todos</button>
+        <button class="btn btn-ghost btn-sm" onclick="cleanOldHits(30)" title="Elimina hits de más de 30 días (las sentencias no se eliminan)" style="color:var(--text-muted)">🗑 Limpiar &gt;30d</button>
         <button class="btn btn-ghost btn-sm" onclick="syncHits()">Sync</button>
       </div>
     </div>
@@ -695,6 +696,12 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
       </select>
       <select class="fi" style="width:140px" id="hit-filter-source" onchange="renderHits()">
         <option value="">Fuente</option><option value="BOE">BOE</option><option value="BORME">BORME</option><option value="NewsAPI">NewsAPI</option><option value="Sentencia">Sentencia</option>
+      </select>
+      <select class="fi" style="width:145px" id="hit-filter-days" onchange="renderHits()">
+        <option value="">Fecha: todo</option>
+        <option value="7">Últimos 7 días</option>
+        <option value="14">Últimos 14 días</option>
+        <option value="30">Últimos 30 días</option>
       </select>
       <input type="text" class="fi" id="hit-search" placeholder="Buscar en hits..." style="max-width:200px" oninput="renderHits()">
       <button class="btn btn-ghost btn-xs" onclick="resetAndRegroup()" style="color:var(--purple);border-color:rgba(139,92,246,.3)" title="Reagrupar noticias con IA">✦ Re-agrupar IA</button>
@@ -1602,10 +1609,15 @@ async function syncHits(){
           return fsHit ? { ...fsHit, ...ghHit, id: ghHit.id||fsHit.id } : ghHit;
         });
         // Add Firestore-only hits (sentencias, etc.) not in GitHub
+        // Only keep hits within retention window (30 days), sentencias always kept
+        const _retentionCutoff = new Date(Date.now() - 30 * 86400000).toISOString();
         fsHits.forEach(fh => {
           const key = fh.id||fh.link;
           if(!ghHits.find(gh=>(gh.id||gh.link)===key)){
-            merged.push(fh);
+            const hitDate = fh.raw_date||fh.fetched_at||fh._created||'';
+            if(fh.is_sentencia || !hitDate || hitDate >= _retentionCutoff){
+              merged.push(fh);
+            }
           }
         });
         S.hits = merged;
@@ -1630,6 +1642,29 @@ async function syncHits(){
   lsSet('hits', S.hits);
   renderHits();
   updateBadges();
+}
+
+async function cleanOldHits(daysToKeep = 30){
+  const cutoff = new Date(Date.now() - daysToKeep * 86400000).toISOString();
+  const toDelete = S.hits.filter(h => {
+    if(h.is_sentencia) return false;
+    const hitDate = h.raw_date||h.fetched_at||h._created||'';
+    return hitDate && hitDate < cutoff;
+  });
+  if(!toDelete.length){
+    showAlert('hits-alert', 'No hay hits anteriores a ' + daysToKeep + ' días', 'ok');
+    return;
+  }
+  if(!confirm('¿Eliminar ' + toDelete.length + ' hits anteriores a los últimos ' + daysToKeep + ' días?\nLas sentencias no se eliminan. Esta acción no se puede deshacer.')) return;
+  showAlert('hits-alert', 'Limpiando ' + toDelete.length + ' hits antiguos...', 'ok');
+  const delIds = new Set(toDelete.map(h => h.id||h.link));
+  const delPromises = toDelete.filter(h => h._fsId).map(h => fsDelete('hits', h._fsId).catch(()=>{}));
+  await Promise.all(delPromises);
+  S.hits = S.hits.filter(h => !delIds.has(h.id||h.link));
+  lsSet('hits', S.hits);
+  renderHits();
+  updateBadges();
+  showAlert('hits-alert', '✓ ' + toDelete.length + ' hits eliminados', 'ok');
 }
 
 function restoreLocal(){
@@ -3006,6 +3041,7 @@ function renderHits(){
   const inh    = document.getElementById('hit-filter-inh')?.value||'';
   const res    = document.getElementById('hit-filter-res')?.value||'';
   const src    = document.getElementById('hit-filter-source')?.value||'';
+  const days   = document.getElementById('hit-filter-days')?.value||'';
   const search = (document.getElementById('hit-search')?.value||'').toLowerCase();
 
   // Exclude semantic duplicates (only show the winner of each group)
@@ -3038,6 +3074,14 @@ function renderHits(){
     return norm===res;
   });
   if(src) hits=hits.filter(h=>(h.source||'').includes(src)||(h.is_sentencia&&src==='Sentencia'));
+  if(days){
+    const dayCutoff = new Date(Date.now() - parseInt(days) * 86400000).toISOString();
+    hits = hits.filter(h => {
+      if(h.is_sentencia) return true;
+      const d = h.raw_date||h.fetched_at||h._created||'';
+      return !d || d >= dayCutoff;
+    });
+  }
   if(search) hits=hits.filter(h=>((h.title||'')+(h.summary||'')+(h.twin_analysis||'')).toLowerCase().includes(search));
 
   updateFunnelCounts();
