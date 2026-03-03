@@ -1937,18 +1937,15 @@ function groupHitsLocally(){
     const avgSevNum = groupHits.reduce((s, h) => s + (SEV_ORD[h.inherent_level||h.level||'info']||1), 0) / groupHits.length;
     const avgSev = avgSevNum >= 2.5 ? 'alto' : avgSevNum >= 1.5 ? 'medio' : 'bajo';
 
-    const wi = S.hits.findIndex(h => h.id === winner.id);
-    if(wi >= 0){
-      S.hits[wi]._groupId     = winner.id;
-      S.hits[wi]._groupSize   = groupHits.length;
-      S.hits[wi]._groupIntl   = intlCount;
-      S.hits[wi]._groupAvgSev = avgSev;
-      S.hits[wi]._groupIds    = groupHits.map(h => h.id);
-    }
+    // candidates son referencias directas a los objetos en S.hits → mutamos directamente
+    winner._groupId     = winner.id;
+    winner._groupSize   = groupHits.length;
+    winner._groupIntl   = intlCount;
+    winner._groupAvgSev = avgSev;
+    winner._groupIds    = groupHits.map(h => h.id);
     groupHits.forEach(h => {
-      if(h.id === winner.id) return;
-      const idx = S.hits.findIndex(sh => sh.id === h.id);
-      if(idx >= 0) S.hits[idx]._groupedUnder = winner.id;
+      if(h === winner) return; // comparación por referencia, no por id
+      h._groupedUnder = winner.id;
     });
   });
 
