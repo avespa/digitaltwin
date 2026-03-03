@@ -645,6 +645,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
       <div class="ph-left"><div class="ph-title">Monitorización de Hits</div><div class="ph-sub" id="hits-sync-info">Funnel de relevancia · Filtrado por keywords → Impacto en tu empresa</div></div>
       <div class="ph-actions">
         <button class="btn btn-ghost btn-sm" id="batch-reanalyze-btn" onclick="batchReAnalyze()" title="Re-analiza todos los hits pendientes contra tu Digital Twin">⟳ Re-evaluar todos</button>
+        <button class="btn btn-ghost btn-sm" onclick="cleanExactDuplicates()" title="Muestra y elimina noticias duplicadas (misma noticia, distintas fuentes)" style="color:var(--text-muted)">🗑 Limpiar duplicados</button>
         <button class="btn btn-ghost btn-sm" onclick="cleanOldHits(30)" title="Elimina hits de más de 30 días (las sentencias no se eliminan)" style="color:var(--text-muted)">🗑 Limpiar &gt;30d</button>
         <button class="btn btn-ghost btn-sm" onclick="syncHits()">Sync</button>
       </div>
@@ -1667,6 +1668,124 @@ async function cleanOldHits(daysToKeep = 30){
   renderHits();
   updateBadges();
   showAlert('hits-alert', '✓ ' + toDelete.length + ' hits eliminados', 'ok');
+}
+
+async function cleanExactDuplicates(){
+  const STOP = new Set([
+    'para','sobre','por','con','una','los','las','del','que','como','este','esta',
+    'pero','sus','sin','más','entre','ante','han','sido','puede','tras','caso',
+    'años','todo','toda','todos','todas','también','según','cuando','donde',
+    'desde','hasta','bajo','algo','muy','bien','solo','cada','gran','otro','otra',
+    'mismo','misma','tanto','mientras','contra','nuevo','nueva','dicho','dicha',
+    'aquel','aquella','ser','estar','haber','tener','hacer','decir','poder',
+    'dice','dijo','tiene','tuvo','será','siendo','porque','aunque','además',
+    'incluso','pese','parte','cuya','cuyo','cuyas','cuyos','estas','estos',
+    'menos','more','with','that','from','this','have','been','para','pelo'
+  ]);
+  function normTitle(t){
+    return (t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+  }
+  function keyTokens(t){
+    return new Set(normTitle(t).split(' ').filter(w => w.length > 3 && !STOP.has(w)));
+  }
+
+  const candidates = S.hits.filter(h => !h.false_positive && !h._discarded && !h.is_sentencia);
+  const SEV_ORD = {alto:3,critical:3,warning:2,medio:2,info:1,bajo:1};
+  const THREE_DAYS = 3 * 86400000;
+
+  // Union-Find
+  const parent = candidates.map((_, i) => i);
+  function find(x){ return parent[x]===x ? x : (parent[x]=find(parent[x])); }
+  function union(x, y){ parent[find(x)] = find(y); }
+
+  const tokenSets = candidates.map(h => keyTokens(h.title));
+
+  // Criterio 1: título casi idéntico (primeros 60 chars normalizados)
+  const prefixMap = new Map();
+  candidates.forEach((h, i) => {
+    const k = normTitle(h.title).slice(0, 60);
+    if(k.length < 15) return;
+    if(prefixMap.has(k)) union(prefixMap.get(k), i);
+    else prefixMap.set(k, i);
+  });
+
+  // Criterio 2: ≥5 tokens en común Y publicados con ≤3 días de diferencia
+  for(let a = 0; a < candidates.length; a++){
+    for(let b = a+1; b < candidates.length; b++){
+      if(find(a) === find(b)) continue; // ya están en el mismo grupo
+      const ha = candidates[a], hb = candidates[b];
+      const da = new Date(ha.raw_date||ha.fetched_at||ha._created||'').getTime();
+      const db = new Date(hb.raw_date||hb.fetched_at||hb._created||'').getTime();
+      if(da && db && Math.abs(da - db) > THREE_DAYS) continue;
+      let shared = 0;
+      tokenSets[a].forEach(t => { if(tokenSets[b].has(t)) shared++; });
+      if(shared >= 5) union(a, b);
+    }
+  }
+
+  // Recoger grupos con más de 1 hit
+  const groupsMap = new Map();
+  candidates.forEach((_, i) => {
+    const root = find(i);
+    if(!groupsMap.has(root)) groupsMap.set(root, []);
+    groupsMap.get(root).push(i);
+  });
+  const dupGroups = [...groupsMap.values()].filter(g => g.length > 1);
+
+  if(!dupGroups.length){
+    showAlert('hits-alert', 'No se encontraron duplicados exactos', 'ok');
+    return;
+  }
+
+  // Construir vista previa para confirmar
+  let preview = 'Se encontraron ' + dupGroups.length + ' grupos de noticias duplicadas.\n';
+  preview += 'Se conservará 1 hit por grupo (el más relevante) y se borrarán el resto:\n\n';
+  let totalToDelete = 0;
+
+  const groupsToProcess = dupGroups.map(indices => {
+    const groupHits = indices.map(i => candidates[i]);
+    const winner = groupHits.reduce((best, h) => {
+      const bSev = SEV_ORD[best.inherent_level||best.level||'info']||1;
+      const hSev = SEV_ORD[h.inherent_level||h.level||'info']||1;
+      if(hSev > bSev) return h;
+      if(hSev === bSev && (h._analyzed && !best._analyzed)) return h;
+      if(hSev === bSev && (h.relevance_score||0) > (best.relevance_score||0)) return h;
+      return best;
+    });
+    const losers = groupHits.filter(h => h !== winner);
+    totalToDelete += losers.length;
+    return { winner, losers };
+  });
+
+  // Vista previa (máximo 8 grupos para no saturar el confirm)
+  groupsToProcess.slice(0, 8).forEach(({ winner, losers }) => {
+    const date = (winner.raw_date||winner.fetched_at||'').slice(0,10);
+    preview += `▸ CONSERVA: "${(winner.title||'').slice(0,70)}" [${date}]\n`;
+    losers.forEach(h => {
+      const d = (h.raw_date||h.fetched_at||'').slice(0,10);
+      preview += `  × BORRA: "${(h.title||'').slice(0,70)}" [${d}]\n`;
+    });
+    preview += '\n';
+  });
+  if(groupsToProcess.length > 8) preview += `... y ${groupsToProcess.length - 8} grupos más\n\n`;
+  preview += `Total: se borrarán ${totalToDelete} hits duplicados de ${dupGroups.length} grupos.`;
+
+  if(!confirm(preview)) return;
+
+  showAlert('hits-alert', 'Eliminando ' + totalToDelete + ' duplicados de Firestore...', 'ok');
+
+  // Borrar de Firestore
+  const losersAll = groupsToProcess.flatMap(g => g.losers);
+  await Promise.all(losersAll.filter(h => h._fsId).map(h => fsDelete('hits', h._fsId).catch(()=>{})));
+
+  // Eliminar de S.hits
+  const loserSet = new Set(losersAll);
+  S.hits = S.hits.filter(h => !loserSet.has(h));
+  lsSet('hits', S.hits);
+  renderHits();
+  updateBadges();
+  showAlert('hits-alert', '✓ ' + totalToDelete + ' duplicados eliminados permanentemente', 'ok');
 }
 
 function restoreLocal(){
