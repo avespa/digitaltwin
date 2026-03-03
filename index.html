@@ -697,6 +697,7 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
         <option value="">Fuente</option><option value="BOE">BOE</option><option value="BORME">BORME</option><option value="NewsAPI">NewsAPI</option><option value="Sentencia">Sentencia</option>
       </select>
       <input type="text" class="fi" id="hit-search" placeholder="Buscar en hits..." style="max-width:200px" oninput="renderHits()">
+      <button class="btn btn-ghost btn-xs" onclick="resetAndRegroup()" style="color:var(--purple);border-color:rgba(139,92,246,.3)" title="Reagrupar noticias con IA">✦ Re-agrupar IA</button>
       <span id="hit-count" style="font-size:10px;color:var(--text-muted);margin-left:auto"></span>
     </div>
 
@@ -1743,6 +1744,16 @@ function renderCocDimBar(scores){
 
 // ── Feed ─────────────────────────────────────────────────────────
 function _normTitle(t){ return (t||'').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,55); }
+
+function resetAndRegroup(){
+  S.hits.forEach(h=>{
+    delete h._groupId; delete h._groupedUnder; delete h._groupSize;
+    delete h._groupIntl; delete h._groupAvgSev; delete h._groupIds;
+  });
+  lsSet('hits', S.hits);
+  renderHits();
+  groupHitsSemantically();
+}
 function renderCocFeed(){
   const el = document.getElementById('coc-feed-list');
   if(!el) return;
@@ -1763,11 +1774,13 @@ function renderCocFeed(){
     const lvLabel = {critical:'CRÍTICO',warning:'MEDIO',alto:'CRÍTICO',medio:'MEDIO',info:'BAJO',bajo:'BAJO'}[lv]||lv.toUpperCase();
     const lvCol = {crit:'var(--danger)',warn:'var(--warn)',info:'var(--accent2)'}[cls];
     const src = (h.source||'').split('·')[0].trim().slice(0,12);
+    const grpBadge=(h._groupSize||1)>1?`<span style="background:rgba(139,92,246,.18);color:#c4b5fd;font-size:7px;padding:1px 4px;border-radius:2px;font-weight:700" title="${h._groupSize} fuentes · sev. ${h._groupAvgSev||''}">📰 ${h._groupSize}</span>`:'';
     return `<div class="cfi ${cls}" onclick="go('hits')">
       <div class="cfi-t">${esc((h.title||'').slice(0,72))}${(h.title||'').length>72?'…':''}</div>
       <div class="cfi-m">
         <span class="cfi-lv" style="background:${lvCol}20;color:${lvCol}">${lvLabel}</span>
         <span>${src}</span>
+        ${grpBadge}
         <span style="margin-left:auto">${fmtDate(h.raw_date||h.fetched_at||'')}</span>
       </div>
     </div>`;
@@ -2080,7 +2093,8 @@ function drawCocBuilding(){
   const fitByH = Math.floor(availH / ((ROWS + COLS) * 0.27));
   const TX = Math.max(22, Math.min(48, Math.min(fitByW, fitByH)));
   const TY = Math.round(TX * 0.52);
-  const ox = W / 2;
+  const oxOffset = ((COLS-1)-(ROWS-1))*TX/4;
+  const ox = W/2 - oxOffset;
   const oy = topMargin + (COLS + ROWS) * TY * 0.28;
 
   // ── Pass 1: Ground tiles ────────────────────────────────────────
@@ -2177,106 +2191,11 @@ function drawCocBuilding(){
     _drawRoof(ctx,x,y,TX,TY,h,sc,T,day);
   });
 
-  // ── Pass 5: Outside-grid callout labels ───────────────────────
-  // Row 1 (dims 0,2,5): label ABOVE the grid, at top margin
-  // Row 4 (dims 1,3,6): labels to LEFT (col 1,5) or RIGHT (col 9)
-  // Row 7 (dim 4)      : label BELOW the grid
-  buildCalls.forEach(({row, col, x, y, h, sc, dimIdx}) => {
-    const dim   = DIMS[dimIdx];
-    const hPx   = h * TY * 0.55;
-    const topY  = y - hPx;
-    const [r,g,gr] = sc>=4?[0,229,160]:sc>=3?[100,210,130]:sc>=2?[245,158,11]:sc>0?[239,100,68]:[100,130,150];
 
-    const fSize  = Math.max(9, Math.round(TX * 0.30));
-    const iconSz = fSize + 5;
-    const padX = 8, padY = 5;
-
-    ctx.font = `600 ${fSize}px 'DM Mono',monospace`;
-    const nameW = ctx.measureText(dim.label.toUpperCase()).width;
-    ctx.font = `${fSize-1}px 'DM Mono',monospace`;
-    const scoreStr  = sc > 0 ? sc.toFixed(1) + '/5' : 'sin datos';
-    const scoreW    = ctx.measureText(scoreStr).width;
-    const cardW     = Math.max(nameW, scoreW) + padX*2 + iconSz + 6;
-    const lineCount = 2;
-    const cardH     = lineCount * (fSize + 3) + padY * 2;
-
-    // Position depends on grid row
-    let cardX, cardY, anchorX, anchorY;
-
-    if (row === 1) {
-      // TOP: above the whole grid
-      cardX   = x - cardW / 2;
-      cardY   = 8;
-      anchorX = x;
-      anchorY = topY - 4;
-    } else if (row === 4) {
-      // SIDES: left for cols 1 & 5, right for col 9
-      if (col <= 5) {
-        cardX = 8;
-      } else {
-        cardX = W - cardW - 8;
-      }
-      cardY   = y - hPx / 2 - cardH / 2;
-      anchorX = x;
-      anchorY = topY + hPx * 0.4;
-    } else {
-      // BOTTOM: below the grid (row 7)
-      cardX   = x - cardW / 2;
-      cardY   = H - botMargin + 4;
-      anchorX = x;
-      anchorY = y + TY * 0.6;
-    }
-
-    // Clamp
-    cardX = Math.max(4, Math.min(W - cardW - 4, cardX));
-    cardY = Math.max(4, Math.min(H - cardH - 4, cardY));
-
-    // Callout line
-    const cardCX = cardX + cardW / 2, cardCY = cardY + cardH / 2;
-    const dx = anchorX - cardCX, dy = anchorY - cardCY;
-    const dist = Math.sqrt(dx*dx + dy*dy) || 1;
-    const lsx  = cardCX + dx/dist * (cardW/2 + 2);
-    const lsy  = cardCY + dy/dist * (cardH/2 + 2);
-
-    ctx.strokeStyle = `rgba(${r},${g},${gr},0.28)`;
-    ctx.lineWidth = 1; ctx.setLineDash([3,4]);
-    ctx.beginPath(); ctx.moveTo(lsx, lsy); ctx.lineTo(anchorX, anchorY); ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Anchor dot
-    ctx.fillStyle = `rgba(${r},${g},${gr},0.55)`;
-    ctx.beginPath(); ctx.arc(anchorX, anchorY, 2.5, 0, Math.PI*2); ctx.fill();
-
-    // Card bg
-    ctx.globalAlpha = 0.90;
-    ctx.fillStyle = day ? 'rgba(225,236,250,0.96)' : 'rgba(5,13,25,0.93)';
-    ctx.beginPath(); ctx.roundRect(cardX, cardY, cardW, cardH, 5); ctx.fill();
-    ctx.strokeStyle = `rgba(${r},${g},${gr},0.50)`;
-    ctx.lineWidth = 1; ctx.stroke();
-    ctx.globalAlpha = 1;
-
-    // Accent bar
-    ctx.fillStyle = `rgba(${r},${g},${gr},0.85)`;
-    ctx.beginPath(); ctx.roundRect(cardX, cardY, 3, cardH, [5,0,0,5]); ctx.fill();
-
-    // Icon
-    ctx.font = `${iconSz}px sans-serif`;
-    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-    ctx.fillText(dim.icon, cardX + 8, cardY + cardH * 0.38);
-
-    const txtX = cardX + 8 + iconSz + 5;
-
-    // Name
-    ctx.font = `600 ${fSize}px 'DM Mono',monospace`;
-    ctx.fillStyle = day ? 'rgba(12,30,60,0.90)' : 'rgba(200,220,242,0.92)';
-    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-    ctx.fillText(dim.label.toUpperCase(), txtX, cardY + cardH * 0.33);
-
-    // Score
-    ctx.font = `${fSize - 1}px 'DM Mono',monospace`;
-    ctx.fillStyle = `rgba(${r},${g},${gr},0.95)`;
-    ctx.fillText(scoreStr, txtX, cardY + cardH * 0.72);
-  });
+  // ── Pass 5: Hit zones for hover ───────────────────────────────────────
+  window._cityHitZones = buildCalls.map(({x,y,h,sc,dimIdx})=>({
+    x, y, hPx: h*TY*0.55, r: TX*0.75, sc, dimIdx
+  }));
 
   // ── Mini legend ──────────────────────────────────────────────────────
   {
@@ -2479,81 +2398,70 @@ function renderDashboard(){
 }
 
 function renderHealthGauge(){
-  const canvas = document.getElementById('coc-health-canvas');
+  const canvas=document.getElementById('coc-health-canvas');
   if(!canvas) return;
-  const detail = document.getElementById('coc-health-detail');
-  const {score,critHitsNoPlan,highResidualNoPlan,overdueP,ctrlThisMonth} = calcHealthScore();
-  const day = _isDay();
+  const detail=document.getElementById('coc-health-detail');
+  const {score,critHitsNoPlan,highResidualNoPlan,overdueP,ctrlThisMonth}=calcHealthScore();
 
-  // Scale canvas for sharpness
   const W=canvas.offsetWidth||220, H=90;
-  canvas.width=W*2; canvas.height=H*2;
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  canvas.width=W*dpr; canvas.height=H*dpr;
+  canvas.style.width=W+'px'; canvas.style.height=H+'px';
   const ctx=canvas.getContext('2d');
-  ctx.scale(2,2);
-
+  ctx.setTransform(dpr,0,0,dpr,0,0);
   ctx.clearRect(0,0,W,H);
 
-  // Gauge arc: semicircle, bottom center
-  const cx=W/2, cy=H-10, R=Math.min(W/2-12, H-16);
-  const startA=Math.PI, endA=0;
-  const scoreA = Math.PI + (score/100)*Math.PI;
+  const cx=W/2, cy=H-10;
+  const R=Math.min(cx-8, cy-4);
+  const day=_isDay();
+  const [r,g,gr]=score>=70?[0,229,160]:score>=40?[245,158,11]:[239,68,68];
+  const scoreA=Math.PI+(score/100)*Math.PI;
 
-  // BG arc
-  ctx.beginPath(); ctx.arc(cx,cy,R,startA,endA);
-  ctx.strokeStyle=day?'rgba(60,100,140,0.12)':'rgba(0,229,160,0.10)';
+  // BG track
+  ctx.beginPath(); ctx.arc(cx,cy,R,Math.PI,0);
+  ctx.strokeStyle=day?'rgba(60,100,140,0.14)':'rgba(255,255,255,0.08)';
   ctx.lineWidth=10; ctx.lineCap='round'; ctx.stroke();
 
-  // Color gradient along arc
-  const [r,g,gr] = score>=70?[0,229,160]:score>=40?[245,158,11]:[239,68,68];
-  const grd = ctx.createLinearGradient(cx-R,cy,cx+R,cy);
-  grd.addColorStop(0,'rgba(239,68,68,0.9)');
-  grd.addColorStop(0.4,'rgba(245,158,11,0.9)');
-  grd.addColorStop(1,'rgba(0,229,160,0.9)');
-  ctx.beginPath(); ctx.arc(cx,cy,R,startA,scoreA);
-  ctx.strokeStyle=grd; ctx.lineWidth=10; ctx.lineCap='round'; ctx.stroke();
+  // Colored fill arc
+  if(score>0){
+    const grd=ctx.createLinearGradient(cx-R,cy,cx+R,cy);
+    grd.addColorStop(0,'rgba(239,68,68,0.95)');
+    grd.addColorStop(0.42,'rgba(245,158,11,0.95)');
+    grd.addColorStop(1,'rgba(0,229,160,0.95)');
+    ctx.beginPath(); ctx.arc(cx,cy,R,Math.PI,scoreA);
+    ctx.strokeStyle=grd; ctx.lineWidth=10; ctx.lineCap='round'; ctx.stroke();
+  }
 
-  // Center number
-  ctx.font=`bold ${Math.round(R*0.52)}px 'DM Mono',monospace`;
-  ctx.fillStyle=`rgba(${r},${g},${gr},0.96)`;
-  ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.fillText(score, cx, cy-R*0.18);
-
-  // Label below number
-  ctx.font=`${Math.round(R*0.22)}px 'DM Mono',monospace`;
-  ctx.fillStyle=day?'rgba(40,70,110,0.55)':'rgba(140,180,210,0.55)';
-  ctx.fillText('/100', cx, cy-R*0.18+R*0.30);
-
-  // Tick marks at 0, 40, 70, 100
-  [0,40,70,100].forEach(v=>{
+  // Zone ticks at 40 and 70
+  [40,70].forEach(v=>{
     const a=Math.PI+(v/100)*Math.PI;
-    const x1=cx+R*0.88*Math.cos(a), y1=cy+R*0.88*Math.sin(a);
-    const x2=cx+R*1.05*Math.cos(a), y2=cy+R*1.05*Math.sin(a);
-    ctx.strokeStyle=day?'rgba(60,100,140,0.25)':'rgba(0,229,160,0.20)';
-    ctx.lineWidth=1;
-    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    ctx.strokeStyle=day?'rgba(60,100,140,0.3)':'rgba(255,255,255,0.18)';
+    ctx.lineWidth=1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx+(R-6)*Math.cos(a),cy+(R-6)*Math.sin(a));
+    ctx.lineTo(cx+(R+6)*Math.cos(a),cy+(R+6)*Math.sin(a));
+    ctx.stroke();
   });
 
-  // Pointer needle
-  const needleA = Math.PI+(score/100)*Math.PI;
-  ctx.strokeStyle=`rgba(${r},${g},${gr},0.8)`;
-  ctx.lineWidth=2; ctx.lineCap='round';
-  ctx.beginPath();
-  ctx.moveTo(cx,cy);
-  ctx.lineTo(cx+R*0.70*Math.cos(needleA), cy+R*0.70*Math.sin(needleA));
-  ctx.stroke();
-  ctx.fillStyle=day?'rgba(200,215,230,1)':'rgba(15,28,45,1)';
-  ctx.beginPath(); ctx.arc(cx,cy,4,0,Math.PI*2); ctx.fill();
-  ctx.fillStyle=`rgba(${r},${g},${gr},0.9)`;
-  ctx.beginPath(); ctx.arc(cx,cy,2.5,0,Math.PI*2); ctx.fill();
+  // Score number — positioned in center of arc bowl
+  const numY = cy - R * 0.42;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.font=`bold ${Math.round(R*0.60)}px 'DM Mono',monospace`;
+  ctx.fillStyle=`rgb(${r},${g},${gr})`;
+  ctx.fillText(score, cx, numY);
 
-  // Detail breakdown
+  // /100 sub-label
+  ctx.font=`${Math.round(R*0.23)}px 'DM Mono',monospace`;
+  ctx.fillStyle=day?'rgba(60,90,130,0.50)':'rgba(140,180,210,0.50)';
+  ctx.fillText('/100', cx, numY + R*0.36);
+
   if(detail){
     const items=[];
-    if(critHitsNoPlan>0)     items.push(`<span style="color:var(--danger)">-${critHitsNoPlan*15}</span> hits críticos sin plan`);
+    if(critHitsNoPlan>0)     items.push(`<span style="color:var(--danger)">-${critHitsNoPlan*15}</span> hits crit. sin plan`);
     if(highResidualNoPlan>0) items.push(`<span style="color:var(--warn)">-${highResidualNoPlan*10}</span> residual alto sin plan`);
     if(overdueP>0)           items.push(`<span style="color:var(--warn)">-${overdueP*8}</span> planes vencidos`);
-    if(ctrlThisMonth>0)      items.push(`<span style="color:var(--accent)">+${ctrlThisMonth*2}</span> controles ejecutados`);
-    detail.innerHTML = items.length ? items.join(' · ') : '<span style="opacity:.5">sin factores activos</span>';
+    if(ctrlThisMonth>0)      items.push(`<span style="color:var(--accent)">+${ctrlThisMonth*2}</span> controles este mes`);
+    detail.innerHTML=items.length?items.join(' · '):'<span style="opacity:.45">sin factores activos</span>';
   }
 }
 
@@ -3094,6 +3002,7 @@ function hitCard(h){
     <div class="hit-title">${esc(h.title)}</div>
     ${h.summary?`<div class="hit-summary">${esc(h.summary)}</div>`:''}
     ${h.relevance_score?`<div style="font-size:8px;color:var(--text-muted);margin-top:4px">Relevancia: ${h.relevance_score}/100</div>`:''}
+    ${(h._groupSize||1)>1?`<div style="display:flex;align-items:center;gap:6px;margin-top:6px;padding:5px 9px;border-radius:4px;background:rgba(139,92,246,.10);border:1px solid rgba(139,92,246,.25)"><span style="font-size:9px;letter-spacing:1px;font-weight:700;color:#a78bfa">📰 COBERTURA REPUTACIONAL</span><span style="font-size:9px;color:var(--text-dim)">${h._groupSize} fuentes</span>${h._groupIntl>0?`<span style="font-size:8px;color:var(--accent)">· ${h._groupIntl} internac.</span>`:''}<span style="font-size:8px;padding:1px 5px;border-radius:2px;font-weight:700;background:${{alto:'rgba(239,68,68,.15)',medio:'rgba(245,158,11,.15)',bajo:'rgba(0,229,160,.12)'}[h._groupAvgSev||'bajo']};color:${{alto:'var(--danger)',medio:'var(--warn)',bajo:'var(--accent)'}[h._groupAvgSev||'bajo']}">sev. media ${(h._groupAvgSev||'bajo').toUpperCase()}</span></div>`:''}
     <div class="flex gap6 mt6" style="flex-wrap:wrap">
       ${hasDetail?`<button class="btn btn-ghost btn-xs" onclick="toggleHitDetail('hd-${h.id}')">Ver análisis ↓</button>`:''}
       ${h.inherent_level?`<button class="btn btn-ghost btn-xs" style="color:var(--purple);border-color:rgba(139,92,246,.3)" onclick="openDeepDive('${h.id}')">✦ Análisis Profundo</button>`:'' }
