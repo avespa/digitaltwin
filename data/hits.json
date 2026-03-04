@@ -1,6 +1,78 @@
 {
   "hits": [
     {
+      "id": "4128aec08a03",
+      "title": "Seis detenidos tras los registros en Forestalia por una presunta trama de corrupción medioambiental en Teruel",
+      "link": "https://www.eldiario.es/aragon/politica/seis-detenidos-registros-forestalia-presunta-trama-corrupcion-medioambiental-teruel_1_13035201.html",
+      "source": "NewsAPI-Q2 · Eldiario.es",
+      "raw_date": "2026-03-03T09:26:04Z",
+      "fetched_at": "2026-03-04T09:44:41.407071+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Corrupción",
+        "Daño reputacional",
+        "Sanciones penales"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Ley 22/2015 de Auditoría de Cuentas",
+        "Código Penal español"
+      ],
+      "summary": "Seis detenidos y 12 registros en Forestalia por presunta corrupción medioambiental en Teruel. La investigación incluye acceso a domicilios y sedes de la empresa, con implicaciones legales y reputacionales significativas.",
+      "vulnerability": "Falta de controles efectivos de compliance en procesos de contratación y gestión ambiental.",
+      "financial_impact": "Multas superiores a 500.000€ y posibles indemnizaciones por daños ambientales.",
+      "recommended_action": "Revisar y fortalecer el sistema de compliance, especialmente en áreas de contratación y gestión ambiental, y colaborar plenamente con las autoridades investigadoras."
+    },
+    {
+      "id": "054278c662ec",
+      "title": "La Audiencia Nacional pone el ojo en el rescate de la aerolínea Plus Ultra y asume la investigación",
+      "link": "https://www.huffingtonpost.es/politica/la-audiencia-nacional-pone-ojo-rescate-aerolinea-plus-ultra-asume-investigacionbr-f202603.html",
+      "source": "NewsAPI-Q3 · Huffingtonpost.es",
+      "raw_date": "2026-03-03T09:38:13Z",
+      "fetched_at": "2026-03-04T09:44:44.298120+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Blanqueo de capitales",
+        "Uso irregular de fondos públicos",
+        "Responsabilidad penal de administradores"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Código Penal español",
+        "Normativa de ayudas públicas"
+      ],
+      "summary": "La Audiencia Nacional investiga el presunto uso irregular de 53 millones de euros de rescate público a Plus Ultra y posible blanqueo de fondos. El caso podría afectar a la aerolínea y a responsables públicos.",
+      "vulnerability": "Falta de controles efectivos en la gestión de fondos públicos y en la prevención de blanqueo de capitales.",
+      "financial_impact": "Multas superiores a 500.000€ y posibles indemnizaciones por daños a la Hacienda Pública.",
+      "recommended_action": "Revisar y fortalecer los protocolos de gestión de fondos públicos y de prevención de blanqueo de capitales, con especial atención a las ayudas públicas."
+    },
+    {
+      "id": "e95568250f23",
+      "title": "La Audiencia Nacional asume la investigación sobre el rescate de la aerolínea Plus Ultra",
+      "link": "https://www.europapress.es/nacional/noticia-audiencia-nacional-asume-investigacion-rescate-aerolinea-plus-ultra-20260303103101.html",
+      "source": "NewsAPI-Q3 · Europapress.es",
+      "raw_date": "2026-03-03T09:31:01Z",
+      "fetched_at": "2026-03-04T09:44:47.908766+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Blanqueo de capitales",
+        "Uso irregular de fondos públicos",
+        "Responsabilidad penal de administradores"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Código Penal español",
+        "Ley de Contratos del Sector Público"
+      ],
+      "summary": "La Audiencia Nacional investiga el presunto uso irregular de 53 millones de euros de fondos públicos destinados al rescate de la aerolínea Plus Ultra durante la pandemia, incluyendo posibles delitos de blanqueo de capitales.",
+      "vulnerability": "Falta de controles efectivos en la gestión de fondos públicos y en la prevención del blanqueo de capitales.",
+      "financial_impact": "Multas superiores a 500.000€ y posibles indemnizaciones por daños y perjuicios.",
+      "recommended_action": "Revisar y fortalecer los protocolos de prevención del blanqueo de capitales y la gestión de fondos públicos, así como realizar una auditoría interna inmediata."
+    },
+    {
       "id": "8f0ec3411307",
       "title": "La CNMV multa con 1,5 M al Sabadell por no informar a minoristas sobre sus pagarés",
       "link": "https://www.elconfidencial.com/empresas/2026-03-02/cnmv-multa-sabadell-informacion-minoristas-pagares_4312589/",
@@ -1011,13 +1083,13 @@
     }
   ],
   "stats": {
-    "total_hits": 45,
-    "critical_count": 13,
+    "total_hits": 48,
+    "critical_count": 16,
     "warning_count": 32,
     "info_count": 0,
-    "new_this_run": 0,
-    "articles_checked": 1,
-    "seen_ids_total": 52,
+    "new_this_run": 3,
+    "articles_checked": 3,
+    "seen_ids_total": 55,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -1036,5 +1108,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-04T06:56:26.289546+00:00"
+  "last_updated": "2026-03-04T09:44:49.108960+00:00"
 }
