@@ -2720,9 +2720,9 @@ function initHealthHover(){
       { label:'Base de partida', val:'+100', color:'var(--text-dim)' },
     ];
     if(critHitsNoPlan > 0)
-      factors.push({ label:`${critHitsNoPlan} hit${critHitsNoPlan>1?'s':''} crít. sin plan`, val:`−${critHitsNoPlan*15}`, color:'var(--danger)' });
+      factors.push({ label:`${critHitsNoPlan} hit${critHitsNoPlan>1?'s':''} alto sin plan`, val:`−${critHitsNoPlan*15}`, color:'var(--danger)' });
     else
-      factors.push({ label:'Sin hits críticos sin plan', val:'0', color:'var(--text-muted)' });
+      factors.push({ label:'Sin hits alto sin plan', val:'0', color:'var(--text-muted)' });
 
     if(highResidualNoPlan > 0)
       factors.push({ label:`${highResidualNoPlan} residual alto sin plan`, val:`−${highResidualNoPlan*10}`, color:'var(--warn)' });
@@ -2910,7 +2910,7 @@ function renderHealthGauge(){
 
   if(detail){
     const items=[];
-    if(critHitsNoPlan>0)     items.push(`<span style="color:var(--danger)">-${critHitsNoPlan*15}</span> hits crit. sin plan`);
+    if(critHitsNoPlan>0)     items.push(`<span style="color:var(--danger)">-${critHitsNoPlan*15}</span> hits alto sin plan`);
     if(highResidualNoPlan>0) items.push(`<span style="color:var(--warn)">-${highResidualNoPlan*10}</span> residual alto sin plan`);
     if(overdueP>0)           items.push(`<span style="color:var(--warn)">-${overdueP*8}</span> planes vencidos`);
     if(ctrlThisMonth>0)      items.push(`<span style="color:var(--accent)">+${ctrlThisMonth*2}</span> controles este mes`);
