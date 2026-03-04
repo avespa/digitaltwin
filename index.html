@@ -385,6 +385,14 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   .coc-feed-lbl{font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);flex:1}
   #coc-feed-list{flex:1;overflow-y:auto;padding:6px}
   #coc-tooltip{display:none;position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--border2);border-radius:6px;padding:9px 11px;font-size:10px;min-width:130px;max-width:190px;box-shadow:0 4px 14px rgba(0,0,0,.3);z-index:20;line-height:1.4}
+  #health-tooltip{display:none;position:absolute;inset:0;background:var(--surface);border-radius:6px;padding:12px 14px;z-index:4;line-height:1.5;cursor:default}
+  .ht-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--border)}
+  .ht-row:last-of-type{border-bottom:none}
+  .ht-lbl{font-size:10px;color:var(--text-dim)}
+  .ht-val{font-size:11px;font-weight:700;font-family:var(--font-mono);flex-shrink:0}
+  .ht-total{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:6px;border-top:2px solid var(--border2)}
+  .ht-total-lbl{font-size:10px;font-weight:600;color:var(--text)}
+  .ht-total-val{font-size:15px;font-weight:800;font-family:var(--font-mono)}
   .tt-icon{font-size:15px;display:block;margin-bottom:3px}
   .tt-name{font-weight:600;font-size:11px;margin-bottom:2px}
   .tt-score{font-size:12px;font-weight:700;margin-bottom:5px}
@@ -423,10 +431,11 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
       <div id="coc-splitter" title="Arrastra para redimensionar"></div>
       <div id="coc-right">
         <!-- Health Score Gauge -->
-      <div id="coc-health-wrap" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px 14px;flex-shrink:0">
+      <div id="coc-health-wrap" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px 14px;flex-shrink:0;position:relative">
         <div style="font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">Health Score</div>
         <canvas id="coc-health-canvas" width="220" height="110" style="width:100%;height:auto;display:block"></canvas>
         <div id="coc-health-detail" style="font-size:8px;color:var(--text-dim);line-height:1.6;margin-top:6px"></div>
+        <div id="health-tooltip"></div>
       </div>
       <div class="ckri" style="--kc:var(--accent)">
           <div class="ckri-n" id="coc-kri-m">—</div>
@@ -2696,6 +2705,59 @@ function initCityHover(){
   cv.addEventListener('mouseleave', ()=>{ tip.style.display = 'none'; });
 }
 
+// ── Health gauge hover tooltip ─────────────────────────────────────
+function initHealthHover(){
+  const wrap = document.getElementById('coc-health-wrap');
+  const tip  = document.getElementById('health-tooltip');
+  if(!wrap || !tip || wrap._healthHoverBound) return;
+  wrap._healthHoverBound = true;
+
+  wrap.addEventListener('mouseenter', ()=>{
+    const {score, critHitsNoPlan, highResidualNoPlan, overdueP, ctrlThisMonth} = calcHealthScore();
+    const scoreColor = score>=70 ? 'var(--accent)' : score>=40 ? 'var(--warn)' : 'var(--danger)';
+
+    const factors = [
+      { label:'Base de partida', val:'+100', color:'var(--text-dim)' },
+    ];
+    if(critHitsNoPlan > 0)
+      factors.push({ label:`${critHitsNoPlan} hit${critHitsNoPlan>1?'s':''} crít. sin plan`, val:`−${critHitsNoPlan*15}`, color:'var(--danger)' });
+    else
+      factors.push({ label:'Sin hits críticos sin plan', val:'0', color:'var(--text-muted)' });
+
+    if(highResidualNoPlan > 0)
+      factors.push({ label:`${highResidualNoPlan} residual alto sin plan`, val:`−${highResidualNoPlan*10}`, color:'var(--warn)' });
+    else
+      factors.push({ label:'Sin residuales altos sin plan', val:'0', color:'var(--text-muted)' });
+
+    if(overdueP > 0)
+      factors.push({ label:`${overdueP} plan${overdueP>1?'es':''} vencido${overdueP>1?'s':''}`, val:`−${overdueP*8}`, color:'var(--warn)' });
+    else
+      factors.push({ label:'Sin planes vencidos', val:'0', color:'var(--text-muted)' });
+
+    if(ctrlThisMonth > 0)
+      factors.push({ label:`${ctrlThisMonth} control${ctrlThisMonth>1?'es':''} este mes`, val:`+${ctrlThisMonth*2}`, color:'var(--accent)' });
+    else
+      factors.push({ label:'Sin controles este mes', val:'0', color:'var(--text-muted)' });
+
+    const rows = factors.map(f=>`
+      <div class="ht-row">
+        <span class="ht-lbl">${f.label}</span>
+        <span class="ht-val" style="color:${f.color}">${f.val}</span>
+      </div>`).join('');
+
+    tip.innerHTML = `
+      <div style="font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">Desglose · Health Score</div>
+      ${rows}
+      <div class="ht-total">
+        <span class="ht-total-lbl">Total</span>
+        <span class="ht-total-val" style="color:${scoreColor}">${score}<span style="font-size:10px;opacity:.55">/100</span></span>
+      </div>`;
+    tip.style.display = 'block';
+  });
+
+  wrap.addEventListener('mouseleave', ()=>{ tip.style.display = 'none'; });
+}
+
 // ── Health Score ───────────────────────────────────────────────────
 function calcHealthScore(){
   // Base 100
@@ -2784,6 +2846,7 @@ function renderDashboard(){
   startCocClock();
   startCocAnimation();
   setTimeout(initCityHover, 200);
+  setTimeout(initHealthHover, 200);
 }
 
 function renderHealthGauge(){
