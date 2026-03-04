@@ -2713,17 +2713,12 @@ function initHealthHover(){
   wrap._healthHoverBound = true;
 
   wrap.addEventListener('mouseenter', ()=>{
-    const {score, critHitsNoPlan, highResidualNoPlan, overdueP, ctrlThisMonth} = calcHealthScore();
+    const {score, highResidualNoPlan, overdueP, ctrlThisMonth} = calcHealthScore();
     const scoreColor = score>=70 ? 'var(--accent)' : score>=40 ? 'var(--warn)' : 'var(--danger)';
 
     const factors = [
       { label:'Base de partida', val:'+100', color:'var(--text-dim)' },
     ];
-    if(critHitsNoPlan > 0)
-      factors.push({ label:`${critHitsNoPlan} hit${critHitsNoPlan>1?'s':''} alto sin plan`, val:`−${critHitsNoPlan*15}`, color:'var(--danger)' });
-    else
-      factors.push({ label:'Sin hits alto sin plan', val:'0', color:'var(--text-muted)' });
-
     if(highResidualNoPlan > 0)
       factors.push({ label:`${highResidualNoPlan} residual alto sin plan`, val:`−${highResidualNoPlan*10}`, color:'var(--warn)' });
     else
@@ -2768,17 +2763,6 @@ function calcHealthScore(){
   const now = Date.now();
   const msMonth = 30*24*3600*1000;
 
-  const critHitsNoPlan = S.hits.filter(h=>{
-    const lv=h.inherent_level||h.level||'';
-    const isCrit=lv==='critical'||lv==='alto';
-    if(!isCrit||h.false_positive||h._discarded) return false;
-    const hasPlan=S.actionPlans.some(p=>
-      (p.hit_id===h.id||(p.description||'').includes(h.id)||p.title?.includes(h.title?.slice(0,30)||'__'))
-      && p.status!=='closed'
-    );
-    return !hasPlan;
-  }).length;
-
   const highResidualNoPlan = S.hits.filter(h=>{
     const rv=h.residual_level||h.inherent_level||h.level||'';
     const isHigh=rv==='alto'||rv==='critical'||rv==='high';
@@ -2800,15 +2784,13 @@ function calcHealthScore(){
 
   const score = Math.max(0, Math.min(100,
     100
-    - critHitsNoPlan    * 15
     - highResidualNoPlan * 10
-    - overdueP          * 8
-    + ctrlThisMonth     * 2
+    - overdueP           * 8
+    + ctrlThisMonth      * 2
   ));
 
   return {
     score: Math.round(score),
-    critHitsNoPlan,
     highResidualNoPlan,
     overdueP,
     ctrlThisMonth,
@@ -2853,7 +2835,7 @@ function renderHealthGauge(){
   const canvas=document.getElementById('coc-health-canvas');
   if(!canvas) return;
   const detail=document.getElementById('coc-health-detail');
-  const {score,critHitsNoPlan,highResidualNoPlan,overdueP,ctrlThisMonth}=calcHealthScore();
+  const {score,highResidualNoPlan,overdueP,ctrlThisMonth}=calcHealthScore();
 
   const W=canvas.offsetWidth||220, H=110;
   const dpr=Math.min(window.devicePixelRatio||1,2);
@@ -2910,7 +2892,6 @@ function renderHealthGauge(){
 
   if(detail){
     const items=[];
-    if(critHitsNoPlan>0)     items.push(`<span style="color:var(--danger)">-${critHitsNoPlan*15}</span> hits alto sin plan`);
     if(highResidualNoPlan>0) items.push(`<span style="color:var(--warn)">-${highResidualNoPlan*10}</span> residual alto sin plan`);
     if(overdueP>0)           items.push(`<span style="color:var(--warn)">-${overdueP*8}</span> planes vencidos`);
     if(ctrlThisMonth>0)      items.push(`<span style="color:var(--accent)">+${ctrlThisMonth*2}</span> controles este mes`);
