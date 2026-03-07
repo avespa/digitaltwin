@@ -1,6 +1,54 @@
 {
   "hits": [
     {
+      "id": "e1b95cad5805",
+      "title": "Detienen a tres personas dedicadas a cometer fraudes bancarios con cheques y pagarés manipulados en España",
+      "link": "https://www.europapress.es/islas-canarias/noticia-detienen-tres-personas-dedicadas-cometer-fraudes-bancarios-cheques-pagares-manipulados-espana-20260306102412.html",
+      "source": "NewsAPI-Q3 · Europapress.es",
+      "raw_date": "2026-03-06T09:24:12Z",
+      "fetched_at": "2026-03-07T09:32:25.845886+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Fraude financiero",
+        "Daño reputacional",
+        "Pérdida de confianza en el sistema bancario"
+      ],
+      "norms_affected": [
+        "Código Penal español",
+        "Ley de Prevención del Blanqueo de Capitales (LPBC)",
+        "ISO 37001"
+      ],
+      "summary": "Tres personas han sido detenidas por presuntamente cometer fraudes bancarios mediante la manipulación de cheques y pagarés. La organización operaba en diferentes puntos de España, sustrayendo documentos de correspondencia comercial.",
+      "vulnerability": "Falta de controles de seguridad en la gestión de correspondencia y transacciones bancarias.",
+      "financial_impact": "Pérdidas económicas significativas para las entidades bancarias y empresas afectadas, con posibles multas y sanciones.",
+      "recommended_action": "Implementar protocolos de seguridad más robustos en la gestión de documentos financieros y capacitar al personal en la detección de fraudes."
+    },
+    {
+      "id": "4d96f533d56b",
+      "title": "La trama ucraniana de 'El Maestro' utilizaba 'bots' para realizar miles de apuestas deportivas al momento",
+      "link": "https://www.abc.es/espana/comunidad-valenciana/trama-ucraniana-maestro-utilizaba-bots-realizar-miles-20260306164658-nt.html",
+      "source": "NewsAPI-Q3 · Www.abc.es",
+      "raw_date": "2026-03-06T06:58:50Z",
+      "fetched_at": "2026-03-07T09:32:29.265535+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Blanqueo de capitales",
+        "Fraude en apuestas deportivas",
+        "Uso de tecnología para delitos financieros"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "ISO 37001:2016 Anti-bribery management systems",
+        "Ley 13/2011 de regulación del juego"
+      ],
+      "summary": "Operación Girasoles destapa red de blanqueo de capitales mediante apuestas deportivas con bots. Doce detenidos en la Comunidad Valenciana. Uso de tecnología para evadir controles financieros.",
+      "vulnerability": "Falta de controles de monitorización de transacciones sospechosas en plataformas de apuestas deportivas",
+      "financial_impact": "Multas superiores a 500.000€ por incumplimiento de normativa anti-blanqueo y regulación del juego",
+      "recommended_action": "Implementar sistemas de detección de patrones sospechosos en transacciones y auditorías periódicas de cumplimiento normativo en el sector de apuestas"
+    },
+    {
       "id": "7b0d70aaf8e3",
       "title": "Hatta Energy traslada su domicilio fiscal a Galicia, donde planea invertir en dos plantas de biocombustibles",
       "link": "https://www.europapress.es/galicia/noticia-hatta-energy-traslada-domicilio-fiscal-galicia-donde-planea-invertir-dos-plantas-biocombustibles-20260305133628.html",
@@ -1174,13 +1222,13 @@
     }
   ],
   "stats": {
-    "total_hits": 52,
-    "critical_count": 16,
-    "warning_count": 36,
+    "total_hits": 54,
+    "critical_count": 17,
+    "warning_count": 37,
     "info_count": 0,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 61,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 63,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -1199,5 +1247,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-07T06:46:40.301325+00:00"
+  "last_updated": "2026-03-07T09:32:30.465741+00:00"
 }
