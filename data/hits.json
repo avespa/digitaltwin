@@ -1,6 +1,124 @@
 {
   "hits": [
     {
+      "id": "223ed975bfe0",
+      "title": "Competencia investiga a las aseguradoras por intercambiar datos de clientes e inspecciona sus sedes",
+      "link": "https://www.eldiario.es/economia/competencia-investiga-aseguradoras-intercambiar-datos-clientes-e-inspecciona-sedes_1_13046328.html",
+      "source": "NewsAPI-Q2 · Eldiario.es",
+      "raw_date": "2026-03-06T12:04:32Z",
+      "fetched_at": "2026-03-07T12:54:25.738698+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "prácticas anticompetitivas",
+        "incumplimiento de protección de datos",
+        "sanciones regulatorias"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento General de Protección de Datos (RGPD)",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales"
+      ],
+      "summary": "La CNMC investiga a aseguradoras por posibles prácticas anticompetitivas, incluyendo el intercambio de datos de clientes y la concertación de precios. Se han realizado registros en sus sedes. Esto puede implicar sanciones significativas y afectar la reputación corporativa.",
+      "vulnerability": "Falta de controles internos para prevenir prácticas anticompetitivas y garantizar el cumplimiento del RGPD en el intercambio de datos.",
+      "financial_impact": "Multas que pueden superar los 500.000€ por incumplimiento de la normativa de competencia y protección de datos.",
+      "recommended_action": "Realizar una auditoría interna inmediata para identificar y corregir cualquier práctica anticompetitiva, así como revisar y fortalecer los protocolos de protección de datos."
+    },
+    {
+      "id": "7cf680566adf",
+      "title": "La CNMC investiga a varias aseguradoras por prácticas contra la competencia",
+      "link": "https://www.abc.es/economia/cnmc-investiga-varias-aseguradoras-practicas-competencia-20260306124657-nt.html",
+      "source": "NewsAPI-Q2 · Www.abc.es",
+      "raw_date": "2026-03-06T11:47:04Z",
+      "fetched_at": "2026-03-07T12:54:28.289253+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Multas significativas",
+        "Daño reputacional",
+        "Expediente sancionador"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 2019/1"
+      ],
+      "summary": "La CNMC investiga a varias aseguradoras por prácticas anticompetitivas. No se han revelado los nombres de las empresas involucradas, pero la investigación podría resultar en sanciones significativas.",
+      "vulnerability": "Falta de controles internos para prevenir prácticas anticompetitivas",
+      "financial_impact": "Multas entre 50K€ y 500K€ por empresa investigada",
+      "recommended_action": "Revisar y fortalecer los programas de compliance en materia de competencia, realizar auditorías internas y capacitar al personal sobre las normativas de competencia."
+    },
+    {
+      "id": "70eb2e6e8967",
+      "title": "La CNMC investiga a varias aseguradoras por posibles prácticas anticompetitivas",
+      "link": "https://www.expansion.com/empresas/seguros/2026/03/06/69aab949468aeb7b438b45a0.html",
+      "source": "NewsAPI-Q2 · Expansion.com",
+      "raw_date": "2026-03-06T11:24:02Z",
+      "fetched_at": "2026-03-07T12:54:30.986292+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Prácticas anticompetitivas",
+        "Sanciones económicas",
+        "Daño reputacional"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 2019/1"
+      ],
+      "summary": "La CNMC investiga a varias aseguradoras por posibles prácticas anticompetitivas tras realizar inspecciones en sus sedes. Esto podría derivar en sanciones económicas y daño reputacional.",
+      "vulnerability": "Falta de controles internos para prevenir prácticas anticompetitivas",
+      "financial_impact": "Multa de hasta 500.000€ para una empresa española media",
+      "recommended_action": "Revisar y fortalecer los protocolos de compliance anticompetitivo y realizar auditorías internas."
+    },
+    {
+      "id": "2369a97b385c",
+      "title": "Una denuncia en Gran Canaria provoca la caída de un entramado que usaba criptomonedas para el blanqueo de capitales",
+      "link": "https://www.eldiario.es/canariasahora/sucesos/gran-canaria-entramado-criptomonedas-blanqueo-capitales_1_13046582.html",
+      "source": "NewsAPI-Q3 · Eldiario.es",
+      "raw_date": "2026-03-06T12:31:46Z",
+      "fetched_at": "2026-03-07T12:54:33.796455+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Blanqueo de capitales",
+        "Delincuencia informática",
+        "Uso de criptomonedas para actividades ilícitas"
+      ],
+      "norms_affected": [
+        "ISO 37001",
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "RGPD"
+      ],
+      "summary": "La Guardia Civil desarticuló una red que usaba criptomonedas para blanquear dinero de estafas como 'hijo en apuros' o 'smishing'. El caso destaca el riesgo de blanqueo de capitales y delincuencia informática en España.",
+      "vulnerability": "Falta de controles robustos en transacciones con criptomonedas y sistemas de detección de actividades sospechosas.",
+      "financial_impact": "Multas superiores a 500.000€ por incumplimiento de la normativa anti-blanqueo y posibles indemnizaciones a víctimas de estafas.",
+      "recommended_action": "Implementar sistemas de monitorización de transacciones con criptomonedas y capacitar al personal en la detección de actividades sospechosas."
+    },
+    {
+      "id": "4d8ed54d9a21",
+      "title": "Cae una red que robaba documentos de buzones de correos en el polígono de Toledo",
+      "link": "https://www.abc.es/espana/castilla-la-mancha/toledo/cae-red-robaba-documentos-buzones-correos-poligono-20260306112920-nt.html",
+      "source": "NewsAPI-Q3 · Www.abc.es",
+      "raw_date": "2026-03-06T10:29:26Z",
+      "fetched_at": "2026-03-07T12:54:37.786485+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "fraude bancario",
+        "robo de identidad",
+        "violación de datos"
+      ],
+      "norms_affected": [
+        "Ley Orgánica 10/1995 de Código Penal",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales",
+        "Ley 10/2010 de prevención del blanqueo de capitales"
+      ],
+      "summary": "La Policía Nacional ha desmantelado una red criminal que robaba documentos de buzones de correos en Toledo para cometer fraudes bancarios. Los detenidos manipulaban cheques y pagarés sustraídos de la correspondencia.",
+      "vulnerability": "Falta de controles de seguridad en buzones de correos y procedimientos de verificación de documentos bancarios.",
+      "financial_impact": "Multas de hasta 500.000€ por incumplimiento de la Ley de Protección de Datos y posibles indemnizaciones a afectados.",
+      "recommended_action": "Implementar sistemas de seguridad en buzones de correos y protocolos de verificación de documentos bancarios."
+    },
+    {
       "id": "e1b95cad5805",
       "title": "Detienen a tres personas dedicadas a cometer fraudes bancarios con cheques y pagarés manipulados en España",
       "link": "https://www.europapress.es/islas-canarias/noticia-detienen-tres-personas-dedicadas-cometer-fraudes-bancarios-cheques-pagares-manipulados-espana-20260306102412.html",
@@ -1222,13 +1340,13 @@
     }
   ],
   "stats": {
-    "total_hits": 54,
-    "critical_count": 17,
-    "warning_count": 37,
+    "total_hits": 59,
+    "critical_count": 18,
+    "warning_count": 41,
     "info_count": 0,
-    "new_this_run": 2,
-    "articles_checked": 2,
-    "seen_ids_total": 63,
+    "new_this_run": 5,
+    "articles_checked": 5,
+    "seen_ids_total": 68,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -1247,5 +1365,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-07T09:32:30.465741+00:00"
+  "last_updated": "2026-03-07T12:54:38.986659+00:00"
 }
