@@ -1,6 +1,29 @@
 {
   "hits": [
     {
+      "id": "e3169b82f959",
+      "title": "Cierran un desguace clandestino en Valencia por almacenar residuos peligrosos",
+      "link": "https://www.abc.es/espana/comunidad-valenciana/cierran-desguace-clandestino-valencia-almacenar-residuos-peligrosos-20260307123354-nt.html",
+      "source": "NewsAPI-Q1 · Www.abc.es",
+      "raw_date": "2026-03-07T11:34:00Z",
+      "fetched_at": "2026-03-08T12:55:43.182229+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Multa económica",
+        "Responsabilidad penal por delito ecológico",
+        "Daño reputacional"
+      ],
+      "norms_affected": [
+        "Ley 22/2011 de residuos y suelos contaminados",
+        "Ley 34/2007 de calidad del aire y protección de la atmósfera"
+      ],
+      "summary": "Cierre de desguace clandestino en Valencia por almacenar residuos peligrosos, incumpliendo normativa medioambiental. La Guardia Civil propone sanción.",
+      "vulnerability": "Falta de controles de gestión de residuos peligrosos y permisos de actividad",
+      "financial_impact": "Multa estimada entre 100K€ y 500K€ para una empresa española media",
+      "recommended_action": "Revisar y actualizar los procedimientos de gestión de residuos peligrosos y verificar el cumplimiento de todas las autorizaciones administrativas"
+    },
+    {
       "id": "dcb63aced06e",
       "title": "Igualdad multa con 25.000 euros a Vodafone por la caída del sistema de las pulseras de control de maltratadores",
       "link": "https://www.eldiario.es/sociedad/igualdad-multa-25-000-euros-vodafone-caida-sistema-pulseras-control-maltratadores_1_13047976.html",
@@ -1407,13 +1430,13 @@
     }
   ],
   "stats": {
-    "total_hits": 62,
+    "total_hits": 63,
     "critical_count": 20,
-    "warning_count": 41,
+    "warning_count": 42,
     "info_count": 1,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 72,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 73,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -1432,5 +1455,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-08T09:33:21.092731+00:00"
+  "last_updated": "2026-03-08T12:55:44.382437+00:00"
 }
