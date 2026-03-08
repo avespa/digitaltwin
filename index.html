@@ -2506,6 +2506,32 @@ function drawCocBuilding(){
   const gridScreenH = (COLS + ROWS) * TY / 2;
   const oy          = topMargin + Math.round((availH - gridScreenH) / 2);
 
+  // ── Heartbeat scan rings (behind everything) ────────────────────
+  {
+    const cx = ox;
+    const cy = oy + (ROWS + COLS) * TY / 4;
+    const maxR = Math.sqrt(W * W + H * H) * 0.65;
+    const period = 2400; // ms per heartbeat cycle
+    const [hr, hg, hb] = crits > 0    ? [239, 68, 68]
+      : globalS >= 4 ? [0, 229, 160]
+      : globalS >= 3 ? [80, 200, 120]
+      : [245, 158, 11];
+    // Lub-dub: two pulses close together, then silence
+    [0, 280].forEach(offset => {
+      const p = ((T + offset) % period) / period;
+      const r = p * maxR;
+      const alpha = Math.pow(1 - p, 2.2) * (day ? 0.10 : 0.18);
+      if (alpha < 0.004) return;
+      ctx.save();
+      ctx.strokeStyle = `rgba(${hr},${hg},${hb},${alpha})`;
+      ctx.lineWidth = Math.max(0.5, 2.5 * (1 - p));
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    });
+  }
+
   // ── Pass 1: Ground tiles ────────────────────────────────────────
   for(let row=0; row<ROWS; row++){
     for(let col=0; col<COLS; col++){
