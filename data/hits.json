@@ -1,6 +1,30 @@
 {
   "hits": [
     {
+      "id": "1537894b7ed7",
+      "title": "Llega el tsunami de la IA y Díaz amenaza con multas de 250.000 euros por tener becarios: ¿qué podría salir mal?",
+      "link": "https://www.libertaddigital.com/libremercado/2026-03-08/domingo-soriano-llega-el-tsunami-de-la-ia-y-diaz-amenaza-con-multas-de-250-000-euros-por-tener-becarios-que-podria-salir-mal-7370717/",
+      "source": "NewsAPI-Q1 · Libertaddigital.com",
+      "raw_date": "2026-03-08T06:11:56Z",
+      "fetched_at": "2026-03-09T07:06:33.817711+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Multas de hasta 250.000 euros por incumplimiento de normativa laboral",
+        "Impacto negativo en la reputación corporativa",
+        "Posible aumento de costes laborales"
+      ],
+      "norms_affected": [
+        "Estatuto de los Trabajadores",
+        "Ley de Prevención de Riesgos Laborales",
+        "Ley General de la Seguridad Social"
+      ],
+      "summary": "La ministra amenaza con multas de 250.000 euros por tener becarios, coincidiendo con un desplome en las contrataciones de jóvenes. Las empresas deben revisar sus prácticas de contratación para evitar sanciones.",
+      "vulnerability": "Falta de un programa de compliance laboral que garantice el cumplimiento de la normativa sobre becarios y prácticas no laborales.",
+      "financial_impact": "Multas de hasta 250.000 euros por incumplimiento, más costes legales y posibles indemnizaciones.",
+      "recommended_action": "Revisar y actualizar las políticas de contratación de becarios y prácticas no laborales, asegurando el cumplimiento de la normativa vigente."
+    },
+    {
       "id": "e3169b82f959",
       "title": "Cierran un desguace clandestino en Valencia por almacenar residuos peligrosos",
       "link": "https://www.abc.es/espana/comunidad-valenciana/cierran-desguace-clandestino-valencia-almacenar-residuos-peligrosos-20260307123354-nt.html",
@@ -1430,13 +1454,13 @@
     }
   ],
   "stats": {
-    "total_hits": 63,
+    "total_hits": 64,
     "critical_count": 20,
-    "warning_count": 42,
+    "warning_count": 43,
     "info_count": 1,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 73,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 74,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -1455,5 +1479,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-09T04:54:20.515710+00:00"
+  "last_updated": "2026-03-09T07:06:35.017923+00:00"
 }
