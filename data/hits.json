@@ -1,6 +1,30 @@
 {
   "hits": [
     {
+      "id": "2c0dd57f886b",
+      "title": "El Tesoro de EE.UU. vincula una transferencia de Plus Ultra con una gran red de corrupción venezolana",
+      "link": "https://www.abc.es/espana/tesoro-eeuu-vincula-transferencia-plus-ultra-gran-20260308040507-nt.html",
+      "source": "NewsAPI-Q2 · Www.abc.es",
+      "raw_date": "2026-03-09T03:05:07Z",
+      "fetched_at": "2026-03-10T04:44:38.185888+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Blanqueo de capitales",
+        "Sanciones internacionales",
+        "Daño reputacional"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Reglamento (UE) 2015/847",
+        "ISO 37001"
+      ],
+      "summary": "El Tesoro de EE.UU. vincula una transferencia de Plus Ultra con una red de corrupción venezolana, lo que podría implicar sanciones y riesgos de blanqueo de capitales para la aerolínea española.",
+      "vulnerability": "Falta de controles robustos en la diligencia debida de clientes y transacciones internacionales.",
+      "financial_impact": "Multa superior a 500.000€ y posibles sanciones adicionales por incumplimiento de normativas internacionales.",
+      "recommended_action": "Realizar una auditoría inmediata de los procesos de compliance y fortalecer los controles de diligencia debida y monitoreo de transacciones sospechosas."
+    },
+    {
       "id": "1537894b7ed7",
       "title": "Llega el tsunami de la IA y Díaz amenaza con multas de 250.000 euros por tener becarios: ¿qué podría salir mal?",
       "link": "https://www.libertaddigital.com/libremercado/2026-03-08/domingo-soriano-llega-el-tsunami-de-la-ia-y-diaz-amenaza-con-multas-de-250-000-euros-por-tener-becarios-que-podria-salir-mal-7370717/",
@@ -1454,13 +1478,13 @@
     }
   ],
   "stats": {
-    "total_hits": 64,
-    "critical_count": 20,
+    "total_hits": 65,
+    "critical_count": 21,
     "warning_count": 43,
     "info_count": 1,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 74,
+    "new_this_run": 1,
+    "articles_checked": 2,
+    "seen_ids_total": 76,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -1479,5 +1503,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-10T02:21:26.736232+00:00"
+  "last_updated": "2026-03-10T04:44:40.085477+00:00"
 }
