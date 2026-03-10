@@ -1,6 +1,28 @@
 {
   "hits": [
     {
+      "id": "57aca210d5cd",
+      "title": "Víctimas de la dana piden al TSJ \"no aplicar\" el aforamiento a Mazón por ser un \"fraude de ley\" y que lo investigue la jueza de Catarroja",
+      "link": "https://www.elmundo.es/comunidad-valenciana/2026/03/09/69aead4afdddff24628b458b.html",
+      "source": "NewsAPI-Q4 · El Mundo",
+      "raw_date": "2026-03-09T11:25:30Z",
+      "fetched_at": "2026-03-10T13:08:11.493882+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Riesgo reputacional",
+        "Riesgo legal y penal"
+      ],
+      "norms_affected": [
+        "Código Penal español",
+        "Ley de Enjuiciamiento Criminal"
+      ],
+      "summary": "La Asociación Víctimas de la dana solicita al TSJ que no aplique el aforamiento al ex presidente Carlos Mazón, considerándolo un 'fraude de ley', y que sea investigado por la jueza de Catarroja. Esto podría afectar a la imagen y cumplimiento normativo de la empresa vinculada al ex presidente.",
+      "vulnerability": "Falta de controles internos para prevenir y gestionar riesgos legales y reputacionales asociados a altos cargos.",
+      "financial_impact": "Multas y sanciones entre 50K€ y 500K€, además de posibles indemnizaciones a víctimas.",
+      "recommended_action": "El Compliance Officer debe revisar y fortalecer los protocolos de prevención de delitos y riesgos legales, asegurando la independencia y transparencia en las investigaciones internas."
+    },
+    {
       "id": "b23786d876af",
       "title": "El Tesoro de EEUU vincula un pago de Plus Ultra con la red de corrupción del chavismo",
       "link": "https://www.libertaddigital.com/espana/2026-03-09/el-tesoro-de-eeuu-vincula-un-pago-de-plus-ultra-con-la-red-de-corrupcion-del-chavismo-7371084/",
@@ -1501,13 +1523,13 @@
     }
   ],
   "stats": {
-    "total_hits": 66,
+    "total_hits": 67,
     "critical_count": 22,
-    "warning_count": 43,
+    "warning_count": 44,
     "info_count": 1,
     "new_this_run": 1,
     "articles_checked": 1,
-    "seen_ids_total": 77,
+    "seen_ids_total": 78,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -1526,5 +1548,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-10T09:50:24.191522+00:00"
+  "last_updated": "2026-03-10T13:08:12.694133+00:00"
 }
