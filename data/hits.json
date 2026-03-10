@@ -1,6 +1,28 @@
 {
   "hits": [
     {
+      "id": "bcc1b00add8c",
+      "title": "Vox desdeña la intención de Ortega Smith de llevar su expulsión a los tribunales: \"Que se ponga a la cola\"",
+      "link": "https://www.europapress.es/nacional/noticia-vox-desdena-intencion-ortega-smith-llevar-expulsion-tribunales-fantastico-ponga-cola-20260309151219.html",
+      "source": "NewsAPI-Q2 · Europapress.es",
+      "raw_date": "2026-03-09T14:12:19Z",
+      "fetched_at": "2026-03-10T16:02:54.852153+00:00",
+      "level": "warning",
+      "relevance_score": 65,
+      "risks": [
+        "Posible incumplimiento de RGPD",
+        "Conflictos legales internos"
+      ],
+      "norms_affected": [
+        "RGPD",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales"
+      ],
+      "summary": "Vox minimiza la denuncia de Ortega Smith ante la AEPD por su expulsión, lo que podría derivar en un conflicto legal relevante para el compliance corporativo.",
+      "vulnerability": "Falta de protocolos internos para la gestión de conflictos y protección de datos en procesos de expulsión de miembros.",
+      "financial_impact": "Multa potencial de 50K€ a 500K€ por incumplimiento de RGPD.",
+      "recommended_action": "Revisar y actualizar los protocolos internos de gestión de conflictos y protección de datos, asegurando el cumplimiento del RGPD."
+    },
+    {
       "id": "57aca210d5cd",
       "title": "Víctimas de la dana piden al TSJ \"no aplicar\" el aforamiento a Mazón por ser un \"fraude de ley\" y que lo investigue la jueza de Catarroja",
       "link": "https://www.elmundo.es/comunidad-valenciana/2026/03/09/69aead4afdddff24628b458b.html",
@@ -1523,13 +1545,13 @@
     }
   ],
   "stats": {
-    "total_hits": 67,
+    "total_hits": 68,
     "critical_count": 22,
-    "warning_count": 44,
+    "warning_count": 45,
     "info_count": 1,
     "new_this_run": 1,
     "articles_checked": 1,
-    "seen_ids_total": 78,
+    "seen_ids_total": 79,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -1548,5 +1570,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-10T13:08:12.694133+00:00"
+  "last_updated": "2026-03-10T16:02:56.052383+00:00"
 }
