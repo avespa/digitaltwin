@@ -1,6 +1,28 @@
 {
   "hits": [
     {
+      "id": "589c91e76f99",
+      "title": "El TSJA inadmite la querella contra el socialista Rafael Recio por acoso laboral",
+      "link": "https://www.abc.es/sevilla/ciudad/tsja-inadmite-querella-socialista-rafael-recio-acoso-20260311102506-nts.html",
+      "source": "NewsAPI-Q4 · Www.abc.es",
+      "raw_date": "2026-03-11T09:28:51Z",
+      "fetched_at": "2026-03-12T09:49:12.274587+00:00",
+      "level": "warning",
+      "relevance_score": 65,
+      "risks": [
+        "riesgo reputacional",
+        "riesgo legal"
+      ],
+      "norms_affected": [
+        "Ley Orgánica 3/2007 para la igualdad efectiva de mujeres y hombres",
+        "Ley 31/1995 de Prevención de Riesgos Laborales"
+      ],
+      "summary": "El TSJA ha inadmitido una querella por acoso laboral contra un político del PSOE, lo que puede generar riesgos reputacionales y legales para la organización.",
+      "vulnerability": "falta de protocolos claros de prevención y actuación frente al acoso laboral",
+      "financial_impact": "50.000€ a 500.000€",
+      "recommended_action": "revisar y actualizar los protocolos de prevención de acoso laboral y formación continua en igualdad y derechos laborales"
+    },
+    {
       "id": "ff5139acea62",
       "title": "De Arabia Saudí a Sevilla, así salpica el caso Rubiales a la Cartuja",
       "link": "https://www.abc.es/sevilla/ciudad/arabia-saudi-sevilla-salpica-rubiales-cartuja-20260311214749-nts.html",
@@ -1636,13 +1658,13 @@
     }
   ],
   "stats": {
-    "total_hits": 72,
+    "total_hits": 73,
     "critical_count": 23,
-    "warning_count": 47,
+    "warning_count": 48,
     "info_count": 2,
     "new_this_run": 1,
     "articles_checked": 1,
-    "seen_ids_total": 85,
+    "seen_ids_total": 86,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -1661,5 +1683,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-12T07:00:34.275593+00:00"
+  "last_updated": "2026-03-12T09:49:13.474768+00:00"
 }
