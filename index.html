@@ -375,7 +375,8 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
   #coc-splitter:hover,#coc-splitter.dragging{background:var(--border2)}
   #coc-splitter::after{content:'';display:block;width:2px;height:32px;background:var(--border2);border-radius:2px}
   #coc-right{width:300px;min-width:140px;max-width:600px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;flex-shrink:0}
-  .ckri{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0;position:relative;overflow:hidden}
+  .ckri{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0;position:relative;overflow:hidden;transition:border-color .15s,background .15s}
+  .ckri:hover{background:var(--surface2);border-color:var(--kc,var(--accent))}
   .ckri::before{content:\'\';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--kc,var(--accent))}
   .ckri-n{font-family:var(--font-ui);font-size:24px;font-weight:800;color:var(--kc,var(--accent));line-height:1;min-width:40px}
   .ckri-l{font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:2px}
@@ -437,19 +438,19 @@ code{background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:10.5
         <div id="coc-health-detail" style="font-size:8px;color:var(--text-dim);line-height:1.6;margin-top:6px"></div>
         <div id="health-tooltip"></div>
       </div>
-      <div class="ckri" style="--kc:var(--accent)">
+      <div class="ckri" style="--kc:var(--accent);cursor:pointer" onclick="go('madurez')" title="Ir a Assessment de Madurez">
           <div class="ckri-n" id="coc-kri-m">—</div>
           <div><div class="ckri-l">Madurez Global</div><div class="ckri-s">ISO 37301 · /5.0</div></div>
         </div>
-        <div class="ckri" style="--kc:var(--danger)">
+        <div class="ckri" style="--kc:var(--danger);cursor:pointer" onclick="go('hits')" title="Ir a Monitorización de Hits">
           <div class="ckri-n" id="coc-kri-c">0</div>
           <div><div class="ckri-l">Amenazas activas</div><div class="ckri-s" id="coc-kri-cs">impacto crítico/alto</div></div>
         </div>
-        <div class="ckri" style="--kc:var(--warn)">
+        <div class="ckri" style="--kc:var(--warn);cursor:pointer" onclick="go('planes')" title="Ir a Planes de Acción">
           <div class="ckri-n" id="coc-kri-p">0</div>
           <div><div class="ckri-l">Planes abiertos</div><div class="ckri-s">en seguimiento activo</div></div>
         </div>
-        <div class="ckri" style="--kc:var(--accent2)">
+        <div class="ckri" style="--kc:var(--accent2);cursor:pointer" onclick="go('hits')" title="Ir a Monitorización de Hits">
           <div class="ckri-n" id="coc-kri-h">0</div>
           <div><div class="ckri-l">Hits monitorizados</div><div class="ckri-s" id="coc-kri-hs">última actualización</div></div>
         </div>
@@ -2495,32 +2496,6 @@ function drawCocBuilding(){
   const gridScreenH = (COLS + ROWS) * TY / 2;
   const oy          = topMargin + Math.round((availH - gridScreenH) / 2);
 
-  // ── Heartbeat scan rings (behind everything) ────────────────────
-  {
-    const cx = ox;
-    const cy = oy + (ROWS + COLS) * TY / 4;
-    const maxR = Math.sqrt(W * W + H * H) * 0.65;
-    const period = 2400; // ms per heartbeat cycle
-    const [hr, hg, hb] = crits > 0    ? [239, 68, 68]
-      : globalS >= 4 ? [0, 229, 160]
-      : globalS >= 3 ? [80, 200, 120]
-      : [245, 158, 11];
-    // Lub-dub: two pulses close together, then silence
-    [0, 280].forEach(offset => {
-      const p = ((T + offset) % period) / period;
-      const r = p * maxR;
-      const alpha = Math.pow(1 - p, 2.2) * (day ? 0.10 : 0.18);
-      if (alpha < 0.004) return;
-      ctx.save();
-      ctx.strokeStyle = `rgba(${hr},${hg},${hb},${alpha})`;
-      ctx.lineWidth = Math.max(0.5, 2.5 * (1 - p));
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.restore();
-    });
-  }
-
   // ── Pass 1: Ground tiles ────────────────────────────────────────
   for(let row=0; row<ROWS; row++){
     for(let col=0; col<COLS; col++){
@@ -2534,6 +2509,34 @@ function drawCocBuilding(){
       if(isRoadRow && !isRoadCol) _drawRoadMark(ctx,x,y,TX,TY,'h',day);
       if(isRoadCol && !isRoadRow) _drawRoadMark(ctx,x,y,TX,TY,'v',day);
     }
+  }
+
+  // ── Heartbeat scan rings (over tiles, under buildings) ──────────
+  {
+    const cx = ox;
+    const cy = oy + (ROWS + COLS) * TY / 4;
+    const maxR = Math.sqrt(W * W + H * H) * 0.65;
+    const period = 2400;
+    const [hr, hg, hb] = crits > 0   ? [239, 68, 68]
+      : globalS >= 4 ? [0, 229, 160]
+      : globalS >= 3 ? [80, 200, 120]
+      : [245, 158, 11];
+    [0, 280].forEach(offset => {
+      const p = ((T + offset) % period) / period;
+      const r = p * maxR;
+      const alpha = Math.pow(1 - p, 1.6) * (day ? 0.32 : 0.52);
+      if (alpha < 0.006) return;
+      ctx.save();
+      // Outer glow
+      ctx.strokeStyle = `rgba(${hr},${hg},${hb},${alpha * 0.35})`;
+      ctx.lineWidth = Math.max(1, 8 * (1 - p));
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+      // Sharp ring
+      ctx.strokeStyle = `rgba(${hr},${hg},${hb},${alpha})`;
+      ctx.lineWidth = Math.max(0.5, 2 * (1 - p));
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+      ctx.restore();
+    });
   }
 
   // ── Collect building draw calls (sort back-to-front) ───────────
@@ -2790,7 +2793,7 @@ function calcHealthScore(){
   const msMonth = 30*24*3600*1000;
 
   const highResidualNoPlan = S.hits.filter(h=>{
-    const rv=h.residual_level||h.inherent_level||h.level||'';
+    const rv=h.inherent_level||h.level||'';
     const isHigh=rv==='alto'||rv==='critical'||rv==='high';
     if(!isHigh||h.false_positive||h._discarded) return false;
     return !S.actionPlans.some(p=>p.status!=='closed'&&
