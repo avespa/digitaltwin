@@ -2463,7 +2463,7 @@ function drawCocBuilding(){
   const scores= getDimScores();
   const crits = S.hits.filter(h=>{
     const lv=h.inherent_level||h.level||'';
-    return (lv==='critical'||lv==='alto')&&!h.false_positive&&!h._discarded;
+    return (lv==='critical'||lv==='alto')&&!h.false_positive&&!h._discarded&&!h._groupedUnder;
   }).length;
   const globalS = calcGlobalScore();
 
@@ -2795,7 +2795,7 @@ function calcHealthScore(){
   const highResidualNoPlan = S.hits.filter(h=>{
     const rv=h.inherent_level||h.level||'';
     const isHigh=rv==='alto'||rv==='critical'||rv==='high';
-    if(!isHigh||h.false_positive||h._discarded) return false;
+    if(!isHigh||h.false_positive||h._discarded||h._groupedUnder) return false;
     return !S.actionPlans.some(p=>p.status!=='closed'&&
       (p.hit_id===h.id||(p.description||'').includes(h.id))
     );
@@ -2831,7 +2831,7 @@ function renderDashboard(){
   const globalScore = calcGlobalScore();
   const crits = S.hits.filter(h=>{
     const lv=h.inherent_level||h.level||'';
-    return (lv==='critical'||lv==='alto') && !h.false_positive && !h._discarded;
+    return (lv==='critical'||lv==='alto') && !h.false_positive && !h._discarded && !h._groupedUnder;
   }).length;
   const openPlans = S.actionPlans.filter(p=>p.status!=='closed').length;
   const lastCtxUpdate = S.ctx?._updated;
@@ -2949,7 +2949,7 @@ function miniPlan(p){
 function updateBadges(){
   const highRisk = S.hits.filter(h=>{
     const r=h.inherent_level||h.level||'';
-    return (r==='alto'||r==='critical')&&!h.false_positive&&!h._discarded;
+    return (r==='alto'||r==='critical')&&!h.false_positive&&!h._discarded&&!h._groupedUnder;
   }).length;
   const badgeHits=document.getElementById('badge-hits');
   if(badgeHits) badgeHits.textContent=highRisk;
@@ -5172,7 +5172,7 @@ function updateFunnelCounts(){
   }).length;
   const inherentAlto = S.hits.filter(h=>{
     const r=h.inherent_level||h.level||'';
-    return (r==='alto'||r==='critical')&&!h.false_positive&&!h._discarded;
+    return (r==='alto'||r==='critical')&&!h.false_positive&&!h._discarded&&!h._groupedUnder;
   }).length;
   const plans = S.actionPlans.filter(p=>p.status!=='closed').length;
   document.getElementById('funnel-count-all').textContent=all;
