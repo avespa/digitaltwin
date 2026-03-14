@@ -2948,7 +2948,8 @@ function miniPlan(p){
 
 function updateBadges(){
   const highRisk = S.hits.filter(h=>{
-    const r=h.inherent_level||''; return r==='alto'||r==='critical';
+    const r=h.inherent_level||h.level||'';
+    return (r==='alto'||r==='critical')&&!h.false_positive&&!h._discarded;
   }).length;
   const badgeHits=document.getElementById('badge-hits');
   if(badgeHits) badgeHits.textContent=highRisk;
@@ -5169,6 +5170,10 @@ function updateFunnelCounts(){
     const r=h.residual_level||'';
     return r==='alto'||r==='critical';
   }).length;
+  const inherentAlto = S.hits.filter(h=>{
+    const r=h.inherent_level||h.level||'';
+    return (r==='alto'||r==='critical')&&!h.false_positive&&!h._discarded;
+  }).length;
   const plans = S.actionPlans.filter(p=>p.status!=='closed').length;
   document.getElementById('funnel-count-all').textContent=all;
   document.getElementById('funnel-count-company').textContent=impacts;
@@ -5176,9 +5181,9 @@ function updateFunnelCounts(){
   if(fra) fra.textContent=residualAlto;
   const fp = document.getElementById('funnel-count-plans');
   if(fp) fp.textContent=plans;
-  // Badge in nav = residual ALTO count
+  // Badge in nav = inherent ALTO count (same as KRI "Amenazas activas")
   const badge = document.getElementById('badge-hits');
-  if(badge) badge.textContent=residualAlto;
+  if(badge) badge.textContent=inherentAlto;
 }
 
 // ═══════════════════════════════════════════════════════════════
