@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "149bb83ed378",
+      "title": "Anuncio del Área de Industria y Energía de Delegación del Gobierno en Castilla-La Mancha, por el que se somete a Información Pública la solicitud de autorización de un Depósito de Consumo de explosivos, con una capacidad máxima de almacenamiento de 9.950 kilogramos de explosivos y 15.000 detonadores, situado en el término municipal de Abenójar, en la provincia de Ciudad Real; cuyo titular será la persona jurídica «ABENOJAR TUNGSTEN, S.A.»; solicitud realizada según lo previsto en el artículo 62, y siguientes, del Reglamento de Explosivos, aprobado mediante Real Decreto 130/2017, de 24 de febrero.",
+      "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2026-8373",
+      "source": "BOE - Anuncios oficiales",
+      "raw_date": "Wed, 18 Mar 2026 00:00:00 +0100",
+      "fetched_at": "2026-03-18T07:06:03.275207+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Incumplimiento de normativa de seguridad industrial y almacenamiento de sustancias peligrosas (Reglamento de Explosivos RD 130/2017)",
+        "Riesgo de sanciones administrativas por parte de la Delegación del Gobierno en Castilla-La Mancha",
+        "Posible impacto en la licencia de actividad y autorizaciones ambientales",
+        "Exposición a responsabilidades penales por negligencia en gestión de explosivos (Código Penal, Art. 348)"
+      ],
+      "norms_affected": [
+        "Reglamento de Explosivos (RD 130/2017)",
+        "Ley 31/1995 de PRL (prevención de riesgos laborales en manejo de sustancias peligrosas)",
+        "Ley 21/2013 de evaluación ambiental",
+        "Real Decreto 656/2017 sobre almacenamiento de productos químicos"
+      ],
+      "summary": "La empresa ABENOJAR TUNGSTEN, S.A. ha solicitado autorización para un depósito de explosivos con capacidad de 9.950 kg y 15.000 detonadores en Abenójar (Ciudad Real). El proceso requiere evaluación pública y cumplimiento estricto de normativa de seguridad industrial y ambiental.",
+      "vulnerability": "Falta de un sistema de gestión de riesgos integral para sustancias peligrosas (ISO 31000) y protocolos de seguridad específicos para almacenamiento de explosivos (UNE 192006-1)",
+      "financial_impact": "Entre 100.000€ y 500.000€ (multas administrativas, paralización de actividad, costes de adecuación y posibles indemnizaciones por incidentes)",
+      "recommended_action": "Revisar el expediente de solicitud para garantizar cumplimiento con el Reglamento de Explosivos y coordinar con el área de seguridad industrial para verificar que los controles de almacenamiento y manipulación cumplen con la normativa aplicable. Documentar el proceso de evaluación pública y preparar un plan de contingencia."
+    },
+    {
       "id": "dcea55c88a67",
       "title": "La UE cambia las normas ante la guerra de Irán: Grecia limita el margen de las gasolineras a 12 céntimos, Francia multa al 5% de las inspeccionadas y España sopesa medidas",
       "link": "https://www.huffingtonpost.es/economia/ue-cambia-normas-guerra-iran-grecia-limita-margen-gasolineras-francia-multa-f202603.html",
@@ -1917,13 +1943,13 @@
     }
   ],
   "stats": {
-    "total_hits": 84,
+    "total_hits": 85,
     "critical_count": 26,
-    "warning_count": 56,
+    "warning_count": 57,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 101,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 102,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -1942,5 +1968,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-18T04:59:31.538623+00:00"
+  "last_updated": "2026-03-18T07:06:04.475449+00:00"
 }
