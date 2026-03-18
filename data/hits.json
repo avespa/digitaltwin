@@ -1,6 +1,30 @@
 {
   "hits": [
     {
+      "id": "dba2c4835b53",
+      "title": "Un error al entregar el cambio a una clienta lleva a una pequeña tienda de alimentación a ser sancionada con 20.000€ ante la Agencia Española de Protección de Datos (AEPD)",
+      "link": "https://www.meneame.net/m/actualidad/error-entregar-cambio-clienta-lleva-pequena-tienda-alimentacion",
+      "source": "NewsAPI-Q2 · Meneame.net",
+      "raw_date": "2026-03-17T09:33:53Z",
+      "fetched_at": "2026-03-18T09:59:53.887632+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Tratamiento ilícito de datos personales (art. 6 RGPD)",
+        "Falta de transparencia en el uso de videovigilancia (art. 13 RGPD)",
+        "Incumplimiento de principios de minimización y finalidad (art. 5 RGPD)",
+        "Posible vulneración del derecho a la intimidad (LOPDGDD)"
+      ],
+      "norms_affected": [
+        "Reglamento General de Protección de Datos (RGPD)",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD)"
+      ],
+      "summary": "Una tienda de alimentación fue sancionada con 20.000€ por la AEPD al utilizar imágenes de videovigilancia para demostrar un error en el cambio a una clienta, sin cumplir con los requisitos de transparencia y finalidad del RGPD. La multa se debe a la falta de información previa sobre el uso de las cámaras y la finalidad del tratamiento.",
+      "vulnerability": "Falta de un registro de actividades de tratamiento (ROPA) específico para videovigilancia y ausencia de cláusulas informativas visibles en las zonas monitorizadas.",
+      "financial_impact": "20.000€ (multa administrativa) + costes legales y reputacionales estimados en 5.000-10.000€ para una pyme española media.",
+      "recommended_action": "Revisar y actualizar la política de videovigilancia, incluir cláusulas informativas visibles en las zonas con cámaras, y registrar el tratamiento en el ROPA. Formar al personal en cumplimiento del RGPD y documentar los protocolos de uso de imágenes."
+    },
+    {
       "id": "149bb83ed378",
       "title": "Anuncio del Área de Industria y Energía de Delegación del Gobierno en Castilla-La Mancha, por el que se somete a Información Pública la solicitud de autorización de un Depósito de Consumo de explosivos, con una capacidad máxima de almacenamiento de 9.950 kilogramos de explosivos y 15.000 detonadores, situado en el término municipal de Abenójar, en la provincia de Ciudad Real; cuyo titular será la persona jurídica «ABENOJAR TUNGSTEN, S.A.»; solicitud realizada según lo previsto en el artículo 62, y siguientes, del Reglamento de Explosivos, aprobado mediante Real Decreto 130/2017, de 24 de febrero.",
       "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2026-8373",
@@ -1943,13 +1967,13 @@
     }
   ],
   "stats": {
-    "total_hits": 85,
+    "total_hits": 86,
     "critical_count": 26,
-    "warning_count": 57,
+    "warning_count": 58,
     "info_count": 2,
     "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 102,
+    "articles_checked": 2,
+    "seen_ids_total": 104,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -1968,5 +1992,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-18T07:06:04.475449+00:00"
+  "last_updated": "2026-03-18T09:59:57.718066+00:00"
 }
