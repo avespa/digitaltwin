@@ -1,6 +1,83 @@
 {
   "hits": [
     {
+      "id": "527fe7f1613f",
+      "title": "Competencia propone cargar con 42 millones la factura de la luz para pagar a las eléctricas por la reposición del día del apagón",
+      "link": "https://www.elperiodico.com/es/economia/20260317/competencia-propone-cargar-42-millones-factura-luz-electricas-reposicion-apagon-128072877",
+      "source": "NewsAPI-Q2 · Elperiodico.com",
+      "raw_date": "2026-03-17T12:02:36Z",
+      "fetched_at": "2026-03-18T13:20:23.130946+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Sanción por incumplimiento de normativa de transparencia en facturación energética (Ley 24/2013 del Sector Eléctrico)",
+        "Riesgo de sobrecostes indebidos en la factura eléctrica que afectan a consumidores y empresas (Ley 15/2018 de Transparencia y Participación Ciudadana)",
+        "Posible vulneración del principio de proporcionalidad en la asignación de costes (Reglamento (UE) 2019/943)",
+        "Riesgo de reclamaciones masivas por parte de consumidores y empresas afectadas (Ley 3/2014 de Protección de Consumidores)"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Ley 15/2018 de Transparencia y Participación Ciudadana",
+        "Reglamento (UE) 2019/943",
+        "Ley 3/2014 de Protección de Consumidores"
+      ],
+      "summary": "La CNMC propone un sobrecoste de entre 25,2 y 42,5 millones de euros en la factura de la luz para compensar a las eléctricas por la reposición tras un apagón. La medida podría vulnerar principios de transparencia y proporcionalidad, generando riesgos de sanciones y reclamaciones.",
+      "vulnerability": "Falta de un mecanismo de revisión independiente y transparente para la asignación de costes adicionales en situaciones de emergencia energética, así como la ausencia de un protocolo claro de comunicación con los consumidores afectados.",
+      "financial_impact": "Entre 25.200.000€ y 42.500.000€ en sobrecostes directos para consumidores y empresas, con posible impacto adicional en reputación corporativa y litigios.",
+      "recommended_action": "Revisar la propuesta de la CNMC en colaboración con el área legal y de relaciones institucionales, identificar posibles vulneraciones de normativa y preparar una estrategia de comunicación y defensa ante posibles reclamaciones o sanciones."
+    },
+    {
+      "id": "810905472872",
+      "title": "La AEPD lanza 'Los deepfakes no son una broma', una iniciativa que llama a actuar con \"prudencia\" en Internet",
+      "link": "https://www.europapress.es/sociedad/noticia-aepd-lanza-deepfakes-no-son-broma-iniciativa-llama-actuar-prudencia-internet-20260317123000.html",
+      "source": "NewsAPI-Q5 · Europapress.es",
+      "raw_date": "2026-03-17T11:30:00Z",
+      "fetched_at": "2026-03-18T13:20:27.547206+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Infracción del RGPD por tratamiento de datos personales sin consentimiento en deepfakes",
+        "Violación de derechos de imagen y honor (LOPDGDD) por uso no autorizado de identidades",
+        "Sanciones administrativas por difusión de contenidos falsos o manipulados",
+        "Riesgo reputacional por asociación con prácticas engañosas"
+      ],
+      "norms_affected": [
+        "RGPD (Reglamento (UE) 2016/679)",
+        "LOPDGDD (Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de derechos digitales)",
+        "Ley 34/2002 de Servicios de la Sociedad de la Información (LSSI-CE)"
+      ],
+      "summary": "La AEPD lanza una campaña de concienciación sobre los riesgos legales y éticos de los deepfakes, destacando posibles infracciones del RGPD y la LOPDGDD por uso no consentido de datos personales. La iniciativa subraya la necesidad de actuar con prudencia para evitar sanciones y daños reputacionales.",
+      "vulnerability": "Falta de políticas internas que regulen el uso de tecnologías de IA generativa (deepfakes) y la verificación de contenidos antes de su difusión.",
+      "financial_impact": "Multas de hasta 20 millones de euros o el 4% de la facturación global anual (según RGPD), más posibles indemnizaciones por daños morales o reputacionales.",
+      "recommended_action": "Elaborar y aprobar una política corporativa sobre deepfakes e IA generativa, incluyendo protocolos de verificación de contenidos, formación a empleados y mecanismos de denuncia interna para casos de uso indebido."
+    },
+    {
+      "id": "e834a84796e7",
+      "title": "El presidente de la Agencia Española de Protección de Datos se somete a un experimento y lo acaba dejando claro: \"Los deepfakes no son una broma\"",
+      "link": "https://www.huffingtonpost.es/tecnologia/el-presidente-agencia-espanola-proteccion-datos-somete-experimento-acaba-dejando-claro-los-deepfake-son-broma-f202603.html",
+      "source": "NewsAPI-Q5 · Huffingtonpost.es",
+      "raw_date": "2026-03-17T10:14:01Z",
+      "fetched_at": "2026-03-18T13:20:32.177851+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Uso indebido de datos personales para generar deepfakes",
+        "Violación del derecho a la imagen y privacidad (RGPD, LOPDGDD)",
+        "Daño reputacional por asociación con contenidos falsos",
+        "Posible incumplimiento de la Ley de Servicios de la Sociedad de la Información (LSSI) en difusión de contenidos engañosos"
+      ],
+      "norms_affected": [
+        "RGPD (Reglamento (UE) 2016/679)",
+        "LOPDGDD (Ley Orgánica 3/2018)",
+        "LSSI (Ley 34/2002)",
+        "Ley Orgánica 1/1982 de protección civil del derecho al honor, a la intimidad personal y familiar y a la propia imagen"
+      ],
+      "summary": "La AEPD advierte sobre los riesgos legales y sociales de los deepfakes, especialmente en relación con la protección de datos personales y el derecho a la imagen. La campaña busca concienciar sobre el uso fraudulento de IA para crear contenidos falsos que pueden afectar a personas y empresas.",
+      "vulnerability": "Falta de políticas internas que regulen el uso de herramientas de IA generativa (como deepfakes) en la empresa, incluyendo formación en privacidad y derechos de imagen.",
+      "financial_impact": "Entre 50.000€ y 300.000€ (multas por infracciones graves en RGPD/LOPDGDD, costes legales y reparación de daños reputacionales)",
+      "recommended_action": "Revisar y actualizar el protocolo de uso de IA en la empresa, incluyendo cláusulas específicas sobre deepfakes, formación obligatoria en privacidad para empleados y evaluación de riesgos en herramientas de generación de contenido sintético."
+    },
+    {
       "id": "dba2c4835b53",
       "title": "Un error al entregar el cambio a una clienta lleva a una pequeña tienda de alimentación a ser sancionada con 20.000€ ante la Agencia Española de Protección de Datos (AEPD)",
       "link": "https://www.meneame.net/m/actualidad/error-entregar-cambio-clienta-lleva-pequena-tienda-alimentacion",
@@ -1967,13 +2044,13 @@
     }
   ],
   "stats": {
-    "total_hits": 86,
+    "total_hits": 89,
     "critical_count": 26,
-    "warning_count": 58,
+    "warning_count": 61,
     "info_count": 2,
-    "new_this_run": 1,
-    "articles_checked": 2,
-    "seen_ids_total": 104,
+    "new_this_run": 3,
+    "articles_checked": 3,
+    "seen_ids_total": 107,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -1992,5 +2069,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-18T09:59:57.718066+00:00"
+  "last_updated": "2026-03-18T13:20:33.378060+00:00"
 }
