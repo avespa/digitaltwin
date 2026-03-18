@@ -1,6 +1,33 @@
 {
   "hits": [
     {
+      "id": "9c8532b5ce56",
+      "title": "El editorial de Carlos Cuesta: 'Respondiendo a Sánchez: en España sí tenemos una corrupción sistémica'",
+      "link": "https://esradio.libertaddigital.com/la-noche-de-cuesta/el-editorial-de-carlos-cuesta/2026-03-17/respondiendo-a-sanchez-en-espana-si-tenemos-una-corrupcion-sistemica-7375980/",
+      "source": "NewsAPI-Q2 · Libertaddigital.com",
+      "raw_date": "2026-03-17T19:30:19Z",
+      "fetched_at": "2026-03-18T21:38:38.186990+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Corrupción sistémica en sector público (tramas de contratación irregular)",
+        "Riesgo de incumplimiento de la Ley 9/2017 de Contratos del Sector Público (fraude en licitaciones)",
+        "Exposición a responsabilidad penal de la empresa por delitos contra la Administración Pública (art. 432 CP)",
+        "Daño reputacional severo para empresas vinculadas a casos de corrupción"
+      ],
+      "norms_affected": [
+        "Ley 9/2017 de Contratos del Sector Público",
+        "Código Penal (arts. 432, 433, 434)",
+        "Ley Orgánica 10/1995 del Código Penal (delitos contra la Administración Pública)",
+        "ISO 37301 (Sistemas de Gestión de Compliance Penal)",
+        "UNE 19601 (Sistemas de Gestión de Compliance Penal)"
+      ],
+      "summary": "El editorial denuncia corrupción sistémica en España, citando el caso Forestalia y otras tramas vinculadas al Gobierno. Se destaca la posible implicación de empresas en contrataciones irregulares con la Administración, lo que expone a riesgos penales y de compliance.",
+      "vulnerability": "Falta de due diligence en contratación pública y debilidad en controles internos para prevenir sobornos y fraudes en licitaciones.",
+      "financial_impact": "Entre 500.000€ y 5M€ (multas, indemnizaciones, pérdida de contratos y costes legales por investigaciones)",
+      "recommended_action": "Revisar urgentemente todos los contratos públicos en los últimos 5 años, realizar auditorías forenses en áreas de riesgo (compras, relaciones institucionales) y reforzar el canal de denuncias con protocolos de protección a informantes."
+    },
+    {
       "id": "527fe7f1613f",
       "title": "Competencia propone cargar con 42 millones la factura de la luz para pagar a las eléctricas por la reposición del día del apagón",
       "link": "https://www.elperiodico.com/es/economia/20260317/competencia-propone-cargar-42-millones-factura-luz-electricas-reposicion-apagon-128072877",
@@ -2044,13 +2071,13 @@
     }
   ],
   "stats": {
-    "total_hits": 89,
+    "total_hits": 90,
     "critical_count": 26,
-    "warning_count": 61,
+    "warning_count": 62,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 107,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 108,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -2069,5 +2096,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-18T19:05:26.018860+00:00"
+  "last_updated": "2026-03-18T21:38:39.387197+00:00"
 }
