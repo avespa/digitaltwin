@@ -1,6 +1,58 @@
 {
   "hits": [
     {
+      "id": "273746cd8f1c",
+      "title": "Multa de 50.000 euros a una empresa portuguesa ubicada en León al contratar empleados extranjeros sin permiso de trabajo",
+      "link": "https://www.europapress.es/castilla-y-leon/noticia-multa-50000-euros-empresa-portuguesa-ubicada-leon-contratar-empleados-extranjeros-permiso-trabajo-20260318162411.html",
+      "source": "NewsAPI-Q1 · Europapress.es",
+      "raw_date": "2026-03-18T15:24:11Z",
+      "fetched_at": "2026-03-19T15:57:51.545784+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Trabajo irregular",
+        "Discriminación por origen nacional",
+        "Incumplimiento de normativa laboral y migratoria",
+        "Responsabilidad penal de la empresa y sus administradores"
+      ],
+      "norms_affected": [
+        "Ley Orgánica 4/2000 sobre derechos y libertades de los extranjeros en España",
+        "Estatuto de los Trabajadores (Art. 15 y 36)",
+        "Ley de Infracciones y Sanciones en el Orden Social (LISOS)",
+        "Reglamento de la Ley Orgánica 4/2000"
+      ],
+      "summary": "Una empresa portuguesa en León ha sido multada con 50.000 euros por contratar trabajadores extranjeros sin permiso de trabajo, incumpliendo normativa laboral y migratoria española. La sanción ha sido confirmada por el Tribunal de Instancia de León.",
+      "vulnerability": "Falta de verificación documental previa a la contratación (permiso de trabajo, NIE, autorización de residencia) y ausencia de protocolos de compliance en materia de contratación de personal extranjero.",
+      "financial_impact": "Entre 50.000€ y 150.000€ (incluyendo multa, costes legales y posibles indemnizaciones por despidos improcedentes o reclamaciones laborales).",
+      "recommended_action": "Revisar urgentemente los procesos de contratación para verificar permisos de trabajo y residencia de todos los empleados extranjeros, implementar un protocolo de compliance laboral con auditorías periódicas y formar al departamento de RRHH en normativa migratoria y laboral española."
+    },
+    {
+      "id": "eaf25309b92d",
+      "title": "La Unión Europea endurece el control del efectivo",
+      "link": "https://www.elconfidencialdigital.com/articulo/dinero/union-europea-endurece-control-efectivo/202603181548331010481.html",
+      "source": "NewsAPI-Q3 · Elconfidencialdigital.com",
+      "raw_date": "2026-03-18T14:48:33Z",
+      "fetched_at": "2026-03-19T15:57:56.063633+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Blanqueo de capitales",
+        "Financiación del terrorismo",
+        "Incumplimiento de normativa AML (Anti-Money Laundering)",
+        "Sanciones por parte de la SEPBLAC (Servicio Ejecutivo de la Comisión de Prevención del Blanqueo de Capitales)"
+      ],
+      "norms_affected": [
+        "Directiva (UE) 2015/849 (4ª Directiva AML)",
+        "Reglamento (UE) 2018/1672 (5ª Directiva AML)",
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Real Decreto 304/2014 (reglamento de la Ley 10/2010)"
+      ],
+      "summary": "La UE implementa un nuevo marco común para el control de pagos en efectivo como parte de su estrategia contra el blanqueo de capitales y la financiación del terrorismo. España, como estado miembro, deberá adaptar su normativa interna para cumplir con las nuevas exigencias.",
+      "vulnerability": "Falta de adaptación de los sistemas internos de control y registro de transacciones en efectivo, así como de los protocolos de identificación de clientes en operaciones con efectivo.",
+      "financial_impact": "Multas administrativas entre 150.000€ y 500.000€ por incumplimiento, dependiendo de la gravedad y reincidencia, además de posibles sanciones penales en casos extremos.",
+      "recommended_action": "Revisar y actualizar los protocolos internos de prevención de blanqueo de capitales, especialmente en lo relativo a operaciones con efectivo, y formar al personal en las nuevas exigencias normativas. Contactar con la SEPBLAC para confirmar los plazos de adaptación."
+    },
+    {
       "id": "416afe6a2bc4",
       "title": "Detenidos en Mallorca tres testaferros de un oligarca ruso que buscaba esquivar las sanciones por la guerra de Ucrania",
       "link": "https://www.abc.es/espana/baleares/detenidos-mallorca-tres-testaferros-oligarca-ruso-buscaba-20260318125347-nt.html",
@@ -2101,13 +2153,13 @@
     }
   ],
   "stats": {
-    "total_hits": 91,
+    "total_hits": 93,
     "critical_count": 27,
-    "warning_count": 62,
+    "warning_count": 64,
     "info_count": 2,
-    "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 110,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 112,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -2126,5 +2178,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-19T13:12:14.402716+00:00"
+  "last_updated": "2026-03-19T15:57:57.263815+00:00"
 }
