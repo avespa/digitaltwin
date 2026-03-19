@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "b8bd06e5a626",
+      "title": "La Fiscalía pide 9 años de prisión para Francisco González, expresidente de BBVA, por el 'Caso Cenyt'",
+      "link": "https://www.expansion.com/empresas/banca/2026/03/18/69bae6bae5fdea590d8b45a0.html",
+      "source": "NewsAPI-Q4 · Expansion.com",
+      "raw_date": "2026-03-18T17:54:29Z",
+      "fetched_at": "2026-03-19T19:03:30.364037+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Corrupción y cohecho en el sector financiero",
+        "Reputación corporativa y pérdida de confianza en el mercado",
+        "Responsabilidad penal de la persona jurídica (art. 31 bis CP)",
+        "Incumplimiento de controles internos de compliance (ISO 37301, UNE 19601)"
+      ],
+      "norms_affected": [
+        "Código Penal español (arts. 31 bis, 427, 432, 433)",
+        "Ley 10/2010 de prevención del blanqueo de capitales (art. 36)",
+        "ISO 37301:2021 (Sistemas de gestión de compliance)",
+        "UNE 19601:2017 (Compliance penal)"
+      ],
+      "summary": "La Fiscalía solicita penas de prisión para el expresidente de BBVA, Francisco González, y el excomisario Villarejo por presuntos delitos de cohecho y revelación de secretos en el 'Caso Cenyt'. El caso afecta directamente a la integridad del sector financiero y podría derivar en responsabilidad penal para la entidad.",
+      "vulnerability": "Falta de controles efectivos en la prevención de delitos de corrupción y blanqueo de capitales, así como en la supervisión de relaciones con terceros (proveedores, asesores externos).",
+      "financial_impact": "Multas penales (hasta 10% del beneficio anual) + costes legales y de reputación (estimación: 50-200M€ para una entidad financiera española de tamaño medio).",
+      "recommended_action": "Revisar urgentemente los protocolos de compliance penal y blanqueo de capitales, realizar una auditoría independiente de los controles internos y reforzar la formación en ética y prevención de delitos para el consejo de administración y alta dirección."
+    },
+    {
       "id": "273746cd8f1c",
       "title": "Multa de 50.000 euros a una empresa portuguesa ubicada en León al contratar empleados extranjeros sin permiso de trabajo",
       "link": "https://www.europapress.es/castilla-y-leon/noticia-multa-50000-euros-empresa-portuguesa-ubicada-leon-contratar-empleados-extranjeros-permiso-trabajo-20260318162411.html",
@@ -2153,13 +2179,13 @@
     }
   ],
   "stats": {
-    "total_hits": 93,
-    "critical_count": 27,
+    "total_hits": 94,
+    "critical_count": 28,
     "warning_count": 64,
     "info_count": 2,
-    "new_this_run": 2,
-    "articles_checked": 2,
-    "seen_ids_total": 112,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 113,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -2178,5 +2204,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-19T15:57:57.263815+00:00"
+  "last_updated": "2026-03-19T19:03:31.564242+00:00"
 }
