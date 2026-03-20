@@ -1,6 +1,63 @@
 {
   "hits": [
     {
+      "id": "df84f02ffbd4",
+      "title": "Caso Forestalia: Aun peor de lo que parecía",
+      "link": "https://www.libertaddigital.com/opinion/2026-03-19/editorial-caso-forestalia-aun-peor-de-lo-que-parecia-7376943/",
+      "source": "NewsAPI-Q2 · Libertaddigital.com",
+      "raw_date": "2026-03-19T02:45:38Z",
+      "fetched_at": "2026-03-20T04:49:29.559219+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Corrupción sistémica en sector público-privado",
+        "Soborno y tráfico de influencias",
+        "Blanqueo de capitales",
+        "Fraude en contratación pública",
+        "Incumplimiento de ISO 37301 (SGC de Compliance)",
+        "Violación de UNE 19601 (Compliance Penal)",
+        "Incumplimiento de Ley 19/2013 de transparencia"
+      ],
+      "norms_affected": [
+        "ISO 37301:2021",
+        "UNE 19601:2017",
+        "Ley Orgánica 1/2015 (Código Penal, arts. 286 bis, 427, 430)",
+        "Ley 9/2017 de Contratos del Sector Público",
+        "Ley 19/2013 de transparencia",
+        "RGPD (si hay filtración de datos personales)",
+        "Ley 10/2010 de blanqueo de capitales"
+      ],
+      "summary": "El caso Forestalia revela una red delictiva organizada con ramificaciones en contratación pública, sobornos y blanqueo de capitales, afectando a múltiples empresas y administraciones. Supera el ámbito de un caso aislado, evidenciando fallos graves en controles de compliance y transparencia.",
+      "vulnerability": "Falta de controles robustos en contratación pública (debida diligencia, segregación de funciones, auditorías independientes) y debilidad en canales de denuncia efectivos.",
+      "financial_impact": "Entre 10M€ y 50M€ (multas, indemnizaciones, pérdida de licitaciones, costes legales y reputacionales para empresas españolas medianas-grandes).",
+      "recommended_action": "Revisar urgentemente los protocolos de compliance penal y contratación pública, realizar auditorías forenses en áreas de riesgo, y reforzar el canal de denuncias con garantías de confidencialidad y protección al denunciante."
+    },
+    {
+      "id": "ab3db2bac880",
+      "title": "Sanidad ya estudia denunciar a Ayuso por desobediencia tras negarse a crear el censo de objetores al aborto",
+      "link": "https://www.elconfidencial.com/espana/madrid/2026-03-19/sanidad-denunciar-ayuso-desobediencia-censo-objetores-aborto_4323023/",
+      "source": "NewsAPI-Q5 · Elconfidencial.com",
+      "raw_date": "2026-03-19T04:00:00Z",
+      "fetched_at": "2026-03-20T04:49:33.968297+00:00",
+      "level": "warning",
+      "relevance_score": 60,
+      "risks": [
+        "Incumplimiento de sentencia judicial vinculante",
+        "Exposición a sanciones administrativas y multas",
+        "Daño reputacional por desobediencia institucional",
+        "Posible derivación a responsabilidad penal por desobediencia a autoridad"
+      ],
+      "norms_affected": [
+        "Ley Orgánica 2/2010 de salud sexual y reproductiva y de la interrupción voluntaria del embarazo (art. 19)",
+        "Ley 29/1998 reguladora de la Jurisdicción Contencioso-Administrativa (art. 105.2)",
+        "Constitución Española (art. 103.1 y 117.1)"
+      ],
+      "summary": "El TSJ de Madrid ordenó al Gobierno de Ayuso crear un censo de objetores al aborto en 10 días, pero la región recurrió la sentencia sin cumplirla. Sanidad estudia denunciar por desobediencia, lo que podría derivar en multas y expedientes sancionadores.",
+      "vulnerability": "Falta de mecanismos de cumplimiento de sentencias judiciales en plazos establecidos y ausencia de protocolos para gestionar recursos contra resoluciones vinculantes.",
+      "financial_impact": "Multa estimada entre 100.000€ y 400.000€ (según gravedad y reiteración), más costes legales y de gestión de crisis reputacional (50.000€-200.000€ adicionales).",
+      "recommended_action": "Revisar urgentemente la sentencia del TSJ de Madrid, evaluar viabilidad del recurso interpuesto y, en caso de confirmación, proceder a la creación inmediata del censo para evitar sanciones. Documentar todas las acciones y comunicaciones con el tribunal."
+    },
+    {
       "id": "b514b9ad1a8b",
       "title": "Acciona intenta evitar la imputación por el 'caso Koldo' con un infome a Anticorrupción: \"El 'modus operandi' empleado resultó indetectable\"",
       "link": "https://www.elmundo.es/espana/2026/03/19/69baef4dfc6c8309328b459d.html",
@@ -2207,13 +2264,13 @@
     }
   ],
   "stats": {
-    "total_hits": 95,
-    "critical_count": 29,
-    "warning_count": 64,
+    "total_hits": 97,
+    "critical_count": 30,
+    "warning_count": 65,
     "info_count": 2,
-    "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 114,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 116,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -2232,5 +2289,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-20T02:25:28.722800+00:00"
+  "last_updated": "2026-03-20T04:49:35.168507+00:00"
 }
