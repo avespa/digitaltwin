@@ -1,6 +1,34 @@
 {
   "hits": [
     {
+      "id": "b514b9ad1a8b",
+      "title": "Acciona intenta evitar la imputación por el 'caso Koldo' con un infome a Anticorrupción: \"El 'modus operandi' empleado resultó indetectable\"",
+      "link": "https://www.elmundo.es/espana/2026/03/19/69baef4dfc6c8309328b459d.html",
+      "source": "NewsAPI-Q4 · El Mundo",
+      "raw_date": "2026-03-19T00:25:54Z",
+      "fetched_at": "2026-03-20T02:25:27.522568+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Corrupción en contratación pública (posible soborno o tráfico de influencias)",
+        "Incumplimiento de la Ley 19/2013 de transparencia y lucha contra el fraude fiscal",
+        "Violación de la ISO 37001 (Sistema de Gestión Antisoborno)",
+        "Exposición a sanciones penales para la empresa y sus directivos (art. 427 CP)",
+        "Daño reputacional severo y pérdida de licitaciones públicas"
+      ],
+      "norms_affected": [
+        "Ley Orgánica 10/1995 (Código Penal, arts. 427-445 bis)",
+        "Ley 19/2013 de transparencia, acceso a la información pública y buen gobierno",
+        "ISO 37001:2016 (Sistema de Gestión Antisoborno)",
+        "Ley 9/2017 de Contratos del Sector Público (art. 71 sobre prohibición de subcontratación fraudulenta)",
+        "Directiva UE 2019/1937 (protección de denunciantes)"
+      ],
+      "summary": "Acciona Construcción SL ha presentado un informe a la Fiscalía Anticorrupción admitiendo que su relación con Servinabar (empresa investigada por posible corrupción) siguió un 'modus operandi indetectable', lo que podría configurar delitos de soborno o tráfico de influencias. La constructora enfrenta riesgos penales, administrativos y reputacionales graves.",
+      "vulnerability": "Falta de controles robustos en la selección y supervisión de proveedores/subcontratistas, especialmente en contratos públicos, y ausencia de canales de denuncia efectivos para detectar irregularidades.",
+      "financial_impact": "Entre 10M€ y 50M€ (multas penales, indemnizaciones, pérdida de contratos públicos y costes legales, según gravedad de los hechos y tamaño de Acciona)",
+      "recommended_action": "El Compliance Officer debe: 1) Revisar urgentemente el informe interno y coordinarse con asesoría legal para evaluar responsabilidad penal; 2) Activar un plan de auditoría forense en contratos con Servinabar y similares; 3) Fortalecer el canal de denuncias con garantías de confidencialidad y protección al denunciante; 4) Actualizar el mapa de riesgos de corrupción y reforzar controles en contratación pública."
+    },
+    {
       "id": "b8bd06e5a626",
       "title": "La Fiscalía pide 9 años de prisión para Francisco González, expresidente de BBVA, por el 'Caso Cenyt'",
       "link": "https://www.expansion.com/empresas/banca/2026/03/18/69bae6bae5fdea590d8b45a0.html",
@@ -2179,13 +2207,13 @@
     }
   ],
   "stats": {
-    "total_hits": 94,
-    "critical_count": 28,
+    "total_hits": 95,
+    "critical_count": 29,
     "warning_count": 64,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 113,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 114,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -2204,5 +2232,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-19T21:39:10.783621+00:00"
+  "last_updated": "2026-03-20T02:25:28.722800+00:00"
 }
