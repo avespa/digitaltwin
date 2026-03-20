@@ -1,6 +1,106 @@
 {
   "hits": [
     {
+      "id": "3df9d4d19849",
+      "title": "La CNMC cree que había herramientas para haber evitado el apagón, pero urge a reforzar el sistema eléctrico",
+      "link": "https://www.europapress.es/economia/energia-00341/noticia-cnmc-cree-herramientas-haber-evitado-apagon-urge-reforzar-sistema-electrico-20260319103559.html",
+      "source": "NewsAPI-Q2 · Europapress.es",
+      "raw_date": "2026-03-19T09:35:59Z",
+      "fetched_at": "2026-03-20T09:45:56.491812+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Incumplimiento de obligaciones de suministro energético (Ley 24/2013 del Sector Eléctrico)",
+        "Sanciones administrativas por parte de la CNMC por fallos en el sistema eléctrico",
+        "Daño reputacional por interrupciones no planificadas en el suministro",
+        "Posible responsabilidad penal en casos de negligencia grave (Código Penal, Art. 316 bis)"
+      ],
+      "norms_affected": [
+        "Ley 24/2013, de 26 de diciembre, del Sector Eléctrico",
+        "Real Decreto 1955/2000, de 1 de diciembre, por el que se regulan las actividades de transporte, distribución, comercialización, suministro y procedimientos de autorización de instalaciones de energía eléctrica",
+        "Reglamento (UE) 2019/943 del Parlamento Europeo y del Consejo, de 5 de junio de 2019, sobre el mercado interior de la electricidad"
+      ],
+      "summary": "La CNMC determina que existían herramientas regulatorias para evitar el apagón eléctrico de abril de 2025, pero subraya la necesidad de reforzar el sistema. Se identifican posibles incumplimientos en la gestión del suministro energético que podrían derivar en sanciones.",
+      "vulnerability": "Falta de implementación efectiva de protocolos de prevención de fallos en el sistema eléctrico y de planes de contingencia robustos conforme a la normativa sectorial.",
+      "financial_impact": "Multas de entre 100.000€ y 500.000€ por parte de la CNMC, además de posibles costes por compensaciones a usuarios afectados y pérdida de ingresos por interrupciones no planificadas.",
+      "recommended_action": "Revisar y actualizar los protocolos de prevención de fallos en el sistema eléctrico, implementar planes de contingencia conforme a la normativa vigente, y realizar una auditoría interna para identificar y corregir vulnerabilidades en la gestión del suministro energético."
+    },
+    {
+      "id": "c4e9d4471082",
+      "title": "Competencia asegura que había herramientas para evitar el apagón",
+      "link": "https://www.lavozdegalicia.es/noticia/economia/2026/03/19/competencia-asegura-habia-herramientas-evitar-apagon/00031773907410024476168.htm",
+      "source": "NewsAPI-Q2 · Lavozdegalicia.es",
+      "raw_date": "2026-03-19T08:49:00Z",
+      "fetched_at": "2026-03-20T09:46:00.634012+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Incumplimiento de normativa de seguridad y calidad en el suministro eléctrico (Ley 24/2013 del Sector Eléctrico)",
+        "Falta de implementación de protocolos de prevención de apagones (Real Decreto 1955/2000)",
+        "Posible responsabilidad administrativa o sanción por parte de la CNMC por deficiencias en el sistema"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Real Decreto 1955/2000",
+        "Reglamento (UE) 2019/943 sobre el mercado interior de la electricidad"
+      ],
+      "summary": "La CNMC identifica deficiencias en los marcos técnicos y regulatorios del sistema eléctrico que podrían haber evitado un apagón, sin atribuir responsabilidades directas. Se requiere revisión urgente de protocolos y normativas para garantizar la seguridad del suministro.",
+      "vulnerability": "Falta de protocolos de prevención y respuesta ante fallos en el sistema eléctrico, así como de auditorías técnicas periódicas obligatorias.",
+      "financial_impact": "Entre 100.000€ y 500.000€ (multas por incumplimiento de normativa sectorial y posibles compensaciones a usuarios afectados)",
+      "recommended_action": "Revisar y actualizar los protocolos de prevención de apagones, realizar auditorías técnicas independientes y documentar las medidas adoptadas para presentar a la CNMC en un plazo máximo de 30 días."
+    },
+    {
+      "id": "a2179bdd3c11",
+      "title": "La CNMC detecta fallos y plantea reforzar el sistema eléctrico tras el apagón masivo de abril de 2025",
+      "link": "https://www.bolsamania.com/noticias/economia/cnmc-fallos-reforzar-sistema-electrico-apagon-masivo-abril-2025--22097458.html",
+      "source": "NewsAPI-Q2 · Bolsamania.com",
+      "raw_date": "2026-03-19T07:59:41Z",
+      "fetched_at": "2026-03-20T09:46:09.035918+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Incumplimiento de normativa de seguridad y resiliencia en infraestructuras críticas (Ley 24/2013 del Sector Eléctrico)",
+        "Exposición a sanciones administrativas por parte de la CNMC (Ley 3/2013 de creación de la CNMC)",
+        "Riesgo reputacional por fallos en suministro energético esencial",
+        "Posible incumplimiento de estándares de calidad y continuidad del servicio (Real Decreto 1955/2000)"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Ley 3/2013 de creación de la CNMC",
+        "Real Decreto 1955/2000 sobre actividades de transporte, distribución, comercialización, suministro y procedimientos de autorización de instalaciones de energía eléctrica",
+        "Reglamento (UE) 2019/943 sobre el mercado interior de la electricidad"
+      ],
+      "summary": "La CNMC identifica fallos estructurales en el sistema eléctrico español tras el apagón masivo de abril de 2025, proponiendo medidas correctivas urgentes para garantizar la resiliencia y eficiencia del sistema. El informe destaca la necesidad de reforzar protocolos de prevención y respuesta ante incidentes críticos.",
+      "vulnerability": "Falta de un sistema de gestión de riesgos integral para infraestructuras críticas eléctricas, incluyendo planes de contingencia y pruebas periódicas de resistencia (ISO 31000, UNE 19601).",
+      "financial_impact": "Entre 50M€ y 200M€ por sanciones, compensaciones a usuarios, costes de reforzamiento de infraestructuras y pérdida de ingresos por interrupciones prolongadas.",
+      "recommended_action": "El Compliance Officer debe revisar el cumplimiento de la normativa sectorial (Ley 24/2013, RD 1955/2000) y coordinarse con el área técnica para implementar un plan de acción basado en las recomendaciones de la CNMC, incluyendo auditorías internas y formación en gestión de riesgos críticos."
+    },
+    {
+      "id": "35ed4c480ccd",
+      "title": "La CNMC cree que había herramientas para evitar el apagón del 28A y reclama más coordinación entre operadores",
+      "link": "https://www.elespanol.com/invertia/empresas/energia/20260319/cnmc-cree-herramientas-evitar-apagon-reclama-coordinacion-operadores/1003744175766_0.html",
+      "source": "NewsAPI-Q2 · Elespanol.com",
+      "raw_date": "2026-03-19T07:43:18Z",
+      "fetched_at": "2026-03-20T09:46:16.080860+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Falta de coordinación entre operadores críticos",
+        "Incumplimiento de obligaciones de seguridad en infraestructuras esenciales",
+        "Posible responsabilidad administrativa por negligencia en la gestión de riesgos sistémicos"
+      ],
+      "norms_affected": [
+        "Ley 11/2014 de acceso a actividades de servicios y su ejercicio (transposición de Directiva de Servicios)",
+        "Reglamento (UE) 2019/941 sobre seguridad del suministro de electricidad",
+        "Ley 24/2013 del Sector Eléctrico",
+        "Ley 3/2018 de Protección de Datos y Garantía de Derechos Digitales (en caso de afectar a datos de clientes)"
+      ],
+      "summary": "La CNMC identifica deficiencias en la coordinación entre operadores de sectores críticos (telecomunicaciones, energía, transporte) que podrían haber evitado el apagón del 28A. Aunque no se señalarán responsables, recomienda medidas urgentes para evitar futuros incidentes.",
+      "vulnerability": "Falta de un protocolo de coordinación interoperadores con pruebas periódicas de contingencia y planes de respuesta conjunta ante fallos sistémicos.",
+      "financial_impact": "Entre 1M€ y 10M€ (multas administrativas, compensaciones a clientes afectados, pérdida de reputación y posibles reclamaciones judiciales)",
+      "recommended_action": "Revisar y actualizar los protocolos de coordinación con operadores críticos, realizar simulacros conjuntos de contingencia y documentar las medidas implementadas para demostrar diligencia debida ante posibles inspecciones."
+    },
+    {
       "id": "02ed19054c04",
       "title": "Moncloa pide la cabeza de Ángel Escribano por escrito y ante la CNMV",
       "link": "https://www.libertaddigital.com/libremercado/2026-03-19/moncloa-pide-la-cabeza-de-angel-escribano-por-escrito-y-ante-la-cnmv-7377042/",
@@ -2290,13 +2390,13 @@
     }
   ],
   "stats": {
-    "total_hits": 98,
+    "total_hits": 102,
     "critical_count": 30,
-    "warning_count": 66,
+    "warning_count": 70,
     "info_count": 2,
-    "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 117,
+    "new_this_run": 4,
+    "articles_checked": 6,
+    "seen_ids_total": 123,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -2315,5 +2415,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-20T07:00:36.500986+00:00"
+  "last_updated": "2026-03-20T09:46:17.281076+00:00"
 }
