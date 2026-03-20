@@ -1,6 +1,30 @@
 {
   "hits": [
     {
+      "id": "f0d308066537",
+      "title": "Bustinduy planta cara a Ryanair y advierte que \"han tocado hueso en España y deberán cumplir la ley\", porque \"aquí se respetan los derechos de los consumidores\"",
+      "link": "https://www.elmundo.es/economia/empresas/2026/03/19/69bc35d721efa03e028b4576.html",
+      "source": "NewsAPI-Q1 · El Mundo",
+      "raw_date": "2026-03-19T17:59:10Z",
+      "fetched_at": "2026-03-20T18:55:04.935299+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Multa por incumplimiento de normativa de protección al consumidor",
+        "Daño reputacional por conflicto con autoridades públicas",
+        "Exposición mediática negativa por prácticas comerciales abusivas"
+      ],
+      "norms_affected": [
+        "Ley General para la Defensa de los Consumidores y Usuarios (Real Decreto Legislativo 1/2007)",
+        "Reglamento (UE) 2019/2144 sobre derechos de los pasajeros aéreos",
+        "Ley 3/2014 de creación de la CNMC (competencia y protección al consumidor)"
+      ],
+      "summary": "Ryanair enfrenta presión regulatoria en España por cobro de equipaje de mano, considerado práctica abusiva según la normativa de protección al consumidor. El ministro de Consumo advierte que la aerolínea debe cumplir la ley española, lo que podría derivar en sanciones económicas.",
+      "vulnerability": "Falta de adaptación de políticas comerciales a la normativa local de protección al consumidor en operaciones en España",
+      "financial_impact": "Multa estimada entre 100.000€ y 400.000€ para una empresa de tamaño medio-alto en el sector aéreo, más costes legales y reputacionales",
+      "recommended_action": "Revisar urgentemente las políticas de equipaje de mano en rutas españolas, consultar con asesoría legal especializada en derecho del consumidor y preparar un plan de comunicación para mitigar impacto reputacional"
+    },
+    {
       "id": "cbdbe91496c5",
       "title": "Guardan silencio las constructoras cántabras investigadas por Competencia por presuntas prácticas prohibidas",
       "link": "https://www.europapress.es/cantabria/noticia-guardan-silencio-constructoras-cantabras-investigadas-competencia-presuntas-practicas-prohibidas-20260319115128.html",
@@ -2442,13 +2466,13 @@
     }
   ],
   "stats": {
-    "total_hits": 104,
+    "total_hits": 105,
     "critical_count": 31,
-    "warning_count": 71,
+    "warning_count": 72,
     "info_count": 2,
-    "new_this_run": 0,
+    "new_this_run": 1,
     "articles_checked": 1,
-    "seen_ids_total": 127,
+    "seen_ids_total": 128,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -2467,5 +2491,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-20T15:46:31.546853+00:00"
+  "last_updated": "2026-03-20T18:55:06.135543+00:00"
 }
