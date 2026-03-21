@@ -1,6 +1,58 @@
 {
   "hits": [
     {
+      "id": "8c67ae116cb2",
+      "title": "La CNMC desvela las 12 empresas y los cuatro directivos investigados por posible manipulación de licitaciones de obra",
+      "link": "https://www.europapress.es/cantabria/noticia-cnmc-desvela-12-empresas-cuatro-directivos-investigados-posible-manipulacion-licitaciones-obra-20260320134307.html",
+      "source": "NewsAPI-Q2 · Europapress.es",
+      "raw_date": "2026-03-20T12:43:07Z",
+      "fetched_at": "2026-03-21T12:56:22.162501+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Manipulación de licitaciones públicas (art. 262 del Código Penal)",
+        "Sanciones administrativas por prácticas restrictivas de la competencia (Ley 15/2007)",
+        "Daño reputacional severo",
+        "Exclusión de futuras licitaciones públicas",
+        "Responsabilidad penal de la persona jurídica (art. 31 bis CP)"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Código Penal (art. 262 y 286)",
+        "Ley 9/2017 de Contratos del Sector Público",
+        "Reglamento (UE) 2019/452 (control de concentraciones)"
+      ],
+      "summary": "La CNMC ha abierto expediente sancionador a 12 empresas y 4 directivos por posible colusión en licitaciones de obra pública, con un plazo de 24 meses para resolver. La investigación podría derivar en multas millonarias y responsabilidad penal para las personas jurídicas involucradas.",
+      "vulnerability": "Falta de controles internos para detectar y prevenir acuerdos restrictivos de competencia en procesos de licitación (ej.: políticas de compliance en contratación pública, canales de denuncia anónimos, auditorías internas periódicas).",
+      "financial_impact": "Entre 5M€ y 50M€ (dependiendo de la gravedad, tamaño de las empresas y sanciones accesorias como exclusión de licitaciones).",
+      "recommended_action": "Activar inmediatamente un equipo de investigación interna para revisar contratos, comunicaciones y prácticas con las empresas y directivos afectados. Notificar a la CNMC cualquier medida correctiva adoptada y reforzar el programa de compliance en competencia con formación específica para el área de contratación."
+    },
+    {
+      "id": "89bfa2dc2803",
+      "title": "La CNMC investiga a 12 empresas por posible manipulación de licitaciones en obra civil en Cantabria",
+      "link": "https://www.bolsamania.com/noticias/economia/cnmc-investiga-12-empresas-posible-manipulacion-licitaciones-obra-civil-cantabria--22115250.html",
+      "source": "NewsAPI-Q2 · Bolsamania.com",
+      "raw_date": "2026-03-20T12:38:50Z",
+      "fetched_at": "2026-03-21T12:56:26.119513+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Manipulación de licitaciones públicas (art. 284 CP)",
+        "Infracción grave de la Ley 9/2017 de Contratos del Sector Público",
+        "Daño reputacional y exclusión de futuras licitaciones",
+        "Sanciones económicas elevadas (hasta 10% del volumen de negocio)"
+      ],
+      "norms_affected": [
+        "Ley 9/2017 de Contratos del Sector Público",
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Código Penal (art. 284)"
+      ],
+      "summary": "La CNMC investiga a 12 empresas por posible colusión en licitaciones de obra civil en Cantabria, lo que podría constituir un cártel sancionable con multas millonarias y exclusión de contratos públicos. El expediente podría derivar en sanciones penales si se demuestra manipulación dolosa.",
+      "vulnerability": "Falta de controles en procesos de licitación (ej.: segregación de funciones, auditorías previas, canales de denuncia internos)",
+      "financial_impact": "Entre 1M€ y 10M€ (dependiendo del volumen de negocio de las empresas afectadas y sanciones aplicadas)",
+      "recommended_action": "Revisar urgentemente los procesos de licitación interna, implementar un canal de denuncia específico para licitaciones, y realizar una auditoría independiente de los últimos 3 años de contratos públicos."
+    },
+    {
       "id": "6db52de1b55f",
       "title": "La medalla al Servicio en la Policía requerirá ejemplaridad y no sólo 20 años en el cuerpo",
       "link": "https://www.elconfidencialdigital.com/articulo/seguridad/interior-exigira-ejemplaridad-conceder-medalla-mas-20-anos-policia/202603191320331010652.html",
@@ -2541,13 +2593,13 @@
     }
   ],
   "stats": {
-    "total_hits": 108,
-    "critical_count": 31,
+    "total_hits": 110,
+    "critical_count": 33,
     "warning_count": 75,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 133,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 135,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -2566,5 +2618,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-21T09:36:04.314690+00:00"
+  "last_updated": "2026-03-21T12:56:27.319705+00:00"
 }
