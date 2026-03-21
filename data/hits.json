@@ -1,6 +1,34 @@
 {
   "hits": [
     {
+      "id": "2de05595abad",
+      "title": "El juez aplaza a abril por enfermedad la declaración de la exedil Inmaculada Medina por el caso Valka",
+      "link": "https://www.eldiario.es/canariasahora/tribunales/juez-aplaza-abril-enfermedad-declaracion-exedil-inmaculada-medina-caso-valka_1_13084717.html",
+      "source": "NewsAPI-Q4 · Eldiario.es",
+      "raw_date": "2026-03-20T13:14:34Z",
+      "fetched_at": "2026-03-21T15:29:41.717984+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Malversación de fondos públicos",
+        "Corrupción en sector público",
+        "Incumplimiento de principios de transparencia y buena administración",
+        "Daño reputacional para el Ayuntamiento y la administración local",
+        "Posible responsabilidad penal de la exedil"
+      ],
+      "norms_affected": [
+        "Ley Orgánica 10/1995 (Código Penal) - Art. 252 (malversación)",
+        "Ley 40/2015 de Régimen Jurídico del Sector Público (principios de transparencia)",
+        "Ley 19/2013 de Transparencia, Acceso a la Información Pública y Buen Gobierno",
+        "ISO 37301 (Sistemas de Gestión de Compliance Penal)",
+        "UNE 19601 (Sistemas de Gestión de Compliance Penal)"
+      ],
+      "summary": "La exedil Inmaculada Medina ha sido imputada por presunta malversación de 400.000 euros en el Ayuntamiento de Las Palmas de Gran Canaria, vinculado al caso Valka. El juez ha aplazado su declaración por enfermedad, pero el caso podría derivar en condenas penales y sanciones administrativas.",
+      "vulnerability": "Falta de controles internos en la gestión de fondos públicos y supervisión de compras municipales, especialmente en partidas sensibles como agua para riego.",
+      "financial_impact": "Entre 400.000€ y 1.200.000€ (incluyendo multas penales, indemnizaciones y costes legales), dependiendo de la gravedad de la malversación y posibles sanciones administrativas.",
+      "recommended_action": "Revisar urgentemente los protocolos de control interno en el Ayuntamiento de Las Palmas de Gran Canaria, implementar auditorías forenses en partidas de gasto público y reforzar la formación en compliance penal para cargos públicos y empleados municipales."
+    },
+    {
       "id": "8c67ae116cb2",
       "title": "La CNMC desvela las 12 empresas y los cuatro directivos investigados por posible manipulación de licitaciones de obra",
       "link": "https://www.europapress.es/cantabria/noticia-cnmc-desvela-12-empresas-cuatro-directivos-investigados-posible-manipulacion-licitaciones-obra-20260320134307.html",
@@ -2593,13 +2621,13 @@
     }
   ],
   "stats": {
-    "total_hits": 110,
-    "critical_count": 33,
+    "total_hits": 111,
+    "critical_count": 34,
     "warning_count": 75,
     "info_count": 2,
-    "new_this_run": 2,
-    "articles_checked": 2,
-    "seen_ids_total": 135,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 136,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -2618,5 +2646,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-21T12:56:27.319705+00:00"
+  "last_updated": "2026-03-21T15:29:42.918196+00:00"
 }
