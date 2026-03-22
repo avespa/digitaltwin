@@ -1,6 +1,58 @@
 {
   "hits": [
     {
+      "id": "6753c0202649",
+      "title": "El Gobierno redobla el cerco sobre los precios de las petroleras con multas de hasta seis millones de euros",
+      "link": "https://www.lavozdegalicia.es/noticia/economia/2026/03/21/gobierno-redobla-cerco-sobre-precios-petroleras-multas-seis-millones-euros/00031774094079103535813.htm",
+      "source": "NewsAPI-Q2 · Lavozdegalicia.es",
+      "raw_date": "2026-03-21T12:25:00Z",
+      "fetched_at": "2026-03-22T12:58:23.755014+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Abuso de posición dominante en el mercado (Ley 15/2007 de Defensa de la Competencia)",
+        "Sanciones administrativas por incumplimiento de obligaciones de transparencia (Ley 3/2013 de creación de la CNMC)",
+        "Riesgo reputacional por prácticas comerciales cuestionables"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Ley 3/2013 de creación de la CNMC",
+        "Reglamento (UE) 2019/1150 sobre transparencia de precios en el sector energético"
+      ],
+      "summary": "El Gobierno español refuerza el control sobre los precios de las petroleras mediante la obligación de remitir semanalmente datos de costes y ventas a la CNMC, con multas de hasta 6M€ por incumplimiento. La medida busca evitar abusos en el mercado energético y garantizar transparencia.",
+      "vulnerability": "Falta de sistemas automatizados para la recopilación, verificación y envío de datos de costes y precios a la CNMC en los plazos establecidos.",
+      "financial_impact": "Entre 500K€ y 2M€ por sanción administrativa, más costes legales y de implementación de controles (100K-300K€).",
+      "recommended_action": "Implementar un sistema de monitorización continua de precios y costes, con protocolos de reporte semanal a la CNMC, y realizar auditorías internas previas para verificar el cumplimiento de la normativa."
+    },
+    {
+      "id": "b32ec6ff3e29",
+      "title": "La policía alerta del incremento de estafas con inversiones ficticias en criptomonedas en Galicia",
+      "link": "https://www.lavozdegalicia.es/noticia/pontevedra/2026/03/21/policia-alerta-incremento-estafas-inversiones-ficticias-criptomonedas-galicia/00031774088134421956195.htm",
+      "source": "NewsAPI-Q2 · Lavozdegalicia.es",
+      "raw_date": "2026-03-21T10:33:01Z",
+      "fetched_at": "2026-03-22T12:58:28.242880+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Fraude financiero",
+        "Blanqueo de capitales",
+        "Incumplimiento de la Ley 10/2010 de prevención del blanqueo de capitales",
+        "Violación de la Ley 5/2019 reguladora de los contratos de crédito inmobiliario (en caso de intermediación)",
+        "Incumplimiento de la Ley 35/2003 reguladora de la actividad de los agentes financieros"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales y de la financiación del terrorismo",
+        "Ley 5/2019 reguladora de los contratos de crédito inmobiliario",
+        "Ley 35/2003 reguladora de la actividad de los agentes financieros",
+        "Reglamento (UE) 2015/847 (transferencias de fondos)",
+        "Directiva (UE) 2018/843 (AMLD5)"
+      ],
+      "summary": "La policía alerta de un aumento significativo de estafas con inversiones ficticias en criptomonedas en Galicia, lo que implica riesgos de fraude financiero y blanqueo de capitales. Las víctimas podrían sufrir pérdidas económicas directas y las empresas podrían incumplir normativas de prevención de blanqueo.",
+      "vulnerability": "Falta de controles robustos en la identificación de clientes (KYC) y en la monitorización de transacciones sospechosas en operaciones con criptomonedas.",
+      "financial_impact": "Entre 500.000€ y 5.000.000€ (dependiendo del volumen de operaciones y exposición de la empresa)",
+      "recommended_action": "Revisar y reforzar los protocolos de KYC y AML para operaciones con criptomonedas, implementar sistemas de alerta temprana para transacciones sospechosas y formar al personal en detección de fraudes con activos digitales."
+    },
+    {
       "id": "2de05595abad",
       "title": "El juez aplaza a abril por enfermedad la declaración de la exedil Inmaculada Medina por el caso Valka",
       "link": "https://www.eldiario.es/canariasahora/tribunales/juez-aplaza-abril-enfermedad-declaracion-exedil-inmaculada-medina-caso-valka_1_13084717.html",
@@ -2621,13 +2673,13 @@
     }
   ],
   "stats": {
-    "total_hits": 111,
-    "critical_count": 34,
-    "warning_count": 75,
+    "total_hits": 113,
+    "critical_count": 35,
+    "warning_count": 76,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 136,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 138,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -2646,5 +2698,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-22T09:36:40.452932+00:00"
+  "last_updated": "2026-03-22T12:58:29.443123+00:00"
 }
