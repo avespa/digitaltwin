@@ -1,6 +1,54 @@
 {
   "hits": [
     {
+      "id": "8d5ca07673c4",
+      "title": "Multas de hasta 6 millones para las petroleras que no den datos de precios",
+      "link": "https://www.expansion.com/economia/2026/03/23/69c065c2468aebd3338b4581.html",
+      "source": "NewsAPI-Q2 · Expansion.com",
+      "raw_date": "2026-03-22T23:47:52Z",
+      "fetched_at": "2026-03-24T02:28:54.576599+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Sanciones administrativas por incumplimiento de obligaciones de transparencia en precios",
+        "Daño reputacional por falta de colaboración con autoridades de competencia",
+        "Posible impacto en la concesión de beneficios fiscales"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Real Decreto 261/2018 sobre transparencia en mercados energéticos",
+        "Reglamento (UE) 2019/943 sobre mercados de electricidad y gas"
+      ],
+      "summary": "La CNMC impone multas de hasta 6 millones a petroleras por no reportar datos de precios, con el fin de garantizar que las rebajas fiscales se trasladen al consumidor. La medida refuerza la supervisión en el sector energético para evitar prácticas anticompetitivas.",
+      "vulnerability": "Falta de un sistema automatizado de reporte de precios en tiempo real a la CNMC, con validación periódica de datos",
+      "financial_impact": "Entre 500.000€ y 2.000.000€ por multa (dependiendo de la gravedad y tamaño de la empresa)",
+      "recommended_action": "Implementar un protocolo de reporte obligatorio de precios a la CNMC, con asignación de responsables internos y auditorías trimestrales para verificar el cumplimiento"
+    },
+    {
+      "id": "97c191311066",
+      "title": "María Jesús Montero 'estafa' a los autónomos: les saca 200M al año saltándose una directiva UE que tendrá una multa de 30",
+      "link": "https://www.elespanol.com/espana/politica/20260323/maria-jesus-montero-estafa-autonomos-saca-ano-saltandose-directiva-ue-multa/1003744178262_0.html",
+      "source": "NewsAPI-Q5 · Elespanol.com",
+      "raw_date": "2026-03-23T01:25:31Z",
+      "fetched_at": "2026-03-24T02:28:58.951691+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de normativa fiscal europea (Directiva UE sobre IVA para autónomos)",
+        "Exposición a sanciones económicas por parte de la UE y TJUE",
+        "Daño reputacional para el Estado español y posibles implicaciones en compliance corporativo de empresas afectadas"
+      ],
+      "norms_affected": [
+        "Directiva UE 2022/2523 (sobre IVA para pequeños negocios)",
+        "Ley 37/1992 del IVA (España)",
+        "Reglamento (UE) 2021/1173 (procedimiento sancionador por incumplimiento de directivas)"
+      ],
+      "summary": "España ha sido denunciada por la Comisión Europea ante el TJUE por no transponer una directiva UE que exime del IVA a pequeños autónomos, generando una pérdida estimada de 200M€ anuales para este colectivo. La multa podría alcanzar los 30M€, con posibles repercusiones en el compliance fiscal de empresas y autónomos.",
+      "vulnerability": "Falta de adaptación oportuna de normativa nacional a directivas europeas en materia fiscal, con controles insuficientes en la implementación de regulaciones tributarias.",
+      "financial_impact": "Multa estimada de 30M€ para España (3-5% del impacto anual en autónomos), con posibles costes adicionales por reclamaciones individuales y ajustes retroactivos en IVA.",
+      "recommended_action": "Revisar urgentemente la transposición de la Directiva UE 2022/2523 al ordenamiento español, coordinar con la AEAT para evaluar impactos fiscales y preparar un plan de acción para mitigar riesgos de sanciones y reclamaciones."
+    },
+    {
       "id": "032ba08e0912",
       "title": "El BOE advierte a las petroleras de multas de hasta seis millones si no facilitan información sobre los precios",
       "link": "https://www.elperiodico.com/es/economia/20260321/petroleras-multas-seis-millones-euros-informacion-precios-boe-128255179",
@@ -2697,13 +2745,13 @@
     }
   ],
   "stats": {
-    "total_hits": 114,
+    "total_hits": 116,
     "critical_count": 35,
-    "warning_count": 77,
+    "warning_count": 79,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 142,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 144,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -2722,5 +2770,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-23T21:40:29.998366+00:00"
+  "last_updated": "2026-03-24T02:29:00.151931+00:00"
 }
