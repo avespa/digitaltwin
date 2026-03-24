@@ -1,6 +1,85 @@
 {
   "hits": [
     {
+      "id": "690c332645d2",
+      "title": "La Justicia obliga a Airbnb a pagar los 64 millones previstos en la multa que le impuso Consumo",
+      "link": "https://www.expansion.com/empresas/2026/03/23/69c11641468aeb3a4d8b4598.html",
+      "source": "NewsAPI-Q1 · Expansion.com",
+      "raw_date": "2026-03-23T10:31:20Z",
+      "fetched_at": "2026-03-24T13:19:12.104050+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Multa administrativa por incumplimiento de normativa de publicidad turística",
+        "Reputación corporativa por sanción pública",
+        "Posible impacto en licencias de actividad turística"
+      ],
+      "norms_affected": [
+        "Ley 13/2011 de Turismo de las Illes Balears (y otras leyes autonómicas similares)",
+        "Ley 3/1991 de Competencia Desleal",
+        "Reglamento (UE) 2019/1150 sobre plataformas digitales"
+      ],
+      "summary": "Airbnb ha sido condenada a pagar 64 millones de euros por infracciones en la publicación de anuncios turísticos, según resolución del Ministerio de Derechos Sociales, Consumo y Agenda 2030. La empresa recurrirá la decisión, pero la sanción refleja un incumplimiento grave de normativas autonómicas y europeas en materia de publicidad turística.",
+      "vulnerability": "Falta de sistemas de verificación automática y manual de anuncios para garantizar el cumplimiento de normativas autonómicas y europeas en publicidad turística.",
+      "financial_impact": "Entre 0.5M€ y 2M€ anuales en costes de cumplimiento y posibles multas recurrentes si no se implementan controles adecuados.",
+      "recommended_action": "Revisar urgentemente los procesos de verificación de anuncios turísticos para alinearlos con las normativas autonómicas y europeas, implementar un sistema de alertas tempranas para detectar incumplimientos y preparar una estrategia de defensa legal para el recurso de reposición."
+    },
+    {
+      "id": "8259361dd9b0",
+      "title": "Autoridades de protección de datos avisan a colegios de que contratar plataformas digitales \"entraña responsabilidad\"",
+      "link": "https://www.europapress.es/sociedad/educacion-00468/noticia-autoridades-proteccion-datos-avisan-colegios-contratar-plataformas-digitales-entrana-responsabilidad-20260323140356.html",
+      "source": "NewsAPI-Q5 · Europapress.es",
+      "raw_date": "2026-03-23T13:03:56Z",
+      "fetched_at": "2026-03-24T13:19:20.292194+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Tratamiento ilícito de datos personales de menores sin base legal válida",
+        "Incumplimiento de principios de minimización y finalidad en el uso de plataformas digitales",
+        "Falta de evaluación de impacto en protección de datos (EIPD) para herramientas con alto riesgo",
+        "Posible exposición a sanciones administrativas por parte de la AEPD u otras autoridades autonómicas",
+        "Riesgo reputacional por vulneración de derechos fundamentales de menores"
+      ],
+      "norms_affected": [
+        "Reglamento General de Protección de Datos (RGPD) - Arts. 5, 6, 9, 25, 35",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de derechos digitales (LOPDGDD) - Arts. 7, 8, 9",
+        "Ley 3/2018 de Protección de Datos Personales y garantía de derechos digitales (Cataluña)",
+        "Ley 2/2021 de Protección de Datos Personales y garantía de derechos digitales (País Vasco)",
+        "Ley 1/2019 de Transparencia y Buen Gobierno de Andalucía"
+      ],
+      "summary": "Las autoridades de protección de datos españolas alertan a los colegios sobre la responsabilidad en la contratación de plataformas digitales que procesan datos personales de menores, especialmente en contextos educativos. Se enfatiza la necesidad de garantizar el cumplimiento del RGPD y normativas autonómicas, incluyendo evaluaciones de impacto y bases legales adecuadas.",
+      "vulnerability": "Falta de un procedimiento formalizado para la selección y evaluación de proveedores de plataformas digitales, incluyendo cláusulas contractuales de protección de datos (Art. 28 RGPD) y garantías de cumplimiento normativo.",
+      "financial_impact": "Multas administrativas entre 50.000€ y 500.000€ por infracción grave (Art. 83 RGPD), con posible impacto adicional en costes legales y reputacionales para centros educativos de tamaño medio.",
+      "recommended_action": "El Compliance Officer debe revisar urgentemente los contratos con proveedores de plataformas digitales, asegurando que incluyan cláusulas de protección de datos conforme al Art. 28 RGPD, evaluar la necesidad de realizar Evaluaciones de Impacto (EIPD) para herramientas con alto riesgo, y formar al personal docente y administrativo en cumplimiento del RGPD y normativas autonómicas aplicables."
+    },
+    {
+      "id": "41271710327b",
+      "title": "Las autoridades de Datos avisan de los \"riesgos\" de las plataformas escolares digitales: \"Los principales afectados son menores de edad\"",
+      "link": "https://www.elmundo.es/espana/2026/03/23/69c111f5e9cf4ac5748b457d.html",
+      "source": "NewsAPI-Q5 · El Mundo",
+      "raw_date": "2026-03-23T10:46:04Z",
+      "fetched_at": "2026-03-24T13:19:25.420425+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Tratamiento ilícito de datos personales de menores de edad (RGPD, LOPDGDD)",
+        "Falta de base legal para el tratamiento de datos en plataformas educativas digitales",
+        "Incumplimiento de principios de minimización y proporcionalidad en el tratamiento de datos",
+        "Riesgo de brechas de seguridad con impacto en menores vulnerables",
+        "Posible infracción de la normativa de protección de datos en entornos educativos (AEPD)"
+      ],
+      "norms_affected": [
+        "Reglamento General de Protección de Datos (RGPD) - UE 2016/679",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de derechos digitales (LOPDGDD)",
+        "Ley Orgánica 1/1996 de Protección Jurídica del Menor",
+        "Real Decreto 4/2010 por el que se regula el Esquema Nacional de Seguridad en el ámbito de la Administración Electrónica"
+      ],
+      "summary": "Las autoridades españolas de protección de datos han emitido un decálogo de principios para regular el uso de plataformas escolares digitales, destacando riesgos graves en el tratamiento de datos de menores. El incumplimiento podría derivar en sanciones millonarias y afectar a derechos fundamentales de los menores.",
+      "vulnerability": "Falta de evaluación de impacto en protección de datos (EIPD) para plataformas educativas digitales y ausencia de mecanismos de consentimiento válido para menores.",
+      "financial_impact": "Multas administrativas entre 100.000€ y 10.000.000€ (hasta el 4% de la facturación anual global de la empresa) según gravedad y recurrencia, más posibles indemnizaciones por daños y perjuicios.",
+      "recommended_action": "Revisar urgentemente los contratos con proveedores de plataformas educativas digitales, realizar una Evaluación de Impacto en Protección de Datos (EIPD) específica para menores, y actualizar políticas de privacidad con cláusulas claras sobre tratamiento de datos de menores, incluyendo mecanismos de consentimiento parental válido."
+    },
+    {
       "id": "42331b668882",
       "title": "Airbnb deberá pagar 64 millones tras perder el pulso con Consumo",
       "link": "https://www.adslzone.net/noticias/internet/airbnb-debera-pagar-64-millones-consumo/",
@@ -2818,13 +2897,13 @@
     }
   ],
   "stats": {
-    "total_hits": 119,
-    "critical_count": 36,
-    "warning_count": 81,
+    "total_hits": 122,
+    "critical_count": 37,
+    "warning_count": 83,
     "info_count": 2,
-    "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 148,
+    "new_this_run": 3,
+    "articles_checked": 3,
+    "seen_ids_total": 151,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -2843,5 +2922,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-24T09:58:56.313135+00:00"
+  "last_updated": "2026-03-24T13:19:26.620636+00:00"
 }
