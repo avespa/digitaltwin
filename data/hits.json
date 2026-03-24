@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "6de218e9a663",
+      "title": "El mayor fraude musical con IA en Spotify, Apple Music y YouTube Music destapa las costuras del streaming",
+      "link": "https://www.actualidadiphone.com/el-mayor-fraude-musical-con-ia-en-spotify-apple-music-y-youtube-music-destapa-las-costuras-del-streaming/",
+      "source": "NewsAPI-Q3 · Actualidadiphone.com",
+      "raw_date": "2026-03-23T21:15:48Z",
+      "fetched_at": "2026-03-24T21:41:11.552068+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Fraude en regalías y desviación de ingresos económicos",
+        "Daño reputacional por asociación con prácticas fraudulentas",
+        "Incumplimiento de normativas de transparencia en plataformas digitales",
+        "Riesgo de sanciones por parte de autoridades de competencia (CNMC)"
+      ],
+      "norms_affected": [
+        "Ley de Servicios Digitales (DSA - Digital Services Act, UE 2022/2065)",
+        "Ley de Propiedad Intelectual (Real Decreto Legislativo 1/1996)",
+        "Reglamento General de Protección de Datos (RGPD) - si se usan datos personales en el fraude",
+        "Ley de Competencia Desleal (Ley 3/1991)"
+      ],
+      "summary": "Un fraude masivo con IA y bots en plataformas de streaming (Spotify, Apple Music, YouTube Music) ha desviado millones en regalías, afectando a artistas reales y generando riesgos legales para las empresas involucradas. Las plataformas podrían incumplir normativas de transparencia y competencia.",
+      "vulnerability": "Falta de controles automatizados para detectar y bloquear contenido generado por IA o bots en plataformas de streaming, así como sistemas de auditoría independiente de regalías.",
+      "financial_impact": "Entre 500.000€ y 5 millones de euros (dependiendo del volumen de fraude y sanciones por incumplimiento normativo).",
+      "recommended_action": "Implementar un sistema de monitorización en tiempo real con IA para detectar patrones fraudulentos en streams, revisar contratos con plataformas de streaming para incluir cláusulas de auditoría y transparencia, y notificar a la CNMC y a la AEPD si hay indicios de incumplimiento."
+    },
+    {
       "id": "f0cb306d676a",
       "title": "Fraude musical con IA en Spotify y Apple Music: el caso que sacude al streaming",
       "link": "https://www.soydemac.com/fraude-musical-con-ia-en-spotify-y-apple-music-el-caso-que-sacude-al-streaming/",
@@ -2925,13 +2951,13 @@
     }
   ],
   "stats": {
-    "total_hits": 123,
+    "total_hits": 124,
     "critical_count": 37,
-    "warning_count": 84,
+    "warning_count": 85,
     "info_count": 2,
-    "new_this_run": 0,
+    "new_this_run": 1,
     "articles_checked": 1,
-    "seen_ids_total": 153,
+    "seen_ids_total": 154,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -2950,5 +2976,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-24T19:07:39.410739+00:00"
+  "last_updated": "2026-03-24T21:41:12.752305+00:00"
 }
