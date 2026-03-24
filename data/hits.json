@@ -1,6 +1,30 @@
 {
   "hits": [
     {
+      "id": "42331b668882",
+      "title": "Airbnb deberá pagar 64 millones tras perder el pulso con Consumo",
+      "link": "https://www.adslzone.net/noticias/internet/airbnb-debera-pagar-64-millones-consumo/",
+      "source": "NewsAPI-Q1 · Adslzone.net",
+      "raw_date": "2026-03-23T07:19:14Z",
+      "fetched_at": "2026-03-24T09:58:55.112874+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Multa administrativa por incumplimiento de normativa turística autonómica",
+        "Daño reputacional por sanción pública",
+        "Riesgo de incumplimiento de obligaciones de transparencia en plataformas digitales"
+      ],
+      "norms_affected": [
+        "Ley de Turismo de cada Comunidad Autónoma (ej. Ley 13/2011 de Turismo de Andalucía, Ley 14/2014 de Turismo de Cataluña)",
+        "Ley 39/2015 de Procedimiento Administrativo Común",
+        "Reglamento (UE) 2019/1150 sobre transparencia en plataformas digitales"
+      ],
+      "summary": "Airbnb ha sido sancionada con 64 millones de euros por Consumo por anunciar viviendas sin licencia turística, recurso que ha perdido. La sanción afecta a normativas autonómicas de turismo y a obligaciones de transparencia en plataformas digitales.",
+      "vulnerability": "Falta de verificación automatizada de licencias turísticas en la plataforma antes de publicar anuncios",
+      "financial_impact": "64 millones de euros (multa) + costes legales y reputacionales (estimación total: 70-80 millones para empresa de tamaño similar)",
+      "recommended_action": "Revisar urgentemente los procesos de verificación de licencias turísticas en todas las comunidades autónomas donde opera, implementar sistemas automatizados de validación y actualizar políticas de cumplimiento para evitar futuras sanciones."
+    },
+    {
       "id": "8fe18bc15648",
       "title": "Si vas a hacer prácticas en 2026, esto te interesa: lo que cambia con el nuevo Estatuto del Becario explicado por un experto",
       "link": "https://www.hola.com/al-dia/20260323890553/claves-estatuto-becario-2026-experto-laboral/",
@@ -2794,13 +2818,13 @@
     }
   ],
   "stats": {
-    "total_hits": 118,
-    "critical_count": 35,
+    "total_hits": 119,
+    "critical_count": 36,
     "warning_count": 81,
     "info_count": 2,
     "new_this_run": 1,
-    "articles_checked": 2,
-    "seen_ids_total": 147,
+    "articles_checked": 1,
+    "seen_ids_total": 148,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -2819,5 +2843,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-24T07:11:34.008135+00:00"
+  "last_updated": "2026-03-24T09:58:56.313135+00:00"
 }
