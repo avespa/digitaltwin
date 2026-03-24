@@ -1,6 +1,34 @@
 {
   "hits": [
     {
+      "id": "f0cb306d676a",
+      "title": "Fraude musical con IA en Spotify y Apple Music: el caso que sacude al streaming",
+      "link": "https://www.soydemac.com/fraude-musical-con-ia-en-spotify-y-apple-music-el-caso-que-sacude-al-streaming/",
+      "source": "NewsAPI-Q3 · Soydemac.com",
+      "raw_date": "2026-03-23T15:11:46Z",
+      "fetched_at": "2026-03-24T16:09:43.770874+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Fraude en métricas de consumo (streaming artificial)",
+        "Violación de derechos de propiedad intelectual",
+        "Daño reputacional para plataformas y artistas",
+        "Incumplimiento de normativas de transparencia en plataformas digitales",
+        "Riesgo de blanqueo de capitales en transacciones digitales"
+      ],
+      "norms_affected": [
+        "Ley de Propiedad Intelectual (Real Decreto Legislativo 1/1996)",
+        "Reglamento General de Protección de Datos (RGPD)",
+        "Ley de Servicios de la Sociedad de la Información (LSSI-CE)",
+        "Directiva (UE) 2019/770 sobre contratos de suministro de contenidos digitales",
+        "Ley 10/2010 de prevención del blanqueo de capitales"
+      ],
+      "summary": "Un productor musical usó IA y bots para inflar artificialmente el número de streams en Spotify y Apple Music, defraudando millones. El caso expone vulnerabilidades en los sistemas de verificación de plataformas de streaming y plantea riesgos legales para artistas, plataformas y reguladores en España y Europa.",
+      "vulnerability": "Sistemas de detección de fraude en métricas de consumo (streaming) y verificación de autenticidad de reproducciones",
+      "financial_impact": "Entre 500.000€ y 2.000.000€ (dependiendo de la escala del fraude y sanciones por incumplimiento de normativas de propiedad intelectual y blanqueo de capitales)",
+      "recommended_action": "Revisar y fortalecer los controles internos de verificación de métricas de consumo en plataformas digitales, implementar auditorías externas periódicas y actualizar políticas de compliance para incluir fraudes con IA en el mapa de riesgos corporativos."
+    },
+    {
       "id": "690c332645d2",
       "title": "La Justicia obliga a Airbnb a pagar los 64 millones previstos en la multa que le impuso Consumo",
       "link": "https://www.expansion.com/empresas/2026/03/23/69c11641468aeb3a4d8b4598.html",
@@ -2897,13 +2925,13 @@
     }
   ],
   "stats": {
-    "total_hits": 122,
+    "total_hits": 123,
     "critical_count": 37,
-    "warning_count": 83,
+    "warning_count": 84,
     "info_count": 2,
-    "new_this_run": 3,
-    "articles_checked": 3,
-    "seen_ids_total": 151,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 152,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -2922,5 +2950,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-24T13:19:26.620636+00:00"
+  "last_updated": "2026-03-24T16:09:44.971089+00:00"
 }
