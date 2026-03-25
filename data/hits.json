@@ -1,6 +1,56 @@
 {
   "hits": [
     {
+      "id": "d6afa13ecbde",
+      "title": "Dos varapalos al refuerzo del registro de jornada: no pasa el Consejo de Estado ni la Agencia de Protección de Datos",
+      "link": "https://www.eldiario.es/economia/varapalos-refuerzo-registro-jornada-no-pasa-consejo-agencia-proteccion-datos_1_13092600.html",
+      "source": "NewsAPI-Q2 · Eldiario.es",
+      "raw_date": "2026-03-24T10:51:12Z",
+      "fetched_at": "2026-03-25T13:17:51.553423+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de la normativa laboral española (Estatuto de los Trabajadores, art. 34.9) por falta de registro de jornada válido",
+        "Sanciones administrativas por parte de la Inspección de Trabajo y Seguridad Social",
+        "Exposición a reclamaciones laborales por parte de empleados",
+        "Posible vulneración de derechos fundamentales (protección de datos) si el registro no cumple con el RGPD"
+      ],
+      "norms_affected": [
+        "Real Decreto-ley 8/2019 (modificación del Estatuto de los Trabajadores, art. 34.9)",
+        "Reglamento General de Protección de Datos (RGPD) y Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de derechos digitales (LOPDGDD)",
+        "Ley 10/2021 de trabajo a distancia"
+      ],
+      "summary": "El refuerzo del registro de jornada propuesto por el Gobierno ha sido rechazado por el Consejo de Estado y la AEPD, lo que bloquea su implementación. La medida, pactada con sindicatos, buscaba garantizar el cumplimiento del Estatuto de los Trabajadores pero choca con requisitos de protección de datos.",
+      "vulnerability": "Falta de un sistema de registro de jornada que cumpla simultáneamente con la normativa laboral y el RGPD, incluyendo medidas de minimización de datos, transparencia y derechos de los trabajadores.",
+      "financial_impact": "Entre 50.000€ y 300.000€ (multas por incumplimiento laboral y protección de datos, más costes legales y de adaptación de sistemas)",
+      "recommended_action": "Revisar urgentemente el proyecto de real decreto con asesoría legal especializada en derecho laboral y protección de datos, y proponer alternativas al registro de jornada que cumplan con ambas normativas, priorizando soluciones tecnológicas seguras y proporcionales."
+    },
+    {
+      "id": "ecf0934360f4",
+      "title": "Carlos Cuerpo dice que hay que asegurar \"una implementación equilibrada\" del registro horario para las empresas",
+      "link": "https://www.eldiario.es/economia/carlos-cuerpo-dice-hay-asegurar-implementacion-equilibrada-registro-horario-empresas_1_13093528.html",
+      "source": "NewsAPI-Q5 · Eldiario.es",
+      "raw_date": "2026-03-24T12:53:47Z",
+      "fetched_at": "2026-03-25T13:17:56.709948+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Sanciones por incumplimiento del registro horario (art. 34.9 ET)",
+        "Multas por la AEPD por vulneración del RGPD (tratamiento de datos biométricos)",
+        "Exposición a reclamaciones laborales por trabajadores"
+      ],
+      "norms_affected": [
+        "Real Decreto-ley 8/2019 (registro horario)",
+        "RGPD (Reglamento (UE) 2016/679)",
+        "Ley Orgánica 3/2018 de Protección de Datos y Garantía de Derechos Digitales (LOPDGDD)",
+        "Estatuto de los Trabajadores (art. 34.9)"
+      ],
+      "summary": "El ministro de Economía propone modificar el decreto de registro horario tras informes desfavorables del Consejo de Estado y la AEPD. La normativa actual exige a las empresas registrar la jornada laboral, pero su implementación genera controversia por posibles vulneraciones de privacidad y derechos laborales.",
+      "vulnerability": "Falta de un protocolo claro para el tratamiento de datos de registro horario, incluyendo medidas de minimización, seguridad y transparencia hacia los trabajadores.",
+      "financial_impact": "Entre 10.000€ y 100.000€ por sanción administrativa (AEPD o Inspección de Trabajo), más costes legales y posibles indemnizaciones por reclamaciones laborales.",
+      "recommended_action": "Revisar el protocolo de registro horario para garantizar cumplimiento con el RGPD y el Estatuto de los Trabajadores, incluyendo evaluación de impacto (EIPD) si se usan sistemas biométricos, y comunicar cambios a los trabajadores."
+    },
+    {
       "id": "a629d2d61a92",
       "title": "Red Eléctrica pide al juez que oculte a Iberdrola y Endesa las grabaciones de sus centros de control del día del apagón",
       "link": "https://www.elespanol.com/invertia/20260324/red-electrica-pide-juez-oculte-iberdrola-endesa-grabaciones-centros-control-dia-apagon/1003744181205_0.html",
@@ -2977,13 +3027,13 @@
     }
   ],
   "stats": {
-    "total_hits": 125,
+    "total_hits": 127,
     "critical_count": 37,
-    "warning_count": 86,
+    "warning_count": 88,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 155,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 157,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -3002,5 +3052,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-25T10:00:29.299549+00:00"
+  "last_updated": "2026-03-25T13:17:57.910173+00:00"
 }
