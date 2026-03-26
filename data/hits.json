@@ -1,6 +1,35 @@
 {
   "hits": [
     {
+      "id": "e3c8096afce9",
+      "title": "Los despidos en Tubos Reunidos destapan más de 40 trabajadores eventuales contratados irregularmente",
+      "link": "https://www.eldiario.es/euskadi/despidos-tubos-reunidos-destapan-40-trabajadores-eventuales-contratados-irregularmente_1_13098146.html",
+      "source": "NewsAPI-Q2 · Eldiario.es",
+      "raw_date": "2026-03-25T20:46:14Z",
+      "fetched_at": "2026-03-26T21:35:11.197961+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "fraude laboral y discriminación en contratación",
+        "incumplimiento de la normativa laboral española (Estatuto de los Trabajadores, Ley 15/2022 de Igualdad de Trato)",
+        "sanciones administrativas por la Inspección de Trabajo (multas de hasta 10.000€ por trabajador irregular)",
+        "demandas judiciales por despidos improcedentes y discriminación",
+        "daño reputacional severo (incumplimiento de estándares ESG y compliance laboral)",
+        "posible responsabilidad penal de la empresa y sus administradores (art. 318 del Código Penal)"
+      ],
+      "norms_affected": [
+        "Estatuto de los Trabajadores (Real Decreto Legislativo 2/2015)",
+        "Ley 15/2022 de Igualdad de Trato y No Discriminación",
+        "Ley Orgánica 3/2007 para la Igualdad Efectiva de Mujeres y Hombres",
+        "Real Decreto 1424/2002 sobre contratación temporal",
+        "Reglamento (UE) 2016/679 (RGPD) en caso de tratamiento de datos personales en el proceso"
+      ],
+      "summary": "Tubos Reunidos enfrenta un ERE con 285 despidos tras descubrirse la contratación irregular de más de 40 trabajadores eventuales en fraude de ley. La Inspección de Trabajo exige una nueva decisión sobre estos trabajadores, lo que podría derivar en sanciones millonarias y demandas judiciales.",
+      "vulnerability": "Falta de controles internos para verificar el cumplimiento de la normativa laboral en contratación temporal y eventual, así como la ausencia de un protocolo de compliance laboral que incluya auditorías periódicas de RRHH.",
+      "financial_impact": "Entre 400.000€ y 2.000.000€ (multas por trabajadores irregulares + indemnizaciones por despidos improcedentes + costes legales y reputacionales)",
+      "recommended_action": "1) Iniciar una auditoría interna urgente de todos los contratos temporales y eventuales en los últimos 4 años. 2) Presentar un plan de regularización ante la Inspección de Trabajo con plazos definidos. 3) Revisar y actualizar el protocolo de compliance laboral para incluir controles de contratación y formación específica al área de RRHH. 4) Contactar con asesoría legal para evaluar riesgos penales y preparar defensa ante posibles demandas."
+    },
+    {
       "id": "d6afa13ecbde",
       "title": "Dos varapalos al refuerzo del registro de jornada: no pasa el Consejo de Estado ni la Agencia de Protección de Datos",
       "link": "https://www.eldiario.es/economia/varapalos-refuerzo-registro-jornada-no-pasa-consejo-agencia-proteccion-datos_1_13092600.html",
@@ -3027,13 +3056,13 @@
     }
   ],
   "stats": {
-    "total_hits": 127,
-    "critical_count": 37,
+    "total_hits": 128,
+    "critical_count": 38,
     "warning_count": 88,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 160,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 161,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -3052,5 +3081,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-26T19:12:17.838244+00:00"
+  "last_updated": "2026-03-26T21:35:12.398177+00:00"
 }
