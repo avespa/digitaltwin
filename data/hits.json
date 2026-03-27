@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "248df5109318",
+      "title": "Francisco de Borbón reaparece un mes después de su detención con un homenaje implícito a su bisabuelo, Duque de Sevilla",
+      "link": "https://www.hola.com/actualidad/20260325891924/francisco-de-borbon-primer-acto-publico-tras-detencion/",
+      "source": "NewsAPI-Q3 · Hola",
+      "raw_date": "2026-03-25T22:59:23Z",
+      "fetched_at": "2026-03-27T02:40:05.738301+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Blanqueo de capitales",
+        "Financiación de actividades delictivas",
+        "Reputación corporativa",
+        "Cumplimiento de programas de compliance en entidades financieras o empresas vinculadas"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Reglamento (UE) 2015/847",
+        "ISO 37001 (Sistemas de gestión antisoborno)",
+        "RGPD (si hay tratamiento de datos personales en la investigación)"
+      ],
+      "summary": "Francisco de Borbón, vinculado a una red de blanqueo de capitales y narcotráfico, fue liberado tras testificar. Su reapareción pública con un homenaje implícito a su bisabuelo genera riesgos reputacionales y de cumplimiento para entidades financieras o empresas con vínculos a su entorno.",
+      "vulnerability": "Falta de due diligence reforzado en clientes de alto riesgo (PEP - Personas Expuestas Políticamente) y en transacciones sospechosas vinculadas a redes de blanqueo.",
+      "financial_impact": "Entre 200K€ y 1M€ (multas administrativas, pérdida de licencias, costes legales y reputacionales para empresas con exposición a este caso).",
+      "recommended_action": "Revisar y reforzar los controles de compliance en clientes PEP y en transacciones con entidades o personas vinculadas a Francisco de Borbón. Actualizar el riesgo reputacional en el mapa de riesgos corporativo y comunicar internamente a los equipos de prevención de blanqueo."
+    },
+    {
       "id": "e3c8096afce9",
       "title": "Los despidos en Tubos Reunidos destapan más de 40 trabajadores eventuales contratados irregularmente",
       "link": "https://www.eldiario.es/euskadi/despidos-tubos-reunidos-destapan-40-trabajadores-eventuales-contratados-irregularmente_1_13098146.html",
@@ -3056,13 +3082,13 @@
     }
   ],
   "stats": {
-    "total_hits": 128,
+    "total_hits": 129,
     "critical_count": 38,
-    "warning_count": 88,
+    "warning_count": 89,
     "info_count": 2,
     "new_this_run": 1,
     "articles_checked": 1,
-    "seen_ids_total": 161,
+    "seen_ids_total": 162,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -3081,5 +3107,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-26T21:35:12.398177+00:00"
+  "last_updated": "2026-03-27T02:40:06.938546+00:00"
 }
