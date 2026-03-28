@@ -1,6 +1,34 @@
 {
   "hits": [
     {
+      "id": "39ea1f5f4f88",
+      "title": "Dentro de Belate, el túnel bajo sospecha de corrupción en Navarra: excavado al 90% y sin casi rastro de Servinabar",
+      "link": "https://www.eldiario.es/navarra/belate-tunel-sospecha-corrupcion-navarra-excavado-90-rastro-servinabar_1_13104413.html",
+      "source": "NewsAPI-Q1 · Eldiario.es",
+      "raw_date": "2026-03-27T21:02:12Z",
+      "fetched_at": "2026-03-28T21:32:46.685831+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Soborno y corrupción en contratación pública",
+        "Conflicto de intereses en adjudicación de obra",
+        "Posible fraude en licitación",
+        "Incumplimiento de Ley de Contratos del Sector Público (LCSP)",
+        "Riesgo de responsabilidad penal de la empresa (art. 286 bis CP)"
+      ],
+      "norms_affected": [
+        "Ley 9/2017 de Contratos del Sector Público (LCSP)",
+        "Código Penal (art. 286 bis: cohecho)",
+        "Ley Orgánica 10/1995 del Código Penal (responsabilidad penal de personas jurídicas)",
+        "ISO 37001:2016 (Sistemas de Gestión Antisoborno)",
+        "UNE 19601:2017 (Compliance Penal)"
+      ],
+      "summary": "La obra del túnel de Belate (Navarra), adjudicada por 62 millones a un consorcio liderado por Acciona, Osés y Servinabar, presenta indicios de corrupción tras la retirada de Servinabar, empresa vinculada a figuras investigadas por la UCO. La excavación al 90% sin participación de la empresa señalada genera sospechas sobre irregularidades en la licitación y ejecución.",
+      "vulnerability": "Falta de controles robustos en procesos de contratación pública (due diligence en socios, auditorías independientes en licitaciones, canal de denuncias efectivo para empleados y proveedores).",
+      "financial_impact": "Entre 500.000€ y 5 millones de euros (multas administrativas, pérdida de contratos futuros, costes legales y reputacionales, posible devolución de fondos europeos si aplica).",
+      "recommended_action": "Iniciar una auditoría forense independiente sobre el proceso de licitación y ejecución del proyecto, revisar el cumplimiento de la LCSP y el Código Penal en la contratación, y reforzar el programa de compliance con formación específica en soborno y conflictos de intereses para el equipo directivo y de compras."
+    },
+    {
       "id": "8f1a87e5958f",
       "title": "La Audiencia Nacional detiene a un empresario relacionado con Venezuela por el caso Plus Ultra",
       "link": "https://www.libertaddigital.com/espana/2026-03-27/la-audiencia-nacional-detiene-a-un-empresario-relacionado-con-venezuela-por-el-caso-plus-ultra-7381198/",
@@ -3272,13 +3300,13 @@
     }
   ],
   "stats": {
-    "total_hits": 136,
+    "total_hits": 137,
     "critical_count": 42,
-    "warning_count": 92,
+    "warning_count": 93,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 169,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 170,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -3297,5 +3325,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-28T18:46:04.111360+00:00"
+  "last_updated": "2026-03-28T21:32:47.886485+00:00"
 }
