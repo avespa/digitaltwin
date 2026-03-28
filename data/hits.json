@@ -1,6 +1,88 @@
 {
   "hits": [
     {
+      "id": "c73acd3b077f",
+      "title": "Ordenan retirar corriendo el surtidor clandestino de gasóleo del CNIO tras desvelar Libertad Digital su uso por la trama",
+      "link": "https://www.libertaddigital.com/espana/politica/2026-03-27/ordenan-retirar-corriendo-el-surtidor-clandestino-de-gasoleo-del-cnio-tras-desvelar-libertad-digital-su-uso-por-la-trama-7380681/",
+      "source": "NewsAPI-Q3 · Libertaddigital.com",
+      "raw_date": "2026-03-27T01:56:54Z",
+      "fetched_at": "2026-03-28T02:30:07.113625+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Soborno y corrupción en sector público",
+        "Desvío de fondos públicos",
+        "Incumplimiento de normativa de contratación pública (Ley 9/2017 de Contratos del Sector Público)",
+        "Posible blanqueo de capitales (Ley 10/2010)",
+        "Vulneración de principios de transparencia y buena administración"
+      ],
+      "norms_affected": [
+        "Ley 9/2017 de Contratos del Sector Público",
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Ley 40/2015 de Régimen Jurídico del Sector Público",
+        "ISO 37001 (Sistemas de gestión antisoborno)",
+        "UNE 19601 (Compliance penal)"
+      ],
+      "summary": "Un surtidor clandestino de gasóleo en el CNIO (Centro Nacional de Investigaciones Oncológicas) ha sido retirado tras descubrirse su uso para desviar recursos públicos, evidenciando corrupción en una entidad pública. La trama podría implicar sobornos, blanqueo de capitales y fraude en contratación.",
+      "vulnerability": "Falta de controles internos en contratación pública y gestión de recursos, así como ausencia de sistemas de alerta temprana para detectar desviaciones de fondos.",
+      "financial_impact": "Entre 500.000€ y 5.000.000€ (dependiendo de la cuantía desviada y sanciones administrativas/penales)",
+      "recommended_action": "Iniciar auditoría forense inmediata en el CNIO y revisar todos los contratos públicos recientes. Implementar un canal de denuncias anónimo y reforzar el compliance penal con formación obligatoria en ética pública para directivos."
+    },
+    {
+      "id": "daa19d71acc2",
+      "title": "Gaia-X: la crónica de una ambición europea que encalló \"en un momento crítico\"",
+      "link": "https://www.elespanol.com/invertia/disruptores/opinion/20260327/gaia-x-cronica-ambicion-europea-encallo-momento-critico/1003744183151_13.html",
+      "source": "NewsAPI-Q3 · Elespanol.com",
+      "raw_date": "2026-03-27T00:50:00Z",
+      "fetched_at": "2026-03-28T02:30:11.175319+00:00",
+      "level": "warning",
+      "relevance_score": 60,
+      "risks": [
+        "Falta de alineación regulatoria entre Estados miembros de la UE",
+        "Riesgo de fragmentación del mercado único digital europeo",
+        "Incumplimiento de estándares comunes en ciberseguridad y protección de datos",
+        "Posible sanción por parte de la CNMC por prácticas anticompetitivas"
+      ],
+      "norms_affected": [
+        "Reglamento (UE) 2016/679 (RGPD)",
+        "Directiva (UE) 2016/1148 (NIS2)",
+        "Reglamento (UE) 2022/2554 (DORA)",
+        "Ley 15/2022 de igualdad de trato y no discriminación (en acceso a servicios digitales)"
+      ],
+      "summary": "El proyecto Gaia-X, iniciativa europea para crear una infraestructura de datos soberana, ha enfrentado obstáculos regulatorios y divergencias entre Estados miembros, poniendo en riesgo su viabilidad. La falta de armonización normativa en ciberseguridad y protección de datos dificulta su implementación.",
+      "vulnerability": "Ausencia de un marco común de gobernanza y estándares técnicos vinculantes para garantizar interoperabilidad y cumplimiento normativo en todos los Estados miembros.",
+      "financial_impact": "Entre 500.000€ y 2M€ (multas por incumplimiento de RGPD/NIS2, pérdida de financiación pública europea y costes de reestructuración)",
+      "recommended_action": "Coordinar con la Secretaría de Estado de Digitalización e IA para alinear el proyecto con los requisitos de la NIS2 y RGPD, y proponer un plan de acción para armonizar normativas entre Estados miembros."
+    },
+    {
+      "id": "cd8a33c98fe9",
+      "title": "La Audiencia ordena detener al empresario clave en el blanqueo de Plus Ultra en la isla de Aruba",
+      "link": "https://www.elmundo.es/espana/2026/03/26/69c58bcbe9cf4ace2a8b4584.html",
+      "source": "NewsAPI-Q3 · El Mundo",
+      "raw_date": "2026-03-26T21:44:01Z",
+      "fetched_at": "2026-03-28T02:30:15.468759+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Blanqueo de capitales",
+        "Financiación ilegal de empresa",
+        "Corrupción en operaciones financieras",
+        "Incumplimiento de normativa de prevención de blanqueo (Ley 10/2010, Real Decreto 304/2014)",
+        "Responsabilidad penal de la persona jurídica (art. 31 bis CP)"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Real Decreto 304/2014",
+        "Código Penal (art. 301 y 31 bis)",
+        "Reglamento (UE) 2015/847",
+        "Normativa CNMV sobre transparencia en operaciones financieras"
+      ],
+      "summary": "La Audiencia Nacional ha ordenado la detención de un banquero suizo vinculado a operaciones de blanqueo de capitales en la aerolínea Plus Ultra, con posible implicación de financiación ilegal. La investigación afecta a operaciones de préstamo y podría derivar en responsabilidad penal para la empresa y sus administradores.",
+      "vulnerability": "Falta de controles robustos en la identificación de beneficiarios finales (UBO) y en la monitorización de operaciones financieras sospechosas en transacciones internacionales.",
+      "financial_impact": "Entre 5M€ y 50M€ (multas, pérdida de licencias, costes legales y reputacionales, incluyendo posible decomiso de activos)",
+      "recommended_action": "Activar protocolo de blanqueo de capitales: revisar transacciones con Plus Ultra, verificar cumplimiento de la Ley 10/2010, notificar a la SEPBLAC, y evaluar responsabilidad penal de la persona jurídica según art. 31 bis CP. Coordinar con asesoría legal para preparar defensa ante posible expediente sancionador."
+    },
+    {
       "id": "074718934337",
       "title": "La UE confirma que estas páginas de pornografía incumplen la ley por no verificar la edad de los menores: cuándo llegarán las primeras multas",
       "link": "https://www.huffingtonpost.es/global/la-ue-confirma-paginas-pornografia-incumplen-ley-verificar-edad-menores-cuando-llegaran-primeras-multas-f202603.html",
@@ -3162,13 +3244,13 @@
     }
   ],
   "stats": {
-    "total_hits": 132,
-    "critical_count": 39,
-    "warning_count": 91,
+    "total_hits": 135,
+    "critical_count": 41,
+    "warning_count": 92,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 165,
+    "new_this_run": 3,
+    "articles_checked": 3,
+    "seen_ids_total": 168,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -3187,5 +3269,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-03-27T21:38:43.266411+00:00"
+  "last_updated": "2026-03-28T02:30:16.669359+00:00"
 }
