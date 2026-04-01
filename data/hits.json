@@ -1,6 +1,78 @@
 {
   "hits": [
     {
+      "id": "de4d511935d7",
+      "title": "La CNMC detecta riesgos para la competencia en la compra de Intersport por parte de Decathlon",
+      "link": "https://www.expansion.com/empresas/distribucion/2026/03/31/69cbbccbe5fdea52768b4575.html",
+      "source": "NewsAPI-Q2 · Expansion.com",
+      "raw_date": "2026-03-31T12:27:18Z",
+      "fetched_at": "2026-04-01T13:28:29.945231+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Restricción de la competencia en el sector deportivo",
+        "Posible abuso de posición dominante",
+        "Sanciones por concentración anticompetitiva"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (CE) 139/2004 sobre concentraciones",
+        "Ley 3/2013 de creación de la CNMC"
+      ],
+      "summary": "La CNMC ha identificado riesgos de reducción de competencia en la adquisición de activos de Intersport por Decathlon, lo que podría derivar en una segunda fase de análisis. La operación podría vulnerar la normativa de defensa de la competencia si limita la presión competitiva en el sector.",
+      "vulnerability": "Falta de evaluación previa de impacto en competencia antes de la operación (control de due diligence en concentraciones)",
+      "financial_impact": "Multa de hasta el 10% del volumen de negocios global de Decathlon en España (estimación: 50-200M€) y posible desinversión forzosa",
+      "recommended_action": "Suspender la operación hasta obtener autorización expresa de la CNMC y realizar un análisis de impacto en competencia con asesoría legal especializada en derecho de la competencia"
+    },
+    {
+      "id": "033088c25b55",
+      "title": "Luz verde de la CNMC a la adquisición de la naviera Armas por Baleària (aunque con condiciones)",
+      "link": "https://www.hosteltur.com/175230_luz-verde-de-la-cnmc-a-la-adquisicion-de-la-naviera-armas-por-balearia-aunque-con-condiciones.html",
+      "source": "NewsAPI-Q2 · Hosteltur.com",
+      "raw_date": "2026-03-31T11:55:53Z",
+      "fetched_at": "2026-04-01T13:28:33.874871+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Riesgo de concentración de mercado en el sector del transporte marítimo español",
+        "Posible vulneración de la normativa de competencia (Ley 15/2007 de Defensa de la Competencia)",
+        "Exposición a sanciones por prácticas restrictivas de la competencia"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 2019/452 sobre control de concentraciones",
+        "Directiva (UE) 2019/1 sobre competencia"
+      ],
+      "summary": "La CNMC ha aprobado la adquisición de Armas-Trasmediterránea por Baleària con condiciones para evitar distorsiones en el mercado del transporte marítimo español. La operación podría generar una posición dominante que requiera supervisión regulatoria.",
+      "vulnerability": "Falta de un protocolo de análisis de impacto en competencia previo a operaciones de concentración empresarial",
+      "financial_impact": "Multa potencial de hasta 10% del volumen de negocios de Baleària en España (estimación: 50-200M€) y costes legales asociados",
+      "recommended_action": "Revisar el acuerdo con asesoría legal especializada en competencia para garantizar el cumplimiento de las condiciones impuestas por la CNMC y documentar el proceso de análisis de mercado previo a la operación."
+    },
+    {
+      "id": "3c50a1e50c9d",
+      "title": "Sanción a la Diputación de Pontevedra: las administraciones tampoco pueden pedir copia del DNI sin motivo",
+      "link": "https://www.meneame.net/m/actualidad/sancion-diputacion-pontevedra-administraciones-tampoco-pueden",
+      "source": "NewsAPI-Q2 · Meneame.net",
+      "raw_date": "2026-03-31T11:54:21Z",
+      "fetched_at": "2026-04-01T13:28:38.386443+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Tratamiento ilícito de datos personales (RGPD)",
+        "Incumplimiento de principios de minimización y finalidad (Art. 5 RGPD)",
+        "Exposición a sanciones administrativas por parte de la AEPD"
+      ],
+      "norms_affected": [
+        "Reglamento General de Protección de Datos (RGPD) - UE 2016/679",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de derechos digitales (LOPDGDD)",
+        "Ley 39/2015 de Procedimiento Administrativo Común de las Administraciones Públicas (LPACAP)"
+      ],
+      "summary": "La AEPD ha sancionado a la Diputación de Pontevedra por exigir una copia del DNI a un ciudadano sin justificación legal, vulnerando el principio de minimización del RGPD. La administración pública no puede requerir este documento para trámites administrativos básicos.",
+      "vulnerability": "Falta de protocolos internos para verificar la necesidad de solicitar datos personales sensibles como el DNI, así como ausencia de formación al personal en materia de protección de datos.",
+      "financial_impact": "Multa estimada entre 50.000€ y 200.000€ para una entidad pública de tamaño medio como una diputación provincial.",
+      "recommended_action": "Revisar y actualizar los procedimientos internos para garantizar el cumplimiento del RGPD, especialmente en la solicitud de datos personales, y formar al personal en protección de datos. Notificar el incidente a la AEPD si aplica."
+    },
+    {
       "id": "958d8ff45a19",
       "title": "Baleària ultima la compra de Naviera Armas tras el visto bueno con condiciones de Competencia",
       "link": "https://www.elperiodico.com/es/economia/20260331/balearia-ultima-compra-naviera-armas-128615212",
@@ -3506,13 +3578,13 @@
     }
   ],
   "stats": {
-    "total_hits": 145,
-    "critical_count": 46,
-    "warning_count": 97,
+    "total_hits": 148,
+    "critical_count": 47,
+    "warning_count": 99,
     "info_count": 2,
-    "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 180,
+    "new_this_run": 3,
+    "articles_checked": 4,
+    "seen_ids_total": 184,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -3531,5 +3603,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-01T10:08:38.161570+00:00"
+  "last_updated": "2026-04-01T13:28:43.566512+00:00"
 }
