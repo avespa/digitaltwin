@@ -1,6 +1,29 @@
 {
   "hits": [
     {
+      "id": "9d3629d58103",
+      "title": "Multa de 4.000 euros a un restaurante por vengarse de la mala reseña de unos clientes al revelar sus datos personales",
+      "link": "https://www.lavozdegalicia.es/noticia/sociedad/2026/04/01/multa-4000-euros-restaurante-vengarse-mala-resena-clientes-revelar-datos-personales/00031775030502826281335.htm",
+      "source": "NewsAPI-Q2 · Lavozdegalicia.es",
+      "raw_date": "2026-04-01T08:18:00Z",
+      "fetched_at": "2026-04-02T10:03:54.122857+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Violación de la confidencialidad de datos personales (RGPD)",
+        "Reputación corporativa",
+        "Exposición a sanciones administrativas y judiciales"
+      ],
+      "norms_affected": [
+        "Reglamento General de Protección de Datos (RGPD)",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de derechos digitales (LOPDGDD)"
+      ],
+      "summary": "Un restaurante fue sancionado con 4.000 euros por la AEPD al revelar datos personales de clientes que dejaron una mala reseña, incumpliendo el RGPD. La acción se enmarca en una estrategia de represalia, agravando la infracción por el uso indebido de información sensible.",
+      "vulnerability": "Falta de formación en protección de datos y protocolos de privacidad para empleados, especialmente en gestión de reseñas y datos de clientes.",
+      "financial_impact": "Entre 3.000€ y 10.000€ (multa + costes legales y reputacionales para una empresa mediana en España).",
+      "recommended_action": "Revisar y actualizar el programa de compliance en protección de datos, incluyendo formación obligatoria en RGPD para todo el personal con acceso a datos de clientes, y establecer un protocolo de gestión de reseñas que garantice el anonimato y la confidencialidad."
+    },
+    {
       "id": "b8d236909886",
       "title": "El Gobierno pide al TS a través de la Abogacía del Estado intervenir en el juicio a Ábalos para acusarle de malversación",
       "link": "https://www.elespanol.com/espana/tribunales/20260401/gobierno-pide-ts-traves-abogacia-intervenir-juicio-abalos-acusarle-malversacion/1003744191622_0.html",
@@ -3606,13 +3629,13 @@
     }
   ],
   "stats": {
-    "total_hits": 149,
+    "total_hits": 150,
     "critical_count": 47,
-    "warning_count": 100,
+    "warning_count": 101,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 185,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 186,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -3631,5 +3654,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-02T07:17:48.909141+00:00"
+  "last_updated": "2026-04-02T10:03:55.323293+00:00"
 }
