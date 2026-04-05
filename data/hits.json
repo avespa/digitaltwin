@@ -1,6 +1,31 @@
 {
   "hits": [
     {
+      "id": "eea57ef51619",
+      "title": "Las aseguradoras entran en alerta por una investigación de Competencia",
+      "link": "https://www.abc.es/economia/aseguradoras-entran-alerta-investigacion-competencia-20260329041351-nt.html",
+      "source": "NewsAPI-Q2 · Www.abc.es",
+      "raw_date": "2026-04-04T02:13:51Z",
+      "fetched_at": "2026-04-05T02:46:30.779556+00:00",
+      "level": "warning",
+      "relevance_score": 90,
+      "risks": [
+        "Sanciones económicas por prácticas anticompetitivas",
+        "Daño reputacional en el sector asegurador",
+        "Posible condena penal para directivos (art. 284 CP)",
+        "Exclusión de licitaciones públicas"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 2019/1150",
+        "Ley Orgánica 10/1995 del Código Penal (art. 284)"
+      ],
+      "summary": "La CNMC investiga a varias aseguradoras y corredurías por posibles prácticas anticompetitivas, lo que podría derivar en multas significativas y expedientes sancionadores. El sector asegurador español se encuentra en alerta máxima ante posibles consecuencias legales y reputacionales.",
+      "vulnerability": "Falta de controles internos para detectar y prevenir acuerdos restrictivos de la competencia (carteles, fijación de precios, reparto de mercados).",
+      "financial_impact": "Entre 1M€ y 10M€ (dependiendo del tamaño de la empresa y gravedad de la infracción, según sanciones históricas de la CNMC en el sector).",
+      "recommended_action": "Revisar urgentemente todos los acuerdos comerciales, políticas de precios y comunicaciones con competidores para identificar posibles riesgos de colusión. Implementar formación específica en competencia para directivos y empleados clave, y designar un responsable de compliance en competencia."
+    },
+    {
       "id": "33a915903fa1",
       "title": "Competencia permite a Iryo operar en la ruta Madrid-Ciudad Real-Puertollano y plantará cara a Renfe",
       "link": "https://www.abc.es/economia/competencia-permite-iryo-operar-ruta-madridciudad-realpuertollano-20260401140923-nt.html",
@@ -3653,13 +3678,13 @@
     }
   ],
   "stats": {
-    "total_hits": 151,
+    "total_hits": 152,
     "critical_count": 47,
-    "warning_count": 102,
+    "warning_count": 103,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 187,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 188,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -3678,5 +3703,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-04T21:34:47.964434+00:00"
+  "last_updated": "2026-04-05T02:46:31.980685+00:00"
 }
