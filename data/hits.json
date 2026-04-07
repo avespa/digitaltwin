@@ -1,6 +1,31 @@
 {
   "hits": [
     {
+      "id": "2fb2deaf8208",
+      "title": "Banco de España inhabilita a otro miembro de la cúpula de Caja Rural de Jaén, Barcelona y Madrid",
+      "link": "https://www.europapress.es/economia/finanzas-00340/noticia-banco-espana-inhabilita-otro-miembro-cupula-caja-rural-jaen-barcelona-madrid-20260406103944.html",
+      "source": "NewsAPI-Q2 · Europapress.es",
+      "raw_date": "2026-04-06T08:39:44Z",
+      "fetched_at": "2026-04-07T10:09:43.587385+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "incumplimiento de normativa de gobierno corporativo en entidades financieras",
+        "infracción de la Ley 10/2014 de ordenación, supervisión y solvencia de entidades de crédito",
+        "riesgo de reputación corporativa",
+        "posible responsabilidad penal de administradores"
+      ],
+      "norms_affected": [
+        "Ley 10/2014 de ordenación, supervisión y solvencia de entidades de crédito",
+        "Código de Buen Gobierno de las Cajas de Ahorros",
+        "Ley Orgánica 1/2015 de modificación del Código Penal (responsabilidad penal de personas jurídicas)"
+      ],
+      "summary": "El Banco de España ha sancionado con inhabilitación a otro miembro de la cúpula directiva de Caja Rural de Jaén, Barcelona y Madrid por incumplimientos graves en su gestión, reflejando un patrón de fallos en el gobierno corporativo y control interno. La sanción, publicada en el BOE, evidencia deficiencias en el cumplimiento de la normativa financiera y de transparencia.",
+      "vulnerability": "Falta de controles efectivos en la evaluación de idoneidad de los miembros del consejo de administración y en la supervisión de su conducta (art. 26 Ley 10/2014).",
+      "financial_impact": "Multa estimada entre 1M€ y 5M€ (dependiendo de la gravedad y reincidencia), más costes legales y de reputación (pérdida de confianza de clientes y socios).",
+      "recommended_action": "Revisar urgentemente los protocolos de evaluación de idoneidad de los miembros del consejo y del equipo directivo, así como los sistemas de control interno para garantizar el cumplimiento de la Ley 10/2014 y el Código de Buen Gobierno. Documentar todas las acciones correctivas para presentar al Banco de España en caso de inspección."
+    },
+    {
       "id": "05bd38495d5f",
       "title": "Ábalos, el hombre fuerte de Sánchez, se sienta en el banquillo cercado por los indicios de corrupción",
       "link": "https://www.abc.es/espana/abalos-hombre-fuerte-sanchez-2021-sienta-banquillo-20260406040025-nt.html",
@@ -3705,13 +3730,13 @@
     }
   ],
   "stats": {
-    "total_hits": 153,
-    "critical_count": 48,
+    "total_hits": 154,
+    "critical_count": 49,
     "warning_count": 103,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 191,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 192,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -3730,5 +3755,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-07T07:23:05.437698+00:00"
+  "last_updated": "2026-04-07T10:09:44.788133+00:00"
 }
