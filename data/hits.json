@@ -1,6 +1,33 @@
 {
   "hits": [
     {
+      "id": "05bd38495d5f",
+      "title": "Ábalos, el hombre fuerte de Sánchez, se sienta en el banquillo cercado por los indicios de corrupción",
+      "link": "https://www.abc.es/espana/abalos-hombre-fuerte-sanchez-2021-sienta-banquillo-20260406040025-nt.html",
+      "source": "NewsAPI-Q1 · Www.abc.es",
+      "raw_date": "2026-04-06T02:00:25Z",
+      "fetched_at": "2026-04-07T02:41:05.651401+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Corrupción en el sector público (posible delito de cohecho, tráfico de influencias o prevaricación)",
+        "Daño reputacional severo para el partido político y la administración pública",
+        "Riesgo de responsabilidad penal de la persona jurídica (art. 31 bis CP)",
+        "Posible incumplimiento de la Ley de Transparencia y Buen Gobierno (Ley 19/2013)"
+      ],
+      "norms_affected": [
+        "Ley Orgánica 10/1995 (Código Penal) - arts. 248 a 251 (delitos contra la Administración Pública)",
+        "Ley 19/2013 de Transparencia, Acceso a la Información Pública y Buen Gobierno",
+        "ISO 37301 (Sistemas de Gestión de Compliance Penal)",
+        "UNE 19601 (Sistemas de Gestión de Compliance Penal)",
+        "RGPD (si hay tratamiento de datos personales en el proceso)"
+      ],
+      "summary": "El exministro José Luis Ábalos afronta un juicio por presuntos delitos de corrupción vinculados a su etapa en el gobierno, lo que podría derivar en condenas penales y multas para la persona física y, potencialmente, para la administración pública o partido político. El caso expone fallos en controles de integridad y transparencia en la gestión pública.",
+      "vulnerability": "Falta de controles internos robustos en la administración pública para prevenir conflictos de interés, transparencia en adjudicaciones y supervisión de altos cargos (ej.: registro de intereses, auditorías independientes, canales de denuncia efectivos).",
+      "financial_impact": "Entre 1M€ y 10M€ (incluyendo multas penales, indemnizaciones por daños reputacionales, costes legales y posibles sanciones administrativas a la administración o partido político).",
+      "recommended_action": "1) Revisar urgentemente los protocolos de compliance en la administración pública afectada (o partido político) para identificar posibles brechas en controles anticorrupción. 2) Activar un canal de denuncia interno y externo para empleados y ciudadanos. 3) Realizar una auditoría independiente sobre los procesos de contratación y gestión de altos cargos durante el periodo relevante. 4) Informar al Consejo de Ministros o órgano equivalente sobre los riesgos detectados y medidas correctivas."
+    },
+    {
       "id": "eea57ef51619",
       "title": "Las aseguradoras entran en alerta por una investigación de Competencia",
       "link": "https://www.abc.es/economia/aseguradoras-entran-alerta-investigacion-competencia-20260329041351-nt.html",
@@ -3678,13 +3705,13 @@
     }
   ],
   "stats": {
-    "total_hits": 152,
-    "critical_count": 47,
+    "total_hits": 153,
+    "critical_count": 48,
     "warning_count": 103,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 189,
+    "new_this_run": 1,
+    "articles_checked": 2,
+    "seen_ids_total": 191,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -3703,5 +3730,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-06T21:40:48.002619+00:00"
+  "last_updated": "2026-04-07T02:41:08.139597+00:00"
 }
