@@ -1,6 +1,30 @@
 {
   "hits": [
     {
+      "id": "1e2758ffa5b7",
+      "title": "La Universidad de Nebrija, condenada con 20.000 euros por pedir el DNI a un estudiante para expedir su título académico",
+      "link": "https://www.meneame.net/m/actualidad/universidad-nebrija-condenada-20-000-euros-pedir-dni-estudiante",
+      "source": "NewsAPI-Q5 · Meneame.net",
+      "raw_date": "2026-04-07T07:15:34Z",
+      "fetched_at": "2026-04-08T07:25:53.719721+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Tratamiento indebido de datos personales (RGPD)",
+        "Falta de base legal para el tratamiento de datos sensibles",
+        "Incumplimiento de principios de minimización y proporcionalidad (RGPD)",
+        "Exposición a sanciones administrativas por la AEPD"
+      ],
+      "norms_affected": [
+        "Reglamento General de Protección de Datos (RGPD) - Art. 5, 6 y 9",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de derechos digitales (LOPDGDD) - Art. 5 y 6"
+      ],
+      "summary": "La AEPD sancionó a la Universidad Nebrija con 20.000€ por exigir el DNI completo de un estudiante para expedir su título, incumpliendo el principio de minimización del RGPD. La universidad no demostró una base legal válida para solicitar este dato sensible.",
+      "vulnerability": "Falta de un protocolo de tratamiento de datos personales en procesos administrativos que garantice el cumplimiento del principio de minimización y proporcionalidad.",
+      "financial_impact": "Entre 10.000€ y 50.000€ (multa media por infracción grave en RGPD para una entidad de tamaño medio como una universidad privada)",
+      "recommended_action": "Revisar y actualizar los procedimientos internos para la expedición de títulos académicos, eliminando la solicitud de datos innecesarios como el DNI completo. Implementar formación específica en protección de datos para el personal administrativo y legal."
+    },
+    {
       "id": "2fb2deaf8208",
       "title": "Banco de España inhabilita a otro miembro de la cúpula de Caja Rural de Jaén, Barcelona y Madrid",
       "link": "https://www.europapress.es/economia/finanzas-00340/noticia-banco-espana-inhabilita-otro-miembro-cupula-caja-rural-jaen-barcelona-madrid-20260406103944.html",
@@ -3730,13 +3754,13 @@
     }
   ],
   "stats": {
-    "total_hits": 154,
+    "total_hits": 155,
     "critical_count": 49,
-    "warning_count": 103,
+    "warning_count": 104,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 196,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 197,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -3755,5 +3779,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-08T05:14:10.149132+00:00"
+  "last_updated": "2026-04-08T07:25:54.920220+00:00"
 }
