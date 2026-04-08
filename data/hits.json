@@ -1,6 +1,30 @@
 {
   "hits": [
     {
+      "id": "b766ba2e6e38",
+      "title": "El PSOE lleva una ley al Congreso para habilitar legalmente a la CNMC como coordinador de servicios digitales",
+      "link": "https://www.europapress.es/sociedad/noticia-psoe-lleva-ley-congreso-habilitar-legalmente-cnmc-coordinador-servicios-digitales-20260407161156.html",
+      "source": "NewsAPI-Q1 · Europapress.es",
+      "raw_date": "2026-04-07T14:11:56Z",
+      "fetched_at": "2026-04-08T16:17:45.260335+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Infracción del Reglamento (UE) 2019/1150 (DSA) por falta de coordinación con autoridades europeas",
+        "Posible conflicto de competencias con la AEPD en materia de protección de datos",
+        "Exposición a sanciones por incumplimiento de obligaciones de transparencia en servicios digitales"
+      ],
+      "norms_affected": [
+        "Reglamento (UE) 2019/1150 (DSA - Digital Services Act)",
+        "Ley 3/2018 de Protección de Datos y Garantía de Derechos Digitales (LOPDGDD)",
+        "Ley 3/2014 de creación de la CNMC"
+      ],
+      "summary": "El PSOE propone una ley para atribuir a la CNMC la coordinación de servicios digitales en España, alineándose con el Reglamento DSA. La iniciativa busca evitar sanciones por incumplimiento de obligaciones europeas, pero podría generar conflictos con otras autoridades como la AEPD.",
+      "vulnerability": "Falta de un protocolo claro de coordinación entre la CNMC, AEPD y otras autoridades competentes en servicios digitales",
+      "financial_impact": "100.000€ - 500.000€ (multas por incumplimiento del DSA o conflictos de competencias)",
+      "recommended_action": "Revisar la proposición de ley para garantizar su alineación con el DSA y establecer mecanismos de coordinación con la AEPD y otras autoridades, así como evaluar riesgos de duplicidad de funciones."
+    },
+    {
       "id": "1e2758ffa5b7",
       "title": "La Universidad de Nebrija, condenada con 20.000 euros por pedir el DNI a un estudiante para expedir su título académico",
       "link": "https://www.meneame.net/m/actualidad/universidad-nebrija-condenada-20-000-euros-pedir-dni-estudiante",
@@ -3754,13 +3778,13 @@
     }
   ],
   "stats": {
-    "total_hits": 155,
+    "total_hits": 156,
     "critical_count": 49,
-    "warning_count": 104,
+    "warning_count": 105,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 200,
+    "new_this_run": 1,
+    "articles_checked": 2,
+    "seen_ids_total": 202,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -3779,5 +3803,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-08T13:25:51.956936+00:00"
+  "last_updated": "2026-04-08T16:17:49.585888+00:00"
 }
