@@ -1,6 +1,30 @@
 {
   "hits": [
     {
+      "id": "ab799595b76b",
+      "title": "La CNMC archiva la denuncia de Vodafone contra Telefónica y Disney",
+      "link": "https://www.expansion.com/empresas/tecnologia/2026/04/07/69d54138468aeb90688b4571.html",
+      "source": "NewsAPI-Q1 · Expansion.com",
+      "raw_date": "2026-04-07T17:39:17Z",
+      "fetched_at": "2026-04-08T19:21:21.629381+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Prácticas restrictivas de la competencia (art. 101 TFUE y Ley 15/2007)",
+        "Exposición a sanciones administrativas por la CNMC",
+        "Daño reputacional por denuncia pública"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 1/2003",
+        "Art. 101 TFUE"
+      ],
+      "summary": "La CNMC archiva la denuncia de Vodafone contra Telefónica y Disney por supuestas prácticas restrictivas de la competencia en el acuerdo de integración de Disney+ en Movistar Plus+. Aunque se archiva, el expediente refleja riesgos en acuerdos verticales y exclusividades.",
+      "vulnerability": "Falta de análisis previo de acuerdos verticales para evaluar impacto en competencia (control de compliance en contratos con proveedores/partners).",
+      "financial_impact": "Multa potencial entre 100K€ y 300K€ (expediente sancionador archivado sin sanción, pero con costes legales estimados en 50-150K€).",
+      "recommended_action": "Revisar todos los acuerdos comerciales con proveedores/partners para identificar posibles cláusulas restrictivas de competencia y documentar análisis de impacto en el mercado. Incluir en el programa de compliance de competencia (ISO 37301) un protocolo de revisión previa de acuerdos."
+    },
+    {
       "id": "b766ba2e6e38",
       "title": "El PSOE lleva una ley al Congreso para habilitar legalmente a la CNMC como coordinador de servicios digitales",
       "link": "https://www.europapress.es/sociedad/noticia-psoe-lleva-ley-congreso-habilitar-legalmente-cnmc-coordinador-servicios-digitales-20260407161156.html",
@@ -3778,13 +3802,13 @@
     }
   ],
   "stats": {
-    "total_hits": 156,
+    "total_hits": 157,
     "critical_count": 49,
-    "warning_count": 105,
+    "warning_count": 106,
     "info_count": 2,
     "new_this_run": 1,
-    "articles_checked": 2,
-    "seen_ids_total": 202,
+    "articles_checked": 1,
+    "seen_ids_total": 203,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -3803,5 +3827,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-08T16:17:49.585888+00:00"
+  "last_updated": "2026-04-08T19:21:22.829918+00:00"
 }
