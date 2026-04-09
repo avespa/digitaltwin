@@ -1,6 +1,31 @@
 {
   "hits": [
     {
+      "id": "48823ce0a78c",
+      "title": "El Banco de España sanciona con 41,5 millones a CaixaBank y Sabadell por malas prácticas en sus préstamos a clientes: \"Es infracción muy grave\"",
+      "link": "https://www.elmundo.es/economia/empresas/2026/04/08/69d53180e85ece7a1e8b4586.html",
+      "source": "NewsAPI-Q1 · El Mundo",
+      "raw_date": "2026-04-07T23:20:15Z",
+      "fetched_at": "2026-04-09T02:36:31.165881+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Incumplimiento de normativa de protección al cliente financiero (Ley 5/2019, Real Decreto 309/2019)",
+        "Sanciones administrativas y reputacionales por prácticas abusivas en préstamos",
+        "Exposición a reclamaciones judiciales por parte de clientes afectados"
+      ],
+      "norms_affected": [
+        "Ley 5/2019 de contratos de crédito al consumo",
+        "Real Decreto 309/2019 sobre transparencia en préstamos",
+        "Directiva 2014/17/UE (Crédito Hipotecario)",
+        "Reglamento (UE) 2016/679 (RGPD) - si hubo tratamiento indebido de datos"
+      ],
+      "summary": "El Banco de España ha sancionado a CaixaBank y Sabadell con 41,5 millones de euros por infracciones muy graves en la concesión de préstamos a clientes, incluyendo prácticas abusivas y falta de transparencia. Las sanciones reflejan un incumplimiento sistemático de la normativa financiera y de protección al consumidor.",
+      "vulnerability": "Falta de controles internos robustos para garantizar el cumplimiento de la normativa de transparencia y protección al cliente en la concesión de préstamos (ej.: verificación de solvencia, información clara y comprensible, evaluación de riesgos).",
+      "financial_impact": "Entre 10 y 30 millones de euros adicionales en costes (multas, indemnizaciones, medidas correctivas y pérdida de reputación) para una entidad financiera española de tamaño medio-alto.",
+      "recommended_action": "Revisar urgentemente los procesos de concesión de préstamos, implementar auditorías internas independientes y reforzar los canales de reclamación y transparencia. Notificar al Comité de Dirección y al Consejo de Administración, y actualizar el mapa de riesgos de compliance con este tipo de infracciones."
+    },
+    {
       "id": "ab799595b76b",
       "title": "La CNMC archiva la denuncia de Vodafone contra Telefónica y Disney",
       "link": "https://www.expansion.com/empresas/tecnologia/2026/04/07/69d54138468aeb90688b4571.html",
@@ -3802,13 +3827,13 @@
     }
   ],
   "stats": {
-    "total_hits": 157,
-    "critical_count": 49,
+    "total_hits": 158,
+    "critical_count": 50,
     "warning_count": 106,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 203,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 204,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -3827,5 +3852,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-08T21:43:19.434424+00:00"
+  "last_updated": "2026-04-09T02:36:32.366492+00:00"
 }
