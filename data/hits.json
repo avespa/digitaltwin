@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "415af5589b8d",
+      "title": "Consumo ratifica la multa de 3,6 millones a Alquiler Seguro por prácticas \"abusivas\" contra sus inquilinos",
+      "link": "https://www.europapress.es/economia/construccion-y-vivienda-00342/noticia-consumo-ratifica-multa-36-millones-alquiler-seguro-practicas-abusivas-contra-inquilinos-20260408080023.html",
+      "source": "NewsAPI-Q4 · Europapress.es",
+      "raw_date": "2026-04-08T06:00:23Z",
+      "fetched_at": "2026-04-09T07:28:02.347814+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Prácticas abusivas en contratos de alquiler (protección al consumidor)",
+        "Sanciones administrativas por incumplimiento de normativa de consumo",
+        "Daño reputacional y pérdida de confianza en la empresa",
+        "Posible responsabilidad civil por daños a inquilinos"
+      ],
+      "norms_affected": [
+        "Ley General para la Defensa de los Consumidores y Usuarios (Real Decreto Legislativo 1/2007)",
+        "Ley de Ordenación del Territorio y Urbanismo (varía por CCAA)",
+        "Reglamento General de Protección de Datos (RGPD) si se manejaron datos personales de inquilinos",
+        "Ley de Competencia Desleal (Ley 3/1991)"
+      ],
+      "summary": "El Ministerio de Derechos Sociales, Consumo y Agenda 2030 ha ratificado una multa de 3,6 millones de euros a Alquiler Seguro por prácticas abusivas contra inquilinos, confirmando un expediente sancionador por incumplimiento de normativa de protección al consumidor. La resolución afecta a contratos de alquiler y podría implicar responsabilidades adicionales por daños a los afectados.",
+      "vulnerability": "Falta de revisión legal periódica de contratos de alquiler y cláusulas abusivas, así como de políticas de protección de datos de inquilinos. Ausencia de formación en normativa de consumo para equipos comerciales y jurídicos.",
+      "financial_impact": "Entre 3,6M€ (multa) y 10M€ (incluyendo posibles indemnizaciones, costes legales y reparación de imagen).",
+      "recommended_action": "Revisar urgentemente todos los contratos de alquiler en vigor para eliminar cláusulas potencialmente abusivas y alinear con la Ley de Consumidores. Implementar un programa de formación en normativa de consumo para empleados y proveedores. Realizar auditoría interna de protección de datos de inquilinos y notificar a la AEPD si se detectan irregularidades."
+    },
+    {
       "id": "48823ce0a78c",
       "title": "El Banco de España sanciona con 41,5 millones a CaixaBank y Sabadell por malas prácticas en sus préstamos a clientes: \"Es infracción muy grave\"",
       "link": "https://www.elmundo.es/economia/empresas/2026/04/08/69d53180e85ece7a1e8b4586.html",
@@ -3827,13 +3853,13 @@
     }
   ],
   "stats": {
-    "total_hits": 158,
-    "critical_count": 50,
+    "total_hits": 159,
+    "critical_count": 51,
     "warning_count": 106,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 204,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 205,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -3852,5 +3878,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-09T05:12:29.263617+00:00"
+  "last_updated": "2026-04-09T07:28:03.548501+00:00"
 }
