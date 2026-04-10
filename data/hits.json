@@ -3859,7 +3859,7 @@
     "info_count": 2,
     "new_this_run": 0,
     "articles_checked": 1,
-    "seen_ids_total": 212,
+    "seen_ids_total": 213,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -3878,5 +3878,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-10T07:47:04.798557+00:00"
+  "last_updated": "2026-04-10T10:09:35.039507+00:00"
 }
