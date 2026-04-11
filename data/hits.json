@@ -1,6 +1,30 @@
 {
   "hits": [
     {
+      "id": "1ecfd98e559d",
+      "title": "La reacción de Broncano a la resolución de la CNMC ante la denuncia contra 'La revuelta': \"A ver si somos cultura o no\"",
+      "link": "https://www.elconfidencial.com/television/programas-tv/2026-04-10/1qrt-reaccion-broncano-resolucion-cnmc-denuncia-revuelta-cultura_4335640/",
+      "source": "NewsAPI-Q2 · Elconfidencial.com",
+      "raw_date": "2026-04-10T07:09:43Z",
+      "fetched_at": "2026-04-11T09:44:03.718020+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Sanción administrativa por incumplimiento de normativa de comunicación audiovisual (Ley General de Comunicación Audiovisual)",
+        "Daño reputacional por conflicto con organismo regulador (CNMC)",
+        "Posible vulneración de principios de neutralidad y pluralismo en contenidos audiovisuales"
+      ],
+      "norms_affected": [
+        "Ley 13/2022, de 14 de julio, General de Comunicación Audiovisual (LGCA)",
+        "Reglamento (UE) 2017/1129 sobre servicios de comunicación audiovisual",
+        "Ley Orgánica 1/1982, de 5 de mayo, de protección civil del derecho al honor, a la intimidad personal y familiar y a la propia imagen"
+      ],
+      "summary": "La CNMC ha resuelto a favor de RTVE en una denuncia presentada por televisiones privadas contra el programa 'La revuelta', cuestionando su contenido cultural y pluralista. Broncano reacciona públicamente, generando controversia y posible exposición a sanciones administrativas por incumplimiento de normativas audiovisuales.",
+      "vulnerability": "Falta de protocolos internos para garantizar el cumplimiento de los principios de neutralidad, pluralismo y diversidad en contenidos audiovisuales, así como la revisión previa de programas para evitar conflictos con reguladores.",
+      "financial_impact": "Multa estimada entre 100.000€ y 400.000€ (según gravedad y antecedentes de la empresa), más costes legales y de reputación (pérdida de audiencia o patrocinios).",
+      "recommended_action": "Revisar inmediatamente el contenido del programa 'La revuelta' y todos los programas de la cadena para asegurar el cumplimiento de la LGCA y el Reglamento (UE) 2017/1129. Implementar un comité de revisión de contenidos con participación de expertos en comunicación audiovisual y derecho a la imagen. Documentar todas las decisiones editoriales para demostrar cumplimiento en futuros procedimientos."
+    },
+    {
       "id": "01ed85548b09",
       "title": "Alquiler Seguro pedirá medidas cautelares ante la sanción de Consumo, que tacha de \"ideológica\"",
       "link": "https://www.europapress.es/economia/construccion-y-vivienda-00342/noticia-alquiler-seguro-pedira-medidas-cautelares-sancion-consumo-tacha-ideologica-20260409135054.html",
@@ -3879,13 +3903,13 @@
     }
   ],
   "stats": {
-    "total_hits": 160,
+    "total_hits": 161,
     "critical_count": 51,
-    "warning_count": 107,
+    "warning_count": 108,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 215,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 216,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -3904,5 +3928,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-11T07:05:02.128032+00:00"
+  "last_updated": "2026-04-11T09:44:04.918739+00:00"
 }
