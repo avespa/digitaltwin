@@ -1,6 +1,60 @@
 {
   "hits": [
     {
+      "id": "9e151a1d4d5c",
+      "title": "18.000 euros de multa y 7.500 de indemnizaciones para el dueño de La Gilda del Norte por explotar a extranjeros",
+      "link": "https://www.eldiario.es/euskadi/18-000-euros-multa-7-500-indemnizaciones-dueno-gilda-norte-explotar-extranjeros_1_13133431.html",
+      "source": "NewsAPI-Q1 · Eldiario.es",
+      "raw_date": "2026-04-10T12:23:19Z",
+      "fetched_at": "2026-04-11T13:05:09.109293+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Explotación laboral de trabajadores extranjeros sin permiso de trabajo",
+        "Incumplimiento de normativa laboral y de derechos humanos",
+        "Sanciones administrativas y penales por discriminación y condiciones laborales abusivas",
+        "Daño reputacional grave para la empresa"
+      ],
+      "norms_affected": [
+        "Ley Orgánica 4/2000 (Derechos y Libertades de los Extranjeros en España y su Integración Social)",
+        "Estatuto de los Trabajadores (Real Decreto Legislativo 2/2015)",
+        "Constitución Española (Artículo 14: igualdad y no discriminación)",
+        "Código Penal (Artículo 318 bis: tráfico ilegal de personas y explotación laboral)"
+      ],
+      "summary": "El dueño de La Gilda del Norte ha sido condenado a pagar 18.000 euros de multa y 7.500 euros en indemnizaciones por explotar laboralmente a trabajadores extranjeros sin permiso de trabajo, manteniéndolos en situación irregular y bajo amenazas. La sentencia exime de prisión pero reconoce prácticas discriminatorias y abusivas.",
+      "vulnerability": "Falta de controles internos para verificar la legalidad de la contratación de trabajadores extranjeros y ausencia de protocolos de prevención de explotación laboral.",
+      "financial_impact": "Entre 25.000€ y 50.000€ (multa + indemnizaciones + costes legales y reputacionales para una empresa española media).",
+      "recommended_action": "Revisar urgentemente los procesos de contratación de trabajadores extranjeros, implementar un protocolo de compliance laboral que incluya verificación de permisos de trabajo, formación en derechos laborales y canales de denuncia internos. Contactar con asesoría legal para evaluar posibles responsabilidades penales y civiles."
+    },
+    {
+      "id": "b0dcbf0b7856",
+      "title": "Carles Naval confirma ante la jueza del 'caso Negreira' que recibía los informes arbitrales",
+      "link": "https://www.mundodeportivo.com/futbol/fc-barcelona/20260410/1004168125/carles-naval-confirma-jueza-caso-negreira-recibia-informes-arbitrales.html",
+      "source": "NewsAPI-Q4 · Mundodeportivo.com",
+      "raw_date": "2026-04-10T11:55:40Z",
+      "fetched_at": "2026-04-11T13:05:17.724100+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Soborno y corrupción en el deporte",
+        "Incumplimiento de normativa de transparencia y buen gobierno (Ley 19/2013 de transparencia, acceso a la información pública y buen gobierno)",
+        "Violación de principios de integridad en competiciones deportivas (Ley 19/2013 y Código de Buen Gobierno del Deporte)",
+        "Posible blanqueo de capitales (Ley 10/2010 de prevención del blanqueo de capitales)",
+        "Daño reputacional severo para el FC Barcelona y sus directivos"
+      ],
+      "norms_affected": [
+        "Ley 19/2013 de transparencia, acceso a la información pública y buen gobierno",
+        "Ley Orgánica 10/1995 del Código Penal (art. 286 bis: cohecho)",
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Reglamento de la UEFA sobre integridad en competiciones",
+        "Código de Buen Gobierno del Deporte (España)"
+      ],
+      "summary": "El tesorero del FC Barcelona confirma ante la jueza del 'caso Negreira' que recibía informes arbitrales, lo que podría implicar prácticas de soborno y corrupción en el deporte. El club está imputado como persona jurídica, con riesgo de sanciones penales, económicas y reputacionales.",
+      "vulnerability": "Falta de controles internos robustos en la recepción y gestión de informes arbitrales, así como en la supervisión de pagos a terceros vinculados a decisiones arbitrales.",
+      "financial_impact": "Multas de hasta 10-20 millones de euros (según gravedad), pérdida de ingresos por patrocinios y derechos televisivos (estimación: 50-100 millones de euros en 2-3 años), y posibles indemnizaciones por daños reputacionales.",
+      "recommended_action": "Activar protocolo de emergencia: suspender cualquier pago a terceros vinculados a arbitraje, revisar contratos y transacciones con empresas intermediarias, y coordinar con asesoría legal para preparar defensa penal y civil. Notificar a la CNMC y a la AEPD si hay indicios de blanqueo."
+    },
+    {
       "id": "1ecfd98e559d",
       "title": "La reacción de Broncano a la resolución de la CNMC ante la denuncia contra 'La revuelta': \"A ver si somos cultura o no\"",
       "link": "https://www.elconfidencial.com/television/programas-tv/2026-04-10/1qrt-reaccion-broncano-resolucion-cnmc-denuncia-revuelta-cultura_4335640/",
@@ -3903,13 +3957,13 @@
     }
   ],
   "stats": {
-    "total_hits": 161,
-    "critical_count": 51,
+    "total_hits": 163,
+    "critical_count": 53,
     "warning_count": 108,
     "info_count": 2,
-    "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 216,
+    "new_this_run": 2,
+    "articles_checked": 4,
+    "seen_ids_total": 220,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -3928,5 +3982,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-11T09:44:04.918739+00:00"
+  "last_updated": "2026-04-11T13:05:21.213243+00:00"
 }
