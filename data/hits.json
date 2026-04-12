@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "6ba5cd3790f3",
+      "title": "Malversación en el país de las Jésicas",
+      "link": "https://www.abc.es/opinion/juan-soto-ivars-malversacion-pais-jesicas-20260411133223-nt.html",
+      "source": "NewsAPI-Q1 · Www.abc.es",
+      "raw_date": "2026-04-11T17:55:07Z",
+      "fetched_at": "2026-04-12T18:55:30.787730+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Malversación de fondos públicos",
+        "Fraude fiscal en declaración de la renta",
+        "Posible incumplimiento de normativa de contratación pública (Ley 9/2017 de Contratos del Sector Público)",
+        "Riesgo de responsabilidad penal de administradores (Código Penal, Art. 252 y siguientes)"
+      ],
+      "norms_affected": [
+        "Ley 9/2017 de Contratos del Sector Público",
+        "Código Penal (Art. 252-254: malversación)",
+        "Ley General Tributaria (fraude fiscal)",
+        "Ley Orgánica 10/1995 del Código Penal (responsabilidad penal de personas jurídicas)"
+      ],
+      "summary": "El artículo alude a un juicio por malversación de fondos públicos en la compra de mascarillas durante la pandemia, con posible implicación en fraude fiscal en declaraciones de la renta. Se sugiere un caso de desvío de fondos públicos con posible responsabilidad penal de administradores y la empresa.",
+      "vulnerability": "Falta de controles internos en gestión de fondos públicos y fiscalidad (ej.: segregación de funciones, auditorías internas periódicas, canal de denuncias efectivo)",
+      "financial_impact": "Entre 200.000€ y 1.500.000€ (dependiendo de la cuantía desviada y sanciones penales/ fiscales, incluyendo posible decomiso y multas del 150% del fraude)",
+      "recommended_action": "Iniciar una investigación interna inmediata con asesoría legal especializada en fraude público y fiscal, revisar controles internos en contratación pública y fiscalidad, y notificar a la Fiscalía Anticorrupción si hay indicios de delito."
+    },
+    {
       "id": "e49deff2d229",
       "title": "Condenado a una multa de 18.000 euros el dueño de La Gilda del Norte por emplear a trabajadores en situación irregular",
       "link": "https://www.europapress.es/euskadi/noticia-condenado-multa-18000-euros-dueno-gilda-norte-emplear-trabajadores-situacion-irregular-20260410202432.html",
@@ -4009,13 +4035,13 @@
     }
   ],
   "stats": {
-    "total_hits": 165,
+    "total_hits": 166,
     "critical_count": 54,
-    "warning_count": 109,
+    "warning_count": 110,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 223,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 224,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -4034,5 +4060,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-12T15:38:53.323153+00:00"
+  "last_updated": "2026-04-12T18:55:31.988119+00:00"
 }
