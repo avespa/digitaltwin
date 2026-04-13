@@ -1,6 +1,58 @@
 {
   "hits": [
     {
+      "id": "7dcdc691664a",
+      "title": "Hacienda te vigila: este la cantidad máxima que puedes pagar en efectivo",
+      "link": "https://www.elperiodico.com/es/economia/20260412/hacienda-multa-pagar-efectivo-dv-88878655",
+      "source": "NewsAPI-Q3 · Elperiodico.com",
+      "raw_date": "2026-04-12T07:36:00Z",
+      "fetched_at": "2026-04-13T08:09:28.478010+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Fraude fiscal por incumplimiento del límite de pagos en efectivo",
+        "Sanciones administrativas por parte de la AEAT",
+        "Riesgo de inspección fiscal por transacciones sospechosas"
+      ],
+      "norms_affected": [
+        "Ley 11/2021 de medidas de prevención y lucha contra el fraude fiscal",
+        "Real Decreto 249/2023 (reglamento de la Ley 11/2021)",
+        "Reglamento General de las actuaciones y los procedimientos de gestión e inspección tributaria"
+      ],
+      "summary": "La Ley 11/2021 establece un límite máximo de 1.000 euros para pagos en efectivo en España, reducido desde los 2.500 euros anteriores. Su incumplimiento puede derivar en sanciones administrativas significativas por parte de la AEAT.",
+      "vulnerability": "Falta de controles internos para monitorizar y limitar pagos en efectivo en operaciones comerciales o entre empresas.",
+      "financial_impact": "Multas entre 1.000€ y 50.000€ por infracción, dependiendo de la gravedad y volumen de operaciones no declaradas correctamente.",
+      "recommended_action": "Revisar y actualizar la política de pagos en efectivo de la empresa, implementar sistemas de registro y alerta para transacciones superiores a 1.000€, y formar al personal en la normativa vigente."
+    },
+    {
+      "id": "02f7f959ae2f",
+      "title": "Anticorrupción aprovecha el juicio de las mascarillas para 'abonar' las acusaciones contra Ábalos, Koldo y Pardo de Vera en la Audiencia Nacional",
+      "link": "https://www.elperiodico.com/es/politica/20260412/anticorrupcion-aprovecha-juicio-mascarillas-abonar-acusaciones-abalos-koldo-pardo-de-vera-audiencia-128958745",
+      "source": "NewsAPI-Q4 · Elperiodico.com",
+      "raw_date": "2026-04-12T08:00:12Z",
+      "fetched_at": "2026-04-13T08:09:36.121488+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Corrupción en contratación pública",
+        "Soborno y tráfico de influencias",
+        "Incumplimiento de la Ley de Contratos del Sector Público (LCSP)",
+        "Violación de principios de transparencia y competencia",
+        "Posible blanqueo de capitales"
+      ],
+      "norms_affected": [
+        "Ley Orgánica 10/1995 (Código Penal, arts. 286 bis, 427, 432)",
+        "Ley 9/2017 de Contratos del Sector Público",
+        "Ley 19/2013 de transparencia, acceso a la información pública y buen gobierno",
+        "ISO 37001 (Sistemas de Gestión Antisoborno)",
+        "UNE 19601 (Compliance Penal)"
+      ],
+      "summary": "El juicio en la Audiencia Nacional por presuntos delitos de corrupción en la adjudicación de contratos de mascarillas durante la pandemia involucra a altos cargos públicos. Las acusaciones podrían derivar en condenas penales graves y multas millonarias para las empresas implicadas.",
+      "vulnerability": "Falta de controles internos en procesos de contratación pública (debida diligencia, segregación de funciones, auditorías independientes)",
+      "financial_impact": "Entre 1M€ y 10M€ (multas penales, indemnizaciones, pérdida de contratos públicos, costes legales y reputacionales)",
+      "recommended_action": "Revisar urgentemente todos los contratos públicos adjudicados durante 2020-2022, implementar un programa de compliance específico para contratación pública con formación obligatoria a directivos y empleados, y realizar una auditoría externa independiente de los procesos de licitación."
+    },
+    {
       "id": "6ba5cd3790f3",
       "title": "Malversación en el país de las Jésicas",
       "link": "https://www.abc.es/opinion/juan-soto-ivars-malversacion-pais-jesicas-20260411133223-nt.html",
@@ -4035,13 +4087,13 @@
     }
   ],
   "stats": {
-    "total_hits": 166,
-    "critical_count": 54,
-    "warning_count": 110,
+    "total_hits": 168,
+    "critical_count": 55,
+    "warning_count": 111,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 1,
-    "seen_ids_total": 225,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 227,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -4060,5 +4112,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-13T05:46:52.721597+00:00"
+  "last_updated": "2026-04-13T08:09:37.322211+00:00"
 }
