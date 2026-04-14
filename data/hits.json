@@ -1,6 +1,60 @@
 {
   "hits": [
     {
+      "id": "77170afa8dda",
+      "title": "La CNMV alerta sobre los riegos de invertir con IA",
+      "link": "https://www.expansion.com/mercados/2026/04/13/69dcc6dc468aeb27358b4595.html",
+      "source": "NewsAPI-Q2 · Expansion.com",
+      "raw_date": "2026-04-13T10:42:35Z",
+      "fetched_at": "2026-04-14T13:49:17.162454+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Inducción a errores de inversión por sesgos en modelos de IA",
+        "Incumplimiento de obligaciones de transparencia y diligencia en recomendaciones de inversión (MIFID II)",
+        "Exposición a sanciones por falta de supervisión en herramientas automatizadas de asesoramiento financiero"
+      ],
+      "norms_affected": [
+        "MIFID II (Directiva 2014/65/UE)",
+        "Reglamento Delegado (UE) 2017/565",
+        "Ley del Mercado de Valores (Real Decreto Legislativo 4/2015)",
+        "Reglamento General de Conducta y Protección al Inversor (CNMV)"
+      ],
+      "summary": "La CNMV ha identificado fallos en modelos de IA como ChatGPT o DeepSeek que podrían generar pérdidas a inversores por errores de razonamiento. Esto afecta a la obligación de las entidades financieras de garantizar la transparencia y adecuación de sus recomendaciones automatizadas.",
+      "vulnerability": "Falta de controles internos para validar la precisión y sesgos de herramientas de IA utilizadas en asesoramiento financiero o gestión de carteras.",
+      "financial_impact": "Entre 100K€ y 500K€ en multas por entidad, dependiendo de la gravedad y alcance de los errores detectados en recomendaciones automatizadas.",
+      "recommended_action": "Revisar y auditar todos los sistemas de IA empleados en asesoramiento financiero para garantizar cumplimiento con MIFID II, incluyendo pruebas de sesgos, documentación de algoritmos y supervisión humana en decisiones críticas."
+    },
+    {
+      "id": "3a3c97abb275",
+      "title": "Peinado cierra la instrucción y procesa a Begoña Gómez por cuatro delitos",
+      "link": "https://www.huffingtonpost.es/politica/peinado-cierra-instruccion-procesa-begona-gomez-cuatro-delitos-f202604.html",
+      "source": "NewsAPI-Q4 · Huffingtonpost.es",
+      "raw_date": "2026-04-13T10:19:47Z",
+      "fetched_at": "2026-04-14T13:49:23.434329+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Corrupción en el sector público",
+        "Tráfico de influencias en contratación pública",
+        "Malversación de fondos públicos",
+        "Apropiación indebida de recursos corporativos",
+        "Daño reputacional severo para la empresa vinculada",
+        "Posible responsabilidad penal de la empresa por delitos de sus directivos"
+      ],
+      "norms_affected": [
+        "Ley Orgánica 10/1995 (Código Penal español) - Art. 251 (tráfico de influencias), Art. 252 (corrupción en negocios), Art. 253 (apropiación indebida), Art. 254 (malversación)",
+        "Ley 15/2022 (Ley de Transparencia y Lucha contra el Fraude Fiscal)",
+        "ISO 37001 (Sistemas de Gestión Antisoborno)",
+        "ISO 37301 (Sistemas de Gestión de Compliance)",
+        "RGPD (posible filtración de datos en investigación)"
+      ],
+      "summary": "El juez Peinado ha procesado a Begoña Gómez por cuatro delitos graves (malversación, tráfico de influencias, corrupción en negocios y apropiación indebida de marca), vinculados a su actividad profesional previa. La resolución implica un riesgo penal y reputacional para empresas con las que haya colaborado, especialmente en sectores regulados.",
+      "vulnerability": "Falta de controles robustos en contratación pública y relaciones con cargos públicos, así como deficiencias en la debida diligencia en contratación de directivos con perfiles de alto riesgo.",
+      "financial_impact": "Entre 5M€ y 50M€ (multas penales, indemnizaciones, pérdida de contratos públicos, sanciones administrativas y costes reputacionales)",
+      "recommended_action": "Revisar urgentemente los protocolos de compliance en contratación pública, relaciones con cargos públicos y debida diligencia de directivos. Activar un plan de contingencia para evaluar riesgos legales y reputacionales en empresas vinculadas a la investigada."
+    },
+    {
       "id": "af655abcdc0d",
       "title": "El Congreso decide este martes si tramita una ley para habilitar a la CNMC como coordinador de servicios digitales",
       "link": "https://www.europapress.es/sociedad/noticia-congreso-decide-martes-si-tramita-ley-habilitar-cnmc-coordinador-servicios-digitales-20260412114450.html",
@@ -4111,13 +4165,13 @@
     }
   ],
   "stats": {
-    "total_hits": 169,
-    "critical_count": 55,
-    "warning_count": 112,
+    "total_hits": 171,
+    "critical_count": 56,
+    "warning_count": 113,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 228,
+    "new_this_run": 2,
+    "articles_checked": 3,
+    "seen_ids_total": 231,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -4136,5 +4190,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-14T10:17:21.050751+00:00"
+  "last_updated": "2026-04-14T13:49:24.635087+00:00"
 }
