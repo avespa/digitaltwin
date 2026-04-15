@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "a84d567627d9",
+      "title": "Tu jefe tiene \"prohibido\" cotillearte el Instagram... aunque sea público",
+      "link": "https://www.meneame.net/m/actualidad/tu-jefe-tiene-prohibido-cotillearte-instagram-aunque-sea-publico",
+      "source": "NewsAPI-Q5 · Meneame.net",
+      "raw_date": "2026-04-14T08:58:55Z",
+      "fetched_at": "2026-04-15T10:18:31.077577+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Violación de privacidad y derechos fundamentales (RGPD)",
+        "Posible discriminación en procesos de selección (LOPDGDD)",
+        "Exposición a sanciones administrativas por la AEPD",
+        "Daño reputacional por prácticas invasivas"
+      ],
+      "norms_affected": [
+        "Reglamento General de Protección de Datos (RGPD)",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD)",
+        "Estatuto de los Trabajadores (Art. 4.2.e)",
+        "Directrices de la AEPD sobre monitorización laboral"
+      ],
+      "summary": "La AEPD ha aclarado que el acceso a perfiles públicos en redes sociales por parte de empleadores o reclutadores puede constituir una violación del RGPD, incluso si el contenido es público. Esto afecta a procesos de selección y vigilancia laboral, generando riesgos legales y reputacionales.",
+      "vulnerability": "Falta de políticas claras sobre monitorización de redes sociales y consentimiento explícito para el acceso a perfiles públicos.",
+      "financial_impact": "Multas de hasta 200.000€ por infracción del RGPD (Art. 83.5), más costes legales y posibles indemnizaciones por daños morales.",
+      "recommended_action": "Revisar y actualizar las políticas de privacidad y monitorización laboral, incluir cláusulas específicas en contratos y procesos de selección, y formar al personal en cumplimiento del RGPD y LOPDGDD."
+    },
+    {
       "id": "77170afa8dda",
       "title": "La CNMV alerta sobre los riegos de invertir con IA",
       "link": "https://www.expansion.com/mercados/2026/04/13/69dcc6dc468aeb27358b4595.html",
@@ -4165,13 +4191,13 @@
     }
   ],
   "stats": {
-    "total_hits": 171,
+    "total_hits": 172,
     "critical_count": 56,
-    "warning_count": 113,
+    "warning_count": 114,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 231,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 232,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -4190,5 +4216,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-15T07:52:22.190173+00:00"
+  "last_updated": "2026-04-15T10:18:32.278342+00:00"
 }
