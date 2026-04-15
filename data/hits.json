@@ -1,6 +1,33 @@
 {
   "hits": [
     {
+      "id": "a275f884929c",
+      "title": "Antifraude propone sancionar a un directivo de TMB por tener al descubierto datos confidenciales de sus empleados",
+      "link": "https://www.eldiario.es/catalunya/antifraude-propone-sancionar-directivo-tmb-descubierto-datos-confidenciales-empleados_1_13140839.html",
+      "source": "NewsAPI-Q5 · Eldiario.es",
+      "raw_date": "2026-04-14T19:54:20Z",
+      "fetched_at": "2026-04-15T21:55:32.881775+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Violación de la confidencialidad de datos personales (RGPD)",
+        "Exposición de datos sensibles de empleados (ISO 37301)",
+        "Posible incumplimiento de obligaciones de protección de datos (LOPDGDD)",
+        "Riesgo de sanciones administrativas y reputacionales",
+        "Exposición a reclamaciones laborales por vulneración de derechos"
+      ],
+      "norms_affected": [
+        "RGPD (Reglamento (UE) 2016/679)",
+        "LOPDGDD (Ley Orgánica 3/2018)",
+        "ISO 37301 (Sistemas de Gestión de Cumplimiento)",
+        "Ley 2/2023 de protección de datos personales y garantía de derechos digitales"
+      ],
+      "summary": "La Autoridad Antifraude de Cataluña propone sancionar a un directivo de TMB por dejar al descubierto datos confidenciales de empleados, lo que podría derivar en una multa millonaria para la empresa pública. La situación agrava un expediente ya abierto por la Autoridad Catalana de Protección de Datos por incumplimientos en privacidad.",
+      "vulnerability": "Falta de controles técnicos y organizativos para garantizar la confidencialidad de los datos personales de los empleados (ej.: cifrado, acceso restringido, políticas de tratamiento de datos).",
+      "financial_impact": "Multa de entre 100.000€ y 1.000.000€ (según gravedad y tamaño de la empresa), más posibles indemnizaciones por reclamaciones laborales y daños reputacionales (estimación media para empresa española de tamaño medio: 500.000€ - 2.000.000€).",
+      "recommended_action": "1) Iniciar auditoría inmediata para identificar y corregir la brecha de seguridad. 2) Notificar el incidente a la AEPD en un plazo máximo de 72 horas. 3) Revisar y reforzar los protocolos de protección de datos (RGPD) y compliance (ISO 37301). 4) Comunicar al Comité de Dirección y preparar defensa legal ante posibles sanciones."
+    },
+    {
       "id": "a84d567627d9",
       "title": "Tu jefe tiene \"prohibido\" cotillearte el Instagram... aunque sea público",
       "link": "https://www.meneame.net/m/actualidad/tu-jefe-tiene-prohibido-cotillearte-instagram-aunque-sea-publico",
@@ -4191,13 +4218,13 @@
     }
   ],
   "stats": {
-    "total_hits": 172,
-    "critical_count": 56,
+    "total_hits": 173,
+    "critical_count": 57,
     "warning_count": 114,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 232,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 233,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -4216,5 +4243,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-15T19:22:25.366481+00:00"
+  "last_updated": "2026-04-15T21:55:34.082473+00:00"
 }
