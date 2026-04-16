@@ -1,6 +1,60 @@
 {
   "hits": [
     {
+      "id": "8efec45a46c2",
+      "title": "El PP concluye la investigación del Senado sobre el apagón: culpa a Teresa Ribera, Aagesen, Beatriz Corredor y la CNMC",
+      "link": "https://www.europapress.es/nacional/noticia-pp-concluye-investigacion-senado-apagon-culpa-teresa-ribera-aagesen-beatriz-corredor-cnmc-20260415121451.html",
+      "source": "NewsAPI-Q2 · Europapress.es",
+      "raw_date": "2026-04-15T10:14:51Z",
+      "fetched_at": "2026-04-16T10:17:38.323456+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Incumplimiento de normativa de transparencia y rendición de cuentas en el sector energético",
+        "Posible vulneración de la Ley 24/2013 del Sector Eléctrico y su reglamento",
+        "Riesgo de sanciones administrativas por parte de la CNMC por gestión inadecuada de crisis",
+        "Daño reputacional para el Gobierno y empresas del sector energético",
+        "Posible incumplimiento de obligaciones de comunicación a la CNMC en situaciones de emergencia"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Reglamento de la Ley 24/2013",
+        "Ley 3/2013 de creación de la CNMC",
+        "Ley 19/2013 de transparencia, acceso a la información pública y buen gobierno",
+        "Reglamento General de Protección de Datos (RGPD) en caso de filtración de datos sensibles"
+      ],
+      "summary": "El PP acusa al Gobierno y a altos cargos (Teresa Ribera, Aagesen, Beatriz Corredor) y a la CNMC de negligencia en la gestión del apagón eléctrico de abril de 2025, atribuyendo responsabilidades directas. La investigación del Senado podría derivar en expedientes sancionadores o medidas correctivas.",
+      "vulnerability": "Falta de protocolos claros de comunicación y coordinación entre el Gobierno, la CNMC y las empresas energéticas en situaciones de emergencia eléctrica, así como deficiencias en la transparencia y rendición de cuentas.",
+      "financial_impact": "Entre 500.000€ y 5 millones de euros, incluyendo posibles multas de la CNMC, costes legales y compensaciones a afectados, así como pérdida de confianza en el mercado energético.",
+      "recommended_action": "Revisar y actualizar los protocolos de gestión de crisis del sector energético, garantizando la coordinación con la CNMC y la transparencia en la comunicación. Documentar todas las acciones tomadas durante el apagón para demostrar cumplimiento normativo. Preparar un informe de autoevaluación para la CNMC."
+    },
+    {
+      "id": "e5a6a720c55f",
+      "title": "El Senado declara como \"responsables\" del apagón al Gobierno, a Red Eléctrica y a la CNMC",
+      "link": "https://www.elespanol.com/invertia/empresas/energia/20260415/senado-declara-responsables-apagon-gobierno-red-electrica-cnmc/1003744207471_0.html",
+      "source": "NewsAPI-Q2 · Elespanol.com",
+      "raw_date": "2026-04-15T09:05:08Z",
+      "fetched_at": "2026-04-16T10:17:44.672504+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Responsabilidad administrativa por incumplimiento de obligaciones en la gestión de la red eléctrica",
+        "Sanciones económicas por parte de la CNMC por fallos en la supervisión y control",
+        "Daño reputacional para empresas reguladas (Red Eléctrica) y entidades públicas (Gobierno, CNMC)",
+        "Posible incumplimiento de normativas de seguridad y continuidad del servicio eléctrico (Ley 24/2013 del Sector Eléctrico)"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Reglamento (UE) 2019/943 sobre el mercado interior de la electricidad",
+        "Ley 39/2015 de Procedimiento Administrativo Común de las Administraciones Públicas",
+        "Reglamento General de Protección de Datos (RGPD) si hubo filtración de datos en el incidente"
+      ],
+      "summary": "El Senado atribuye responsabilidad al Gobierno, Red Eléctrica y la CNMC por un apagón eléctrico, señalando fallos en la gestión y supervisión del sistema. El informe podría derivar en expedientes sancionadores o medidas correctivas por parte de la CNMC.",
+      "vulnerability": "Falta de protocolos robustos de gestión de crisis y continuidad del servicio en operadores del sistema eléctrico y entidades reguladoras.",
+      "financial_impact": "Entre 500.000€ y 5 millones de euros (multas, indemnizaciones y costes de reparación del sistema)",
+      "recommended_action": "Revisar y actualizar los protocolos de gestión de crisis y continuidad del servicio en colaboración con la CNMC, documentar todas las acciones preventivas y correctivas, y preparar un plan de respuesta ante posibles expedientes sancionadores."
+    },
+    {
       "id": "4b149c3390a4",
       "title": "Cuidado con los mensajes falsos sobre tus reservas: el ciberataque a Booking dispara los intentos de fraude por phishing",
       "link": "https://www.elmundo.es/economia/empresas/2026/04/15/69df3350e9cf4a517f8b4586.html",
@@ -4270,13 +4324,13 @@
     }
   ],
   "stats": {
-    "total_hits": 175,
+    "total_hits": 177,
     "critical_count": 57,
-    "warning_count": 116,
+    "warning_count": 118,
     "info_count": 2,
-    "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 235,
+    "new_this_run": 2,
+    "articles_checked": 3,
+    "seen_ids_total": 238,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -4295,5 +4349,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-16T07:52:17.940111+00:00"
+  "last_updated": "2026-04-16T10:17:45.873228+00:00"
 }
