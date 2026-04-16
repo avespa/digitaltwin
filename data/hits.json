@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "4b149c3390a4",
+      "title": "Cuidado con los mensajes falsos sobre tus reservas: el ciberataque a Booking dispara los intentos de fraude por phishing",
+      "link": "https://www.elmundo.es/economia/empresas/2026/04/15/69df3350e9cf4a517f8b4586.html",
+      "source": "NewsAPI-Q5 · El Mundo",
+      "raw_date": "2026-04-15T06:42:43Z",
+      "fetched_at": "2026-04-16T07:52:16.739331+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Fraude por phishing",
+        "Pérdida de datos personales",
+        "Incumplimiento RGPD (art. 32)",
+        "Daño reputacional",
+        "Sanciones por brecha de seguridad"
+      ],
+      "norms_affected": [
+        "RGPD (Reglamento UE 2016/679)",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de derechos digitales (LOPDGDD)",
+        "ISO 27001 (seguridad de la información)"
+      ],
+      "summary": "Booking.com sufre un ciberataque que genera confusión y aumenta los intentos de phishing mediante correos falsos con asunto 'Actualización de seguridad importante'. Los usuarios pueden ser víctimas de fraude al compartir datos sensibles, exponiendo a la empresa a riesgos legales y reputacionales.",
+      "vulnerability": "Falta de protocolos de autenticación y verificación en comunicaciones electrónicas con clientes (ej.: doble factor de autenticación, sellos de confianza en correos oficiales).",
+      "financial_impact": "Entre 50.000€ y 300.000€ (multas RGPD, costes de notificación a afectados, medidas correctivas y pérdida de confianza en el servicio).",
+      "recommended_action": "Revisar y reforzar los protocolos de comunicación con clientes, implementar sistemas de autenticación robustos (ej.: DMARC, DKIM) y lanzar una campaña de concienciación interna y externa sobre ciberseguridad, incluyendo simulacros de phishing."
+    },
+    {
       "id": "3f2fa77b3ee8",
       "title": "La comisión del apagón dice que Red Eléctrica no contaba con alertas para \"localizar\" los fallos con margen de reacción",
       "link": "https://www.elespanol.com/espana/politica/20260415/comision-apagon-dice-red-electrica-no-contaba-alertas-localizar-fallos-margen-reaccion/1003744206883_0.html",
@@ -4244,13 +4270,13 @@
     }
   ],
   "stats": {
-    "total_hits": 174,
+    "total_hits": 175,
     "critical_count": 57,
-    "warning_count": 115,
+    "warning_count": 116,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 234,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 235,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -4269,5 +4295,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-16T05:33:47.214942+00:00"
+  "last_updated": "2026-04-16T07:52:17.940111+00:00"
 }
