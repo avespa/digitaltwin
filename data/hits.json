@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "3f2fa77b3ee8",
+      "title": "La comisión del apagón dice que Red Eléctrica no contaba con alertas para \"localizar\" los fallos con margen de reacción",
+      "link": "https://www.elespanol.com/espana/politica/20260415/comision-apagon-dice-red-electrica-no-contaba-alertas-localizar-fallos-margen-reaccion/1003744206883_0.html",
+      "source": "NewsAPI-Q2 · Elespanol.com",
+      "raw_date": "2026-04-15T00:53:08Z",
+      "fetched_at": "2026-04-16T02:57:18.339458+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Falta de controles operativos en infraestructuras críticas",
+        "Incumplimiento de normativa de seguridad en redes eléctricas (Ley 24/2013 del Sector Eléctrico)",
+        "Exposición a sanciones administrativas por parte de la CNMC",
+        "Riesgo de interrupción del suministro eléctrico con impacto económico y social"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Real Decreto 1955/2000 (regulación de la operación del sistema eléctrico)",
+        "Reglamento (UE) 2019/943 (mercado interior de la electricidad)",
+        "Ley 39/2003 de Concesiones Administrativas (en relación con la gestión de infraestructuras críticas)"
+      ],
+      "summary": "La comisión del apagón del 28-A revela que Red Eléctrica de España carecía de sistemas de alerta temprana para detectar fallos en la red eléctrica, incumpliendo normativas de seguridad operativa. La CNMC ha señalado deficiencias en la gestión de infraestructuras críticas que podrían derivar en sanciones.",
+      "vulnerability": "Implementación de sistemas de monitorización en tiempo real con umbrales de alerta automáticos para fallos de tensión y degradación del sistema, conforme a estándares internacionales (ej. NERC CIP para infraestructuras críticas).",
+      "financial_impact": "Multa administrativa de la CNMC entre 100.000€ y 500.000€, más costes de reparación y posibles indemnizaciones por interrupción del suministro (estimación media: 200.000€-1M€).",
+      "recommended_action": "Revisar y actualizar los protocolos de monitorización y alerta de Red Eléctrica en colaboración con la CNMC, documentando las mejoras implementadas para evitar sanciones y garantizar la continuidad del servicio."
+    },
+    {
       "id": "a275f884929c",
       "title": "Antifraude propone sancionar a un directivo de TMB por tener al descubierto datos confidenciales de sus empleados",
       "link": "https://www.eldiario.es/catalunya/antifraude-propone-sancionar-directivo-tmb-descubierto-datos-confidenciales-empleados_1_13140839.html",
@@ -4218,13 +4244,13 @@
     }
   ],
   "stats": {
-    "total_hits": 173,
+    "total_hits": 174,
     "critical_count": 57,
-    "warning_count": 114,
+    "warning_count": 115,
     "info_count": 2,
     "new_this_run": 1,
     "articles_checked": 1,
-    "seen_ids_total": 233,
+    "seen_ids_total": 234,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -4243,5 +4269,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-15T21:55:34.082473+00:00"
+  "last_updated": "2026-04-16T02:57:19.540067+00:00"
 }
