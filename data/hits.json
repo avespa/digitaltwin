@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "6a4f8974f169",
+      "title": "La CNMC ultima casi un centenar de sancionadores por el gran apagón: \"No va a librarse nadie\"",
+      "link": "https://www.elmundo.es/economia/empresas/2026/04/16/69e0a935e4d4d8d6308b4597.html",
+      "source": "NewsAPI-Q1 · El Mundo",
+      "raw_date": "2026-04-16T20:55:31Z",
+      "fetched_at": "2026-04-17T21:45:47.924313+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de normativa de seguridad y calidad en el suministro eléctrico (Ley 24/2013 del Sector Eléctrico, Real Decreto 1955/2000)",
+        "Posible vulneración de obligaciones de diligencia y prevención en la gestión de infraestructuras críticas (Ley 8/2011 de Protección de Infraestructuras Críticas)",
+        "Exposición a sanciones administrativas y reputacionales por fallos en la continuidad del servicio",
+        "Riesgo de incumplimiento de estándares de calidad y seguridad en el sector energético (CNMC)"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Real Decreto 1955/2000",
+        "Ley 8/2011 de Protección de Infraestructuras Críticas",
+        "Reglamento (UE) 2019/943 del Mercado Interior de la Electricidad"
+      ],
+      "summary": "La CNMC investiga a Red Eléctrica y grandes eléctricas (Iberdrola, Endesa, Naturgy) por fallos en el suministro eléctrico del 28 de abril, con posible apertura de expedientes sancionadores. El apagón afectó a millones de usuarios y podría derivar en multas millonarias por incumplimiento de normativa sectorial.",
+      "vulnerability": "Falta de protocolos robustos de prevención, mantenimiento y respuesta ante incidentes en infraestructuras críticas del sector eléctrico, así como deficiencias en la gestión de riesgos operativos y de continuidad del servicio.",
+      "financial_impact": "Entre 5M€ y 50M€ por multas administrativas, compensaciones a usuarios y costes de reparación de infraestructuras, dependiendo de la gravedad de los fallos y la cuantía de las sanciones.",
+      "recommended_action": "Revisar y actualizar urgentemente los protocolos de mantenimiento preventivo, gestión de riesgos operativos y planes de continuidad del servicio en colaboración con la CNMC. Documentar todas las medidas adoptadas para demostrar diligencia en caso de inspección."
+    },
+    {
       "id": "2ea41fa746a5",
       "title": "La CNMV ha demostrado que ChatGPT puede ser un buen inversor en bolsa. Pero no es fácil ganar dinero",
       "link": "https://hipertextual.com/inteligencia-artificial/la-cnmv-ha-demostrado-que-chatgpt-puede-ser-un-buen-inversor-en-bolsa-pero-no-es-facil-ganar-dinero/",
@@ -4434,13 +4460,13 @@
     }
   ],
   "stats": {
-    "total_hits": 181,
+    "total_hits": 182,
     "critical_count": 58,
-    "warning_count": 121,
+    "warning_count": 122,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 246,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 247,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -4459,5 +4485,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-17T19:05:24.286548+00:00"
+  "last_updated": "2026-04-17T21:45:49.125136+00:00"
 }
