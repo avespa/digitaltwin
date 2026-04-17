@@ -1,6 +1,33 @@
 {
   "hits": [
     {
+      "id": "2ea41fa746a5",
+      "title": "La CNMV ha demostrado que ChatGPT puede ser un buen inversor en bolsa. Pero no es fácil ganar dinero",
+      "link": "https://hipertextual.com/inteligencia-artificial/la-cnmv-ha-demostrado-que-chatgpt-puede-ser-un-buen-inversor-en-bolsa-pero-no-es-facil-ganar-dinero/",
+      "source": "NewsAPI-Q2 · Hipertextual",
+      "raw_date": "2026-04-16T12:39:58Z",
+      "fetched_at": "2026-04-17T13:25:43.308343+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Uso indebido de IA en mercados financieros sin supervisión adecuada",
+        "Posible manipulación de mercados por algoritmos no regulados",
+        "Incumplimiento de normativa de transparencia y conducta en mercados (MIFID II, CNMV)",
+        "Riesgo de sesgos algorítmicos en decisiones de inversión"
+      ],
+      "norms_affected": [
+        "Reglamento (UE) 596/2014 (MAR)",
+        "Directiva 2014/65/UE (MIFID II)",
+        "Ley 24/1988 del Mercado de Valores",
+        "Reglamento Delegado (UE) 2017/565",
+        "Guías de la CNMV sobre uso de IA en mercados"
+      ],
+      "summary": "La CNMV publicó un estudio que evalúa el rendimiento de ChatGPT como herramienta de inversión en bolsa, destacando su potencial pero también la dificultad para obtener beneficios consistentes. Se plantean riesgos de transparencia y supervisión en el uso de IA en mercados financieros.",
+      "vulnerability": "Falta de controles internos para supervisar el uso de herramientas de IA en decisiones de inversión y garantizar el cumplimiento de normativas de conducta y transparencia.",
+      "financial_impact": "Entre 50.000€ y 500.000€ (multas por incumplimiento de MIFID II, sanciones por prácticas no transparentes o pérdidas por decisiones algorítmicas no supervisadas).",
+      "recommended_action": "Revisar y actualizar políticas internas sobre el uso de IA en inversiones, implementar controles de supervisión algorítmica, y formar al equipo de compliance en normativas aplicables (MIFID II, MAR) para evitar riesgos de incumplimiento."
+    },
+    {
       "id": "12ade7336acf",
       "title": "El Gobierno impone el prefijo '400' para todas las llamadas comerciales",
       "link": "https://www.libertaddigital.com/libremercado/2026-04-16/el-gobierno-impone-el-prefijo-400-para-todas-las-llamadas-comerciales-7389409/",
@@ -4407,13 +4434,13 @@
     }
   ],
   "stats": {
-    "total_hits": 180,
+    "total_hits": 181,
     "critical_count": 58,
-    "warning_count": 120,
+    "warning_count": 121,
     "info_count": 2,
-    "new_this_run": 2,
-    "articles_checked": 2,
-    "seen_ids_total": 245,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 246,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -4432,5 +4459,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-17T10:15:53.963696+00:00"
+  "last_updated": "2026-04-17T13:25:44.509053+00:00"
 }
