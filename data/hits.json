@@ -1,6 +1,180 @@
 {
   "hits": [
     {
+      "id": "15684c644dd1",
+      "title": "Lluvia de expedientes de la CNMC por el apagón, que sigue viendo \"multifactorial\"",
+      "link": "https://www.libertaddigital.com/libremercado/2026-04-17/lluvia-de-expedientes-de-la-cnmc-por-el-apagon-que-sigue-viendo-multifactorial-7390002/",
+      "source": "NewsAPI-Q2 · Libertaddigital.com",
+      "raw_date": "2026-04-17T09:01:04Z",
+      "fetched_at": "2026-04-18T09:52:07.140569+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Sanciones administrativas por incumplimiento de normativa de mercado energético",
+        "Daño reputacional por exposición mediática de expedientes sancionadores",
+        "Posible responsabilidad penal de administradores en caso de negligencia grave"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Real Decreto 216/2014 (Reglamento de Mercado Eléctrico)",
+        "Ley 3/2013 de creación de la CNMC"
+      ],
+      "summary": "La CNMC abre expedientes sancionadores por el apagón del 28 de abril de 2025, atribuyendo el incidente a causas multifactoriales. Se investigan posibles incumplimientos en la gestión del sistema eléctrico que podrían derivar en sanciones económicas y medidas correctivas.",
+      "vulnerability": "Falta de protocolos robustos de gestión de crisis en el sector energético para prevenir y mitigar apagones, así como de controles internos que garanticen el cumplimiento de las obligaciones regulatorias en la operación del sistema eléctrico.",
+      "financial_impact": "Entre 500.000€ y 2.000.000€ por expediente sancionador, dependiendo de la gravedad y la capacidad económica de la empresa afectada.",
+      "recommended_action": "Revisar inmediatamente los protocolos de gestión de crisis y cumplimiento en el sector energético, identificar posibles brechas en el cumplimiento de la normativa de mercado eléctrico, y preparar una estrategia de defensa legal para los expedientes abiertos. Notificar a la CNMC cualquier medida correctiva implementada."
+    },
+    {
+      "id": "0a1975d05659",
+      "title": "La CNMC cree que el apagón tuvo origen multifactorial pero abre expedientes sancionadores",
+      "link": "https://www.elperiodico.com/es/economia/20260417/cnmc-cree-apagon-tuvo-origen-129206002",
+      "source": "NewsAPI-Q2 · Elperiodico.com",
+      "raw_date": "2026-04-17T07:35:17Z",
+      "fetched_at": "2026-04-18T09:52:13.208212+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de normativa de seguridad en redes eléctricas (Ley 24/2013 del Sector Eléctrico)",
+        "Posible vulneración de obligaciones de transparencia y reporte (Reglamento (UE) 2019/941)",
+        "Riesgo de sanciones económicas por parte de la CNMC (hasta 10% del volumen de negocio anual)",
+        "Daño reputacional por fallos en infraestructuras críticas"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Reglamento (UE) 2019/941 sobre la seguridad del suministro eléctrico",
+        "Ley 3/2018 de Protección de Datos y Garantía de Derechos Digitales (en caso de afectación a datos personales)",
+        "ISO 37301 (Sistemas de Gestión de Compliance) - incumplimiento de controles operativos"
+      ],
+      "summary": "La CNMC ha abierto expedientes sancionadores por un apagón multifactorial que afectó a la red eléctrica española. El incidente podría implicar incumplimientos en normativas sectoriales y de seguridad, con riesgo de sanciones económicas y daños reputacionales.",
+      "vulnerability": "Falta de controles robustos en la gestión de riesgos operativos y de ciberseguridad en infraestructuras críticas, así como deficiencias en los protocolos de respuesta a incidentes.",
+      "financial_impact": "Entre 500.000€ y 5 millones de euros (dependiendo de la gravedad de la infracción y el volumen de negocio de la empresa afectada).",
+      "recommended_action": "Revisar y reforzar los protocolos de gestión de riesgos operativos y de ciberseguridad en infraestructuras críticas, así como implementar auditorías internas para verificar el cumplimiento de la Ley 24/2013 y el Reglamento (UE) 2019/941. Notificar a la CNMC cualquier incidencia relevante en un plazo máximo de 24 horas."
+    },
+    {
+      "id": "a8113a4e1fee",
+      "title": "Competencia abre varios expedientes sancionadores por indicios de infracción en el apagón",
+      "link": "https://www.abc.es/economia/cnmc-abre-varios-expedientes-sancionadores-indicios-infraccion-20260417092858-nt.html",
+      "source": "NewsAPI-Q2 · Www.abc.es",
+      "raw_date": "2026-04-17T07:29:05Z",
+      "fetched_at": "2026-04-18T09:52:16.855608+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Sanciones económicas por infracciones en el sector energético",
+        "Daño reputacional por incumplimiento de normativa de competencia",
+        "Posible responsabilidad penal de directivos (Ley 24/2013 del Sector Eléctrico)"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Ley 24/2013 del Sector Eléctrico",
+        "Reglamento (UE) 2019/943 sobre el mercado interior de la electricidad"
+      ],
+      "summary": "La CNMC ha abierto expedientes sancionadores por posibles infracciones en el apagón de abril de 2025, afectando al sector energético. Las investigaciones podrían derivar en multas significativas y medidas correctivas.",
+      "vulnerability": "Falta de protocolos de cumplimiento en gestión de crisis energéticas y coordinación con autoridades reguladoras.",
+      "financial_impact": "Entre 100.000€ y 500.000€ (multas por infracciones graves en el sector energético según CNMC)",
+      "recommended_action": "Revisar y actualizar protocolos de cumplimiento en gestión de crisis energéticas, coordinar con asesoría legal para preparar defensa ante expedientes sancionadores y evaluar posibles responsabilidades penales de directivos."
+    },
+    {
+      "id": "2034bb30cc33",
+      "title": "Competencia abre varios expedientes sancionadores por el apagón del 28-A",
+      "link": "https://www.elespanol.com/invertia/empresas/energia/20260417/competencia-abre-varios-expedientes-sancionadores-apagon/1003744210707_0.html",
+      "source": "NewsAPI-Q2 · Elespanol.com",
+      "raw_date": "2026-04-17T07:28:15Z",
+      "fetched_at": "2026-04-18T09:52:20.452466+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Incumplimiento de normativa de competencia (Ley 15/2007 de Defensa de la Competencia)",
+        "Posible sanción económica por prácticas anticompetitivas en el sector energético",
+        "Daño reputacional por expedientes sancionadores públicos"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 2019/4 de la Comisión sobre prácticas anticompetitivas"
+      ],
+      "summary": "La CNMC ha abierto expedientes sancionadores por el apagón del 28-A, afectando a empresas del sector energético como Iberdrola y Endesa. Las grabaciones de los centros de control de REE podrían revelar prácticas que vulneren la libre competencia.",
+      "vulnerability": "Falta de controles internos para garantizar el cumplimiento de la normativa de competencia en operaciones críticas del sector energético.",
+      "financial_impact": "Multa estimada entre 50K€ y 500K€ por expediente, dependiendo de la gravedad y participación de la empresa.",
+      "recommended_action": "Revisar inmediatamente los protocolos de competencia en operaciones críticas, recopilar pruebas documentales y preparar alegaciones para la CNMC. Coordinar con asesoría legal especializada en defensa de la competencia."
+    },
+    {
+      "id": "7dede29a2cb4",
+      "title": "La CNMC enfila a Redeia, Iberdrola, Endesa y otros grupos por el apagón",
+      "link": "https://www.expansion.com/empresas/energia/2026/04/17/69e1df20468aeb245d8b4577.html",
+      "source": "NewsAPI-Q2 · Expansion.com",
+      "raw_date": "2026-04-17T07:20:10Z",
+      "fetched_at": "2026-04-18T09:52:25.527026+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de normativa de seguridad en redes eléctricas (Ley 24/2013 del Sector Eléctrico)",
+        "Posible vulneración de obligaciones de continuidad del servicio (Real Decreto 1955/2000)",
+        "Riesgo de sanciones administrativas por parte de la CNMC (Ley 3/2013 de creación de la CNMC)",
+        "Daño reputacional por fallos en infraestructuras críticas"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Real Decreto 1955/2000 sobre actividades de transporte, distribución, comercialización, suministro y procedimientos de autorización de instalaciones de energía eléctrica",
+        "Ley 3/2013 de creación de la CNMC",
+        "Reglamento (UE) 2019/943 sobre el mercado interior de la electricidad"
+      ],
+      "summary": "La CNMC ha abierto expedientes sancionadores contra grandes grupos energéticos (Redeia, Iberdrola, Endesa) por un apagón eléctrico ocurrido en abril de 2025, que afectó a la continuidad del suministro. La investigación se centra en posibles incumplimientos de normativas de seguridad y obligaciones de servicio.",
+      "vulnerability": "Falta de protocolos robustos de mantenimiento preventivo y gestión de riesgos en infraestructuras críticas, así como deficiencias en los sistemas de monitorización y respuesta ante fallos en la red eléctrica.",
+      "financial_impact": "Multas estimadas entre 500.000€ y 5.000.000€ por empresa, dependiendo de la gravedad de las infracciones y la duración del apagón. Costes adicionales por reparaciones, compensaciones a clientes y posibles indemnizaciones.",
+      "recommended_action": "Revisar y reforzar los protocolos de mantenimiento, gestión de riesgos y continuidad del servicio en infraestructuras eléctricas, así como implementar sistemas avanzados de monitorización y respuesta ante incidentes. Coordinar con la CNMC para demostrar el cumplimiento de las obligaciones legales y presentar alegaciones en el expediente sancionador."
+    },
+    {
+      "id": "0e16ed5e59bd",
+      "title": "Competencia abre una batería de expedientes sancionadores por el apagón",
+      "link": "https://www.eldiario.es/economia/competencia-abre-bateria-expedientes-sancionadores-apagon_1_13149905.html",
+      "source": "NewsAPI-Q2 · Eldiario.es",
+      "raw_date": "2026-04-17T07:16:56Z",
+      "fetched_at": "2026-04-18T09:52:29.476673+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de normativa de competencia (Ley 15/2007 de Defensa de la Competencia)",
+        "Sanciones económicas significativas por prácticas anticompetitivas",
+        "Daño reputacional por expedientes sancionadores públicos"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 2019/4 de la Comisión sobre prácticas colusorias"
+      ],
+      "summary": "La CNMC ha abierto expedientes sancionadores contra empresas energéticas por un apagón de origen multifactorial, sin atribuirles directamente la causa. Se investiga posible incumplimiento de normativas de competencia y prácticas anticompetitivas en el sector energético.",
+      "vulnerability": "Falta de protocolos de cumplimiento en competencia para situaciones de crisis sectorial (art. 1 Ley 15/2007)",
+      "financial_impact": "Entre 100.000€ y 500.000€ por expediente sancionador (multas del 1% al 10% de la facturación anual en el sector afectado)",
+      "recommended_action": "Revisar inmediatamente los protocolos de competencia de la empresa, documentar todas las comunicaciones con la CNMC y preparar una estrategia de defensa legal con asesoría especializada en derecho de la competencia."
+    },
+    {
+      "id": "410281d28cd1",
+      "title": "Dos detenidos por un presunto fraude de 3,3 millones de euros de fondos europeos destinados a fomentar el empleo",
+      "link": "https://www.europapress.es/nacional/noticia-dos-detenidos-presunto-fraude-33-millones-euros-fondos-europeos-destinados-fomentar-empleo-20260417114134.html",
+      "source": "NewsAPI-Q3 · Europapress.es",
+      "raw_date": "2026-04-17T09:41:34Z",
+      "fetched_at": "2026-04-18T09:52:34.189279+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Fraude en fondos públicos",
+        "Corrupción en subvenciones europeas",
+        "Responsabilidad penal de la empresa (si es beneficiaria)",
+        "Sanciones administrativas y penales",
+        "Daño reputacional"
+      ],
+      "norms_affected": [
+        "Reglamento (UE) 2017/1939 (EPPO)",
+        "Ley Orgánica 10/1995 (Código Penal, arts. 251-253 sobre fraude)",
+        "Ley 38/2003 (Ley General de Subvenciones)",
+        "Reglamento (UE) 1303/2013 (Fondos Europeos)",
+        "Ley 11/2023 (transposición de la Directiva Whistleblowing)"
+      ],
+      "summary": "Dos personas detenidas por presunto fraude de 3,3 millones de euros en fondos europeos destinados a empleo, investigadas por la Fiscalía Europea (EPPO). Podría implicar a empresas beneficiarias en delitos de fraude y corrupción, con graves consecuencias penales y administrativas.",
+      "vulnerability": "Falta de controles internos robustos en la gestión de fondos europeos (verificación de beneficiarios, seguimiento de subvenciones, canales de denuncia efectivos).",
+      "financial_impact": "Multas de hasta 10-20% del importe defraudado (330K-660K€) + posibles indemnizaciones, pérdida de acceso a futuros fondos europeos, costes legales y reputacionales (estimación total: 1-3M€ para empresa media española).",
+      "recommended_action": "Revisar urgentemente todos los proyectos financiados con fondos europeos en los últimos 5 años, auditar controles internos de subvenciones, y activar canales de denuncia para detectar posibles irregularidades. Notificar a la Fiscalía Europea (EPPO) si se identifican indicios de fraude."
+    },
+    {
       "id": "b913569d049a",
       "title": "La CNMC incoa varios expedientes sancionadores por indicios de infracción en su investigación sobre el apagón",
       "link": "https://www.europapress.es/economia/energia-00341/noticia-cnmc-incoa-varios-expedientes-sancionadores-indicios-infraccion-investigacion-apagon-20260417091021.html",
@@ -4534,13 +4708,13 @@
     }
   ],
   "stats": {
-    "total_hits": 185,
-    "critical_count": 58,
-    "warning_count": 125,
+    "total_hits": 192,
+    "critical_count": 59,
+    "warning_count": 131,
     "info_count": 2,
-    "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 250,
+    "new_this_run": 7,
+    "articles_checked": 8,
+    "seen_ids_total": 258,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -4559,5 +4733,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-18T07:13:30.504637+00:00"
+  "last_updated": "2026-04-18T09:52:35.390052+00:00"
 }
