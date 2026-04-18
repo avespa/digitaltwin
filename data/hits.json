@@ -1,6 +1,81 @@
 {
   "hits": [
     {
+      "id": "774d5d7e4970",
+      "title": "La CNMC abre expediente a Red Electrica por infracción \"muy grave\" por el apagón",
+      "link": "https://www.libertaddigital.com/libremercado/2026-04-17/la-cnmc-abre-expediente-a-red-electrica-por-infraccion-muy-grave-por-el-apagon-7390397/",
+      "source": "NewsAPI-Q2 · Libertaddigital.com",
+      "raw_date": "2026-04-17T17:22:40Z",
+      "fetched_at": "2026-04-18T18:56:12.856989+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Incumplimiento de normativa de seguridad del sistema eléctrico (Ley 24/2013 del Sector Eléctrico)",
+        "Posible responsabilidad penal por negligencia en la gestión de infraestructuras críticas (Código Penal, Art. 316 y 318)",
+        "Daño reputacional severo por fallo en servicio esencial",
+        "Exposición a sanciones económicas elevadas por infracción muy grave (hasta 10% del beneficio anual de la empresa)"
+      ],
+      "norms_affected": [
+        "Ley 24/2013, de 26 de diciembre, del Sector Eléctrico",
+        "Real Decreto 1955/2000, de 1 de diciembre, por el que se regulan las actividades de transporte, distribución, comercialización, suministro y procedimientos de autorización de instalaciones de energía eléctrica",
+        "Reglamento (UE) 2019/943 del Parlamento Europeo y del Consejo, de 5 de junio de 2019, sobre el mercado interior de la electricidad"
+      ],
+      "summary": "La CNMC ha abierto un expediente sancionador contra Red Eléctrica de España por un posible fallo en la gestión del sistema eléctrico que provocó un apagón, considerado infracción 'muy grave'. Además, se investigan 19 expedientes a otras compañías generadoras por posibles incumplimientos en la seguridad y operatividad del sistema.",
+      "vulnerability": "Falta de protocolos robustos de gestión de crisis y continuidad del servicio en infraestructuras críticas, así como deficiencias en la supervisión y mantenimiento preventivo de la red eléctrica.",
+      "financial_impact": "Entre 50 y 200 millones de euros (10% del beneficio anual estimado de Red Eléctrica, considerando multas por infracción muy grave y posibles indemnizaciones a afectados)",
+      "recommended_action": "El Compliance Officer debe coordinarse con el departamento de Operaciones y Seguridad para revisar y reforzar los protocolos de gestión de crisis, continuidad del servicio y mantenimiento preventivo, así como documentar todas las medidas adoptadas para demostrar diligencia debida en caso de inspección regulatoria o judicial."
+    },
+    {
+      "id": "67ea07339c0f",
+      "title": "La CNMC abre expedientes sancionadores a Red Eléctrica y a varias empresas por el apagón",
+      "link": "https://www.huffingtonpost.es/life/consumo/la-cnmc-abre-expedientes-sancionadores-redectrica-empresas-apagonbr-f202604.html",
+      "source": "NewsAPI-Q2 · Huffingtonpost.es",
+      "raw_date": "2026-04-17T17:20:09Z",
+      "fetched_at": "2026-04-18T18:56:17.206633+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de normativa de seguridad y calidad en el suministro eléctrico (Ley 24/2013 del Sector Eléctrico)",
+        "Posible vulneración de la Ley 3/2013 de protección de los consumidores en el mercado eléctrico",
+        "Riesgo de sanciones económicas significativas por parte de la CNMC"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Ley 3/2013 de protección de los consumidores en el mercado eléctrico",
+        "Reglamento (UE) 2019/943 sobre el mercado interior de la electricidad"
+      ],
+      "summary": "La CNMC ha abierto expedientes sancionadores a Red Eléctrica y varias empresas energéticas por un apagón masivo, investigando posibles incumplimientos en la seguridad y calidad del suministro eléctrico. La investigación podría derivar en sanciones económicas y medidas correctivas.",
+      "vulnerability": "Falta de protocolos robustos de gestión de riesgos operativos y de continuidad del servicio en el sector eléctrico, así como deficiencias en la supervisión y control de las infraestructuras críticas.",
+      "financial_impact": "Entre 500.000€ y 5.000.000€ (dependiendo de la gravedad de las infracciones y el número de empresas sancionadas)",
+      "recommended_action": "Revisar y reforzar los protocolos de gestión de riesgos operativos y de continuidad del servicio en la empresa, así como verificar el cumplimiento de la normativa sectorial aplicable. Coordinar con el departamento legal para preparar una posible defensa ante los expedientes sancionadores."
+    },
+    {
+      "id": "b144870caa7f",
+      "title": "Competencia abre expediente a Iberdrola Red Eléctrica, Endesa, Naturgy y Repsol por el apagón",
+      "link": "https://www.elconfidencial.com/empresas/2026-04-17/iberdrola-ree-endesa-naturgy-repsol-apagon_4340467/",
+      "source": "NewsAPI-Q2 · Elconfidencial.com",
+      "raw_date": "2026-04-17T16:07:00Z",
+      "fetched_at": "2026-04-18T18:56:22.059255+00:00",
+      "level": "warning",
+      "relevance_score": 90,
+      "risks": [
+        "Incumplimiento de normativa de competencia (Ley 15/2007 de Defensa de la Competencia)",
+        "Posible infracción grave en la gestión de la red eléctrica (Ley 24/2013 del Sector Eléctrico)",
+        "Sanciones administrativas y reputacionales por fallos en la seguridad del suministro",
+        "Exposición a reclamaciones de clientes y usuarios afectados"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Ley 24/2013 del Sector Eléctrico",
+        "Reglamento (UE) 2019/943 sobre el mercado interior de la electricidad",
+        "Real Decreto 1955/2000 sobre actividades de transporte, distribución, comercialización, suministro y procedimientos de autorización de instalaciones de energía eléctrica"
+      ],
+      "summary": "La CNMC ha abierto expediente sancionador a las principales empresas del sector energético español (Iberdrola, REE, Endesa, Naturgy y Repsol) por un apagón masivo, junto con centrales nucleares y termoeléctricas. El incidente podría derivar en multas significativas y afectar a la reputación del sector.",
+      "vulnerability": "Falta de protocolos robustos de coordinación y comunicación entre operadores del sistema eléctrico para prevenir y gestionar fallos en cascada.",
+      "financial_impact": "Entre 50 y 500 millones de euros (multas, compensaciones a clientes y pérdida de valor de mercado)",
+      "recommended_action": "Revisar y reforzar los protocolos de coordinación con la CNMC y otros operadores del sistema eléctrico, así como implementar un plan de contingencia para incidentes de esta magnitud. Documentar todas las acciones tomadas para demostrar diligencia debida en caso de inspección."
+    },
+    {
       "id": "15684c644dd1",
       "title": "Lluvia de expedientes de la CNMC por el apagón, que sigue viendo \"multifactorial\"",
       "link": "https://www.libertaddigital.com/libremercado/2026-04-17/lluvia-de-expedientes-de-la-cnmc-por-el-apagon-que-sigue-viendo-multifactorial-7390002/",
@@ -4708,13 +4783,13 @@
     }
   ],
   "stats": {
-    "total_hits": 192,
-    "critical_count": 59,
-    "warning_count": 131,
+    "total_hits": 195,
+    "critical_count": 60,
+    "warning_count": 133,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 258,
+    "new_this_run": 3,
+    "articles_checked": 3,
+    "seen_ids_total": 261,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -4733,5 +4808,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-18T15:39:46.869432+00:00"
+  "last_updated": "2026-04-18T18:56:23.259981+00:00"
 }
