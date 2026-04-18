@@ -1,6 +1,56 @@
 {
   "hits": [
     {
+      "id": "973e8793d78e",
+      "title": "El juez oculta a Iberdrola y Endesa las grabaciones de los centros de control de REE el día del apagón, pero no las devuelve",
+      "link": "https://www.elespanol.com/invertia/20260417/juez-oculta-iberdrola-endesa-grabaciones-centros-control-ree-dia-apagon-no-devuelve/1003744210413_0.html",
+      "source": "NewsAPI-Q2 · Elespanol.com",
+      "raw_date": "2026-04-17T00:54:42Z",
+      "fetched_at": "2026-04-18T02:40:29.600980+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de transparencia regulatoria (CNMC)",
+        "Obstrucción a la investigación de incidentes críticos en el sector energético",
+        "Posible vulneración de derechos de defensa de las empresas afectadas",
+        "Riesgo de sanción por falta de colaboración con autoridades"
+      ],
+      "norms_affected": [
+        "Ley 3/2013 de creación de la CNMC (Art. 7 y 55)",
+        "Reglamento (UE) 2019/943 del mercado interior de la electricidad (Art. 40)",
+        "Ley 24/2013 del Sector Eléctrico (Art. 102)",
+        "RGPD (Art. 5.1.b y 6.1.f) en cuanto a tratamiento de datos sensibles"
+      ],
+      "summary": "Un juez ha ocultado grabaciones clave de los centros de control de REE durante el apagón de 2026, alegando confidencialidad y pérdida de relevancia procesal, sin devolverlas a Iberdrola y Endesa. La CNMC ha confirmado que el informe oficial no identifica responsables, lo que podría indicar una falta de transparencia en la investigación.",
+      "vulnerability": "Falta de protocolos claros para la custodia y acceso a grabaciones críticas en incidentes de alto impacto, así como mecanismos de coordinación entre autoridades judiciales y reguladoras.",
+      "financial_impact": "Multa estimada entre 200.000€ y 400.000€ para REE por incumplimiento de obligaciones de transparencia ante la CNMC, más posibles costes legales para Iberdrola y Endesa por defensa en procedimientos paralelos.",
+      "recommended_action": "Solicitar informe urgente a la CNMC sobre el estado de la investigación y los motivos de la ocultación de pruebas, así como revisar los protocolos internos de REE para garantizar el cumplimiento de las obligaciones de transparencia en incidentes críticos. Notificar el incidente al Comité de Cumplimiento y al Consejo de Administración."
+    },
+    {
+      "id": "e7b031178d7d",
+      "title": "No te fíes de la IA si vas a invertir: la CNMV alerta de «fallos, errores y alucinaciones» en sus consejos",
+      "link": "https://www.abc.es/economia/cuentas-corrientes/fies-ia-vas-invertir-cnmv-alerta-fallos-20260417021824-nt.html",
+      "source": "NewsAPI-Q2 · Www.abc.es",
+      "raw_date": "2026-04-17T00:18:24Z",
+      "fetched_at": "2026-04-18T02:40:33.443183+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Asesoramiento financiero incorrecto por parte de IA",
+        "Posible incumplimiento de normativa de protección al inversor (CNMV)",
+        "Riesgo de reclamaciones por pérdidas económicas derivadas de consejos erróneos"
+      ],
+      "norms_affected": [
+        "Ley del Mercado de Valores (Real Decreto Legislativo 4/2015)",
+        "Reglamento (UE) 596/2014 (MAR)",
+        "Normativa CNMV sobre transparencia y protección al inversor"
+      ],
+      "summary": "La CNMV advierte sobre los riesgos de confiar en consejos de inversión generados por IA, señalando fallos, errores y 'alucinaciones' que podrían inducir a malas decisiones financieras. Esto afecta a la protección del inversor y podría generar responsabilidades para entidades que promuevan dichos sistemas.",
+      "vulnerability": "Falta de supervisión humana en sistemas de asesoramiento financiero automatizado y ausencia de protocolos de validación de consejos generados por IA.",
+      "financial_impact": "Entre 50.000€ y 500.000€ por reclamaciones o sanciones derivadas de pérdidas en inversores minoristas, dependiendo de la gravedad y alcance del caso.",
+      "recommended_action": "Revisar y actualizar los protocolos de uso de IA en asesoramiento financiero, implementar sistemas de validación humana obligatoria y documentar los controles aplicados para cumplir con la normativa CNMV y evitar responsabilidades por consejos erróneos."
+    },
+    {
       "id": "6a4f8974f169",
       "title": "La CNMC ultima casi un centenar de sancionadores por el gran apagón: \"No va a librarse nadie\"",
       "link": "https://www.elmundo.es/economia/empresas/2026/04/16/69e0a935e4d4d8d6308b4597.html",
@@ -4460,13 +4510,13 @@
     }
   ],
   "stats": {
-    "total_hits": 182,
+    "total_hits": 184,
     "critical_count": 58,
-    "warning_count": 122,
+    "warning_count": 124,
     "info_count": 2,
-    "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 247,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 249,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -4485,5 +4535,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-17T21:45:49.125136+00:00"
+  "last_updated": "2026-04-18T02:40:34.643883+00:00"
 }
