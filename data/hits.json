@@ -1,6 +1,61 @@
 {
   "hits": [
     {
+      "id": "2dd5dd6d30e0",
+      "title": "Beatriz Corredor, contra las cuerdas: la CNMC expedienta por falta \"muy grave\" a REE por operar mal la red en el apagón",
+      "link": "https://www.elespanol.com/invertia/empresas/energia/20260418/beatriz-corredor-cuerdas-cnmc-expedienta-falta-grave-ree-operar-mal-red-apagon/1003744212027_0.html",
+      "source": "NewsAPI-Q2 · Elespanol.com",
+      "raw_date": "2026-04-18T00:41:42Z",
+      "fetched_at": "2026-04-19T02:56:43.947628+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de obligaciones de operación segura de la red eléctrica (Ley 24/2013 del Sector Eléctrico)",
+        "Sanciones administrativas por parte de la CNMC (hasta 10% del beneficio anual de REE)",
+        "Daño reputacional en el sector energético y pérdida de confianza de inversores",
+        "Posible responsabilidad civil por daños a terceros (empresas y consumidores)",
+        "Riesgo de intervención regulatoria adicional (ej. modificación de condiciones de acceso a la red)"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico (art. 72 y 73 sobre seguridad del suministro)",
+        "Real Decreto 1955/2000 (regulación de la operación del sistema eléctrico)",
+        "Reglamento (UE) 2019/943 (mercado interior de la electricidad)",
+        "Ley 3/2018 de Protección de Datos y Garantía de Derechos Digitales (en caso de afectación a datos de clientes)"
+      ],
+      "summary": "La CNMC ha abierto un expediente sancionador contra Red Eléctrica de España (REE) por una falta 'muy grave' en la operación de la red eléctrica durante un apagón, atribuyendo responsabilidad directa a la empresa. REE intenta desviar la culpa hacia otras entidades del sector, incluyendo una fotovoltaica, pero la CNMC mantiene su postura.",
+      "vulnerability": "Falta de protocolos robustos de gestión de riesgos operativos en la red eléctrica, incluyendo planes de contingencia para fallos en cascada y sistemas de monitorización en tiempo real.",
+      "financial_impact": "Entre 5M€ y 50M€ (estimación basada en sanciones históricas de la CNMC a empresas del sector energético, considerando el volumen de negocio de REE y posibles indemnizaciones por daños a terceros).",
+      "recommended_action": "Revisar y reforzar los protocolos de operación y seguridad de la red eléctrica, incluyendo auditorías independientes de los sistemas de monitorización y contingencia. Coordinar con la CNMC para presentar alegaciones en el expediente y evaluar posibles indemnizaciones por daños a terceros. Implementar un plan de comunicación de crisis para mitigar el impacto reputacional."
+    },
+    {
+      "id": "3e67d9fc573a",
+      "title": "Rebelión de los notarios contra una ley del Gobierno por abrir las puertas al blanqueo de capitales",
+      "link": "https://www.abc.es/economia/rebelion-notarios-ley-gobierno-abrir-puertas-blanqueo-20260418040948-nt.html",
+      "source": "NewsAPI-Q3 · Www.abc.es",
+      "raw_date": "2026-04-18T02:09:48Z",
+      "fetched_at": "2026-04-19T02:56:49.756014+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Blanqueo de capitales por debilitar controles en sociedades de responsabilidad limitada",
+        "Vulneración de la Ley 10/2010 de prevención del blanqueo de capitales (LPBC)",
+        "Incumplimiento de la Directiva (UE) 2018/843 (5ª Directiva AML)",
+        "Exposición a sanciones de la CNMV y SEPBLAC",
+        "Riesgo reputacional por falta de diligencia debida en estructuras societarias"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales y de la financiación del terrorismo",
+        "Directiva (UE) 2018/843 (5ª Directiva AML)",
+        "Real Decreto 304/2014 (reglamento LPBC)",
+        "Reglamento (UE) 2015/847 (transferencias de fondos)",
+        "Ley de Sociedades de Capital (Real Decreto Legislativo 1/2010)"
+      ],
+      "summary": "El anteproyecto de ley del Gobierno para reformar el régimen de las sociedades de responsabilidad limitada (SRL) —que representan el 99% del tejido empresarial español— ha generado una fuerte oposición de los notarios por considerar que debilita los controles contra el blanqueo de capitales, incumpliendo normativas nacionales y europeas en materia de prevención de blanqueo.",
+      "vulnerability": "Falta de mecanismos robustos de identificación de beneficiarios finales (UBO) y debida diligencia reforzada en la constitución y modificación de SRL, así como en la inscripción registral.",
+      "financial_impact": "Multas administrativas de hasta 5.000.000€ por incumplimiento grave de la LPBC (art. 54), además de posibles sanciones penales por blanqueo (art. 301 CP) y costes reputacionales estimados en 1-3M€ para empresas afectadas.",
+      "recommended_action": "El Compliance Officer debe analizar el anteproyecto en detalle, identificar los puntos de conflicto con la normativa AML vigente, y preparar un informe urgente para la dirección con propuestas de enmiendas o medidas compensatorias (ej.: protocolos internos de diligencia debida reforzada) para mitigar riesgos legales y operativos."
+    },
+    {
       "id": "c83c5f748665",
       "title": "La CNMC abre expedientes sancionadores a Red Eléctrica, Iberdrola, Endesa, Naturgy o Repsol en la investigación del apagón",
       "link": "https://www.meneame.net/m/actualidad/cnmc-abre-expedientes-sancionadores-red-electrica-iberdrola",
@@ -4809,13 +4864,13 @@
     }
   ],
   "stats": {
-    "total_hits": 196,
-    "critical_count": 60,
-    "warning_count": 134,
+    "total_hits": 198,
+    "critical_count": 61,
+    "warning_count": 135,
     "info_count": 2,
-    "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 262,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 264,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -4834,5 +4889,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-18T21:38:58.869699+00:00"
+  "last_updated": "2026-04-19T02:56:50.956719+00:00"
 }
