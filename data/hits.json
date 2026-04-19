@@ -1,6 +1,31 @@
 {
   "hits": [
     {
+      "id": "95df12f984ea",
+      "title": "Los expertos de la CNMV coinciden: usar la IA como asesora para invertir \"puede inducir a pérdidas\" por sus \"fallos y alucinaciones\"",
+      "link": "https://www.huffingtonpost.es/sociedad/los-expertos-cnmv-coinciden-ia-asesora-invertir-puede-inducir-perdidas-fallos-alucinaciones-f202604.html",
+      "source": "NewsAPI-Q2 · Huffingtonpost.es",
+      "raw_date": "2026-04-18T17:00:19Z",
+      "fetched_at": "2026-04-19T18:56:28.860079+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Asesoramiento financiero no regulado",
+        "Posible incumplimiento de la normativa de protección al inversor (MiFID II)",
+        "Riesgo de alucinaciones en modelos de IA que generen recomendaciones erróneas",
+        "Exposición a sanciones por parte de la CNMV por falta de supervisión en herramientas automatizadas"
+      ],
+      "norms_affected": [
+        "Reglamento (UE) 2016/1011 (MiFID II)",
+        "Ley 6/2023 de los Mercados de Valores y de los Servicios de Inversión",
+        "Real Decreto 217/2008 sobre el régimen jurídico de las empresas de servicios de inversión"
+      ],
+      "summary": "La CNMV advierte sobre los riesgos de usar IA para asesorar inversiones, destacando fallos y 'alucinaciones' que pueden inducir a pérdidas. La normativa exige supervisión humana en el asesoramiento financiero para garantizar la protección del inversor.",
+      "vulnerability": "Falta de controles internos para validar y supervisar herramientas de IA utilizadas en asesoramiento financiero, incumpliendo requisitos de MiFID II sobre idoneidad y adecuación.",
+      "financial_impact": "Multas de hasta 500.000€ por parte de la CNMV, además de posibles reclamaciones de clientes por pérdidas derivadas de recomendaciones erróneas (estimación media: 100.000-300.000€ por caso).",
+      "recommended_action": "Revisar y actualizar el marco de compliance para incluir políticas específicas sobre el uso de IA en asesoramiento financiero, garantizando supervisión humana y validación de recomendaciones antes de su difusión."
+    },
+    {
       "id": "2dd5dd6d30e0",
       "title": "Beatriz Corredor, contra las cuerdas: la CNMC expedienta por falta \"muy grave\" a REE por operar mal la red en el apagón",
       "link": "https://www.elespanol.com/invertia/empresas/energia/20260418/beatriz-corredor-cuerdas-cnmc-expedienta-falta-grave-ree-operar-mal-red-apagon/1003744212027_0.html",
@@ -4864,13 +4889,13 @@
     }
   ],
   "stats": {
-    "total_hits": 198,
+    "total_hits": 199,
     "critical_count": 61,
-    "warning_count": 135,
+    "warning_count": 136,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 264,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 265,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -4889,5 +4914,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-19T15:40:08.471178+00:00"
+  "last_updated": "2026-04-19T18:56:30.060734+00:00"
 }
