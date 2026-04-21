@@ -1,6 +1,132 @@
 {
   "hits": [
     {
+      "id": "aae4bad22128",
+      "title": "Ojo con '#papagorda' y grabar a personas ebrias en la Feria de Abril: la multa puede ser de hasta 10.000 euros",
+      "link": "https://www.eldiario.es/sevilla/ojo-papagorda-grabar-personas-ebrias-feria-abril-multa-10-000-euros_1_13156410.html",
+      "source": "NewsAPI-Q2 · Eldiario.es",
+      "raw_date": "2026-04-20T18:55:55Z",
+      "fetched_at": "2026-04-21T19:17:38.565925+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Infracción del derecho a la imagen (Art. 18.1 CE y LO 1/1982)",
+        "Posible delito contra el honor (Art. 205-210 CP)",
+        "Incumplimiento del RGPD (tratamiento de datos personales sin consentimiento)",
+        "Exposición a sanciones administrativas (AEPD) y penales"
+      ],
+      "norms_affected": [
+        "LO 1/1982 de protección civil del derecho al honor, a la intimidad personal y familiar y a la propia imagen",
+        "RGPD (Reglamento UE 2016/679)",
+        "Código Penal (Art. 197.7 y 205-210)",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de derechos digitales (LOPDGDD)"
+      ],
+      "summary": "La difusión en redes sociales de grabaciones de personas ebrias en la Feria de Abril sin consentimiento puede constituir un delito penal por vulnerar el derecho a la imagen y al honor, con multas de hasta 10.000€. La AEPD podría imponer sanciones adicionales por incumplimiento del RGPD.",
+      "vulnerability": "Falta de protocolos internos para el tratamiento de datos personales en redes sociales y consentimiento expreso para la difusión de imágenes.",
+      "financial_impact": "Entre 10.000€ y 50.000€ (multas administrativas y posibles indemnizaciones por daños morales)",
+      "recommended_action": "Revisar y actualizar la política de redes sociales para incluir cláusulas de consentimiento explícito en la difusión de imágenes, formar al personal en protección de datos y derecho a la imagen, y establecer un protocolo de respuesta ante reclamaciones de la AEPD o afectados."
+    },
+    {
+      "id": "6f7fe034e804",
+      "title": "Iberdrola valora los expedientes de la CNMC por el apagón y cuestiona la imparcialidad del informe europeo",
+      "link": "https://www.eldiario.es/economia/iberdrola-valora-expedientes-cnmc-apagon-cuestiona-imparcialidad-informe-europeo_1_13158411.html",
+      "source": "NewsAPI-Q2 · Eldiario.es",
+      "raw_date": "2026-04-20T17:27:26Z",
+      "fetched_at": "2026-04-21T19:17:42.724975+00:00",
+      "level": "warning",
+      "relevance_score": 60,
+      "risks": [
+        "Sanción administrativa por posible infracción en el sector energético",
+        "Daño reputacional por cuestionamiento de imparcialidad de autoridades reguladoras",
+        "Riesgo de multa por incumplimiento de normativa de competencia (Ley 15/2007 de Defensa de la Competencia)"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 2019/943 del mercado interior de la electricidad"
+      ],
+      "summary": "La CNMC (CNMC) ha abierto expedientes sancionadores a Red Eléctrica de España (REE) y grandes eléctricas, incluyendo Iberdrola, por un apagón en el sistema eléctrico. Iberdrola cuestiona la imparcialidad del proceso y la CNMC, destacando solo una posible infracción 'muy grave' en REE.",
+      "vulnerability": "Falta de protocolos de transparencia y objetividad en la gestión de expedientes sancionadores por parte de la empresa ante autoridades reguladoras.",
+      "financial_impact": "Multa estimada entre 50K€ y 500K€ para Iberdrola, dependiendo de la gravedad de las infracciones y la resolución final.",
+      "recommended_action": "Revisar y documentar todos los procesos internos relacionados con el apagón, garantizando transparencia y objetividad en futuras interacciones con la CNMC. Preparar una estrategia de defensa legal y comunicativa para mitigar riesgos reputacionales y sancionadores."
+    },
+    {
+      "id": "550dd1fb1bf3",
+      "title": "Aagesen respeta los expedientes de la CNMC del apagón y no interferirá en procedimientos",
+      "link": "https://www.elperiodico.com/es/economia/20260420/aagesen-respeta-expedientes-cnmc-apagon-129322498",
+      "source": "NewsAPI-Q2 · Elperiodico.com",
+      "raw_date": "2026-04-20T16:55:29Z",
+      "fetched_at": "2026-04-21T19:17:46.929546+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Interferencia en procedimientos sancionadores de la CNMC",
+        "Posible obstrucción a la labor de supervisión regulatoria",
+        "Riesgo de multas por incumplimiento de normativa de competencia (Ley 15/2007)",
+        "Daño reputacional por falta de colaboración con autoridades"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 2019/4 de la Comisión sobre cooperación en materia de competencia"
+      ],
+      "summary": "La ministra Miteco asegura no interferir en expedientes de la CNMC por el apagón eléctrico, pero su declaración podría interpretarse como injerencia en procedimientos sancionadores. La CNMC es la autoridad competente para investigar posibles infracciones en el sector energético.",
+      "vulnerability": "Falta de protocolos claros para la comunicación con autoridades reguladoras en situaciones de crisis, especialmente en sectores regulados como el energético.",
+      "financial_impact": "Multa de entre 100.000€ y 500.000€ por obstrucción a procedimientos de la CNMC, según gravedad de la infracción (art. 63 Ley 15/2007).",
+      "recommended_action": "Revisar y actualizar el protocolo de relación con autoridades reguladoras (CNMC, CNMV, AEPD) para garantizar neutralidad y evitar cualquier percepción de interferencia. Documentar todas las comunicaciones con la CNMC durante el proceso."
+    },
+    {
+      "id": "48dfbc0c8a83",
+      "title": "Multan con más de 43 millones por fraude audiovisual a una de las mayores redes ilegales de IPTV",
+      "link": "https://www.abc.es/tecnologia/multan-millones-fraude-audiovisual-mayores-redes-ilegales-20260420194740-nt.html",
+      "source": "NewsAPI-Q3 · Www.abc.es",
+      "raw_date": "2026-04-20T17:47:43Z",
+      "fetched_at": "2026-04-21T19:17:51.473545+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Fraude contra la propiedad intelectual",
+        "Blanqueo de capitales",
+        "Daño al mercado y consumidores",
+        "Incumplimiento de normativa de telecomunicaciones",
+        "Riesgo reputacional severo"
+      ],
+      "norms_affected": [
+        "Ley de Propiedad Intelectual (Real Decreto Legislativo 1/1996)",
+        "Código Penal (Art. 270, 271, 301)",
+        "Ley de Servicios de la Sociedad de la Información (LSSI-CE)",
+        "Reglamento General de Protección de Datos (RGPD) - si hubo tratamiento de datos personales",
+        "Ley 9/2014, de Telecomunicaciones"
+      ],
+      "summary": "La Audiencia Nacional ha impuesto una multa de 43 millones de euros a una red ilegal de IPTV por delitos contra la propiedad intelectual, blanqueo de capitales y fraude al mercado. La sentencia destaca la gravedad de la infracción y su impacto en consumidores y competidores legales.",
+      "vulnerability": "Falta de controles internos para detectar y prevenir actividades ilegales en servicios de telecomunicaciones, incluyendo monitorización de flujos financieros y verificación de licencias.",
+      "financial_impact": "43 millones de euros (multa) + costes legales, pérdida de reputación, posibles indemnizaciones a afectados y sanciones adicionales por incumplimiento de normativas sectoriales.",
+      "recommended_action": "Revisar urgentemente los protocolos de compliance en telecomunicaciones, implementar sistemas de monitorización de transacciones sospechosas y verificar el cumplimiento de licencias y derechos de propiedad intelectual en todos los servicios ofrecidos."
+    },
+    {
+      "id": "9cb38d9cd66b",
+      "title": "Se acabó el fútbol gratis: cae la mayor red de IPTV pirata con una multa histórica de 43 millones de euros",
+      "link": "https://www.adslzone.net/noticias/internet/fin-lista-iptv-ver-laliga-multa-historica/",
+      "source": "NewsAPI-Q3 · Adslzone.net",
+      "raw_date": "2026-04-20T16:59:46Z",
+      "fetched_at": "2026-04-21T19:17:56.333543+00:00",
+      "level": "warning",
+      "relevance_score": 60,
+      "risks": [
+        "Violación de derechos de propiedad intelectual (DPI)",
+        "Exposición a sanciones administrativas por parte de autoridades como la CNMC o AEPD",
+        "Riesgo reputacional por asociación con actividades ilegales",
+        "Posible responsabilidad penal en casos de reincidencia o escalada"
+      ],
+      "norms_affected": [
+        "Ley de Propiedad Intelectual (Real Decreto Legislativo 1/1996)",
+        "Ley de Servicios de la Sociedad de la Información (LSSI, Ley 34/2002)",
+        "Reglamento General de Protección de Datos (RGPD) en caso de tratamiento de datos personales asociados"
+      ],
+      "summary": "La caída de la mayor red de IPTV pirata en España con una multa histórica de 43 millones de euros refleja el endurecimiento en la lucha contra la piratería digital. La operación, impulsada por LALIGA, subraya los riesgos legales y económicos para empresas o particulares que distribuyan o consuman contenidos ilegales.",
+      "vulnerability": "Falta de controles internos para verificar la legalidad de los contenidos distribuidos o consumidos en entornos corporativos (ej.: uso de IPTV en oficinas).",
+      "financial_impact": "Entre 50.000€ y 200.000€ para una empresa española media, incluyendo multas, costes legales y pérdida de reputación.",
+      "recommended_action": "Revisar políticas internas sobre uso de contenidos digitales, incluir cláusulas de cumplimiento en contratos con proveedores de servicios tecnológicos y formar a empleados sobre riesgos legales de la piratería digital."
+    },
+    {
       "id": "a4c71a9283ed",
       "title": "CNMV multa con 300.000 € a la gestora de Bankinter por comisiones de liquidación de seis sicavs",
       "link": "https://www.elconfidencial.com/mercados/2026-04-20/cnmv-multa-gestora-bankinter-comisiones-liquidacion-sicavs_4341372/",
@@ -4966,13 +5092,13 @@
     }
   ],
   "stats": {
-    "total_hits": 202,
-    "critical_count": 62,
-    "warning_count": 138,
+    "total_hits": 207,
+    "critical_count": 63,
+    "warning_count": 142,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 270,
+    "new_this_run": 5,
+    "articles_checked": 5,
+    "seen_ids_total": 275,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -4991,5 +5117,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-21T16:12:24.445123+00:00"
+  "last_updated": "2026-04-21T19:17:57.534233+00:00"
 }
