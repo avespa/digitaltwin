@@ -1,6 +1,31 @@
 {
   "hits": [
     {
+      "id": "a1ae85a0cb90",
+      "title": "Iberdrola, Endesa y Naturgy revelan que los expedientes de la CNMC analizan anomalías de los últimos dos años y no solo del día del apagón",
+      "link": "https://www.elperiodico.com/es/economia/20260420/iberdrola-endesa-naturgy-revelan-expedientes-cnmc-anomalias-dos-anos-129329522",
+      "source": "NewsAPI-Q2 · Elperiodico.com",
+      "raw_date": "2026-04-20T20:45:10Z",
+      "fetched_at": "2026-04-21T21:49:11.872409+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de normativa de mercado eléctrico (Ley 24/2013 del Sector Eléctrico)",
+        "Sanciones económicas por parte de la CNMC (multas hasta el 10% del volumen de negocios anual)",
+        "Daño reputacional en el sector energético",
+        "Posible responsabilidad penal de administradores (art. 318 bis del Código Penal)"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico (art. 72 y siguientes sobre control de tensión)",
+        "Real Decreto 1955/2000 (regulación de la calidad del suministro eléctrico)",
+        "Reglamento (UE) 2019/943 (mercado interior de la electricidad)"
+      ],
+      "summary": "La CNMC investiga a Iberdrola, Endesa y Naturgy por posibles anomalías en el control de tensión de sus instalaciones durante los últimos dos años, no solo en el día del apagón. Las empresas podrían enfrentar sanciones económicas significativas y daños reputacionales en un sector altamente regulado.",
+      "vulnerability": "Falta de controles internos robustos en la monitorización y cumplimiento de los estándares de calidad del suministro eléctrico (art. 72 Ley 24/2013).",
+      "financial_impact": "Multas estimadas entre 50 y 500 millones de euros (1-10% del volumen de negocios anual de las empresas afectadas, que supera los 5.000 millones cada una).",
+      "recommended_action": "El Compliance Officer debe revisar inmediatamente los protocolos de control de tensión, verificar el cumplimiento de la normativa sectorial y preparar una estrategia de respuesta ante la CNMC, incluyendo la posible contratación de asesoría legal especializada en derecho energético."
+    },
+    {
       "id": "aae4bad22128",
       "title": "Ojo con '#papagorda' y grabar a personas ebrias en la Feria de Abril: la multa puede ser de hasta 10.000 euros",
       "link": "https://www.eldiario.es/sevilla/ojo-papagorda-grabar-personas-ebrias-feria-abril-multa-10-000-euros_1_13156410.html",
@@ -5092,13 +5117,13 @@
     }
   ],
   "stats": {
-    "total_hits": 207,
+    "total_hits": 208,
     "critical_count": 63,
-    "warning_count": 142,
+    "warning_count": 143,
     "info_count": 2,
-    "new_this_run": 5,
-    "articles_checked": 5,
-    "seen_ids_total": 275,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 276,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -5117,5 +5142,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-21T19:17:57.534233+00:00"
+  "last_updated": "2026-04-21T21:49:13.072801+00:00"
 }
