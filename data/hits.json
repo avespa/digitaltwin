@@ -1,6 +1,83 @@
 {
   "hits": [
     {
+      "id": "a4c71a9283ed",
+      "title": "CNMV multa con 300.000 € a la gestora de Bankinter por comisiones de liquidación de seis sicavs",
+      "link": "https://www.elconfidencial.com/mercados/2026-04-20/cnmv-multa-gestora-bankinter-comisiones-liquidacion-sicavs_4341372/",
+      "source": "NewsAPI-Q2 · Elconfidencial.com",
+      "raw_date": "2026-04-20T09:53:00Z",
+      "fetched_at": "2026-04-21T10:19:52.455646+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Incumplimiento de transparencia en comisiones (RGPD y normativa CNMV)",
+        "Falta de autorización expresa de accionistas en tarifas de liquidación (Ley 35/2003 y normativa UCITS)",
+        "Riesgo de reputación por sanción regulatoria"
+      ],
+      "norms_affected": [
+        "Ley 35/2003 de Instituciones de Inversión Colectiva",
+        "Reglamento (UE) 2019/2088 (SFDR)",
+        "Normativa CNMV sobre transparencia en comisiones"
+      ],
+      "summary": "La CNMV ha sancionado a la gestora de Bankinter con 300.000 € por aplicar comisiones de liquidación a seis SICAVs sin autorización expresa previa de los accionistas. La multa refleja incumplimientos en transparencia y gobernanza corporativa.",
+      "vulnerability": "Falta de procedimientos internos para verificar la autorización expresa de accionistas en modificaciones de comisiones y liquidación de fondos.",
+      "financial_impact": "300.000 € (multa) + costes legales y reputacionales (estimación: 50.000-100.000 € adicionales)",
+      "recommended_action": "Revisar urgentemente los procedimientos de aprobación de comisiones en fondos de inversión, implementar controles de autorización expresa de accionistas y formar al equipo de compliance en normativa CNMV y UCITS."
+    },
+    {
+      "id": "291633de8a1a",
+      "title": "La CNMV multa a la gestora de Bankinter a cuenta de las comisiones de liquidación de seis Sicav",
+      "link": "https://www.europapress.es/economia/finanzas-00340/noticia-cnmv-multa-gestora-bankinter-cuenta-comisiones-liquidacion-seis-sicav-20260420104750.html",
+      "source": "NewsAPI-Q2 · Europapress.es",
+      "raw_date": "2026-04-20T08:47:50Z",
+      "fetched_at": "2026-04-21T10:19:58.069700+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Incumplimiento de normativa de transparencia en comisiones (Ley 35/2003, RD 1082/2012)",
+        "Daño reputacional por sanción pública de la CNMV",
+        "Posible reclamación de inversores afectados"
+      ],
+      "norms_affected": [
+        "Ley 35/2003 de Instituciones de Inversión Colectiva",
+        "RD 1082/2012 de desarrollo de la Ley 35/2003",
+        "Reglamento Delegado (UE) 2017/565 (transparencia en comisiones)",
+        "Código de Buenas Prácticas de la CNMV"
+      ],
+      "summary": "La CNMV sanciona a Bankinter Gestión de Activos con 300.000€ por cobrar comisiones de liquidación no justificadas en seis Sicav. La infracción afecta a la transparencia en la gestión de fondos de inversión, incumpliendo normativa sectorial.",
+      "vulnerability": "Falta de controles internos para verificar el cumplimiento de las comisiones aplicadas en fondos de inversión (Sicav) y su justificación ante reguladores.",
+      "financial_impact": "300.000€ (multa) + costes legales y de reputación estimados en 50.000-100.000€ adicionales para una gestora de tamaño medio.",
+      "recommended_action": "Revisar inmediatamente los contratos y políticas de comisiones de todas las Sicav gestionadas, implementar auditorías internas trimestrales y presentar un informe de cumplimiento a la CNMV en 30 días."
+    },
+    {
+      "id": "24b2fedfc78d",
+      "title": "La Audiencia Nacional deja en libertad sin fianza a un presunto cabecilla de la estafa piramidal del cannabis Juicy Fields",
+      "link": "https://www.eldiario.es/catalunya/audiencia-nacional-deja-libertad-fianza-presunto-cabecilla-estafa-piramidal-cannabis-juicy-fields_1_13156086.html",
+      "source": "NewsAPI-Q3 · Eldiario.es",
+      "raw_date": "2026-04-20T09:23:57Z",
+      "fetched_at": "2026-04-21T10:20:03.299876+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Fraude masivo y estafa piramidal",
+        "Responsabilidad penal de la empresa por delitos económicos",
+        "Daño reputacional severo",
+        "Incumplimiento de controles internos de prevención de blanqueo (Ley 10/2010)",
+        "Posible responsabilidad de administradores (art. 318 Ley de Sociedades de Capital)"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Código Penal (arts. 251, 252, 253 sobre estafa y delitos económicos)",
+        "Ley de Sociedades de Capital (art. 236 sobre responsabilidad de administradores)",
+        "ISO 37301 (Sistemas de Gestión de Compliance)",
+        "UNE 19601 (Compliance Penal)"
+      ],
+      "summary": "La Audiencia Nacional ha revocado la prisión provisional sin fianza de Victor Bitner, presunto cabecilla de la estafa piramidal Juicy Fields, lo que podría indicar cambios en la estrategia procesal o debilidades en las pruebas presentadas. El caso afecta a miles de inversores en España y Europa, con un impacto económico estimado en cientos de millones de euros.",
+      "vulnerability": "Falta de controles robustos en la detección temprana de esquemas piramidales y blanqueo de capitales en operaciones de inversión, así como en la supervisión de administradores y directivos.",
+      "financial_impact": "Entre 50M€ y 200M€ (dependiendo de la exposición de la empresa a inversores afectados y posibles reclamaciones judiciales)",
+      "recommended_action": "Revisar urgentemente los protocolos de compliance penal y prevención de blanqueo, realizar una auditoría forense independiente sobre operaciones pasadas y actuales, y evaluar la exposición legal de administradores y directivos. Notificar a la CNMV y AEPD si la empresa está registrada como entidad de inversión."
+    },
+    {
       "id": "95df12f984ea",
       "title": "Los expertos de la CNMV coinciden: usar la IA como asesora para invertir \"puede inducir a pérdidas\" por sus \"fallos y alucinaciones\"",
       "link": "https://www.huffingtonpost.es/sociedad/los-expertos-cnmv-coinciden-ia-asesora-invertir-puede-inducir-perdidas-fallos-alucinaciones-f202604.html",
@@ -4889,13 +4966,13 @@
     }
   ],
   "stats": {
-    "total_hits": 199,
-    "critical_count": 61,
-    "warning_count": 136,
+    "total_hits": 202,
+    "critical_count": 62,
+    "warning_count": 138,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 267,
+    "new_this_run": 3,
+    "articles_checked": 3,
+    "seen_ids_total": 270,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -4914,5 +4991,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-21T07:57:19.766001+00:00"
+  "last_updated": "2026-04-21T10:20:04.500624+00:00"
 }
