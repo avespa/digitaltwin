@@ -1,6 +1,83 @@
 {
   "hits": [
     {
+      "id": "b7a90fe102d2",
+      "title": "La CNMC deja al Gobierno la 'patata caliente' de decidir la multa contra Red Eléctrica por el apagón general",
+      "link": "https://www.elmundo.es/economia/empresas/2026/04/21/69e5fb0dfdddff78128b459e.html",
+      "source": "NewsAPI-Q1 · El Mundo",
+      "raw_date": "2026-04-21T00:12:13Z",
+      "fetched_at": "2026-04-22T02:50:02.723054+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Sanción administrativa por incumplimiento de normativa de seguridad en redes eléctricas (Ley 24/2013 del Sector Eléctrico)",
+        "Daño reputacional por fallo sistémico en infraestructura crítica",
+        "Posible responsabilidad penal de administradores por negligencia grave (art. 316 CP)"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Reglamento (UE) 2019/943 sobre el mercado interior de la electricidad",
+        "Ley Orgánica 3/2018 de Protección de Datos (si hubo filtración de datos en el apagón)"
+      ],
+      "summary": "La CNMC ha trasladado al Gobierno la decisión sobre la multa a Red Eléctrica por el apagón general de 2025, que afectó a millones de usuarios. El fallo podría implicar sanciones millonarias por incumplimiento de normativas de seguridad y gestión de infraestructuras críticas.",
+      "vulnerability": "Falta de protocolos robustos de gestión de riesgos operativos y continuidad del servicio en infraestructuras críticas, así como de auditorías periódicas de cumplimiento normativo en redes eléctricas.",
+      "financial_impact": "Entre 50 y 500 millones de euros (multa estimada según gravedad del incumplimiento y tamaño de la empresa, considerando sanciones previas en el sector).",
+      "recommended_action": "Revisar urgentemente los protocolos de gestión de riesgos operativos y continuidad del servicio en Red Eléctrica, así como los controles internos de cumplimiento con la Ley 24/2013 y el Reglamento (UE) 2019/943. Preparar un plan de contingencia para posibles sanciones y comunicar proactivamente con la CNMC para mitigar el impacto."
+    },
+    {
+      "id": "d4cc545e198a",
+      "title": "Competencia pretende abrir lo antes posible hasta 96 expedientes sancionadores a las eléctricas por el apagón",
+      "link": "https://www.abc.es/economia/competencia-pretende-abrir-posible-expedientes-sancionadores-electricas-20260420041012-nt.html",
+      "source": "NewsAPI-Q2 · Www.abc.es",
+      "raw_date": "2026-04-21T02:10:12Z",
+      "fetched_at": "2026-04-22T02:50:07.649276+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Sanciones administrativas por incumplimiento de normativa de mercado eléctrico (Ley 24/2013 del Sector Eléctrico)",
+        "Daño reputacional por exposición mediática en un sector regulado",
+        "Posibles reclamaciones de clientes afectados por el apagón (Ley 40/2015 de Régimen Jurídico del Sector Público)",
+        "Riesgo de intervención regulatoria adicional (CNMC) en operaciones futuras"
+      ],
+      "norms_affected": [
+        "Ley 24/2013, de 26 de diciembre, del Sector Eléctrico",
+        "Real Decreto 216/2014, por el que se regula la actividad de producción de energía eléctrica",
+        "Reglamento (UE) 2019/943 del Parlamento Europeo y del Consejo, sobre el mercado interior de la electricidad"
+      ],
+      "summary": "La CNMC planea abrir hasta 96 expedientes sancionadores contra empresas eléctricas por un apagón, tras incoar ya 20. Las posibles infracciones podrían derivar de incumplimientos en la gestión de la red, la calidad del suministro o la transparencia en la comunicación de incidentes.",
+      "vulnerability": "Falta de protocolos robustos de gestión de crisis y comunicación regulatoria en situaciones de fallos en la red eléctrica, así como deficiencias en la supervisión de la calidad del suministro (art. 75 Ley 24/2013).",
+      "financial_impact": "Entre 500.000€ y 5 millones de euros por expediente sancionador, dependiendo de la gravedad y la capacidad económica de la empresa (multas pueden alcanzar el 10% del volumen de negocios anual en casos graves).",
+      "recommended_action": "Revisar inmediatamente los protocolos de gestión de incidentes en la red eléctrica, documentar todas las acciones correctivas implementadas y preparar una estrategia de comunicación con la CNMC para minimizar riesgos sancionadores. Coordinar con el departamento legal para evaluar posibles recursos contra las sanciones."
+    },
+    {
+      "id": "c5eb6dbb9b5d",
+      "title": "El Consejo de Europa ve de «urgente necesidad» una estrategia anticorrupción en España",
+      "link": "https://www.abc.es/espana/consejo-europa-urgente-necesidad-estrategia-anticorrupcion-espana-20260421040908-nt.html",
+      "source": "NewsAPI-Q3 · Www.abc.es",
+      "raw_date": "2026-04-21T02:09:08Z",
+      "fetched_at": "2026-04-22T02:50:12.610306+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Corrupción sistémica en el sector público",
+        "Incumplimiento de estándares internacionales (Consejo de Europa)",
+        "Exposición a sanciones por falta de medidas anticorrupción efectivas",
+        "Daño reputacional severo para empresas españolas",
+        "Posible exclusión de fondos europeos"
+      ],
+      "norms_affected": [
+        "ISO 37301 (Sistemas de Gestión de Cumplimiento)",
+        "UNE 19601 (Sistemas de Gestión de Compliance Penal)",
+        "Convenio Penal sobre la Corrupción del Consejo de Europa",
+        "Ley Orgánica 1/2015 (Código Penal - delitos de corrupción)",
+        "Directiva (UE) 2019/1937 (Protección de denunciantes)"
+      ],
+      "summary": "El Consejo de Europa alerta sobre la urgente necesidad de implementar una estrategia anticorrupción en España, señalando deficiencias graves en el marco actual. Esto podría derivar en sanciones internacionales y afectar a la confianza en el sistema judicial y empresarial.",
+      "vulnerability": "Falta de un sistema de gestión de compliance anticorrupción robusto y alineado con estándares internacionales (ISO 37301/UNE 19601), incluyendo políticas de prevención, formación y canales de denuncia efectivos.",
+      "financial_impact": "Entre 1M€ y 10M€ (multas, pérdida de contratos públicos, costes legales y reputacionales para empresas españolas en sectores regulados).",
+      "recommended_action": "El Compliance Officer debe evaluar urgentemente el estado actual del sistema de compliance anticorrupción, identificar brechas frente a los estándares del Consejo de Europa y proponer un plan de acción para implementar o reforzar políticas, controles y formación en los próximos 3 meses."
+    },
+    {
       "id": "a1ae85a0cb90",
       "title": "Iberdrola, Endesa y Naturgy revelan que los expedientes de la CNMC analizan anomalías de los últimos dos años y no solo del día del apagón",
       "link": "https://www.elperiodico.com/es/economia/20260420/iberdrola-endesa-naturgy-revelan-expedientes-cnmc-anomalias-dos-anos-129329522",
@@ -5117,13 +5194,13 @@
     }
   ],
   "stats": {
-    "total_hits": 208,
-    "critical_count": 63,
-    "warning_count": 143,
+    "total_hits": 211,
+    "critical_count": 64,
+    "warning_count": 145,
     "info_count": 2,
-    "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 276,
+    "new_this_run": 3,
+    "articles_checked": 3,
+    "seen_ids_total": 279,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -5142,5 +5219,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-21T21:49:13.072801+00:00"
+  "last_updated": "2026-04-22T02:50:13.810661+00:00"
 }
