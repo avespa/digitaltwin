@@ -1,6 +1,59 @@
 {
   "hits": [
     {
+      "id": "535f38c74990",
+      "title": "La CNMC deja al Gobierno la \"patata caliente\" de la multa a Red Eléctrica por el gran apagón",
+      "link": "https://www.meneame.net/m/actualidad/cnmc-deja-gobierno-patata-caliente-multa-red-electrica-gran",
+      "source": "NewsAPI-Q2 · Meneame.net",
+      "raw_date": "2026-04-21T15:25:37Z",
+      "fetched_at": "2026-04-22T16:10:13.829907+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Sanción administrativa por incumplimiento de normativa de seguridad en redes eléctricas (Ley 24/2013 del Sector Eléctrico)",
+        "Daño reputacional por exposición mediática en un sector regulado",
+        "Posible responsabilidad penal de administradores si se demuestra negligencia grave (art. 316 CP)"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Reglamento (UE) 2019/943 sobre el mercado interior de la electricidad",
+        "Ley Orgánica 3/2018 de Protección de Datos (si hubo filtración de datos en el incidente)",
+        "Ley 15/2007 de Defensa de la Competencia (si hubo prácticas anticompetitivas)"
+      ],
+      "summary": "La CNMC ha trasladado al Gobierno la decisión sobre una posible multa a Red Eléctrica por el gran apagón, mientras resuelve otros 20 expedientes sancionadores. El incidente podría implicar incumplimientos en seguridad de redes y normativa sectorial.",
+      "vulnerability": "Falta de protocolos robustos de gestión de riesgos operativos y cumplimiento normativo en infraestructuras críticas (ISO 37301:2021).",
+      "financial_impact": "Entre 500.000€ y 2.000.000€ (multa máxima del 10% de los ingresos anuales de Red Eléctrica en España, según Ley 24/2013).",
+      "recommended_action": "Revisar inmediatamente los protocolos de seguridad y cumplimiento en infraestructuras críticas, documentar todas las medidas correctivas implementadas y preparar un informe detallado para la CNMC en caso de requerimiento."
+    },
+    {
+      "id": "ec3d78965af3",
+      "title": "Golpe histórico a la piratería IPTV con una multa millonaria en España",
+      "link": "https://www.actualidadgadget.com/golpe-historico-a-la-pirateria-iptv-con-una-multa-millonaria-en-espana/",
+      "source": "NewsAPI-Q3 · Actualidadgadget.com",
+      "raw_date": "2026-04-21T15:53:42Z",
+      "fetched_at": "2026-04-22T16:10:18.747490+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Infracción grave de derechos de propiedad intelectual (Ley de Propiedad Intelectual)",
+        "Exposición a responsabilidad penal por delitos contra la propiedad intelectual (Art. 270 CP)",
+        "Sanciones administrativas millonarias por parte de la CNMC o AEPD",
+        "Daño reputacional severo por asociación con actividades ilegales",
+        "Riesgo de bloqueo de servicios por parte de operadores legítimos"
+      ],
+      "norms_affected": [
+        "Ley 21/2014 de Propiedad Intelectual",
+        "Real Decreto Legislativo 1/1996 (Texto Refundido de la Ley de Propiedad Intelectual)",
+        "Ley Orgánica 10/1995 del Código Penal (Art. 270)",
+        "Reglamento (UE) 2017/1128 sobre bloqueo de contenidos ilícitos",
+        "Ley 34/2002 de Servicios de la Sociedad de la Información (LSSI)"
+      ],
+      "summary": "La Audiencia Nacional ha impuesto multas históricas superiores a 43 millones de euros a redes de piratería IPTV en España, marcando un precedente en la lucha contra la distribución ilegal de contenidos. La decisión refuerza la aplicación de la normativa de propiedad intelectual y penal, con posibles implicaciones para empresas que faciliten o toleren estos servicios.",
+      "vulnerability": "Falta de due diligence en la verificación de licencias de contenidos y proveedores de servicios IPTV en la cadena de suministro tecnológica.",
+      "financial_impact": "Entre 500.000€ y 2.000.000€ (multas administrativas, costes legales y posibles indemnizaciones por daños y perjuicios).",
+      "recommended_action": "Revisar urgentemente los contratos con proveedores de IPTV y contenidos para garantizar licencias legales, implementar auditorías periódicas en la cadena de suministro tecnológica y formar al personal en compliance de propiedad intelectual. Notificar a la CNMC cualquier sospecha de infracción en la cadena de valor."
+    },
+    {
       "id": "e24420547b0b",
       "title": "Cani Fernández (CNMC): \"España nunca estuvo en un vacío normativo. El sistema tenía herramientas para evitar el apagón\"",
       "link": "https://www.elmundo.es/economia/empresas/2026/04/21/69e72cb7e9cf4af8138b4595.html",
@@ -5365,13 +5418,13 @@
     }
   ],
   "stats": {
-    "total_hits": 218,
-    "critical_count": 64,
-    "warning_count": 152,
+    "total_hits": 220,
+    "critical_count": 65,
+    "warning_count": 153,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 288,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 290,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -5390,5 +5443,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-22T13:48:27.859312+00:00"
+  "last_updated": "2026-04-22T16:10:19.948199+00:00"
 }
