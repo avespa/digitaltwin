@@ -1,6 +1,81 @@
 {
   "hits": [
     {
+      "id": "e24420547b0b",
+      "title": "Cani Fernández (CNMC): \"España nunca estuvo en un vacío normativo. El sistema tenía herramientas para evitar el apagón\"",
+      "link": "https://www.elmundo.es/economia/empresas/2026/04/21/69e72cb7e9cf4af8138b4595.html",
+      "source": "NewsAPI-Q2 · El Mundo",
+      "raw_date": "2026-04-21T09:18:13Z",
+      "fetched_at": "2026-04-22T10:20:57.481603+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Incumplimiento de normativa de mercado eléctrico (Ley 24/2013, RD 1955/2000)",
+        "Exposición a sanciones administrativas por parte de la CNMC (hasta 10% del volumen de negocios anual)",
+        "Daño reputacional por fallos en la gestión de infraestructuras críticas",
+        "Riesgo de interrupción de suministro eléctrico con impacto en operaciones empresariales"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Real Decreto 1955/2000 sobre actividades de transporte, distribución, comercialización, suministro y procedimientos de autorización de instalaciones de energía eléctrica",
+        "Reglamento (UE) 2019/943 sobre el mercado interior de la electricidad"
+      ],
+      "summary": "La CNMC ha abierto 20 expedientes por el apagón eléctrico en España, cuestionando la eficacia del marco normativo vigente. Cani Fernández destaca que existían herramientas para evitar el incidente, lo que sugiere posibles fallos en el cumplimiento o aplicación de la normativa eléctrica.",
+      "vulnerability": "Falta de supervisión proactiva y controles internos en empresas del sector eléctrico para garantizar el cumplimiento continuo de la normativa de mercado y seguridad de suministro.",
+      "financial_impact": "Entre 500.000€ y 5 millones de euros (multas por expedientes sancionadores y posibles compensaciones a afectados)",
+      "recommended_action": "Revisar urgentemente los protocolos de cumplimiento en el sector eléctrico, implementar auditorías internas sobre el cumplimiento de la Ley 24/2013 y RD 1955/2000, y preparar un plan de respuesta ante posibles sanciones de la CNMC."
+    },
+    {
+      "id": "2234117fa718",
+      "title": "Competencia replica a las eléctricas y niega \"vacío normativo\" en el control de tensión en el momento del apagón",
+      "link": "https://www.eldiario.es/economia/competencia-replica-electricas-niega-vacio-normativo-control-tension-momento-apagon_1_13159228.html",
+      "source": "NewsAPI-Q2 · Eldiario.es",
+      "raw_date": "2026-04-21T08:59:31Z",
+      "fetched_at": "2026-04-22T10:21:03.514230+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Incumplimiento de normativa sectorial energética (Ley 24/2013 del Sector Eléctrico, Real Decreto 1048/2013)",
+        "Sanciones administrativas por parte de la CNMC por falta de actualización normativa",
+        "Daño reputacional en el sector energético español",
+        "Posible responsabilidad penal de administradores por omisión de controles técnicos obligatorios"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Real Decreto 1048/2013, de 27 de diciembre, por el que se establecen las condiciones de acceso y conexión a las redes de transporte y distribución de energía eléctrica",
+        "Reglamento (UE) 2017/2196 de la Comisión, de 24 de noviembre de 2017, por el que se establecen directrices sobre la gestión de la seguridad operativa del sistema eléctrico"
+      ],
+      "summary": "La CNMC niega un 'vacío normativo' en el control de tensión durante apagones, tras críticas de eléctricas como Iberdrola y Endesa sobre la imparcialidad de un informe europeo. La presidenta de la CNMC afirma que la actualización normativa no estuvo 'en ningún cajón' y se aprobó tras cinco años de trabajo.",
+      "vulnerability": "Falta de implementación oportuna de normativas técnicas sectoriales obligatorias en materia de seguridad operativa del sistema eléctrico, con controles insuficientes en la gestión de tensión durante incidentes.",
+      "financial_impact": "Multas administrativas de entre 100.000€ y 500.000€ por parte de la CNMC, además de posibles costes legales y de reputación (estimación media para empresa eléctrica española: 200.000€-400.000€).",
+      "recommended_action": "Revisar urgentemente el estado de implementación de las normativas técnicas sectoriales (especialmente el Real Decreto 1048/2013 y el Reglamento UE 2017/2196) en la empresa, documentar los controles aplicados y preparar una respuesta formal a la CNMC si se requiere. Coordinar con el área técnica para asegurar el cumplimiento de los requisitos de gestión de tensión y seguridad operativa."
+    },
+    {
+      "id": "2f314209c2f9",
+      "title": "Multa histórica para una de las mayores redes ilegales de IPTV: LaLiga y Movistar Plus+ recibirán indemnización",
+      "link": "https://www.xatakamovil.com/tv-movil/multa-historica-para-mayores-redes-ilegales-iptv-laliga-movistar-plus-recibiran-indemnizacion",
+      "source": "NewsAPI-Q3 · Xatakamovil.com",
+      "raw_date": "2026-04-21T08:30:40Z",
+      "fetched_at": "2026-04-22T10:21:08.833448+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Violación de derechos de propiedad intelectual (Ley de Propiedad Intelectual - LPI)",
+        "Exposición a sanciones administrativas por parte de la CNMC (Ley 34/2002 de servicios de la sociedad de la información)",
+        "Riesgo reputacional por asociación con actividades ilegales",
+        "Posible responsabilidad penal por delitos contra la propiedad intelectual (Art. 270 CP)"
+      ],
+      "norms_affected": [
+        "Ley 21/2014 de Propiedad Intelectual",
+        "Ley 34/2002 de servicios de la sociedad de la información y de comercio electrónico (LSSI-CE)",
+        "Código Penal (Art. 270)"
+      ],
+      "summary": "Una red ilegal de IPTV ha sido sancionada con una multa histórica por emitir partidos de fútbol sin licencia. LaLiga y Movistar Plus+ recibirán indemnizaciones por daños y perjuicios, lo que refuerza la lucha contra la piratería en el sector audiovisual.",
+      "vulnerability": "Falta de controles internos para verificar la legalidad de los contenidos distribuidos por proveedores externos o plataformas asociadas.",
+      "financial_impact": "Entre 100.000€ y 500.000€ (multa administrativa + indemnización por daños y perjuicios en empresa española media del sector audiovisual)",
+      "recommended_action": "Revisar urgentemente los acuerdos con proveedores de contenidos y plataformas de distribución para garantizar el cumplimiento de licencias. Implementar un protocolo de due diligence en la selección de socios comerciales y realizar auditorías periódicas de cumplimiento."
+    },
+    {
       "id": "e6df89ae7556",
       "title": "La CNMC archiva la investigación contra Repsol, Moeve y BP por prácticas anticompetitivas en 2022",
       "link": "https://www.elespanol.com/invertia/empresas/energia/20260421/cnmc-archiva-investigacion-repsol-moeve-bp-practicas-anticompetitivas/1003744214836_0.html",
@@ -5290,13 +5365,13 @@
     }
   ],
   "stats": {
-    "total_hits": 215,
+    "total_hits": 218,
     "critical_count": 64,
-    "warning_count": 149,
+    "warning_count": 152,
     "info_count": 2,
-    "new_this_run": 4,
-    "articles_checked": 5,
-    "seen_ids_total": 284,
+    "new_this_run": 3,
+    "articles_checked": 4,
+    "seen_ids_total": 288,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -5315,5 +5390,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-22T07:54:03.369634+00:00"
+  "last_updated": "2026-04-22T10:21:10.034053+00:00"
 }
