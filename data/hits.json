@@ -1,6 +1,102 @@
 {
   "hits": [
     {
+      "id": "e6df89ae7556",
+      "title": "La CNMC archiva la investigación contra Repsol, Moeve y BP por prácticas anticompetitivas en 2022",
+      "link": "https://www.elespanol.com/invertia/empresas/energia/20260421/cnmc-archiva-investigacion-repsol-moeve-bp-practicas-anticompetitivas/1003744214836_0.html",
+      "source": "NewsAPI-Q2 · Elespanol.com",
+      "raw_date": "2026-04-21T07:46:21Z",
+      "fetched_at": "2026-04-22T07:53:45.470696+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Sanciones por prácticas anticompetitivas (Ley 15/2007 de Defensa de la Competencia)",
+        "Daño reputacional por investigación pública",
+        "Posible reanudación de expediente si surgen nuevas pruebas"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 2019/452 (control de concentraciones)",
+        "Directrices de la CNMC sobre prácticas restrictivas"
+      ],
+      "summary": "La CNMC archivó la investigación contra Repsol, Moeve (ex-Cepsa) y BP por presuntas prácticas anticompetitivas en el sector energético, tras analizar las denuncias presentadas. Aunque no se incoó procedimiento sancionador, la decisión no exime de futuras investigaciones si aparecen nuevas pruebas.",
+      "vulnerability": "Falta de un sistema de monitoreo continuo de prácticas anticompetitivas en operaciones comerciales y acuerdos con competidores.",
+      "financial_impact": "Entre 50.000€ y 500.000€ (multa máxima del 10% de la facturación en el mercado afectado, según Ley 15/2007).",
+      "recommended_action": "Revisar y reforzar el programa de compliance en competencia (ISO 37301) para incluir controles específicos en acuerdos con competidores, formación obligatoria a empleados en riesgos anticompetitivos y auditorías periódicas en áreas de compras y ventas."
+    },
+    {
+      "id": "6ed58db00016",
+      "title": "Competencia archiva la investigación contra Repsol, Moeve y BP por prácticas anticompetitivas en 2022",
+      "link": "https://www.eldiario.es/economia/competencia-archiva-investigacion-repsol-moeve-bp-practicas-anticompetitivas-2022_1_13158956.html",
+      "source": "NewsAPI-Q2 · Eldiario.es",
+      "raw_date": "2026-04-21T07:21:45Z",
+      "fetched_at": "2026-04-22T07:53:49.402528+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Infracción del artículo 101 del TFUE (competencia desleal)",
+        "Sanción por prácticas restrictivas de la competencia (Ley 15/2007 de Defensa de la Competencia)",
+        "Daño reputacional por investigación pública"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 1/2003",
+        "Artículo 101 del Tratado de Funcionamiento de la UE (TFUE)"
+      ],
+      "summary": "La CNMC archivó la investigación contra Repsol, Moeve y BP por presuntos descuentos conjuntos en 2022, al no encontrar indicios de prácticas anticompetitivas. La denuncia se enmarcó en la crisis energética derivada de la guerra en Ucrania, pero no se acreditó infracción.",
+      "vulnerability": "Falta de un protocolo de revisión previa de acuerdos comerciales entre competidores para evitar riesgos de colusión o prácticas restrictivas.",
+      "financial_impact": "Entre 50.000€ y 500.000€ en costes legales y de defensa, sin multa aplicable al archivarse el caso.",
+      "recommended_action": "Revisar y actualizar el programa de compliance de competencia (ISO 37301) para incluir un protocolo de análisis de riesgos en acuerdos con competidores, especialmente en contextos de crisis energética o precios volátiles."
+    },
+    {
+      "id": "8e122c990397",
+      "title": "La CNMC cierra la investigación a Repsol, Moeve y BP por descuentos en la guerra de Ucrania",
+      "link": "https://www.elconfidencial.com/empresas/2026-04-21/cnmc-investigacion-repsol-moeve-bp-ucrania_4341963/",
+      "source": "NewsAPI-Q2 · Elconfidencial.com",
+      "raw_date": "2026-04-21T07:20:00Z",
+      "fetched_at": "2026-04-22T07:53:53.633305+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Prácticas anticompetitivas (art. 101 TFUE y Ley 15/2007 de Defensa de la Competencia)",
+        "Sanciones económicas por colusión en precios",
+        "Daño reputacional por prácticas contrarias a la competencia"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 1/2003",
+        "ISO 37301 (Sistemas de Gestión de Cumplimiento)",
+        "UNE 19601 (Compliance Penal)"
+      ],
+      "summary": "La CNMC cerró la investigación a Repsol, Moeve y BP por presuntos descuentos anticompetitivos durante la guerra de Ucrania, vinculados a un procedimiento anterior contra Repsol. La CNMC ya sancionó a Repsol en otro caso por estrechar márgenes, lo que sugiere patrones de conducta cuestionables.",
+      "vulnerability": "Falta de controles internos robustos para monitorizar prácticas comerciales que puedan vulnerar la normativa de competencia (ej.: políticas de precios, acuerdos con competidores).",
+      "financial_impact": "Multa estimada entre 100.000€ y 500.000€ para cada empresa, dependiendo de la gravedad y participación en la infracción.",
+      "recommended_action": "Revisar urgentemente los protocolos de compliance en competencia, realizar auditorías internas en políticas de precios y formación específica al equipo comercial sobre riesgos de colusión. Notificar al Comité de Cumplimiento y documentar las medidas adoptadas."
+    },
+    {
+      "id": "54261cb2ad75",
+      "title": "La CNMC perdona a BP y Moeve pero castiga a Repsol por la guerra de las 'low cost'",
+      "link": "https://www.expansion.com/empresas/energia/2026/04/21/69e71e75e5fdead14a8b457f.html",
+      "source": "NewsAPI-Q2 · Expansion.com",
+      "raw_date": "2026-04-21T06:58:35Z",
+      "fetched_at": "2026-04-22T07:53:57.564727+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "prácticas anticompetitivas (colusión implícita)",
+        "abuso de posición dominante en el mercado de combustibles",
+        "incumplimiento de la Ley 15/2007 de Defensa de la Competencia"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 2019/1150 sobre transparencia en el mercado energético"
+      ],
+      "summary": "La CNMC archiva el expediente contra BP y Moeve (Cepsa) por presuntas prácticas anticompetitivas en el mercado de combustibles, pero sanciona a Repsol. La decisión refleja posibles fallos en la detección de acuerdos colusorios en el sector energético.",
+      "vulnerability": "Falta de controles internos para monitorizar comunicaciones y acuerdos entre competidores en el mercado de combustibles, especialmente en contextos de guerra de precios.",
+      "financial_impact": "Multa estimada entre 100K€ y 400K€ para Repsol (empresa española media en el sector energético), con posible impacto reputacional y en costes legales.",
+      "recommended_action": "Revisar y reforzar el programa de compliance de competencia, incluyendo auditorías periódicas en canales de comunicación con competidores y formación específica en Ley 15/2007 para equipos comerciales y directivos."
+    },
+    {
       "id": "b7a90fe102d2",
       "title": "La CNMC deja al Gobierno la 'patata caliente' de decidir la multa contra Red Eléctrica por el apagón general",
       "link": "https://www.elmundo.es/economia/empresas/2026/04/21/69e5fb0dfdddff78128b459e.html",
@@ -5194,13 +5290,13 @@
     }
   ],
   "stats": {
-    "total_hits": 211,
+    "total_hits": 215,
     "critical_count": 64,
-    "warning_count": 145,
+    "warning_count": 149,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 279,
+    "new_this_run": 4,
+    "articles_checked": 5,
+    "seen_ids_total": 284,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -5219,5 +5315,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-22T05:28:51.678000+00:00"
+  "last_updated": "2026-04-22T07:54:03.369634+00:00"
 }
