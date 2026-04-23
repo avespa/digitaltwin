@@ -1,6 +1,56 @@
 {
   "hits": [
     {
+      "id": "aa3a681ac71b",
+      "title": "La CNMC envía a Bruselas la operación que refuerza el oligopolio del transporte de equipajes en Aena",
+      "link": "https://www.elconfidencial.com/empresas/2026-04-22/cnmc-envia-a-bruselas-equipajes-aena_4342918/",
+      "source": "NewsAPI-Q2 · Elconfidencial.com",
+      "raw_date": "2026-04-22T12:19:00Z",
+      "fetched_at": "2026-04-23T13:51:01.275133+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Concentración de mercado que limita la competencia en un sector regulado",
+        "Posible abuso de posición dominante en servicios aeroportuarios",
+        "Incumplimiento de normativa de competencia (Ley 15/2007 y Reglamento UE 139/2004)",
+        "Riesgo de sanciones por parte de la CNMC o Comisión Europea"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (CE) 139/2004 sobre control de concentraciones",
+        "Directiva 2014/104/UE sobre acciones por daños por infracción de normas de competencia"
+      ],
+      "summary": "La CNMC ha remitido a la Comisión Europea la operación de compra de Siemens Logistic por Vanderlande (Grupo Toyota), que podría reforzar un oligopolio en el transporte de equipajes en Aena. La autoridad portuguesa ya ha actuado en el mismo sentido, lo que sugiere un enfoque coordinado en la UE.",
+      "vulnerability": "Falta de análisis previo de impacto en competencia por parte de las empresas involucradas antes de notificar la operación a las autoridades.",
+      "financial_impact": "Multa potencial de hasta 10% de la facturación anual del grupo en España (estimación: 5-20M€) y costes legales asociados a recursos o indemnizaciones por daños a terceros.",
+      "recommended_action": "Revisar urgentemente la operación con asesoría legal especializada en competencia para evaluar riesgos y preparar documentación que justifique su compatibilidad con el mercado. Notificar a la CNMC cualquier cambio en la operación y monitorizar comunicados de la Comisión Europea."
+    },
+    {
+      "id": "7c73714bd3e8",
+      "title": "Así es Dash, el iraní récord de multas por piratería audiovisual",
+      "link": "https://www.lavozdegalicia.es/noticia/television/2026/04/22/dash-irani-record-multas-pirateria-audiovisual/00031776857183903655183.htm",
+      "source": "NewsAPI-Q3 · Lavozdegalicia.es",
+      "raw_date": "2026-04-22T11:49:00Z",
+      "fetched_at": "2026-04-23T13:51:08.964197+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Piratería audiovisual masiva",
+        "Daño económico a titulares de derechos",
+        "Exposición a sanciones penales por delitos contra la propiedad intelectual",
+        "Reputación corporativa afectada"
+      ],
+      "norms_affected": [
+        "Ley de Propiedad Intelectual (Real Decreto Legislativo 1/1996)",
+        "Directiva (UE) 2019/790 sobre derechos de autor",
+        "Reglamento (UE) 2018/302 sobre bloqueo de acceso a contenidos ilícitos"
+      ],
+      "summary": "Un ciudadano iraní, identificado como Dash, ha sido condenado a pagar más de 43 millones de euros en indemnizaciones y sanciones por liderar una red de piratería audiovisual a gran escala. La investigación policial revela un entramado internacional con impacto en España y la UE.",
+      "vulnerability": "Falta de controles internos para detectar y prevenir la distribución no autorizada de contenidos protegidos por derechos de autor en plataformas digitales.",
+      "financial_impact": "Entre 100.000€ y 500.000€ (multas administrativas y costes legales para empresas afectadas por la piratería en sus canales de distribución)",
+      "recommended_action": "Revisar urgentemente los protocolos de monitoreo de contenidos en plataformas digitales y colaborar con autoridades (CNMC, AEPD) para identificar y bloquear fuentes de piratería vinculadas a la empresa."
+    },
+    {
       "id": "89abf0adf487",
       "title": "Acutelan denuncia a Digi ante la CNMC por posibles precios predatorios",
       "link": "https://www.expansion.com/empresas/tecnologia/2026/04/22/69e8953a468aeb680d8b458b.html",
@@ -5520,13 +5570,13 @@
     }
   ],
   "stats": {
-    "total_hits": 224,
-    "critical_count": 67,
-    "warning_count": 155,
+    "total_hits": 226,
+    "critical_count": 68,
+    "warning_count": 156,
     "info_count": 2,
-    "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 296,
+    "new_this_run": 2,
+    "articles_checked": 3,
+    "seen_ids_total": 299,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -5545,5 +5595,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-23T10:22:38.603340+00:00"
+  "last_updated": "2026-04-23T13:51:10.164891+00:00"
 }
