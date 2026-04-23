@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "d0a94a44a165",
+      "title": "Multa de 200.000 euros a una empresa de VTC por controlar 24 horas a sus trabajadores a través de sus móviles personales",
+      "link": "https://www.meneame.net/m/actualidad/multa-200-000-euros-empresa-vtc-controlar-24-horas-trabajadores",
+      "source": "NewsAPI-Q5 · Meneame.net",
+      "raw_date": "2026-04-22T17:13:07Z",
+      "fetched_at": "2026-04-23T19:16:09.012393+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Vulneración del principio de minimización del RGPD (art. 5.1.c)",
+        "Tratamiento ilícito de datos personales sin base jurídica válida (art. 6 RGPD)",
+        "Falta de transparencia en el tratamiento de datos (art. 13 RGPD)",
+        "Posible incumplimiento de la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de derechos digitales (LOPDGDD)",
+        "Riesgo de reclamaciones laborales por invasión de la privacidad"
+      ],
+      "norms_affected": [
+        "Reglamento General de Protección de Datos (RGPD) - UE 2016/679",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de derechos digitales (LOPDGDD)",
+        "Directiva 2002/58/CE (sobre privacidad en comunicaciones electrónicas)"
+      ],
+      "summary": "La AEPD ha sancionado con 200.000€ a Ares Capital, S.A. por obligar a sus conductores VTC a instalar hasta 4 apps en sus móviles personales para monitorización 24/7, violando principios clave del RGPD como minimización y transparencia en el tratamiento de datos.",
+      "vulnerability": "Falta de evaluación de impacto (EIPD) y de base legal adecuada para el tratamiento masivo de datos de empleados mediante dispositivos personales.",
+      "financial_impact": "200.000€ (multa AEPD) + costes legales y reputacionales estimados en 50.000-100.000€ adicionales para una empresa española media.",
+      "recommended_action": "Revisar urgentemente los protocolos de monitorización de empleados, realizar una Evaluación de Impacto (EIPD) si aplica, y garantizar que cualquier tratamiento de datos cumpla con el RGPD y la LOPDGDD, incluyendo consentimiento informado y proporcionalidad."
+    },
+    {
       "id": "aa3a681ac71b",
       "title": "La CNMC envía a Bruselas la operación que refuerza el oligopolio del transporte de equipajes en Aena",
       "link": "https://www.elconfidencial.com/empresas/2026-04-22/cnmc-envia-a-bruselas-equipajes-aena_4342918/",
@@ -5570,13 +5596,13 @@
     }
   ],
   "stats": {
-    "total_hits": 226,
+    "total_hits": 227,
     "critical_count": 68,
-    "warning_count": 156,
+    "warning_count": 157,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 299,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 300,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -5595,5 +5621,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-23T16:44:40.666681+00:00"
+  "last_updated": "2026-04-23T19:16:10.212966+00:00"
 }
