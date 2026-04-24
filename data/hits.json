@@ -1,6 +1,30 @@
 {
   "hits": [
     {
+      "id": "022cc870d2bf",
+      "title": "Los tres miembros de la agencia 'independiente' contra la corrupción los nombra el Gobierno",
+      "link": "https://www.elconfidencial.com/espana/2026-04-23/miembros-agencia-independiente-lucha-corrupcion-nombramiento-gobierno_4343123/",
+      "source": "NewsAPI-Q1 · Elconfidencial.com",
+      "raw_date": "2026-04-23T03:00:00Z",
+      "fetched_at": "2026-04-24T05:38:41.149876+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Dependencia política de la agencia de lucha contra la corrupción, comprometiendo su independencia y objetividad",
+        "Posible vulneración del principio de separación de poderes y de la transparencia en la designación de miembros",
+        "Riesgo de conflictos de interés en la Oficina de Conflictos de Intereses al depender de Moncloa"
+      ],
+      "norms_affected": [
+        "Ley 19/2013 de transparencia, acceso a la información pública y buen gobierno (Art. 2 y 3)",
+        "Constitución Española (Art. 103.1 sobre objetividad e imparcialidad de la Administración)",
+        "Principios de la OCDE y UE en materia de lucha contra la corrupción (Convención de la OCDE contra el soborno, Directiva UE 2019/1937)"
+      ],
+      "summary": "El Gobierno nombra a los miembros de una agencia 'independiente' contra la corrupción, incluyendo la Oficina de Conflictos de Intereses, generando dudas sobre su autonomía. La dependencia de Moncloa podría vulnerar principios constitucionales y estándares internacionales de transparencia y lucha contra la corrupción.",
+      "vulnerability": "Falta de un mecanismo independiente y transparente para la designación de miembros de órganos anticorrupción, con participación de la sociedad civil y oposición política.",
+      "financial_impact": "Alto (riesgo de sanciones internacionales, pérdida de fondos europeos y multas por incumplimiento de estándares anticorrupción, estimado entre 1M€ y 5M€ para empresa española media con exposición internacional)",
+      "recommended_action": "Revisar la conformidad de la designación con la Ley 19/2013 y estándares OCDE/UE, proponer un modelo de selección con participación plural y transparente, y documentar el proceso para evitar riesgos legales y reputacionales."
+    },
+    {
       "id": "d0a94a44a165",
       "title": "Multa de 200.000 euros a una empresa de VTC por controlar 24 horas a sus trabajadores a través de sus móviles personales",
       "link": "https://www.meneame.net/m/actualidad/multa-200-000-euros-empresa-vtc-controlar-24-horas-trabajadores",
@@ -5596,13 +5620,13 @@
     }
   ],
   "stats": {
-    "total_hits": 227,
-    "critical_count": 68,
+    "total_hits": 228,
+    "critical_count": 69,
     "warning_count": 157,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 300,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 301,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -5621,5 +5645,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-24T02:55:55.875075+00:00"
+  "last_updated": "2026-04-24T05:38:42.350574+00:00"
 }
