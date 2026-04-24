@@ -1,6 +1,30 @@
 {
   "hits": [
     {
+      "id": "240d7b8b7270",
+      "title": "India pone contra las cuerdas a Apple por la App Store con una posible multa récord",
+      "link": "https://www.actualidadiphone.com/india-pone-contra-las-cuerdas-a-apple-por-la-app-store-con-una-posible-multa-record/",
+      "source": "NewsAPI-Q1 · Actualidadiphone.com",
+      "raw_date": "2026-04-23T16:38:49Z",
+      "fetched_at": "2026-04-24T18:57:32.762143+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Prácticas anticompetitivas en la gestión de la App Store",
+        "Incumplimiento de normativas de competencia en mercados digitales",
+        "Posible vulneración de derechos de los desarrolladores de aplicaciones"
+      ],
+      "norms_affected": [
+        "Reglamento (UE) 2022/1925 (DMA - Digital Markets Act)",
+        "Ley de Competencia de India (Competition Act, 2002)",
+        "Directrices de la CNMC sobre mercados digitales (España)"
+      ],
+      "summary": "India amenaza a Apple con una multa récord por prácticas anticompetitivas en la App Store, lo que podría afectar a su modelo de negocio en mercados digitales. La decisión podría tener implicaciones en la UE bajo el DMA, que regula el poder de las grandes plataformas tecnológicas.",
+      "vulnerability": "Falta de políticas internas que aseguren el cumplimiento de normativas de competencia en mercados digitales, especialmente en la gestión de plataformas de distribución de aplicaciones.",
+      "financial_impact": "Multa potencial de hasta 10% de los ingresos globales de Apple en India (estimación: 500M€-1.500M€ para una empresa de su tamaño).",
+      "recommended_action": "Revisar y actualizar políticas de competencia en mercados digitales, especialmente en la gestión de plataformas de distribución de aplicaciones, y realizar un análisis de riesgos específico para la App Store en España y la UE."
+    },
+    {
       "id": "d064eb46c351",
       "title": "Carlos Baño preside la Cámara de Alicante de forma irregular desde hace más de dos años",
       "link": "https://www.elperiodico.com/es/economia/20260423/carlos-bano-preside-camara-alicante-irregular-mas-dos-anos-129455510",
@@ -5649,13 +5673,13 @@
     }
   ],
   "stats": {
-    "total_hits": 229,
+    "total_hits": 230,
     "critical_count": 70,
-    "warning_count": 157,
+    "warning_count": 158,
     "info_count": 2,
     "new_this_run": 1,
     "articles_checked": 1,
-    "seen_ids_total": 303,
+    "seen_ids_total": 304,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -5674,5 +5698,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-24T16:06:15.920625+00:00"
+  "last_updated": "2026-04-24T18:57:33.962882+00:00"
 }
