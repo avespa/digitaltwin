@@ -1,6 +1,35 @@
 {
   "hits": [
     {
+      "id": "d064eb46c351",
+      "title": "Carlos Baño preside la Cámara de Alicante de forma irregular desde hace más de dos años",
+      "link": "https://www.elperiodico.com/es/economia/20260423/carlos-bano-preside-camara-alicante-irregular-mas-dos-anos-129455510",
+      "source": "NewsAPI-Q4 · Elperiodico.com",
+      "raw_date": "2026-04-23T15:15:00Z",
+      "fetched_at": "2026-04-24T16:06:14.719963+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Fraude en subvenciones públicas",
+        "Falsedad documental",
+        "Incumplimiento de requisitos legales para el cargo de presidente de Cámara de Comercio",
+        "Posible conflicto de intereses",
+        "Exposición a responsabilidad penal y administrativa",
+        "Daño reputacional para la institución y el sector empresarial"
+      ],
+      "norms_affected": [
+        "Ley 14/2014 de Cámaras de Comercio, Industria y Navegación",
+        "Código Penal (arts. 248-251 sobre falsedad documental y 308 sobre fraude en subvenciones)",
+        "Ley 38/2003 General de Subvenciones",
+        "Ley Orgánica 10/1995 del Código Penal (responsabilidad penal de personas jurídicas)",
+        "RGPD (si hay tratamiento de datos personales en el proceso)"
+      ],
+      "summary": "Carlos Baño, investigado por fraude en subvenciones y falsedad, preside irregularmente la Cámara de Comercio de Alicante desde noviembre de 2023, tras la disolución de su empresa Plasticart Hispánica SL. La situación vulnera requisitos legales para el cargo y expone a la institución a sanciones penales y administrativas.",
+      "vulnerability": "Falta de verificación rigurosa de los requisitos legales para el cargo de presidente de Cámara de Comercio, incluyendo comprobación de antecedentes penales y cumplimiento de obligaciones societarias previas.",
+      "financial_impact": "Entre 500.000€ y 2.000.000€ (multas administrativas, devolución de subvenciones, costes legales y pérdida de financiación pública)",
+      "recommended_action": "Iniciar investigación interna inmediata para verificar el cumplimiento de requisitos legales del presidente, notificar a la autoridad competente (Ministerio de Industria, Comercio y Turismo) y suspender al presidente en funciones hasta aclarar su situación legal. Coordinar con asesoría jurídica para evaluar responsabilidad penal de la institución."
+    },
+    {
       "id": "022cc870d2bf",
       "title": "Los tres miembros de la agencia 'independiente' contra la corrupción los nombra el Gobierno",
       "link": "https://www.elconfidencial.com/espana/2026-04-23/miembros-agencia-independiente-lucha-corrupcion-nombramiento-gobierno_4343123/",
@@ -5620,13 +5649,13 @@
     }
   ],
   "stats": {
-    "total_hits": 228,
-    "critical_count": 69,
+    "total_hits": 229,
+    "critical_count": 70,
     "warning_count": 157,
     "info_count": 2,
-    "new_this_run": 0,
+    "new_this_run": 1,
     "articles_checked": 1,
-    "seen_ids_total": 302,
+    "seen_ids_total": 303,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -5645,5 +5674,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-24T13:42:11.756669+00:00"
+  "last_updated": "2026-04-24T16:06:15.920625+00:00"
 }
