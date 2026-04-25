@@ -1,6 +1,31 @@
 {
   "hits": [
     {
+      "id": "c45d6768213c",
+      "title": "Ley Foral 3/2026, de 23 de marzo, por la que se modifican la Ley Foral 5/2018, de 17 de mayo, de Transparencia, acceso a la información pública y buen gobierno, y la Ley Foral 7/2018, de 17 de mayo, de creación de la Oficina de Buenas Prácticas y Anticorrupción de la Comunidad Foral de Navarra.",
+      "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-9045",
+      "source": "BOE - Disposiciones generales",
+      "raw_date": "Sat, 25 Apr 2026 00:00:00 +0200",
+      "fetched_at": "2026-04-25T07:22:26.513261+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Incumplimiento de obligaciones de transparencia y buen gobierno en Navarra",
+        "Sanciones por falta de adaptación a normativa autonómica modificada",
+        "Riesgo de corrupción por debilidad en controles internos"
+      ],
+      "norms_affected": [
+        "Ley Foral 5/2018 (Transparencia y Buen Gobierno)",
+        "Ley Foral 7/2018 (Oficina de Buenas Prácticas y Anticorrupción)",
+        "ISO 37301 (Sistemas de Gestión de Compliance)",
+        "UNE 19601 (Compliance Penal)"
+      ],
+      "summary": "La Ley Foral 3/2026 modifica las normas de transparencia y buen gobierno en Navarra, reforzando los mecanismos de control y anticorrupción. Las empresas con operaciones en Navarra deben revisar sus políticas de compliance para alinearse con los nuevos requisitos.",
+      "vulnerability": "Falta de adaptación de políticas internas a los nuevos estándares de transparencia y anticorrupción en Navarra",
+      "financial_impact": "Entre 50.000€ y 300.000€ (multas por incumplimiento de transparencia y buen gobierno en Navarra)",
+      "recommended_action": "Revisar y actualizar las políticas de compliance de la empresa para cumplir con la nueva normativa foral, especialmente en transparencia y anticorrupción, y formar al personal afectado"
+    },
+    {
       "id": "d958b0231858",
       "title": "Multan con 5.000 € a una empresa por pactar el paro con una empleada y un abogado sentencia: \"Cada vez es más común, pero es delito\"",
       "link": "https://www.elconfidencial.com/economia/2026-04-24/1qrt-5000-euros-multa-empresa-pactar-paro-empleada-abogado-sentencia_4343644/",
@@ -5698,13 +5723,13 @@
     }
   ],
   "stats": {
-    "total_hits": 231,
+    "total_hits": 232,
     "critical_count": 70,
-    "warning_count": 159,
+    "warning_count": 160,
     "info_count": 2,
     "new_this_run": 1,
     "articles_checked": 1,
-    "seen_ids_total": 305,
+    "seen_ids_total": 306,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -5723,5 +5748,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-25T05:14:42.208547+00:00"
+  "last_updated": "2026-04-25T07:22:27.713904+00:00"
 }
