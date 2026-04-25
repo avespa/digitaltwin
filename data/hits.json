@@ -1,6 +1,31 @@
 {
   "hits": [
     {
+      "id": "d958b0231858",
+      "title": "Multan con 5.000 € a una empresa por pactar el paro con una empleada y un abogado sentencia: \"Cada vez es más común, pero es delito\"",
+      "link": "https://www.elconfidencial.com/economia/2026-04-24/1qrt-5000-euros-multa-empresa-pactar-paro-empleada-abogado-sentencia_4343644/",
+      "source": "NewsAPI-Q1 · Elconfidencial.com",
+      "raw_date": "2026-04-24T03:00:00Z",
+      "fetched_at": "2026-04-25T05:14:41.007851+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Fraude a la Seguridad Social",
+        "Incumplimiento de obligaciones laborales y fiscales",
+        "Riesgo de responsabilidad penal de la empresa y sus representantes",
+        "Daño reputacional por prácticas ilegales"
+      ],
+      "norms_affected": [
+        "Ley General de la Seguridad Social (Real Decreto Legislativo 8/2015)",
+        "Código Penal (art. 308 bis: fraude a la Seguridad Social)",
+        "Ley de Infracciones y Sanciones en el Orden Social (LISOS)"
+      ],
+      "summary": "Una empresa ha sido multada con 5.000 € por pactar con una empleada y un abogado un acuerdo irregular para acceder a prestaciones por desempleo, lo que constituye fraude a la Seguridad Social. La sentencia destaca que estas prácticas, aunque comunes, son delictivas y están siendo perseguidas con mayor intensidad.",
+      "vulnerability": "Falta de controles internos para detectar y prevenir acuerdos irregulares entre empleados y la empresa que puedan derivar en fraude a la Seguridad Social.",
+      "financial_impact": "Entre 5.000 € y 50.000 € (dependiendo de la gravedad y reincidencia), incluyendo posibles indemnizaciones y costes legales.",
+      "recommended_action": "Revisar y reforzar los protocolos de compliance laboral y fiscal para detectar posibles pactos irregulares, así como formar a los responsables de RRHH y dirección en la normativa de la Seguridad Social y sus riesgos penales. Implementar auditorías internas periódicas."
+    },
+    {
       "id": "240d7b8b7270",
       "title": "India pone contra las cuerdas a Apple por la App Store con una posible multa récord",
       "link": "https://www.actualidadiphone.com/india-pone-contra-las-cuerdas-a-apple-por-la-app-store-con-una-posible-multa-record/",
@@ -5673,13 +5698,13 @@
     }
   ],
   "stats": {
-    "total_hits": 230,
+    "total_hits": 231,
     "critical_count": 70,
-    "warning_count": 158,
+    "warning_count": 159,
     "info_count": 2,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 304,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 305,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -5698,5 +5723,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-25T02:42:36.207251+00:00"
+  "last_updated": "2026-04-25T05:14:42.208547+00:00"
 }
