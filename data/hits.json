@@ -1,6 +1,105 @@
 {
   "hits": [
     {
+      "id": "d091170c5004",
+      "title": "Competencia abre otra batería de expedientes sancionadores por el gran apagón",
+      "link": "https://www.elperiodico.com/es/economia/20260424/apagon-competencia-abre-bateria-expedientes-sancionadores-129492323",
+      "source": "NewsAPI-Q2 · Elperiodico.com",
+      "raw_date": "2026-04-24T15:19:38Z",
+      "fetched_at": "2026-04-25T15:41:58.637103+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Sanciones económicas por incumplimiento de normativa de competencia (Ley 15/2007)",
+        "Daño reputacional por apertura de expedientes sancionadores",
+        "Posible responsabilidad penal de administradores (art. 286 bis CP)",
+        "Interrupción de servicios críticos por falta de controles en infraestructuras esenciales"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 2019/452 (control de concentraciones)",
+        "Ley 9/2014 General de Telecomunicaciones (en caso de afectar a operadores)",
+        "RGPD (si hubo brecha de datos durante el apagón)"
+      ],
+      "summary": "La CNMC ha abierto una veintena de expedientes sancionadores tras el gran apagón, investigando posibles infracciones a la normativa de competencia. Las empresas afectadas podrían enfrentar multas de hasta el 10% de su facturación anual y daños reputacionales significativos.",
+      "vulnerability": "Falta de controles internos para garantizar el cumplimiento de la normativa de competencia en operaciones críticas (ej.: coordinación entre operadores en situaciones de emergencia).",
+      "financial_impact": "Entre 500.000€ y 5M€ (dependiendo del tamaño de la empresa y gravedad de la infracción, aplicando sanciones del 1% al 10% de la facturación anual).",
+      "recommended_action": "Revisar inmediatamente los protocolos de coordinación con otras empresas en situaciones de emergencia para asegurar que no vulneran la normativa de competencia. Documentar todas las comunicaciones y decisiones tomadas durante el apagón para presentar alegaciones en caso de expediente sancionador."
+    },
+    {
+      "id": "043b5ad25666",
+      "title": "La CNMC incoa 15 nuevos expedientes sancionadores por indicios de infracción grave por el apagón eléctrico",
+      "link": "https://www.elmundo.es/economia/empresas/2026/04/24/69eb84dbe9cf4a0b4e8b456d.html",
+      "source": "NewsAPI-Q2 · El Mundo",
+      "raw_date": "2026-04-24T15:01:47Z",
+      "fetched_at": "2026-04-25T15:42:02.854839+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Infracción grave en el sector energético por fallos en la gestión de la red eléctrica",
+        "Sanciones económicas significativas por parte de la CNMC",
+        "Daño reputacional en el mercado energético español",
+        "Posible incumplimiento de normativas de competencia y regulación sectorial"
+      ],
+      "norms_affected": [
+        "Ley 3/2013 de creación de la CNMC",
+        "Ley 24/2013 del Sector Eléctrico",
+        "Reglamento (UE) 2019/943 sobre el mercado interior de la electricidad"
+      ],
+      "summary": "La CNMC ha abierto 15 expedientes sancionadores contra empresas del sector eléctrico por un apagón generalizado, sospechando infracciones graves en la gestión de la red. Las empresas podrían enfrentar multas millonarias y sanciones regulatorias.",
+      "vulnerability": "Falta de protocolos robustos de gestión de riesgos operativos y cumplimiento en el sector energético, especialmente en la coordinación con operadores de red y autoridades reguladoras.",
+      "financial_impact": "Entre 1M€ y 10M€ por expediente sancionador, dependiendo de la gravedad y tamaño de la empresa, con posible impacto adicional en primas de seguros y costes de cumplimiento.",
+      "recommended_action": "Revisar urgentemente los protocolos de gestión de riesgos operativos y cumplimiento en el sector eléctrico, incluyendo auditorías internas y formación específica en normativa CNMC y sectorial. Coordinar con asesoría legal para preparar defensa ante los expedientes."
+    },
+    {
+      "id": "192792fd3cf5",
+      "title": "La CNMC abre quince nuevos expedientes a varias empresas en su investigación del apagón",
+      "link": "https://www.elconfidencial.com/empresas/2026-04-24/cnmc-abre-quince-nuevos-expedientes_4344645/",
+      "source": "NewsAPI-Q2 · Elconfidencial.com",
+      "raw_date": "2026-04-24T14:36:00Z",
+      "fetched_at": "2026-04-25T15:42:06.936971+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Infracción de normativa sectorial (Ley 24/2013 del Sector Eléctrico)",
+        "Sanciones económicas por prácticas anticompetitivas o incumplimiento de obligaciones de suministro",
+        "Daño reputacional por apertura de expedientes sancionadores"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 2019/943 de Mercado Interior de la Electricidad"
+      ],
+      "summary": "La CNMC ha abierto 15 nuevos expedientes sancionadores a empresas por posibles infracciones en el sector eléctrico, incluyendo prácticas en distintos periodos. Las investigaciones podrían derivar en multas significativas por incumplimiento de obligaciones de suministro o prácticas anticompetitivas.",
+      "vulnerability": "Falta de controles internos para garantizar el cumplimiento de normativas sectoriales y de competencia en operaciones críticas del sector eléctrico.",
+      "financial_impact": "Entre 500.000€ y 5.000.000€ por expediente sancionador, dependiendo de la gravedad y tamaño de la empresa.",
+      "recommended_action": "Revisar inmediatamente los protocolos de cumplimiento en el sector eléctrico, identificar posibles prácticas riesgosas en operaciones pasadas y preparar una estrategia de defensa ante la CNMC. Notificar al Comité de Cumplimiento y al Consejo de Administración."
+    },
+    {
+      "id": "0b0ad64b7096",
+      "title": "Competencia abre más de una docena de nuevos expedientes graves por el apagón",
+      "link": "https://www.abc.es/economia/competencia-abre-docena-nuevos-expedientes-graves-apagon-20260424162955-nt.html",
+      "source": "NewsAPI-Q2 · Www.abc.es",
+      "raw_date": "2026-04-24T14:29:55Z",
+      "fetched_at": "2026-04-25T15:42:12.304697+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Sanciones económicas por incumplimiento de normativa de competencia (Ley 15/2007 de Defensa de la Competencia)",
+        "Daño reputacional por expedientes sancionadores abiertos por el regulador",
+        "Posible responsabilidad penal de administradores en casos de prácticas anticompetitivas graves"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 2019/452 (control de concentraciones)",
+        "Ley 3/2013 de creación de la CNMC"
+      ],
+      "summary": "La CNMC ha abierto más de una docena de expedientes graves contra empresas del sector energético, destacando Endesa, por posibles prácticas anticompetitivas relacionadas con el apagón. Las investigaciones podrían derivar en sanciones económicas significativas y afectar a la reputación corporativa.",
+      "vulnerability": "Falta de controles internos para garantizar el cumplimiento de la normativa de competencia, especialmente en la gestión de crisis y operaciones en mercados regulados.",
+      "financial_impact": "Entre 500.000€ y 5 millones de euros (dependiendo de la gravedad de las infracciones y el tamaño de la empresa sancionada).",
+      "recommended_action": "Revisar urgentemente los protocolos de competencia de la empresa, especialmente en relación con la gestión de crisis y operaciones en el sector energético, y realizar una auditoría interna para identificar posibles riesgos de incumplimiento."
+    },
+    {
       "id": "d3071b936a7f",
       "title": "CONSUMUR denuncia al Warm Up por impedir entrar con comida y bebida del exterior y el pago con efectivo",
       "link": "https://www.europapress.es/murcia/noticia-consumur-denuncia-warm-up-impedir-entrar-comida-bebida-exterior-pago-efectivo-20260424123643.html",
@@ -5771,13 +5870,13 @@
     }
   ],
   "stats": {
-    "total_hits": 234,
+    "total_hits": 238,
     "critical_count": 70,
-    "warning_count": 161,
+    "warning_count": 165,
     "info_count": 3,
-    "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 308,
+    "new_this_run": 4,
+    "articles_checked": 4,
+    "seen_ids_total": 312,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -5796,5 +5895,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-25T13:11:09.329129+00:00"
+  "last_updated": "2026-04-25T15:42:13.505333+00:00"
 }
