@@ -1,6 +1,30 @@
 {
   "hits": [
     {
+      "id": "56f1b39f4c5a",
+      "title": "Autoridades de Protección de Datos de España firman un compromiso para cooperar en la protección los vulnerables",
+      "link": "https://www.europapress.es/sociedad/noticia-autoridades-proteccion-datos-espana-firman-compromiso-cooperar-proteccion-vulnerables-20260424103318.html",
+      "source": "NewsAPI-Q5 · Europapress.es",
+      "raw_date": "2026-04-24T08:33:18Z",
+      "fetched_at": "2026-04-25T09:55:37.257600+00:00",
+      "level": "info",
+      "relevance_score": 75,
+      "risks": [
+        "Tratamiento de datos de colectivos vulnerables sin medidas de protección reforzadas",
+        "Incumplimiento de principios de minimización y proporcionalidad en el tratamiento de datos sensibles",
+        "Falta de transparencia en el uso de datos de grupos en riesgo"
+      ],
+      "norms_affected": [
+        "RGPD (Reglamento (UE) 2016/679)",
+        "LOPDGDD (Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de derechos digitales)",
+        "ISO 27701 (extensión de ISO/IEC 27001 para protección de datos)"
+      ],
+      "summary": "Las autoridades de protección de datos españolas han firmado un compromiso para reforzar la cooperación en la protección de colectivos vulnerables en entornos digitales, destacando la necesidad de medidas específicas para garantizar sus derechos. Este acuerdo refuerza la aplicación del RGPD y la LOPDGDD en contextos de alta sensibilidad.",
+      "vulnerability": "Falta de protocolos específicos para la identificación, evaluación de riesgos y tratamiento de datos de colectivos vulnerables (ej.: menores, personas con discapacidad, víctimas de violencia de género).",
+      "financial_impact": "Entre 10.000€ y 50.000€ por sanción administrativa (multas por infracción de principios del RGPD en tratamientos de datos sensibles).",
+      "recommended_action": "Revisar y actualizar los protocolos internos para el tratamiento de datos de colectivos vulnerables, incluyendo evaluaciones de impacto (EIPD) y medidas de seguridad reforzadas. Formar al personal en la identificación de estos grupos y en los requisitos específicos del RGPD y LOPDGDD."
+    },
+    {
       "id": "c45d6768213c",
       "title": "Ley Foral 3/2026, de 23 de marzo, por la que se modifican la Ley Foral 5/2018, de 17 de mayo, de Transparencia, acceso a la información pública y buen gobierno, y la Ley Foral 7/2018, de 17 de mayo, de creación de la Oficina de Buenas Prácticas y Anticorrupción de la Comunidad Foral de Navarra.",
       "link": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-9045",
@@ -5723,13 +5747,13 @@
     }
   ],
   "stats": {
-    "total_hits": 232,
+    "total_hits": 233,
     "critical_count": 70,
     "warning_count": 160,
-    "info_count": 2,
+    "info_count": 3,
     "new_this_run": 1,
     "articles_checked": 1,
-    "seen_ids_total": 306,
+    "seen_ids_total": 307,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -5748,5 +5772,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-25T07:22:27.713904+00:00"
+  "last_updated": "2026-04-25T09:55:38.457860+00:00"
 }
