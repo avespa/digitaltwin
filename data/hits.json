@@ -1,6 +1,58 @@
 {
   "hits": [
     {
+      "id": "170f776bbfbe",
+      "title": "Beatriz Corredor, señalada y expedientada por la CNMC, se aferra a Red Eléctrica: \"Sigue ahí porque la apoya Zapatero\"",
+      "link": "https://www.elespanol.com/espana/politica/20260426/beatriz-corredor-senalada-expedientada-cnmc-aferra-red-electrica-sigue-ahi-apoya-zapatero/1003744220264_0.html",
+      "source": "NewsAPI-Q2 · Elespanol.com",
+      "raw_date": "2026-04-26T00:17:53Z",
+      "fetched_at": "2026-04-27T03:24:00.157316+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Conflicto de intereses en la gestión de Red Eléctrica",
+        "Posible incumplimiento de normativa de transparencia y buen gobierno corporativo (Ley 11/2018 de información no financiera)",
+        "Exposición a sanciones administrativas por parte de la CNMC por mala praxis en la gestión de infraestructuras críticas",
+        "Daño reputacional para Red Eléctrica y sus accionistas (incluyendo posibles implicaciones en el cumplimiento de ISO 37301)"
+      ],
+      "norms_affected": [
+        "Ley 11/2018 de información no financiera y diversidad",
+        "Ley 3/2013 de creación de la CNMC",
+        "Reglamento (UE) 2019/943 sobre el mercado interior de la electricidad",
+        "ISO 37301 (Sistemas de gestión de compliance)",
+        "UNE 19601 (Sistemas de gestión de compliance penal)"
+      ],
+      "summary": "Beatriz Corredor, exministra y presidenta de Red Eléctrica, es señalada por la CNMC en una comisión de investigación del Senado por su gestión durante un apagón nacional. Su permanencia en el cargo, respaldada por el expresidente Zapatero, genera dudas sobre conflictos de intereses y posible incumplimiento de normativas de transparencia y buen gobierno.",
+      "vulnerability": "Falta de controles independientes en la designación y evaluación de altos cargos en empresas con responsabilidad en infraestructuras críticas (debería existir un comité de ética y compliance con participación de stakeholders externos).",
+      "financial_impact": "Multa estimada entre 200.000€ y 400.000€ para Red Eléctrica, junto con posibles costes reputacionales (pérdida de confianza de inversores y clientes) y gastos legales asociados a la defensa en expedientes sancionadores.",
+      "recommended_action": "El Compliance Officer de Red Eléctrica debe: 1) Revisar inmediatamente los protocolos de designación y evaluación de altos cargos para garantizar independencia y transparencia, 2) Documentar cualquier posible conflicto de intereses de la presidenta y miembros del consejo, 3) Presentar un informe detallado a la CNMC y al consejo de administración para mitigar riesgos legales y reputacionales, 4) Evaluar la necesidad de implementar un sistema de compliance reforzado (ISO 37301) con auditorías externas periódicas."
+    },
+    {
+      "id": "d9186cb63036",
+      "title": "Un informático es multado con un millón de euros por fraude fiscal en Vigo",
+      "link": "https://www.lavozdegalicia.es/noticia/vigo/vigo/2026/04/26/informatico-multado-millon-euros-fraude-fiscal/0003_202604V26C3993.htm",
+      "source": "NewsAPI-Q4 · Lavozdegalicia.es",
+      "raw_date": "2026-04-26T03:00:00Z",
+      "fetched_at": "2026-04-27T03:24:03.763608+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "fraude fiscal",
+        "incumplimiento de obligaciones tributarias",
+        "reputación corporativa",
+        "responsabilidad penal de directivos"
+      ],
+      "norms_affected": [
+        "Ley General Tributaria (LGT)",
+        "Código Penal (art. 305 y ss.)",
+        "Ley 10/2010 de prevención del blanqueo de capitales"
+      ],
+      "summary": "Un informático ha sido multado con un millón de euros por fraude fiscal en Vigo, con posible implicación de su empresa en prácticas tributarias irregulares. El caso destaca la exposición pública de un directivo durante el juicio, generando riesgos reputacionales adicionales.",
+      "vulnerability": "Falta de controles internos para detectar y prevenir fraudes fiscales en la empresa (ej.: auditorías fiscales periódicas, canales de denuncia efectivos).",
+      "financial_impact": "Entre 1M€ y 3M€ (multa + costes legales + pérdida de negocio por daño reputacional).",
+      "recommended_action": "Revisar urgentemente los controles internos de cumplimiento fiscal, especialmente en áreas con alto riesgo de fraude (ej.: pagos a proveedores, facturación). Implementar formación específica en compliance tributario para el equipo directivo y reforzar canales de denuncia anónima."
+    },
+    {
       "id": "1c529de94cc5",
       "title": "Allanamientos y prueba del caso Pista Oscura ‘es lícita’, afirma fiscalía",
       "link": "https://www.nacion.com/sucesos/allanamientos-y-prueba-del-caso-pista-oscura-es/TQ3CJTOLLRGALNUWH3YECFOOHQ/story/",
@@ -5895,13 +5947,13 @@
     }
   ],
   "stats": {
-    "total_hits": 239,
-    "critical_count": 70,
-    "warning_count": 166,
+    "total_hits": 241,
+    "critical_count": 71,
+    "warning_count": 167,
     "info_count": 3,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 313,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 315,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -5920,5 +5972,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-26T21:41:14.374528+00:00"
+  "last_updated": "2026-04-27T03:24:04.964316+00:00"
 }
