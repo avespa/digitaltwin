@@ -1,6 +1,31 @@
 {
   "hits": [
     {
+      "id": "6001252ae0e4",
+      "title": "La ley anticorrupción del Gobierno recorta la capacidad de la UCO y la UDEF para llegar a tramas como la de Cerdán",
+      "link": "https://www.elespanol.com/invertia/empresas/20260427/ley-anticorrupcion-gobierno-recorta-capacidad-uco-udef-llegar-tramas-cerdan/1003744220497_0.html",
+      "source": "NewsAPI-Q3 · Elespanol.com",
+      "raw_date": "2026-04-27T00:20:00Z",
+      "fetched_at": "2026-04-28T03:30:47.161479+00:00",
+      "level": "warning",
+      "relevance_score": 90,
+      "risks": [
+        "Dificultad para investigar delitos de corrupción por limitación en acceso a información financiera y titularidad real",
+        "Incapacidad para cumplir con obligaciones de transparencia y prevención de blanqueo de capitales (Ley 10/2010)",
+        "Riesgo de incumplimiento de la ISO 37001 (Sistemas de Gestión Antisoborno) por falta de herramientas de investigación"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Ley Orgánica 1/2015 de modificación del Código Penal (delitos de corrupción)",
+        "ISO 37001:2016 (Sistemas de Gestión Antisoborno)",
+        "Reglamento (UE) 2015/847 (transferencias de fondos)"
+      ],
+      "summary": "La nueva ley anticorrupción limita el acceso de la UCO y UDEF a la Base de Datos de Titularidad Real, clave para investigar tramas de corrupción como la de Cerdán. Esto afecta directamente a la capacidad de las empresas para cumplir con sus obligaciones de prevención y detección de delitos económicos.",
+      "vulnerability": "Falta de mecanismos internos para compensar la reducción de acceso a información pública sobre titularidad real y estructuras societarias opacas",
+      "financial_impact": "Entre 200.000€ y 1.500.000€ (multas por incumplimiento de Ley 10/2010, sanciones CNMC, pérdida de licitaciones públicas y costes de defensa legal)",
+      "recommended_action": "Revisar y reforzar los protocolos internos de diligencia debida (due diligence) sobre clientes, proveedores y socios, especialmente en operaciones con alto riesgo de blanqueo o corrupción. Contactar con la AEPD para evaluar impacto en protección de datos y notificar a la CNMV si la empresa cotiza."
+    },
+    {
       "id": "9b1e441d4bd7",
       "title": "Del hermano de Ayuso al 'caso Ábalos': la avaricia no es delito; el cohecho, sí",
       "link": "https://www.eldiario.es/politica/hermano-ayuso-caso-abalos-avaricia-no-delito-cohecho-si_129_13157865.html",
@@ -6001,13 +6026,13 @@
     }
   ],
   "stats": {
-    "total_hits": 243,
+    "total_hits": 244,
     "critical_count": 72,
-    "warning_count": 168,
+    "warning_count": 169,
     "info_count": 3,
     "new_this_run": 1,
     "articles_checked": 1,
-    "seen_ids_total": 318,
+    "seen_ids_total": 319,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -6026,5 +6051,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-27T21:55:30.708806+00:00"
+  "last_updated": "2026-04-28T03:30:48.362184+00:00"
 }
