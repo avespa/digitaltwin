@@ -1,6 +1,160 @@
 {
   "hits": [
     {
+      "id": "2448f872e92c",
+      "title": "Competencia incoa un nuevo expediente sancionador \"muy grave\" a Iberdrola en el marco del apagón por su nuclear",
+      "link": "https://www.elmundo.es/economia/2026/04/27/69efab6021efa0c93d8b45ac.html",
+      "source": "NewsAPI-Q1 · El Mundo",
+      "raw_date": "2026-04-27T18:31:00Z",
+      "fetched_at": "2026-04-28T19:45:21.829242+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de normativa de competencia (Ley 15/2007 de Defensa de la Competencia)",
+        "Posible infracción grave en la gestión de infraestructuras críticas (Ley 8/2015 de seguridad nacional)",
+        "Daño reputacional por sanciones regulatorias"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Ley 8/2015 de Seguridad Nacional",
+        "Reglamento (UE) 2019/943 sobre el mercado interior de la electricidad"
+      ],
+      "summary": "La CNMC incoa un nuevo expediente sancionador contra Iberdrola por un posible incumplimiento grave en el apagón nuclear del año anterior, sumándose a otros 35 expedientes abiertos. La investigación se centra en indicios de infracciones en la gestión de infraestructuras críticas y competencia.",
+      "vulnerability": "Falta de protocolos robustos de gestión de crisis en infraestructuras críticas y supervisión independiente de operaciones críticas.",
+      "financial_impact": "Multa estimada entre 500.000€ y 5M€, dependiendo de la gravedad de la infracción y ajustes por reincidencia.",
+      "recommended_action": "Revisar inmediatamente los protocolos de gestión de infraestructuras críticas, realizar un análisis de riesgos específico para operaciones nucleares y preparar una estrategia de defensa legal ante la CNMC, incluyendo auditorías internas independientes."
+    },
+    {
+      "id": "f42ebe00427a",
+      "title": "La CNMC incoa un nuevo expediente sancionador \"muy grave\" a Iberdrola en el marco del apagón por su nuclear",
+      "link": "https://www.huffingtonpost.es/economia/cnmc-incoa-nuevo-expediente-sancionador-muy-grave-iberdrola-marco-apagon-nuclear-f202604.html",
+      "source": "NewsAPI-Q1 · Huffingtonpost.es",
+      "raw_date": "2026-04-27T18:12:01Z",
+      "fetched_at": "2026-04-28T19:45:26.215039+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de normativa sectorial energética (Ley 24/2013 del Sector Eléctrico)",
+        "Sanciones administrativas graves por parte de la CNMC",
+        "Daño reputacional en el sector energético",
+        "Posible impacto en la licencia de operación de instalaciones nucleares"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Reglamento de la CNMC sobre infracciones y sanciones en el sector eléctrico",
+        "Directiva 2014/52/UE sobre evaluación de impacto ambiental (en caso de afectar a instalaciones nucleares)"
+      ],
+      "summary": "La CNMC ha abierto un expediente sancionador 'muy grave' contra Iberdrola por su gestión en el apagón nuclear del 28 de abril de 2025, lo que podría derivar en multas significativas y revisión de su operativa en el sector eléctrico.",
+      "vulnerability": "Falta de protocolos robustos de gestión de crisis y cumplimiento normativo en operaciones críticas (apagones, mantenimiento nuclear)",
+      "financial_impact": "Entre 500.000€ y 10 millones de euros (dependiendo de la gravedad de la infracción y sanción final)",
+      "recommended_action": "Revisar inmediatamente los protocolos de gestión de apagones nucleares, documentar todas las acciones realizadas durante el incidente del 28/04/2025 y preparar una estrategia de defensa ante la CNMC, incluyendo posible revisión de controles internos en cumplimiento de la Ley 24/2013."
+    },
+    {
+      "id": "8a9fdb01f386",
+      "title": "La CNMC incoa un nuevo expediente sancionador «muy grave» a Iberdrola en el marco del apagón por su nuclear",
+      "link": "https://www.abc.es/economia/cnmc-incoa-nuevo-expediente-sancionador-grave-iberdrola-20260427195306-nt.html",
+      "source": "NewsAPI-Q1 · Www.abc.es",
+      "raw_date": "2026-04-27T17:53:09Z",
+      "fetched_at": "2026-04-28T19:45:30.591566+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de normativa de mercado eléctrico (Ley 24/2013 del Sector Eléctrico)",
+        "Sanción administrativa por parte de la CNMC por infracción muy grave",
+        "Daño reputacional en el sector energético",
+        "Posible impacto en la licencia de operación de instalaciones nucleares"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Real Decreto 1047/2013 (regulación de mercados energéticos)",
+        "Reglamento (UE) 2019/943 (mercado interior de la electricidad)",
+        "Ley 3/2013 de creación de la CNMC"
+      ],
+      "summary": "La CNMC ha incoado un expediente sancionador «muy grave» contra Iberdrola por su gestión en el apagón nuclear del 28 de abril de 2025, que podría derivar en multas significativas y afectar a su operatividad en el sector.",
+      "vulnerability": "Falta de protocolos robustos de gestión de crisis y cumplimiento en operaciones críticas del sector energético, especialmente en instalaciones nucleares.",
+      "financial_impact": "Entre 500.000€ y 10 millones de euros (dependiendo de la gravedad de la infracción y ajustes por reincidencia).",
+      "recommended_action": "Revisar y reforzar los protocolos de cumplimiento en operaciones nucleares y eléctricas, así como realizar una auditoría interna inmediata para identificar posibles brechas en el marco de la Ley 24/2013 y el Reglamento (UE) 2019/943. Notificar al Consejo de Administración y preparar una estrategia de defensa legal."
+    },
+    {
+      "id": "8d35140a20fd",
+      "title": "La CNMC abre otro expediente sancionador a la nuclear de Iberdrola por una infracción \"muy grave\" en el apagón",
+      "link": "https://www.elespanol.com/invertia/empresas/energia/20260427/cnmc-incoa-nuevo-expediente-sancionador-grave-iberdrola-marco-apagon-nuclear/1003744224613_0.html",
+      "source": "NewsAPI-Q1 · Elespanol.com",
+      "raw_date": "2026-04-27T17:46:15Z",
+      "fetched_at": "2026-04-28T19:45:35.007193+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de normativa energética (Ley 24/2013)",
+        "Sanciones administrativas por parte de la CNMC",
+        "Daño reputacional en el sector energético",
+        "Posible impacto en la operativa de la central nuclear"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Reglamento de Instalaciones Nucleares y Radiactivas (RD 1836/1999)",
+        "Ley 34/2007 de Calidad del Sistema Eléctrico"
+      ],
+      "summary": "La CNMC ha abierto un expediente sancionador a Iberdrola por una posible infracción 'muy grave' en el apagón de una central nuclear, al considerar que hubo una reducción de producción sin autorización reiterada. Aunque Red Eléctrica es señalada como responsable principal, Iberdrola también es expedientada junto a otras empresas del sector.",
+      "vulnerability": "Falta de protocolos claros para la comunicación y autorización de reducciones de producción en centrales nucleares, así como supervisión insuficiente de los operadores.",
+      "financial_impact": "Entre 500.000€ y 2.000.000€ (multa máxima según Ley 24/2013 para infracciones muy graves en el sector eléctrico)",
+      "recommended_action": "Revisar y actualizar los protocolos de operación y comunicación con la CNMC y Red Eléctrica, así como realizar una auditoría interna para identificar posibles incumplimientos previos y reforzar los controles en la operativa de las centrales nucleares."
+    },
+    {
+      "id": "231232c670f7",
+      "title": "Competencia pone en el foco en las nucleares y activa otro expediente muy grave por el apagón",
+      "link": "https://www.elperiodico.com/es/economia/20260427/apagon-competencia-expedientes-nucleares-cnmc-iberdrola-cofrentes-129591018",
+      "source": "NewsAPI-Q2 · Elperiodico.com",
+      "raw_date": "2026-04-27T17:37:32Z",
+      "fetched_at": "2026-04-28T19:45:40.482794+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de normativa de seguridad nuclear (Ley 25/1964 de Energía Nuclear y Reglamento de Instalaciones Nucleares)",
+        "Sanciones económicas severas por parte de la CNMC (hasta 10% del volumen de negocio anual)",
+        "Daño reputacional grave para el sector energético español",
+        "Posible intervención regulatoria forzosa en operaciones de la central afectada",
+        "Riesgo de paralización temporal o definitiva de la instalación"
+      ],
+      "norms_affected": [
+        "Ley 25/1964 de Energía Nuclear",
+        "Reglamento de Instalaciones Nucleares y Radiactivas (Real Decreto 1836/1999)",
+        "Ley 3/2013 de creación de la CNMC",
+        "Reglamento (UE) 2016/631 (seguridad del suministro eléctrico)",
+        "Normativa de protección radiológica (Real Decreto 783/2001)"
+      ],
+      "summary": "La CNMC ha abierto un expediente sancionador grave contra operadores de centrales nucleares (incluyendo Iberdrola en Cofrentes) por posibles incumplimientos en la gestión de seguridad tras el gran apagón de 2026. El organismo investiga fallos en protocolos que podrían derivar en multas millonarias y suspensión de actividades.",
+      "vulnerability": "Falta de auditorías internas independientes en protocolos de seguridad nuclear y planes de contingencia para apagones prolongados, con especial atención a la coordinación entre operadores y autoridades.",
+      "financial_impact": "Entre 50M€ y 500M€ (dependiendo de la gravedad del incumplimiento y la sanción impuesta por la CNMC, incluyendo posibles indemnizaciones por daños colaterales en la red eléctrica).",
+      "recommended_action": "Iniciar una revisión inmediata y exhaustiva de todos los protocolos de seguridad nuclear y planes de contingencia de las centrales operadas por la empresa, con informe técnico independiente para la CNMC en un plazo máximo de 15 días. Notificar al Consejo de Administración y designar un equipo de respuesta rápida para coordinación con la CNMC."
+    },
+    {
+      "id": "7c6c315ffdce",
+      "title": "La CNMC abre expedientes “muy graves” a las nucleares de Iberdrola por el apagón",
+      "link": "https://www.elconfidencial.com/empresas/2026-04-27/la-cnmc-abre-expedientes-muy-graves-a-las-nucleares-de-iberdrola-por-el-apagon_4345997/",
+      "source": "NewsAPI-Q2 · Elconfidencial.com",
+      "raw_date": "2026-04-27T17:08:00Z",
+      "fetched_at": "2026-04-28T19:45:45.517379+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de normativa de seguridad energética (Ley 24/2013 del Sector Eléctrico)",
+        "Sanciones administrativas por fallos en la programación de la red (CNMC)",
+        "Daño reputacional por incidentes críticos en infraestructuras esenciales",
+        "Posible responsabilidad penal por negligencia en la gestión de riesgos operativos"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Real Decreto 1047/2013 (reglamento de instalaciones nucleares)",
+        "Reglamento (UE) 2019/941 (seguridad del suministro eléctrico)",
+        "Ley Orgánica 10/1995 (Código Penal, art. 316 bis - delitos contra la seguridad en el trabajo)"
+      ],
+      "summary": "La CNMC ha abierto expedientes 'muy graves' a Iberdrola y Endesa por fallos en la programación de sus centrales nucleares, que provocaron un apagón masivo. Red Eléctrica también es investigada por posibles deficiencias en la gestión de la red. Las sanciones podrían superar los 500.000€ por incumplimiento de normativas de seguridad energética.",
+      "vulnerability": "Falta de controles robustos en la planificación y supervisión de operaciones críticas en infraestructuras energéticas, así como en la gestión de riesgos operativos y de ciberseguridad asociados.",
+      "financial_impact": "Entre 500.000€ y 2.000.000€ (multas CNMC + costes de reparación y compensaciones a clientes afectados)",
+      "recommended_action": "Revisar urgentemente los protocolos de seguridad operativa y de gestión de riesgos en centrales nucleares y redes eléctricas, implementar auditorías independientes en los procesos de programación, y designar un responsable de compliance energético para supervisar el cumplimiento de la Ley 24/2013 y normativa CNMC."
+    },
+    {
       "id": "cf0860414dc6",
       "title": "La CNMC pone contra las cuerdas las nucleares en España con otro expediente muy grave a Iberdrola",
       "link": "https://www.expansion.com/empresas/energia/2026/04/27/69ef8a96468aeb24448b4596.html",
@@ -6129,13 +6283,13 @@
     }
   ],
   "stats": {
-    "total_hits": 248,
-    "critical_count": 73,
-    "warning_count": 172,
+    "total_hits": 254,
+    "critical_count": 74,
+    "warning_count": 177,
     "info_count": 3,
-    "new_this_run": 2,
-    "articles_checked": 2,
-    "seen_ids_total": 325,
+    "new_this_run": 6,
+    "articles_checked": 6,
+    "seen_ids_total": 331,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -6154,5 +6308,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-28T16:54:49.970807+00:00"
+  "last_updated": "2026-04-28T19:45:46.717738+00:00"
 }
