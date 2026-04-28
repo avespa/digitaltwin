@@ -1,6 +1,56 @@
 {
   "hits": [
     {
+      "id": "cf0860414dc6",
+      "title": "La CNMC pone contra las cuerdas las nucleares en España con otro expediente muy grave a Iberdrola",
+      "link": "https://www.expansion.com/empresas/energia/2026/04/27/69ef8a96468aeb24448b4596.html",
+      "source": "NewsAPI-Q1 · Expansion.com",
+      "raw_date": "2026-04-27T16:14:19Z",
+      "fetched_at": "2026-04-28T16:54:44.279104+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de normativa de competencia (Ley 15/2007 de Defensa de la Competencia)",
+        "Sanciones económicas por prácticas anticompetitivas",
+        "Daño reputacional en el sector energético",
+        "Posible intervención regulatoria adicional"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 2019/4 de la Comisión sobre prácticas anticompetitivas",
+        "Normativa CNMC sobre mercados energéticos"
+      ],
+      "summary": "La CNMC investiga a Iberdrola por un posible incumplimiento grave en el sector energético, vinculado a un apagón ocurrido un año antes. El expediente podría derivar en sanciones económicas significativas y afectar su posición en el mercado.",
+      "vulnerability": "Falta de controles internos robustos en cumplimiento de normativa de competencia y transparencia en operaciones del sector energético.",
+      "financial_impact": "Multa estimada entre 500.000€ y 5M€ para una empresa del tamaño de Iberdrola, más posibles indemnizaciones y costes legales.",
+      "recommended_action": "Revisar inmediatamente los protocolos de competencia y transparencia en operaciones del sector energético, documentar todas las acciones y preparar una estrategia de defensa ante la CNMC."
+    },
+    {
+      "id": "c83037254138",
+      "title": "Sorprendente revés para Vodafone: la Audiencia de Alicante ha tumbado su plan para tomar el control de Finetwork",
+      "link": "https://www.xatakamovil.com/vodafone/sorprendente-reves-para-vodafone-audiencia-alicante-ha-tumbado-su-plan-para-tomar-control-finetwork",
+      "source": "NewsAPI-Q2 · Xatakamovil.com",
+      "raw_date": "2026-04-27T16:38:28Z",
+      "fetched_at": "2026-04-28T16:54:48.770158+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de normativa de competencia (Ley 15/2007 de Defensa de la Competencia)",
+        "Sanciones por prácticas anticompetitivas (multas hasta 10% de la facturación global)",
+        "Daño reputacional por bloqueo de operación estratégica",
+        "Posible incumplimiento de condiciones de autorización CNMC"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (CE) 139/2004 sobre concentraciones",
+        "Ley 3/2013 de creación de la CNMC"
+      ],
+      "summary": "La Audiencia de Alicante ha invalidado la operación de adquisición de Finetwork por parte de Vodafone España, pese a contar con aprobación previa de la CNMC. La sentencia cuestiona el cumplimiento de requisitos legales en el proceso de integración.",
+      "vulnerability": "Falta de verificación previa de la solidez jurídica de operaciones de concentración tras autorización regulatoria, especialmente en aspectos procesales y de cumplimiento continuo.",
+      "financial_impact": "Entre 50M€ y 200M€ (costes de reestructuración, pérdida de sinergias previstas y posible sanción administrativa)",
+      "recommended_action": "Revisar inmediatamente el proceso de integración de operaciones autorizadas por la CNMC, documentar todos los pasos y consultar con asesoría legal especializada en competencia para evaluar recursos y garantizar cumplimiento futuro."
+    },
+    {
       "id": "72c297e7ab27",
       "title": "Jordi Pujol Ferrusola se desmarca del origen de la fortuna en Andorra, dice que \"nunca\" vivieron de ese dinero y admite que él cobraba por dar \"información privilegiada\"",
       "link": "https://www.elmundo.es/cataluna/2026/04/27/69ef51e0e9cf4a1d588b4581.html",
@@ -6079,13 +6129,13 @@
     }
   ],
   "stats": {
-    "total_hits": 246,
+    "total_hits": 248,
     "critical_count": 73,
-    "warning_count": 170,
+    "warning_count": 172,
     "info_count": 3,
-    "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 323,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 325,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -6104,5 +6154,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-28T14:17:37.862157+00:00"
+  "last_updated": "2026-04-28T16:54:49.970807+00:00"
 }
