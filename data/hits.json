@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "df54b7633600",
+      "title": "400.000 euros de multa a Bankinter por un “error manual” de EVO que dejó a la vista las finanzas de un millón de clientes",
+      "link": "https://www.meneame.net/m/actualidad/400-000-euros-multa-bankinter-error-manual-evo-dejo-vista-millon",
+      "source": "NewsAPI-Q5 · Meneame.net",
+      "raw_date": "2026-04-28T16:57:10Z",
+      "fetched_at": "2026-04-29T19:41:30.042142+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Violación de la confidencialidad de datos personales (RGPD)",
+        "Incumplimiento de medidas de seguridad técnicas y organizativas (RGPD)",
+        "Exposición de datos financieros sensibles (Ley de Servicios de Pago)",
+        "Daño reputacional y pérdida de confianza de clientes"
+      ],
+      "norms_affected": [
+        "Reglamento General de Protección de Datos (RGPD) - Art. 32",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de derechos digitales (LOPDGDD)",
+        "Ley 16/2009 de Servicios de Pago",
+        "Directiva (UE) 2015/2366 (PSD2)"
+      ],
+      "summary": "Bankinter fue sancionado con 400.000€ por una brecha de seguridad en EVO Banco durante su absorción, que expuso datos financieros de un millón de clientes. La AEPD consideró que existió un 'error manual' en los controles de seguridad, incumpliendo el RGPD.",
+      "vulnerability": "Falta de controles automatizados y manuales robustos en la migración de datos durante procesos de fusión/adquisición, así como ausencia de auditorías previas en sistemas heredados.",
+      "financial_impact": "400.000€ (multa) + costes de notificación a afectados, refuerzo de medidas de seguridad, posible indemnización por daños y perjuicios, y pérdida de ingresos por desconfianza de clientes (estimación total: 1-3M€ para entidad financiera española media).",
+      "recommended_action": "Revisar urgentemente los protocolos de migración de datos en fusiones/adquisiciones, implementar auditorías técnicas previas y automatizar controles de acceso y cifrado. Notificar a la AEPD en plazo si aplica y reforzar la formación en protección de datos para equipos de TI y compliance."
+    },
+    {
       "id": "fe69264c685b",
       "title": "Inmaculada Medina asegura estar \"muy tranquila\" tras contestar ante el juez \"a todas las preguntas\" por el caso Valka",
       "link": "https://www.eldiario.es/canariasahora/tribunales/inmaculada-medina-comparecer-juez-caso-valka_1_13179352.html",
@@ -6388,13 +6414,13 @@
     }
   ],
   "stats": {
-    "total_hits": 258,
+    "total_hits": 259,
     "critical_count": 77,
-    "warning_count": 178,
+    "warning_count": 179,
     "info_count": 3,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 340,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 341,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -6413,5 +6439,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-29T16:45:54.335158+00:00"
+  "last_updated": "2026-04-29T19:41:31.242854+00:00"
 }
