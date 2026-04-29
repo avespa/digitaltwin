@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "0746d8e517f7",
+      "title": "Las 6 mayores multas de la UE a empresas por prácticas de monopolio",
+      "link": "https://www.huffingtonpost.es/tecnologia/las-6-mayores-multas-ue-empresas-practicas-monopolio-f202604.html",
+      "source": "NewsAPI-Q5 · Huffingtonpost.es",
+      "raw_date": "2026-04-28T04:41:27Z",
+      "fetched_at": "2026-04-29T08:23:31.943340+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Abuso de posición dominante (Art. 102 TFUE)",
+        "Prácticas anticompetitivas (Ley 15/2007 de Defensa de la Competencia)",
+        "Sanciones administrativas y reputacionales",
+        "Exclusión de licitaciones públicas (Ley 9/2017 de Contratos del Sector Público)"
+      ],
+      "norms_affected": [
+        "Reglamento (UE) 1/2003 (competencia)",
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Ley 9/2017 de Contratos del Sector Público",
+        "Directiva (UE) 2019/1 (transparencia en mercados digitales)"
+      ],
+      "summary": "La Comisión Europea impuso a Google una multa récord de 2.950 millones de euros por abuso de posición dominante en el mercado de publicidad digital, reforzando el escrutinio sobre prácticas monopolísticas en el sector tecnológico. Este caso subraya la necesidad de revisar políticas de competencia y estructuras de mercado en empresas con poder significativo.",
+      "vulnerability": "Falta de auditorías periódicas en políticas de competencia y revisión de prácticas comerciales para evitar conductas anticompetitivas.",
+      "financial_impact": "Entre 2M€ y 10M€ (multas directas + costes legales y reputacionales para empresa española media con prácticas similares).",
+      "recommended_action": "Realizar un análisis de riesgos de competencia (compliance antitrust) con urgencia, revisar acuerdos comerciales y políticas de precios, y formar al equipo directivo en normativa de defensa de la competencia (Ley 15/2007 y Reglamento UE 1/2003)."
+    },
+    {
       "id": "b83e7d7cd5c2",
       "title": "La Audiencia deja en libertad al empresario detenido por el blanqueo de Plus Ultra en Aruba",
       "link": "https://www.elmundo.es/espana/2026/04/28/69efa63ce85ecec2158b45a6.html",
@@ -6310,13 +6336,13 @@
     }
   ],
   "stats": {
-    "total_hits": 255,
-    "critical_count": 75,
+    "total_hits": 256,
+    "critical_count": 76,
     "warning_count": 177,
     "info_count": 3,
     "new_this_run": 1,
-    "articles_checked": 2,
-    "seen_ids_total": 333,
+    "articles_checked": 1,
+    "seen_ids_total": 334,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -6335,5 +6361,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-29T03:29:01.459420+00:00"
+  "last_updated": "2026-04-29T08:23:33.143684+00:00"
 }
