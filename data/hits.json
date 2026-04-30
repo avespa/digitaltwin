@@ -1,6 +1,31 @@
 {
   "hits": [
     {
+      "id": "471494bcfc2c",
+      "title": "Red Eléctrica mantiene su estrategia de no hacer provisiones millonarias por el apagón pese al expediente muy grave de la CNMC",
+      "link": "https://www.elperiodico.com/es/economia/20260429/red-electrica-mantiene-estrategia-provisiones-129643460",
+      "source": "NewsAPI-Q2 · Elperiodico.com",
+      "raw_date": "2026-04-29T06:14:10Z",
+      "fetched_at": "2026-04-30T08:26:13.195540+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Sanción económica por incumplimiento de normativa de seguridad del sistema eléctrico",
+        "Daño reputacional por falta de transparencia en gestión de crisis",
+        "Posible responsabilidad civil por daños a terceros"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Real Decreto 1955/2000 (Reglamento de la Ley del Sector Eléctrico)",
+        "Reglamento (UE) 2019/943 (Seguridad del suministro eléctrico)",
+        "Ley 39/2015 de Procedimiento Administrativo Común (expedientes sancionadores)"
+      ],
+      "summary": "La CNMC ha abierto un expediente sancionador muy grave contra REE por el apagón ocurrido en 2025, mientras la empresa niega responsabilidad y no realiza provisiones millonarias. La normativa del sector eléctrico exige cumplimiento estricto en seguridad y gestión de crisis.",
+      "vulnerability": "Falta de un protocolo de contingencia financiera y legal para expedientes sancionadores graves en materia de seguridad del sistema eléctrico, incluyendo evaluación de riesgos y constitución de provisiones.",
+      "financial_impact": "Entre 50M€ y 200M€ (multa estimada + costes legales y compensaciones por daños a terceros)",
+      "recommended_action": "Revisar y actualizar el protocolo de compliance en seguridad del sistema eléctrico, incluyendo evaluación de riesgos legales y financieros asociados a expedientes sancionadores, y constituir provisiones contables para posibles sanciones o indemnizaciones."
+    },
+    {
       "id": "0c0d324589af",
       "title": "Alerta por el regreso de los testaferros: así es la reforma que amenaza la lucha contra el blanqueo",
       "link": "https://www.expansion.com/fiscal/2026/04/29/69f10423468aeb293f8b4586.html",
@@ -6441,13 +6466,13 @@
     }
   ],
   "stats": {
-    "total_hits": 260,
+    "total_hits": 261,
     "critical_count": 78,
-    "warning_count": 179,
+    "warning_count": 180,
     "info_count": 3,
     "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 342,
+    "articles_checked": 2,
+    "seen_ids_total": 344,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -6466,5 +6491,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-30T03:30:33.854044+00:00"
+  "last_updated": "2026-04-30T08:26:14.396169+00:00"
 }
