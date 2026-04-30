@@ -1,6 +1,33 @@
 {
   "hits": [
     {
+      "id": "0c0d324589af",
+      "title": "Alerta por el regreso de los testaferros: así es la reforma que amenaza la lucha contra el blanqueo",
+      "link": "https://www.expansion.com/fiscal/2026/04/29/69f10423468aeb293f8b4586.html",
+      "source": "NewsAPI-Q3 · Expansion.com",
+      "raw_date": "2026-04-28T22:53:35Z",
+      "fetched_at": "2026-04-30T03:30:32.653428+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Blanqueo de capitales mediante estructuras opacas con testaferros",
+        "Infracción de la Ley 10/2010 de prevención del blanqueo de capitales",
+        "Vulneración de la Directiva (UE) 2018/843 (5ª AMLD) y normativa CNMV",
+        "Exposición a sanciones administrativas y penales por incumplimiento de controles AML"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Directiva (UE) 2018/843 (5ª AMLD)",
+        "Ley Orgánica 10/1995 del Código Penal (art. 301 y 302)",
+        "Reglamento (UE) 2015/847",
+        "Normativa CNMV sobre transparencia y lucha contra el blanqueo"
+      ],
+      "summary": "El Anteproyecto de Ley Orgánica de Integridad Pública (ALOIP) podría debilitar los mecanismos de control contra el blanqueo al facilitar el uso de testaferros, incumpliendo estándares internacionales AML y exponiendo a empresas españolas a riesgos legales y reputacionales graves.",
+      "vulnerability": "Falta de due diligence reforzada en identificación de beneficiarios finales y estructuras societarias opacas, especialmente en sectores regulados (banca, finanzas, inmobiliario).",
+      "financial_impact": "Multas de hasta 5M€ (10% de la facturación anual) y posibles indemnizaciones por responsabilidad civil, además de costes de remediación y pérdida de licencias operativas.",
+      "recommended_action": "Revisar urgentemente los protocolos AML/CFT para incluir verificaciones adicionales en clientes con estructuras complejas, actualizar el mapa de riesgos y coordinar con la SEPBLAC para alinear con los cambios normativos previstos."
+    },
+    {
       "id": "df54b7633600",
       "title": "400.000 euros de multa a Bankinter por un “error manual” de EVO que dejó a la vista las finanzas de un millón de clientes",
       "link": "https://www.meneame.net/m/actualidad/400-000-euros-multa-bankinter-error-manual-evo-dejo-vista-millon",
@@ -6414,13 +6441,13 @@
     }
   ],
   "stats": {
-    "total_hits": 259,
-    "critical_count": 77,
+    "total_hits": 260,
+    "critical_count": 78,
     "warning_count": 179,
     "info_count": 3,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 341,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 342,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -6439,5 +6466,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-29T22:01:18.158034+00:00"
+  "last_updated": "2026-04-30T03:30:33.854044+00:00"
 }
