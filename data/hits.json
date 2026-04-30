@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "e1aa3d92b829",
+      "title": "UE acusa a Meta de incumplir la ley por no impedir acceso de menores a Facebook e Instagram",
+      "link": "https://www.diariobitcoin.com/regulacion/ue-acusa-a-meta-de-incumplir-la-ley-por-no-impedir-acceso-de-menores-a-facebook-e-instagram/",
+      "source": "NewsAPI-Q1 · Diariobitcoin.com",
+      "raw_date": "2026-04-29T16:01:29Z",
+      "fetched_at": "2026-04-30T16:22:25.661416+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Incumplimiento de la Ley de Servicios Digitales (DSA) de la UE",
+        "Exposición de menores a contenidos inapropiados",
+        "Multas significativas (hasta 6% de la facturación global)",
+        "Daño reputacional grave",
+        "Posible responsabilidad penal en algunos Estados miembros"
+      ],
+      "norms_affected": [
+        "Ley de Servicios Digitales (DSA) de la UE (Reglamento (UE) 2022/2065)",
+        "Reglamento General de Protección de Datos (RGPD) - protección de menores",
+        "Normativa nacional de protección de la infancia (ej. Ley Orgánica 1/1996 en España)"
+      ],
+      "summary": "La Comisión Europea acusa a Meta de incumplir la Ley de Servicios Digitales al no implementar controles adecuados para evitar el acceso de menores de 13 años a Facebook e Instagram. El caso podría derivar en multas de hasta el 6% de su facturación global, con implicaciones legales y reputacionales graves.",
+      "vulnerability": "Falta de mecanismos robustos de verificación de edad y controles parentales efectivos en plataformas digitales",
+      "financial_impact": "Entre 100M€ y 500M€ para una empresa como Meta (estimación basada en facturación global de 2025)",
+      "recommended_action": "Revisar urgentemente los controles de verificación de edad y acceso de menores en todas las plataformas digitales, implementar soluciones tecnológicas avanzadas (ej. inteligencia artificial para detección de edad), y preparar un plan de respuesta ante posibles sanciones de la DSA y autoridades nacionales como la AEPD"
+    },
+    {
       "id": "bf8ba3378024",
       "title": "Bruselas amenaza a España por no aplicar las normas antiblanqueo sobre criptoactivos",
       "link": "https://www.expansion.com/mercados/criptomonedas/2026/04/29/69f1fdd6468aeb35148b45bb.html",
@@ -6492,13 +6518,13 @@
     }
   ],
   "stats": {
-    "total_hits": 262,
-    "critical_count": 79,
+    "total_hits": 263,
+    "critical_count": 80,
     "warning_count": 180,
     "info_count": 3,
     "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 345,
+    "articles_checked": 2,
+    "seen_ids_total": 347,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -6517,5 +6543,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-04-30T14:03:21.188483+00:00"
+  "last_updated": "2026-04-30T16:22:28.638258+00:00"
 }
