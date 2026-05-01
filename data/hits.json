@@ -1,6 +1,57 @@
 {
   "hits": [
     {
+      "id": "c6c6b1f48e75",
+      "title": "Sancionan a la productora de «La casa de los Gemelos» por promocionar un operador de juego ilegal",
+      "link": "https://www.lavozdegalicia.es/noticia/television/2026/04/30/sancionan-productora-casa-gemelos-promocionar-operador-juego-ilegal/00031777538727777514930.htm",
+      "source": "NewsAPI-Q1 · Lavozdegalicia.es",
+      "raw_date": "2026-04-30T09:03:00Z",
+      "fetched_at": "2026-05-01T10:24:35.791136+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Publicidad de operadores de juego no autorizados (Ley 13/2011 de regulación del juego)",
+        "Incumplimiento de la normativa de publicidad de juegos de azar (CNMC y Ministerio de Consumo)",
+        "Exposición a sanciones administrativas y reputacionales",
+        "Posible vinculación con blanqueo de capitales (Ley 10/2010)"
+      ],
+      "norms_affected": [
+        "Ley 13/2011 de regulación del juego",
+        "Real Decreto 716/2005 (publicidad de juegos de azar)",
+        "Ley 34/1988 de publicidad (CNMC)",
+        "Ley 10/2010 de prevención del blanqueo de capitales"
+      ],
+      "summary": "El Ministerio de Consumo ha sancionado a nueve empresas del sector de apuestas online, incluyendo una productora de televisión, por promocionar operadores de juego no autorizados. La infracción afecta a la normativa de regulación del juego y publicidad, con posibles implicaciones en prevención de blanqueo de capitales.",
+      "vulnerability": "Falta de due diligence en la selección de socios comerciales y verificación de licencias de operadores de juego en campañas publicitarias.",
+      "financial_impact": "Multa estimada entre 100.000€ y 400.000€ para una empresa española media del sector audiovisual o publicitario, más costes legales y reputacionales.",
+      "recommended_action": "Revisar urgentemente los contratos con operadores de juego para verificar licencias CNMC, implementar un protocolo de compliance en publicidad de juegos de azar y formar al equipo comercial en normativa aplicable."
+    },
+    {
+      "id": "e5f0bbcf57db",
+      "title": "Consumo sanciona con 10.000 euros a la productora de 'Zona Gemelos' por publicitar un operador de juego",
+      "link": "https://www.europapress.es/sociedad/noticia-consumo-sanciona-10000-euros-productora-zona-gemelos-publicitar-operador-juego-20260430104615.html",
+      "source": "NewsAPI-Q1 · Europapress.es",
+      "raw_date": "2026-04-30T08:46:15Z",
+      "fetched_at": "2026-05-01T10:24:39.901761+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Publicidad no autorizada de operadores de juego",
+        "Incumplimiento de la Ley 13/2011 de regulación del juego",
+        "Exposición a sanciones administrativas por parte de la DGOJ",
+        "Daño reputacional por vinculación con sector regulado"
+      ],
+      "norms_affected": [
+        "Ley 13/2011 de regulación del juego en España",
+        "Ley 34/1988 de Publicidad",
+        "Ley 3/2014 de medidas de lucha contra la morosidad en operaciones comerciales"
+      ],
+      "summary": "La productora Make Money Now ha sido sancionada con 10.000 euros por la DGOJ por publicitar un operador de juego sin autorización, incumpliendo la normativa sectorial. La infracción se considera grave y afecta a la gestión de contenidos en su plataforma 'Zona Gemelos'.",
+      "vulnerability": "Falta de un protocolo de revisión previa de contenidos publicitarios para verificar el cumplimiento de normativas sectoriales específicas (juego, alcohol, tabaco, etc.).",
+      "financial_impact": "10.000-50.000 € (multa + costes legales y reputacionales para empresa española media)",
+      "recommended_action": "Revisar urgentemente los contenidos publicitarios emitidos en la plataforma, implementar un sistema de filtrado automático para detectar promociones de operadores de juego no autorizados y formar al equipo de compliance en normativa de publicidad sectorial."
+    },
+    {
       "id": "334c1ea4199d",
       "title": "Bustinduy sanciona a la productora de ‘Zona Gemelos’ por publicitar un operador de juego ilegal",
       "link": "https://www.huffingtonpost.es/politica/bustinduy-sanciona-productora-zona-gemelos-publicitar-operador-juego-ilegal-f202604.html",
@@ -6543,13 +6594,13 @@
     }
   ],
   "stats": {
-    "total_hits": 264,
+    "total_hits": 266,
     "critical_count": 80,
-    "warning_count": 181,
+    "warning_count": 183,
     "info_count": 3,
-    "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 349,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 351,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -6568,5 +6619,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-01T08:16:09.583753+00:00"
+  "last_updated": "2026-05-01T10:24:41.102427+00:00"
 }
