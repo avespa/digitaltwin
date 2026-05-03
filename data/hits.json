@@ -1,6 +1,62 @@
 {
   "hits": [
     {
+      "id": "105aa9c8f7d9",
+      "title": "Las 'chistorras' no eran sólo para Koldo: también para los gastos de Ábalos y de la Secretaría de Organización del PSOE",
+      "link": "https://www.elespanol.com/espana/politica/20260502/chistorras-no-solo-koldo-gastos-abalos-secretaria-organizacion-psoe/1003744230326_0.html",
+      "source": "NewsAPI-Q2 · Elespanol.com",
+      "raw_date": "2026-05-02T01:09:53Z",
+      "fetched_at": "2026-05-03T03:32:19.096783+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Soborno y corrupción",
+        "Blanqueo de capitales",
+        "Financiación ilegal de partidos políticos",
+        "Uso indebido de fondos públicos",
+        "Incumplimiento de la Ley Orgánica 8/2007 de Financiación de Partidos Políticos",
+        "Posible vulneración de la Ley Orgánica 10/1995 del Código Penal (delitos contra la Administración Pública)",
+        "Riesgo de sanciones penales para la organización y sus responsables"
+      ],
+      "norms_affected": [
+        "Ley Orgánica 8/2007 (Financiación de Partidos Políticos)",
+        "Ley Orgánica 10/1995 (Código Penal)",
+        "Ley Orgánica 15/1999 (Protección de Datos de Carácter Personal - en caso de manejo de datos sensibles)",
+        "ISO 37001 (Sistemas de Gestión Antisoborno)",
+        "UNE 19601 (Sistemas de Gestión de Compliance Penal)"
+      ],
+      "summary": "Se investiga un posible esquema de financiación ilegal del PSOE mediante pagos en sobres ('chistorras') vinculados a comisiones ilegales y blanqueo de fondos. Los documentos sugieren que altos cargos del partido, incluyendo a Ábalos y la Secretaría de Organización, podrían estar implicados en este mecanismo.",
+      "vulnerability": "Falta de controles internos robustos en la gestión de fondos y donaciones, así como la ausencia de un sistema de compliance penal efectivo que prevenga y detecte prácticas de financiación ilegal o blanqueo.",
+      "financial_impact": "Multas de hasta 500.000€ o más (según gravedad), pérdida de subvenciones públicas, costes legales y reputacionales elevados (estimación para empresa española media: 1-5M€ en sanciones, indemnizaciones y pérdida de confianza).",
+      "recommended_action": "El Compliance Officer debe activar una investigación interna inmediata, revisar los controles de financiación y donaciones, y reforzar el sistema de compliance penal (UNE 19601) para evitar riesgos penales. Notificar a la Fiscalía Anticorrupción si hay indicios de delito."
+    },
+    {
+      "id": "24bb1117bb3e",
+      "title": "Jaque a los nuevos capos británicos de la Costa del Sol",
+      "link": "https://www.abc.es/espana/andalucia/malaga/jaque-nuevos-capos-britanicos-costa-sol-20260502014353-nts.html",
+      "source": "NewsAPI-Q3 · Www.abc.es",
+      "raw_date": "2026-05-01T23:43:56Z",
+      "fetched_at": "2026-05-03T03:32:23.810767+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Blanqueo de capitales",
+        "Financiación del crimen organizado",
+        "Corrupción de funcionarios locales",
+        "Riesgo reputacional para empresas con presencia en la zona"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales (y su reglamento)",
+        "Código Penal (art. 301 y 576 sobre blanqueo y organización criminal)",
+        "Reglamento (UE) 2015/847 (transferencias de fondos)",
+        "Ley Orgánica 1/2015 de modificación del Código Penal (delitos contra el patrimonio)"
+      ],
+      "summary": "La caída de dos capos británicos con intereses en la Costa del Sol expone redes de blanqueo de capitales vinculadas a actividades delictivas. La zona, tradicionalmente usada para operaciones financieras opacas, podría enfrentar mayor escrutinio regulatorio y sanciones por incumplimiento de controles AML.",
+      "vulnerability": "Falta de diligencia debida reforzada en clientes de alto riesgo (PEP extranjeros, sectores de juego, inmobiliario y servicios financieros) en la Costa del Sol, especialmente en entidades bancarias y empresas de gestión de patrimonio.",
+      "financial_impact": "Entre 100K€ y 500K€ por multas administrativas, costes de auditorías forenses y posibles indemnizaciones por negligencia en controles AML, además de pérdida de licencias en sectores regulados.",
+      "recommended_action": "Revisar urgentemente los protocolos de identificación de clientes (KYC) y transacciones sospechosas en operaciones vinculadas a la Costa del Sol, priorizando perfiles de alto riesgo y sectores expuestos. Coordinar con la SEPBLAC y reforzar la formación en blanqueo de capitales para empleados en zonas de riesgo."
+    },
+    {
       "id": "2923bb7d1538",
       "title": "El agravio de Pujol",
       "link": "https://www.abc.es/opinion/carlos-herrera-agravio-pujol-20260430122531-nt.html",
@@ -6675,13 +6731,13 @@
     }
   ],
   "stats": {
-    "total_hits": 269,
-    "critical_count": 80,
-    "warning_count": 186,
+    "total_hits": 271,
+    "critical_count": 81,
+    "warning_count": 187,
     "info_count": 3,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 357,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 359,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -6700,5 +6756,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-02T21:44:13.510972+00:00"
+  "last_updated": "2026-05-03T03:32:25.011546+00:00"
 }
