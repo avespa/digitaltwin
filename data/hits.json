@@ -1,6 +1,29 @@
 {
   "hits": [
     {
+      "id": "b6a992b109c0",
+      "title": "Cani Fernández dejará la Comisión de Competencia con las multas en mínimos: 18 millones en 2025, un 96% menos",
+      "link": "https://www.eldiario.es/economia/cani-fernandez-dejara-comision-competencia-multas-minimos-18-millones-2025-96_1_13183238.html",
+      "source": "NewsAPI-Q1 · Eldiario.es",
+      "raw_date": "2026-05-02T19:53:06Z",
+      "fetched_at": "2026-05-03T21:45:55.545038+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Sanciones por prácticas anticompetitivas no detectadas",
+        "Vulnerabilidad en el control de concentraciones y acuerdos restrictivos",
+        "Posible incumplimiento de la Ley 15/2007 de Defensa de la Competencia"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 2019/1150 sobre transparencia en plataformas digitales"
+      ],
+      "summary": "La CNMC registra una caída del 96% en multas por competencia en 2025 (18M€ vs 444M€ en 2024), lo que sugiere un posible vacío legal o debilidad en la aplicación de la normativa de defensa de la competencia, especialmente en sectores digitales.",
+      "vulnerability": "Falta de recursos humanos/técnicos para supervisar mercados digitales y detectar prácticas anticompetitivas (ej. algoritmos de precios, exclusividades).",
+      "financial_impact": "Entre 500K€ y 5M€ por multas futuras por prácticas no detectadas, más costes de defensa legal.",
+      "recommended_action": "Revisar urgentemente los protocolos de supervisión de mercados digitales y reforzar la colaboración con la CNMC para identificar riesgos de incumplimiento en acuerdos verticales o algoritmos."
+    },
+    {
       "id": "105aa9c8f7d9",
       "title": "Las 'chistorras' no eran sólo para Koldo: también para los gastos de Ábalos y de la Secretaría de Organización del PSOE",
       "link": "https://www.elespanol.com/espana/politica/20260502/chistorras-no-solo-koldo-gastos-abalos-secretaria-organizacion-psoe/1003744230326_0.html",
@@ -6731,13 +6754,13 @@
     }
   ],
   "stats": {
-    "total_hits": 271,
+    "total_hits": 272,
     "critical_count": 81,
-    "warning_count": 187,
+    "warning_count": 188,
     "info_count": 3,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 360,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 361,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -6756,5 +6779,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-03T19:04:24.045710+00:00"
+  "last_updated": "2026-05-03T21:45:56.746097+00:00"
 }
