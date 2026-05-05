@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "a6e0d60800c8",
+      "title": "Todo parece sucio en Plus Ultra",
+      "link": "https://www.abc.es/opinion/editorial-sucio-plus-ultra-20260503162159-nt.html",
+      "source": "NewsAPI-Q3 · Www.abc.es",
+      "raw_date": "2026-05-04T00:19:16Z",
+      "fetched_at": "2026-05-05T02:57:27.946419+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Blanqueo de capitales (Ley 10/2010 de prevención del blanqueo de capitales)",
+        "Corrupción en sector público (Ley Orgánica 1/2015 de reforma del Código Penal)",
+        "Posible incumplimiento de obligaciones de compliance en empresas públicas (Ley 9/2017 de Contratos del Sector Público)",
+        "Vulneración de principios de transparencia y buena gobernanza (Ley 19/2013 de transparencia)"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales y de la financiación del terrorismo",
+        "Ley Orgánica 1/2015 de reforma del Código Penal (art. 286 bis y ter)",
+        "Ley 9/2017 de Contratos del Sector Público",
+        "Ley 19/2013 de transparencia, acceso a la información pública y buen gobierno"
+      ],
+      "summary": "El juez Calama investiga si el rescate de 53M€ a Plus Ultra por parte del Estado español ocultó operaciones de blanqueo de capitales vinculadas a fondos públicos. La Fiscalía Anticorrupción ha solicitado mantener el secreto del procedimiento, lo que sugiere gravedad en los indicios.",
+      "vulnerability": "Falta de controles robustos en la gestión de fondos públicos y en la supervisión de beneficiarios de rescates estatales (debería existir un sistema de due diligence reforzado y auditorías independientes previas a cualquier desembolso).",
+      "financial_impact": "Entre 10M€ y 50M€ (multas, devolución de fondos, costes legales y reputacionales para la empresa y el Estado, incluyendo posibles indemnizaciones por daños a terceros).",
+      "recommended_action": "El Compliance Officer debe activar un protocolo de emergencia para revisar cualquier relación pasada o presente con Plus Ultra, documentar todas las transacciones y comunicaciones con la empresa, y coordinarse con la Fiscalía Anticorrupción si se recibe requerimiento. Además, debe evaluar la implementación de un sistema de alerta temprana para detectar operaciones sospechosas en rescates públicos."
+    },
+    {
       "id": "38d4b90917c0",
       "title": "Montenegro llamará a declarar a José Elías y a su Audax Renovables por presunta corrupción",
       "link": "https://cronicaglobal.elespanol.com/business/20260503/montenegro-declarar-jose-elias-audax-renovables-corrupcion/1003742756252_0.html",
@@ -6782,13 +6808,13 @@
     }
   ],
   "stats": {
-    "total_hits": 273,
-    "critical_count": 81,
+    "total_hits": 274,
+    "critical_count": 82,
     "warning_count": 189,
     "info_count": 3,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 362,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 363,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -6807,5 +6833,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-04T22:04:10.404795+00:00"
+  "last_updated": "2026-05-05T02:57:29.147164+00:00"
 }
