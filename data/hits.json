@@ -1,6 +1,31 @@
 {
   "hits": [
     {
+      "id": "049f81709f1b",
+      "title": "Peramato impide a Luzón rebajar la petición de pena para Aldama, pese a que el fiscal anticorrupción ve motivos",
+      "link": "https://www.elespanol.com/espana/tribunales/20260504/peramato-impide-luzon-rebajar-peticion-pena-aldama-pese-fiscal-anticorrupcion-ve-motivos-colaborado/1003744232383_0.html",
+      "source": "NewsAPI-Q2 · Elespanol.com",
+      "raw_date": "2026-05-04T15:42:33Z",
+      "fetched_at": "2026-05-05T16:29:05.738098+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Soborno y tráfico de influencias",
+        "Obstrucción a la justicia",
+        "Conflicto de intereses en la fiscalía"
+      ],
+      "norms_affected": [
+        "Ley Orgánica 10/1995 (Código Penal) - arts. 386, 427, 432",
+        "Ley 40/2015 de Régimen Jurídico del Sector Público - art. 28",
+        "ISO 37301 (Sistemas de Gestión de Compliance Penal)",
+        "UNE 19601 (Compliance Penal)"
+      ],
+      "summary": "La fiscal general del Estado, Peramato, rechaza aplicar una atenuante cualificada de confesión a Aldama, pese a que la Fiscalía Anticorrupción considera motivos válidos. La decisión podría estar influenciada por presiones políticas del Gobierno y PSOE, generando sospechas de obstrucción a la justicia y conflicto de intereses.",
+      "vulnerability": "Falta de independencia y objetividad en la Fiscalía General del Estado, con posible influencia política en decisiones judiciales.",
+      "financial_impact": "Multa estimada entre 200.000€ y 500.000€ por vulneración de principios de imparcialidad y posible delito de prevaricación (art. 404 CP), además de costes reputacionales y pérdida de confianza en el sistema judicial.",
+      "recommended_action": "El Compliance Officer debe documentar este caso, analizar posibles riesgos penales para la empresa (si está relacionada con el caso) y evaluar la implementación de controles adicionales para prevenir influencias indebidas en procesos judiciales o administrativos."
+    },
+    {
       "id": "19fb3ab1b42c",
       "title": "Para evitar el agotamiento de números de teléfono, el Gobierno tiene nuevas medidas. Son en realidad una zancadilla a las llamadas spam",
       "link": "https://www.xatakamovil.com/movil-y-sociedad/para-evitar-agotamiento-numeros-telefono-gobierno-tiene-nuevas-medidas-realidad-zancadilla-a-llamadas-spam",
@@ -6834,13 +6859,13 @@
     }
   ],
   "stats": {
-    "total_hits": 275,
+    "total_hits": 276,
     "critical_count": 82,
-    "warning_count": 190,
+    "warning_count": 191,
     "info_count": 3,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 364,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 365,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -6859,5 +6884,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-05T10:48:55.393887+00:00"
+  "last_updated": "2026-05-05T16:29:06.938807+00:00"
 }
