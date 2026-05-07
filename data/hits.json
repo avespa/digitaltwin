@@ -1,6 +1,33 @@
 {
   "hits": [
     {
+      "id": "8b52251f6b86",
+      "title": "La Guardia Civil alerta del fraude que vacía cuentas bancarias",
+      "link": "https://www.elconfidencialdigital.com/articulo/dinero/guardia-civil-alerta-fraude-que-vacia-cuentas-bancarias/202605061858451019168.html",
+      "source": "NewsAPI-Q2 · Elconfidencialdigital.com",
+      "raw_date": "2026-05-06T16:58:45Z",
+      "fetched_at": "2026-05-07T19:45:20.678902+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Fraude financiero y blanqueo de capitales",
+        "Incumplimiento de la Ley 10/2010 de prevención del blanqueo de capitales (SEPBLAC)",
+        "Vulneración de la Ley 11/2023 de transacciones electrónicas y protección de inversores (CNMV)",
+        "Exposición a responsabilidad penal por negligencia en controles internos (art. 318 bis CP)"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Ley 11/2023 de transacciones electrónicas y protección de inversores (CNMV)",
+        "Reglamento (UE) 2015/847 (transferencias electrónicas)",
+        "ISO 37001 (Sistemas de gestión antisoborno)",
+        "RGPD (protección de datos en plataformas fraudulentas)"
+      ],
+      "summary": "La Guardia Civil ha identificado un fraude financiero sofisticado que comienza con pequeñas inversiones y termina vaciando cuentas bancarias, utilizando plataformas online fraudulentas. Este esquema podría implicar blanqueo de capitales y vulnerar normativas de protección al inversor y prevención de delitos económicos.",
+      "vulnerability": "Falta de controles automatizados de detección de transacciones sospechosas (SEPBLAC) y debilidades en la verificación de identidad de clientes en plataformas de inversión online.",
+      "financial_impact": "Entre 50.000€ y 500.000€ por caso (dependiendo del volumen de clientes afectados en una empresa española media con exposición a inversiones online).",
+      "recommended_action": "Revisar urgentemente los protocolos de due diligence (KYC) y controles de transacciones en plataformas de inversión, implementar sistemas de alerta temprana para patrones de fraude, y notificar a la SEPBLAC y CNMV cualquier sospecha de actividad ilícita detectada."
+    },
+    {
       "id": "df2d3403776b",
       "title": "España estrecha el cerco al spam telefónico, pero los estafadores se adaptarán",
       "link": "https://www.redes-sociales.com/espana-estrecha-el-cerco-al-spam-telefonico-pero-los-estafadores-se-adaptaran/",
@@ -7016,13 +7043,13 @@
     }
   ],
   "stats": {
-    "total_hits": 282,
+    "total_hits": 283,
     "critical_count": 84,
-    "warning_count": 195,
+    "warning_count": 196,
     "info_count": 3,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 375,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 376,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -7041,5 +7068,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-07T16:53:42.005349+00:00"
+  "last_updated": "2026-05-07T19:45:21.879670+00:00"
 }
