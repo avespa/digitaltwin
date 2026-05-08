@@ -1,6 +1,33 @@
 {
   "hits": [
     {
+      "id": "a180606e5109",
+      "title": "La decana de los registradores: \"España no puede quedar a la cola en la prevención del blanqueo de capitales\"",
+      "link": "https://www.eldiario.es/economia/decana-registradores-espana-no-quedar-cola-prevencion-blanqueo-capitales_128_13202132.html",
+      "source": "NewsAPI-Q3 · Eldiario.es",
+      "raw_date": "2026-05-07T20:03:48Z",
+      "fetched_at": "2026-05-08T22:00:38.493974+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Blanqueo de capitales",
+        "Falta de transparencia en participaciones societarias",
+        "Sanciones por incumplimiento de obligaciones de registro",
+        "Exposición a delitos económicos"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Real Decreto 304/2014 (Reglamento de la Ley 10/2010)",
+        "Ley 11/2023 de medidas de prevención y lucha contra el fraude fiscal",
+        "Reglamento (UE) 2015/847 (transparencia de titularidades reales)",
+        "ISO 37001 (Sistemas de gestión antisoborno)"
+      ],
+      "summary": "El Gobierno impulsa un anteproyecto de Ley de Integridad Pública que obligará a inscribir en el Registro Mercantil las participaciones de sociedades limitadas, reforzando la transparencia para prevenir el blanqueo de capitales. La medida genera controversia entre notarios, pero busca alinear a España con estándares europeos en lucha contra el fraude fiscal y económico.",
+      "vulnerability": "Falta de un sistema automatizado de verificación y actualización en tiempo real de las participaciones societarias en el Registro Mercantil, así como de controles cruzados con bases de datos de titulares reales (como el Registro de Titularidades Reales).",
+      "financial_impact": "Entre 500.000€ y 2.000.000€ en multas por incumplimiento (según tamaño de la empresa) y costes de implementación de sistemas de compliance (100.000€-500.000€ para PYMES, hasta 2M€ para grandes empresas).",
+      "recommended_action": "Revisar urgentemente los protocolos internos de identificación de titulares reales y actualizar los registros societarios. Coordinar con el Registro Mercantil para garantizar el cumplimiento de la nueva obligación y formar al equipo en prevención de blanqueo de capitales (ISO 37001)."
+    },
+    {
       "id": "8b52251f6b86",
       "title": "La Guardia Civil alerta del fraude que vacía cuentas bancarias",
       "link": "https://www.elconfidencialdigital.com/articulo/dinero/guardia-civil-alerta-fraude-que-vacia-cuentas-bancarias/202605061858451019168.html",
@@ -7043,13 +7070,13 @@
     }
   ],
   "stats": {
-    "total_hits": 283,
-    "critical_count": 84,
+    "total_hits": 284,
+    "critical_count": 85,
     "warning_count": 196,
     "info_count": 3,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 376,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 377,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -7068,5 +7095,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-08T19:22:57.516226+00:00"
+  "last_updated": "2026-05-08T22:00:39.694686+00:00"
 }
