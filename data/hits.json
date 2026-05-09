@@ -1,6 +1,35 @@
 {
   "hits": [
     {
+      "id": "51ec45278c35",
+      "title": "Peramato y la Fiscalía de la UE hacen la vista gorda para no investigar a Montero tras desviar fondos para pensiones",
+      "link": "https://www.libertaddigital.com/espana/2026-05-08/peramato-y-la-fiscalia-de-la-ue-hacen-la-vista-gorda-para-no-investigar-a-montero-tras-desviar-fondos-para-pensiones-1b-7400897/",
+      "source": "NewsAPI-Q3 · Libertaddigital.com",
+      "raw_date": "2026-05-08T02:03:48Z",
+      "fetched_at": "2026-05-09T03:23:20.078814+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Malversación de fondos públicos",
+        "Incumplimiento de normativa de transparencia y gestión de fondos públicos (Ley 47/2003 General Presupuestaria)",
+        "Posible vulneración de principios de integridad y ética pública (Ley 19/2013 de transparencia)",
+        "Riesgo de responsabilidad penal para la administración pública (Código Penal, arts. 252-253)",
+        "Daño reputacional severo para la entidad pública involucrada"
+      ],
+      "norms_affected": [
+        "Ley 47/2003 General Presupuestaria",
+        "Ley 19/2013 de transparencia, acceso a la información pública y buen gobierno",
+        "Código Penal (arts. 252-253: malversación)",
+        "Reglamento (UE) 2017/1939 sobre Fiscalía Europea (EPPO)",
+        "ISO 37301:2021 (Sistemas de Gestión de Compliance)",
+        "UNE 19601:2017 (Compliance Penal)"
+      ],
+      "summary": "Se denuncia posible malversación de fondos públicos por parte de una alta representante pública al desviar recursos destinados a pensiones. La Fiscalía Europea y el órgano competente (Peramato) habrían omitido investigar el caso, lo que podría constituir un incumplimiento grave de obligaciones legales y de compliance.",
+      "vulnerability": "Falta de controles internos y externos efectivos para detectar y prevenir desviaciones de fondos públicos, así como de mecanismos de rendición de cuentas transparentes.",
+      "financial_impact": "Entre 5M€ y 50M€ (dependiendo de la cuantía desviada y sanciones aplicables, incluyendo multas penales y administrativas, así como costes de reputación y posibles indemnizaciones).",
+      "recommended_action": "El Compliance Officer debe activar un protocolo de investigación interna inmediata, notificar a la Fiscalía General del Estado y a la Fiscalía Europea (EPPO), y revisar los controles de compliance en gestión de fondos públicos para evitar futuros riesgos. Documentar todas las acciones para posibles defensas legales."
+    },
+    {
       "id": "a180606e5109",
       "title": "La decana de los registradores: \"España no puede quedar a la cola en la prevención del blanqueo de capitales\"",
       "link": "https://www.eldiario.es/economia/decana-registradores-espana-no-quedar-cola-prevencion-blanqueo-capitales_128_13202132.html",
@@ -7070,13 +7099,13 @@
     }
   ],
   "stats": {
-    "total_hits": 284,
-    "critical_count": 85,
+    "total_hits": 285,
+    "critical_count": 86,
     "warning_count": 196,
     "info_count": 3,
     "new_this_run": 1,
     "articles_checked": 1,
-    "seen_ids_total": 377,
+    "seen_ids_total": 378,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -7095,5 +7124,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-08T22:00:39.694686+00:00"
+  "last_updated": "2026-05-09T03:23:21.279516+00:00"
 }
