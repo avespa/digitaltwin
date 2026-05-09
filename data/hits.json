@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "e40b1eb3dd66",
+      "title": "La IA solo es fiable con el acceso a los datos en tiempo real, según 6 de cada 10 empresas españolas",
+      "link": "https://www.silicon.es/la-ia-solo-es-fiable-con-el-acceso-a-los-datos-en-tiempo-real-segun-6-de-cada-10-empresas-espanolas-2579736",
+      "source": "NewsAPI-Q3 · Silicon.es",
+      "raw_date": "2026-05-08T09:29:30Z",
+      "fetched_at": "2026-05-09T10:07:56.091829+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Incumplimiento de RGPD por tratamiento de datos personales sin base legal adecuada",
+        "Riesgo de sanciones por falta de transparencia en el uso de datos en modelos de IA",
+        "Exposición a multas por no garantizar la calidad y exactitud de los datos en tiempo real",
+        "Vulnerabilidad en la protección de datos debido a la dispersión de información"
+      ],
+      "norms_affected": [
+        "RGPD (Reglamento General de Protección de Datos)",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de derechos digitales (LOPDGDD)",
+        "ISO/IEC 27001 (Seguridad de la Información)",
+        "ISO 37301 (Sistemas de Gestión de Compliance)"
+      ],
+      "summary": "El 60% de las empresas españolas considera que la IA requiere acceso a datos en tiempo real para ser fiable, pero enfrentan desafíos como dispersión, calidad y cumplimiento normativo. Esto incrementa riesgos de incumplimiento del RGPD y otras normativas de protección de datos.",
+      "vulnerability": "Falta de un sistema centralizado de gestión de datos con controles de calidad, acceso autorizado y trazabilidad para modelos de IA.",
+      "financial_impact": "Entre 50.000€ y 200.000€ (multas por incumplimiento del RGPD, costes de implementación de medidas correctivas y posibles reclamaciones de afectados).",
+      "recommended_action": "Realizar una auditoría inmediata de los flujos de datos utilizados en modelos de IA para identificar brechas de cumplimiento con el RGPD y LOPDGDD. Implementar un sistema de gestión de datos con controles de calidad, acceso restringido y registro de actividades de tratamiento."
+    },
+    {
       "id": "51ec45278c35",
       "title": "Peramato y la Fiscalía de la UE hacen la vista gorda para no investigar a Montero tras desviar fondos para pensiones",
       "link": "https://www.libertaddigital.com/espana/2026-05-08/peramato-y-la-fiscalia-de-la-ue-hacen-la-vista-gorda-para-no-investigar-a-montero-tras-desviar-fondos-para-pensiones-1b-7400897/",
@@ -7099,13 +7125,13 @@
     }
   ],
   "stats": {
-    "total_hits": 285,
+    "total_hits": 286,
     "critical_count": 86,
-    "warning_count": 196,
+    "warning_count": 197,
     "info_count": 3,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 378,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 379,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -7124,5 +7150,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-09T08:00:21.820253+00:00"
+  "last_updated": "2026-05-09T10:07:57.292525+00:00"
 }
