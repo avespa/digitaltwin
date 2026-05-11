@@ -1,6 +1,33 @@
 {
   "hits": [
     {
+      "id": "0df88c1dfa4b",
+      "title": "Directiva (UE) 2026/1021 del Parlamento Europeo y del Consejo, de 29 abril de 2026, sobre la lucha contra la corrupción, por la que se sustituyen la Decisión marco 2003/568/JAI del Consejo y el Convenio relativo a la lucha contra los actos de corrupción en los que estén implicados funcionarios de las Comunidades Europeas o de los Estados miembros de la Unión Europea, y por la que se modifica la Directiva (UE) 2017/1371 del Parlamento Europeo y del Consejo.",
+      "link": "https://www.boe.es/buscar/doc.php?id=DOUE-L-2026-80682",
+      "source": "BOE - Legislación Derecho Penal",
+      "raw_date": "Mon, 11 May 2026 00:00:00 +0200",
+      "fetched_at": "2026-05-11T09:45:01.065372+00:00",
+      "level": "critical",
+      "relevance_score": 100,
+      "risks": [
+        "Corrupción en transacciones internacionales",
+        "Responsabilidad penal de personas jurídicas",
+        "Incumplimiento de obligaciones de prevención de delitos de corrupción",
+        "Sanciones administrativas y penales por omisión de controles"
+      ],
+      "norms_affected": [
+        "Directiva (UE) 2026/1021",
+        "ISO 37301 (Sistemas de Gestión de Cumplimiento)",
+        "UNE 19601 (Sistemas de Gestión de Compliance Penal)",
+        "RGPD (en caso de filtración de datos en investigaciones)",
+        "Ley Orgánica 1/2015 (Código Penal español)"
+      ],
+      "summary": "La UE aprueba una nueva Directiva que refuerza la lucha contra la corrupción, sustituyendo normativas anteriores y ampliando el ámbito de aplicación. Obliga a los Estados miembros a implementar medidas más estrictas en prevención, detección y sanción de actos corruptos, incluyendo mayor responsabilidad para empresas.",
+      "vulnerability": "Falta de un sistema de gestión de compliance penal actualizado según la nueva Directiva, especialmente en controles de terceros (proveedores, socios comerciales) y en canales de denuncia efectivos.",
+      "financial_impact": "Entre 500.000€ y 5.000.000€ (multas por incumplimiento, costes legales, pérdida de licitaciones públicas y daño reputacional en empresa española media con facturación superior a 50M€).",
+      "recommended_action": "Revisar urgentemente el sistema de compliance penal (UNE 19601) y la política de prevención de delitos de corrupción para alinearlo con la Directiva (UE) 2026/1021. Actualizar el mapa de riesgos, formar a empleados y directivos, y reforzar los controles en operaciones internacionales."
+    },
+    {
       "id": "e40b1eb3dd66",
       "title": "La IA solo es fiable con el acceso a los datos en tiempo real, según 6 de cada 10 empresas españolas",
       "link": "https://www.silicon.es/la-ia-solo-es-fiable-con-el-acceso-a-los-datos-en-tiempo-real-segun-6-de-cada-10-empresas-espanolas-2579736",
@@ -7125,13 +7152,13 @@
     }
   ],
   "stats": {
-    "total_hits": 286,
-    "critical_count": 86,
+    "total_hits": 287,
+    "critical_count": 87,
     "warning_count": 197,
     "info_count": 3,
-    "new_this_run": 0,
+    "new_this_run": 1,
     "articles_checked": 1,
-    "seen_ids_total": 380,
+    "seen_ids_total": 381,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -7150,5 +7177,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-11T03:48:26.367048+00:00"
+  "last_updated": "2026-05-11T09:45:02.266076+00:00"
 }
