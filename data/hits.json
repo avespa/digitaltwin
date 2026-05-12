@@ -1,6 +1,82 @@
 {
   "hits": [
     {
+      "id": "3e11959fa476",
+      "title": "Piqué enfrenta una multa de miles de euros por operar en Bolsa con datos privilegiados",
+      "link": "https://actualidad.rt.com/actualidad/604318-pique-multa-miles-euros-informacion-privilegiada",
+      "source": "NewsAPI-Q1 · RT",
+      "raw_date": "2026-05-11T10:36:18Z",
+      "fetched_at": "2026-05-12T11:22:56.261776+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Uso de información privilegiada (insider trading)",
+        "Violación de normativa CNMV (Ley del Mercado de Valores)",
+        "Daño reputacional severo",
+        "Posible condena penal por delito contra el mercado"
+      ],
+      "norms_affected": [
+        "Ley 14/2013 de Mercado de Valores (art. 285 y 286)",
+        "Reglamento (UE) 596/2014 (MAR)",
+        "Código Penal (art. 285 bis)"
+      ],
+      "summary": "El exfutbolista Gerard Piqué enfrenta una posible multa millonaria por operar en Bolsa con información privilegiada, lo que constituye un delito grave contra la integridad del mercado según la normativa española y europea. La CNMV investiga el caso por posible uso de datos no públicos para obtener beneficios económicos.",
+      "vulnerability": "Falta de controles internos en empresas o entidades vinculadas para prevenir el uso de información privilegiada por parte de empleados, directivos o terceros con acceso a datos sensibles.",
+      "financial_impact": "Multa administrativa de hasta 5.000.000€ (según gravedad) + posible indemnización por daños y perjuicios a terceros afectados. Coste reputacional incalculable (pérdida de patrocinios, imagen de marca).",
+      "recommended_action": "Revisar urgentemente los protocolos de prevención de uso de información privilegiada (insider trading) en la empresa, incluyendo formación obligatoria a directivos y empleados con acceso a información sensible, y auditorías internas periódicas. Notificar a la CNMV si la empresa está sujeta a su supervisión."
+    },
+    {
+      "id": "2a09b24e5d6d",
+      "title": "Piqué y José Elías, multados con 300.000 euros por usar información privilegiada para beneficiarse en Bolsa",
+      "link": "https://www.libertaddigital.com/libremercado/2026-05-11/pique-y-jose-elias-multados-con-300-000-euros-por-usar-informacion-privilegiada-para-beneficiarse-en-bolsa-1b-7402652/",
+      "source": "NewsAPI-Q2 · Libertaddigital.com",
+      "raw_date": "2026-05-11T10:37:15Z",
+      "fetched_at": "2026-05-12T11:23:00.671884+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Uso de información privilegiada (insider trading)",
+        "Incumplimiento de normativa CNMV (Ley del Mercado de Valores)",
+        "Daño reputacional",
+        "Exposición a sanciones administrativas y penales"
+      ],
+      "norms_affected": [
+        "Ley 6/2023 de los Mercados de Valores y de los Servicios de Inversión (transposición de MiFID II)",
+        "Reglamento (UE) 596/2014 sobre abuso de mercado",
+        "Código Penal español (art. 285 bis)"
+      ],
+      "summary": "Dos directivos han sido sancionados con 300.000 euros por la CNMV por utilizar información privilegiada para operar en Bolsa, obtenida de un tercero. La multa refleja un caso claro de abuso de mercado con impacto en la integridad del sistema financiero.",
+      "vulnerability": "Falta de controles internos para detectar operaciones sospechosas con información privilegiada (ej.: sistemas de monitorización de transacciones, políticas de confidencialidad reforzadas, formación en compliance financiero).",
+      "financial_impact": "300.000 euros (multa) + costes legales y reputacionales estimados en 150.000-300.000 euros adicionales para una empresa española media.",
+      "recommended_action": "Revisar urgentemente los protocolos de prevención de abuso de mercado: implementar sistemas automatizados de alerta para operaciones con información privilegiada, reforzar la formación en compliance financiero para directivos y empleados con acceso a información sensible, y auditar los canales de comunicación interna para evitar filtraciones."
+    },
+    {
+      "id": "b8f4bb618f50",
+      "title": "Gerard Piqué y José Elías, multados con 200.000 y 100.000 euros por usar&nbsp;información privilegiada",
+      "link": "https://www.marca.com/tiramillas/economia/2026/05/11/gerard-pique-jose-elias-multados-cnmv-200-000-100-00-euros-infracciones-graves.html",
+      "source": "NewsAPI-Q2 · Marca",
+      "raw_date": "2026-05-11T09:24:31Z",
+      "fetched_at": "2026-05-12T11:23:05.258892+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Uso de información privilegiada (insider trading)",
+        "Violación de la normativa de mercados (Ley del Mercado de Valores y Reglamento UE 596/2014)",
+        "Daño reputacional para la empresa vinculada (Atrys)",
+        "Exposición a sanciones administrativas y penales"
+      ],
+      "norms_affected": [
+        "Reglamento UE 596/2014 (MAR)",
+        "Ley 11/2023 de medidas de prevención y lucha contra el fraude fiscal y en la gestión de subvenciones",
+        "Ley del Mercado de Valores (Real Decreto Legislativo 4/2015)",
+        "ISO 37301 (Sistemas de Gestión de Compliance)"
+      ],
+      "summary": "Gerard Piqué y José Elías han sido multados por la CNMV por usar información privilegiada para comprar acciones de Atrys, infringiendo la normativa de mercados. La sanción refleja un caso grave de insider trading con impacto en la integridad del mercado.",
+      "vulnerability": "Falta de controles internos para detectar y prevenir el uso de información privilegiada (ej.: políticas de confidencialidad, canales de denuncia, formación en compliance financiero).",
+      "financial_impact": "Multas de 300.000€ (200.000€ + 100.000€) + costes legales y reputacionales estimados en 1-3 millones de euros para una empresa española media.",
+      "recommended_action": "Revisar y reforzar los protocolos de prevención de insider trading en la empresa, incluyendo formación obligatoria para empleados con acceso a información privilegiada, auditorías internas periódicas y actualización de políticas de compliance financiero."
+    },
+    {
       "id": "847d548b67a2",
       "title": "La CNMV multa a Piqué y José Elías por información privilegiada de la oferta de Atrys sobre Aspy",
       "link": "https://www.elperiodico.com/es/economia/20260511/cnmv-multa-pique-jose-elias-130086982",
@@ -7325,13 +7401,13 @@
     }
   ],
   "stats": {
-    "total_hits": 294,
-    "critical_count": 89,
-    "warning_count": 202,
+    "total_hits": 297,
+    "critical_count": 90,
+    "warning_count": 204,
     "info_count": 3,
-    "new_this_run": 7,
-    "articles_checked": 7,
-    "seen_ids_total": 388,
+    "new_this_run": 3,
+    "articles_checked": 4,
+    "seen_ids_total": 392,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -7350,5 +7426,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-12T08:44:42.492482+00:00"
+  "last_updated": "2026-05-12T11:23:08.984039+00:00"
 }
