@@ -1,6 +1,55 @@
 {
   "hits": [
     {
+      "id": "f379e776a4ae",
+      "title": "De Piqué a Kim Kardashian: famosos que se han topado con el regulador de los mercados",
+      "link": "https://www.expansion.com/mercados/2026/05/12/6a01dd11468aeb97388b456f.html",
+      "source": "NewsAPI-Q2 · Expansion.com",
+      "raw_date": "2026-05-11T22:08:04Z",
+      "fetched_at": "2026-05-12T22:14:01.536158+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Publicidad engañosa en promociones financieras",
+        "Incumplimiento de obligaciones de transparencia en mercados regulados",
+        "Daño reputacional por sanciones de CNMV"
+      ],
+      "norms_affected": [
+        "Ley 6/2023 de Mercados de Criptoactivos (MiCA)",
+        "Ley 24/1988 del Mercado de Valores (art. 20.4 y 21)",
+        "Reglamento (UE) 2016/1011 sobre índices de referencia"
+      ],
+      "summary": "Celebridades y deportistas han sido sancionados por la CNMV por promocionar criptomonedas sin revelar conflictos de interés, incumpliendo obligaciones de transparencia en mercados regulados. El caso de Floyd Mayweather destaca por una multa por publicidad no declarada.",
+      "vulnerability": "Falta de controles internos para supervisar promociones de productos financieros por parte de terceros (influencers, deportistas, famosos) y asegurar el cumplimiento de la normativa de transparencia.",
+      "financial_impact": "Multa estimada entre 100.000€ y 400.000€ para una empresa española media, más costes legales y reputacionales.",
+      "recommended_action": "Revisar y actualizar políticas de compliance para incluir cláusulas de supervisión en promociones de productos financieros por terceros, con formación obligatoria a colaboradores y proveedores."
+    },
+    {
+      "id": "6012f8bf8efc",
+      "title": "Gerard Piqué recibe multa de € 200.000 por operaciones bursátiles con información privilegiada en España",
+      "link": "https://www.diariobitcoin.com/regulacion/gerard-pique-recibe-multa-de-e-200-000-por-operacion-con-informacion-privilegiada-en-espana/",
+      "source": "NewsAPI-Q2 · Diariobitcoin.com",
+      "raw_date": "2026-05-11T21:27:58Z",
+      "fetched_at": "2026-05-12T22:14:11.029437+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "incumplimiento de la normativa de abuso de mercado (MAR/Reglamento UE 596/2014)",
+        "sanción administrativa por operaciones con información privilegiada",
+        "daño reputacional para la empresa vinculada (si aplica)",
+        "posible responsabilidad penal en casos graves (art. 285 CP)"
+      ],
+      "norms_affected": [
+        "Reglamento (UE) 596/2014 (MAR)",
+        "Ley del Mercado de Valores (LMV) - Art. 285",
+        "Ley 11/2021 de medidas de prevención y lucha contra el fraude fiscal (en relación con operaciones bursátiles)"
+      ],
+      "summary": "Gerard Piqué ha sido sancionado con 200.000€ por operaciones con información privilegiada en 2021, antes de conocerse públicamente una adquisición de Aspy Global Services. La CNMV ha aplicado el Reglamento MAR, que prohíbe el uso de información no pública para operaciones bursátiles.",
+      "vulnerability": "Falta de controles internos para detectar y prevenir operaciones con información privilegiada (ej.: políticas de *wall-crossing*, registros de accesos a información sensible, formación obligatoria en compliance financiero).",
+      "financial_impact": "200.000€ (multa) + costes legales y reputacionales (estimación: 50.000-150.000€ adicionales para una empresa española media vinculada al caso).",
+      "recommended_action": "Revisar y reforzar los protocolos internos de prevención de abuso de mercado: implementar un sistema de *insider trading monitoring*, formar a empleados y directivos en MAR, y auditar periódicamente el acceso a información privilegiada."
+    },
+    {
       "id": "bfd4d952700d",
       "title": "El regulador español sanciona con una millonaria multa a Gerard Piqué por uso de información privilegiada",
       "link": "https://www.df.cl/mercados/bolsa-monedas/el-regulador-espanol-sanciona-con-una-millonaria-multa-a-gerard-pique-por",
@@ -7528,13 +7577,13 @@
     }
   ],
   "stats": {
-    "total_hits": 302,
+    "total_hits": 304,
     "critical_count": 92,
-    "warning_count": 207,
+    "warning_count": 209,
     "info_count": 3,
-    "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 397,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 399,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -7553,5 +7602,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-12T19:56:54.520172+00:00"
+  "last_updated": "2026-05-12T22:14:12.230213+00:00"
 }
