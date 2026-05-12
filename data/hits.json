@@ -1,6 +1,31 @@
 {
   "hits": [
     {
+      "id": "bfd4d952700d",
+      "title": "El regulador español sanciona con una millonaria multa a Gerard Piqué por uso de información privilegiada",
+      "link": "https://www.df.cl/mercados/bolsa-monedas/el-regulador-espanol-sanciona-con-una-millonaria-multa-a-gerard-pique-por",
+      "source": "NewsAPI-Q2 · Www.df.cl",
+      "raw_date": "2026-05-11T19:31:34Z",
+      "fetched_at": "2026-05-12T19:56:53.319504+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Uso de información privilegiada (insider trading)",
+        "Incumplimiento de normativa CNMV (Ley del Mercado de Valores)",
+        "Daño reputacional para la empresa y el individuo",
+        "Posible responsabilidad penal por delito de mercado"
+      ],
+      "norms_affected": [
+        "Ley 14/2013 de Mercado de Valores (art. 285 y 286)",
+        "Reglamento (UE) 596/2014 (MAR)",
+        "Código Penal (art. 285 bis)"
+      ],
+      "summary": "La CNMV ha impuesto una multa millonaria a Gerard Piqué y Francisco José Elías por uso de información privilegiada en la adquisición de Aspy Global Services por parte de Atrys Health en 2021. El caso afecta directamente a la integridad del mercado y a la transparencia en operaciones corporativas.",
+      "vulnerability": "Falta de controles internos para detectar y prevenir el uso de información privilegiada (ej.: políticas de *Chinese Walls*, registros de operaciones sospechosas, formación en compliance para directivos y empleados con acceso a información sensible).",
+      "financial_impact": "Multa estimada entre 1M€ y 5M€ para la empresa (si está involucrada) y sanciones individuales de hasta 1M€ para Piqué. Costes adicionales por litigios, pérdida de confianza inversora y posible exclusión de mercados regulados.",
+      "recommended_action": "1) Revisar urgentemente los protocolos de *Chinese Walls* y acceso a información privilegiada. 2) Realizar auditoría interna para identificar posibles brechas en el cumplimiento de la normativa MAR. 3) Formar a todos los empleados con acceso a información sensible en prevención de insider trading. 4) Notificar el incidente a la CNMV y documentar las medidas correctivas adoptadas."
+    },
+    {
       "id": "00657519fcea",
       "title": "Colapso en la Agencia de Protección de Datos por falta de financiación y de personal",
       "link": "https://www.elconfidencialdigital.com/articulo/dinero/colapso-agencia-proteccion-datos-falta-personal-presupuestos/202605111248121019992.html",
@@ -7503,13 +7528,13 @@
     }
   ],
   "stats": {
-    "total_hits": 301,
-    "critical_count": 91,
+    "total_hits": 302,
+    "critical_count": 92,
     "warning_count": 207,
     "info_count": 3,
     "new_this_run": 1,
     "articles_checked": 1,
-    "seen_ids_total": 396,
+    "seen_ids_total": 397,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -7528,5 +7553,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-12T17:13:46.619691+00:00"
+  "last_updated": "2026-05-12T19:56:54.520172+00:00"
 }
