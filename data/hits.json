@@ -1,6 +1,179 @@
 {
   "hits": [
     {
+      "id": "847d548b67a2",
+      "title": "La CNMV multa a Piqué y José Elías por información privilegiada de la oferta de Atrys sobre Aspy",
+      "link": "https://www.elperiodico.com/es/economia/20260511/cnmv-multa-pique-jose-elias-130086982",
+      "source": "NewsAPI-Q2 · Elperiodico.com",
+      "raw_date": "2026-05-11T08:40:09Z",
+      "fetched_at": "2026-05-12T08:44:15.062596+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Uso de información privilegiada (art. 285 Ley de Sociedades de Capital y art. 81 Ley del Mercado de Valores)",
+        "Daño reputacional para las empresas vinculadas (Atrys Health, FC Barcelona)",
+        "Exposición a sanciones penales por delito de abuso de información privilegiada (art. 285 Código Penal)",
+        "Posible incumplimiento de políticas internas de compliance en empresas involucradas"
+      ],
+      "norms_affected": [
+        "Ley 6/2023 de los Mercados de Valores y de los Servicios de Inversión (transposición MiFID II)",
+        "Ley Orgánica 10/1995 del Código Penal (art. 285)",
+        "Reglamento (UE) 596/2014 sobre abuso de mercado",
+        "Normas internas de compliance de Atrys Health y FC Barcelona"
+      ],
+      "summary": "La CNMV ha sancionado a Gerard Piqué y José Elías por operar con información privilegiada en la OPA de Atrys Health sobre Aspy, violando la normativa de mercados de valores. La multa, aún no cuantificada pero previsiblemente elevada, afecta a figuras públicas y empresarios con vínculos en el sector sanitario.",
+      "vulnerability": "Falta de controles efectivos en el acceso, registro y supervisión de información privilegiada en empresas cotizadas y sus directivos (debería existir un sistema de 'Chinese Walls', registros de operaciones y formación obligatoria en compliance financiero).",
+      "financial_impact": "Entre 500.000€ y 2.000.000€ (multa CNMV + costes legales + posible indemnización por daños a terceros en operaciones con información privilegiada).",
+      "recommended_action": "Revisar urgentemente los protocolos de información privilegiada en todas las empresas del grupo (Atrys Health, FC Barcelona u otras vinculadas), realizar auditoría interna de operaciones sospechosas en los últimos 5 años, y formar a directivos y empleados en prevención de abuso de mercado. Notificar a la CNMV cualquier incidencia detectada."
+    },
+    {
+      "id": "70def47bbb3c",
+      "title": "La CNMV multa a Gerard Piqué y Francisco José Elías por información privilegiada",
+      "link": "https://www.expansion.com/mercados/2026/05/11/6a01952ce5fdeaf5278b4587.html",
+      "source": "NewsAPI-Q2 · Expansion.com",
+      "raw_date": "2026-05-11T08:37:33Z",
+      "fetched_at": "2026-05-12T08:44:19.803196+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "incumplimiento de la normativa de mercados (Ley del Mercado de Valores y Reglamento UE 596/2014)",
+        "daño reputacional para la empresa vinculada (si aplica)",
+        "responsabilidad penal por delito de uso de información privilegiada (art. 285 Código Penal)"
+      ],
+      "norms_affected": [
+        "Reglamento (UE) 596/2014 (MAR)",
+        "Ley 11/2023 de medidas de prevención y lucha contra el fraude fiscal y en la regulación del juego (modificación de la Ley del Mercado de Valores)",
+        "Código Penal español (art. 285)"
+      ],
+      "summary": "La CNMV ha sancionado a Gerard Piqué y Francisco José Elías con multas de 200.000€ y 100.000€ respectivamente por uso de información privilegiada en operaciones bursátiles. El caso afecta a la integridad del mercado y expone riesgos de compliance en empresas con vínculos a los implicados.",
+      "vulnerability": "Falta de controles internos para detectar y prevenir el uso de información privilegiada (ej.: políticas de *wall-crossing*, registros de acceso a información sensible, formación en compliance financiero).",
+      "financial_impact": "Multas administrativas (300.000€) + posibles costes legales y reputacionales (estimación: 1-3M€ para empresa española media con exposición mediática).",
+      "recommended_action": "Revisar urgentemente los protocolos de *insider trading* (incluyendo *wall-crossing* y listas de personas con acceso a información privilegiada), actualizar políticas de compliance financiero y realizar formación específica para directivos y empleados con acceso a datos sensibles."
+    },
+    {
+      "id": "313e0dcb335f",
+      "title": "La CNMV multa a Gerard Piqué y José Elías por el uso de información privilegiada al comprar acciones de Aspy",
+      "link": "https://www.lavozdegalicia.es/noticia/economia/2026/05/11/cnmv-multa-gerard-pique-jose-elias-informacion-privilegiada-oferta-atrys-sobre-aspy/00031778487979104179215.htm",
+      "source": "NewsAPI-Q2 · Lavozdegalicia.es",
+      "raw_date": "2026-05-11T08:33:00Z",
+      "fetched_at": "2026-05-12T08:44:24.202918+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Uso de información privilegiada (insider trading)",
+        "Incumplimiento de normativa de mercados (Ley del Mercado de Valores)",
+        "Daño reputacional para la empresa vinculada (si aplica)",
+        "Exposición a sanciones administrativas y penales"
+      ],
+      "norms_affected": [
+        "Ley 6/2023 de los Mercados de Valores y de los Servicios de Inversión (LMVSI)",
+        "Reglamento (UE) 596/2014 (MAR)",
+        "Código de Conducta de la CNMV"
+      ],
+      "summary": "La CNMV ha sancionado a Gerard Piqué y José Elías con 200.000€ por usar información privilegiada en la compra de acciones de Aspy, calificando la infracción como «muy grave». La operación se enmarca en la OPA de Atrys sobre Aspy, donde los implicados actuaron con datos no públicos.",
+      "vulnerability": "Falta de controles internos para prevenir el uso de información privilegiada (ej.: políticas de *Chinese Walls*, registros de operaciones sospechosas, formación en compliance financiero).",
+      "financial_impact": "Multa de 200.000€ (para la empresa media española, impacto moderado pero significativo en reputación y costes legales asociados).",
+      "recommended_action": "Revisar y reforzar los protocolos de prevención de abuso de información privilegiada, incluyendo auditorías internas, formación obligatoria para empleados con acceso a información sensible y actualización de políticas de *compliance* financiero según MAR y LMVSI."
+    },
+    {
+      "id": "b782fc10a9fb",
+      "title": "La CNMV multa a Gerard Piqué y Francisco José Elías con 300.000 euros por información privilegiada",
+      "link": "https://www.elmundo.es/economia/2026/05/11/6a019284e4d4d8f55c8b4578.html",
+      "source": "NewsAPI-Q2 · El Mundo",
+      "raw_date": "2026-05-11T08:29:47Z",
+      "fetched_at": "2026-05-12T08:44:28.396384+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Uso de información privilegiada (art. 285 Ley de Sociedades de Capital)",
+        "Incumplimiento de deberes de transparencia (Reglamento UE 596/2014 - MAR)",
+        "Daño reputacional y pérdida de confianza en el mercado"
+      ],
+      "norms_affected": [
+        "Reglamento (UE) 596/2014 (MAR)",
+        "Ley 11/2021 de medidas de prevención y lucha contra el fraude fiscal y en la Seguridad Social",
+        "Ley de Sociedades de Capital (art. 285)"
+      ],
+      "summary": "La CNMV ha sancionado a Gerard Piqué y Francisco José Elías con multas de 200.000€ y 100.000€ respectivamente por utilizar información privilegiada en operaciones bursátiles, incumpliendo el Reglamento MAR y la normativa de transparencia.",
+      "vulnerability": "Falta de controles internos para detectar y prevenir el uso de información privilegiada (ej.: políticas de trading, registros de operaciones, formación en compliance financiero).",
+      "financial_impact": "Multa total de 300.000€ (para empresa media española: impacto moderado, pero riesgo reputacional alto).",
+      "recommended_action": "Revisar y reforzar los protocolos de trading interno, implementar sistemas de monitorización de operaciones sospechosas y formar al personal en normativa MAR y deberes de transparencia."
+    },
+    {
+      "id": "295cf79efcd9",
+      "title": "La CNMV multa a Gerard Piqué y José Elías por información privilegiada de la oferta de Atrys sobre Aspy",
+      "link": "https://www.abc.es/economia/cnmv-multa-gerard-pique-jose-elias-informacion-20260511102439-nt.html",
+      "source": "NewsAPI-Q2 · Www.abc.es",
+      "raw_date": "2026-05-11T08:24:41Z",
+      "fetched_at": "2026-05-12T08:44:32.895992+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Uso de información privilegiada (art. 81 Ley del Mercado de Valores)",
+        "Sanciones administrativas y reputacionales",
+        "Posible responsabilidad penal (art. 285 Código Penal)",
+        "Daño a la integridad del mercado"
+      ],
+      "norms_affected": [
+        "Ley 6/2023 de los Mercados de Valores y de los Servicios de Inversión (transposición MiFID II)",
+        "Reglamento (UE) 596/2014 (MAR)",
+        "Código Penal (art. 285)"
+      ],
+      "summary": "La CNMV ha sancionado a Gerard Piqué y José Elías por utilizar información privilegiada en la operación de compra de Aspy por parte de Atrys Health, violando la normativa de transparencia y abuso de mercado. La multa, aún no cuantificada, podría superar los 500K€.",
+      "vulnerability": "Falta de controles internos para detectar y prevenir el uso de información privilegiada (ej.: políticas de *Chinese Walls*, registros de operaciones sospechosas, formación en compliance financiero).",
+      "financial_impact": "Multa estimada entre 1M€ y 3M€ para la empresa (si está vinculada) + costes legales y reputacionales (pérdida de confianza inversora).",
+      "recommended_action": "Revisar urgentemente los protocolos de prevención de abuso de mercado (MAR), implementar sistemas de monitorización de operaciones sospechosas y formar a directivos y empleados en normativa de mercados. Notificar a la CNMV cualquier posible incumplimiento detectado."
+    },
+    {
+      "id": "e166f149f3ac",
+      "title": "La CNMV impone un multón de 200.000 euros a Gerard Piqué",
+      "link": "https://www.huffingtonpost.es/politica/la-cnmv-impone-multon-200000-euros-gerard-pique-f202605.html",
+      "source": "NewsAPI-Q2 · Huffingtonpost.es",
+      "raw_date": "2026-05-11T07:18:56Z",
+      "fetched_at": "2026-05-12T08:44:37.116785+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Información privilegiada (art. 285 Ley de Sociedades de Capital)",
+        "Manipulación de mercado (art. 284 Ley de Sociedades de Capital)",
+        "Incumplimiento de deberes de transparencia (Reglamento UE 596/2014)"
+      ],
+      "norms_affected": [
+        "Reglamento UE 596/2014 (MAR)",
+        "Ley 11/2021 de medidas de prevención y lucha contra el fraude fiscal",
+        "Ley de Sociedades de Capital (art. 284 y 285)"
+      ],
+      "summary": "La CNMV ha sancionado a Gerard Piqué y a José Elías con una multa de 200.000€ por presunta información privilegiada en la compra de Aspy por Atrys Health. La infracción afecta a la transparencia y equidad en los mercados financieros.",
+      "vulnerability": "Falta de controles internos para detectar operaciones sospechosas de información privilegiada (ISO 37301:2021, punto 8.2).",
+      "financial_impact": "200.000€ (multa) + costes legales y reputacionales estimados en 150.000-300.000€ para una empresa española media.",
+      "recommended_action": "Revisar y reforzar los protocolos de prevención de información privilegiada, incluyendo formación específica para directivos y empleados con acceso a información sensible, y actualizar el canal de denuncias interno."
+    },
+    {
+      "id": "690b104188f7",
+      "title": "La CNMV multa a Gerard Piqué y José Elías con 300.000 euros por información privilegiada",
+      "link": "https://www.elespanol.com/invertia/empresas/20260511/cnmv-sanciona-francisco-jose-elias-gerard-pique-informacion-privilegiada/1003744240355_0.html",
+      "source": "NewsAPI-Q2 · Elespanol.com",
+      "raw_date": "2026-05-11T06:58:24Z",
+      "fetched_at": "2026-05-12T08:44:41.291902+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Uso de información privilegiada (art. 285 Ley de Sociedades de Capital)",
+        "Violación de la normativa de mercados (Reglamento UE 596/2014 - MAR)",
+        "Daño reputacional y pérdida de confianza en los mercados"
+      ],
+      "norms_affected": [
+        "Reglamento (UE) 596/2014 (MAR)",
+        "Ley 11/2021 de medidas de prevención y lucha contra el fraude fiscal",
+        "Ley de Sociedades de Capital (art. 285)",
+        "Código de Buen Gobierno de la CNMV"
+      ],
+      "summary": "La CNMV ha sancionado a Gerard Piqué y José Elías con 300.000 euros por operar con información privilegiada en enero de 2021, obteniendo beneficios indebidos. La multa refleja un incumplimiento grave de la normativa de transparencia y mercados.",
+      "vulnerability": "Falta de controles internos para detectar operaciones sospechosas (ej.: sistemas de alerta temprana en transacciones con información privilegiada).",
+      "financial_impact": "Multa de 300.000€ + costes legales y reputacionales (estimación: 500.000€-1M€ para empresa española media con exposición mediática).",
+      "recommended_action": "Revisar y reforzar los protocolos de prevención de información privilegiada, incluyendo formación obligatoria a directivos y empleados con acceso a datos sensibles, y actualizar los sistemas de monitorización de operaciones."
+    },
+    {
       "id": "0df88c1dfa4b",
       "title": "Directiva (UE) 2026/1021 del Parlamento Europeo y del Consejo, de 29 abril de 2026, sobre la lucha contra la corrupción, por la que se sustituyen la Decisión marco 2003/568/JAI del Consejo y el Convenio relativo a la lucha contra los actos de corrupción en los que estén implicados funcionarios de las Comunidades Europeas o de los Estados miembros de la Unión Europea, y por la que se modifica la Directiva (UE) 2017/1371 del Parlamento Europeo y del Consejo.",
       "link": "https://www.boe.es/buscar/doc.php?id=DOUE-L-2026-80682",
@@ -7152,13 +7325,13 @@
     }
   ],
   "stats": {
-    "total_hits": 287,
-    "critical_count": 87,
-    "warning_count": 197,
+    "total_hits": 294,
+    "critical_count": 89,
+    "warning_count": 202,
     "info_count": 3,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 381,
+    "new_this_run": 7,
+    "articles_checked": 7,
+    "seen_ids_total": 388,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -7177,5 +7350,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-12T03:32:56.375778+00:00"
+  "last_updated": "2026-05-12T08:44:42.492482+00:00"
 }
