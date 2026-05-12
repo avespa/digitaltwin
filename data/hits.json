@@ -1,6 +1,82 @@
 {
   "hits": [
     {
+      "id": "d38cff0db4c2",
+      "title": "Regulador español aplica dura sanción económica al exfutbolista Gerard Piqué por información privilegiada",
+      "link": "https://www.latercera.com/pulso/noticia/regulador-espanol-aplica-dura-sancion-economica-al-exfutbolista-gerard-pique-por-uso-de-informacion-privilegiada/",
+      "source": "NewsAPI-Q2 · Latercera.com",
+      "raw_date": "2026-05-11T13:20:30Z",
+      "fetched_at": "2026-05-12T14:31:23.407055+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Uso de información privilegiada (insider trading)",
+        "Daño reputacional para la entidad vinculada (club deportivo)",
+        "Incumplimiento de normativa de mercados financieros"
+      ],
+      "norms_affected": [
+        "Reglamento (UE) 596/2014 (MAR)",
+        "Ley del Mercado de Valores (LMV) - Art. 285",
+        "Código Penal - Art. 285 bis (delito de abuso de información privilegiada)"
+      ],
+      "summary": "El exfutbolista Gerard Piqué ha sido sancionado con 200.000€ por la CNMV por uso de información privilegiada en operaciones bursátiles. La sanción supera en más de cuatro veces el beneficio obtenido, evidenciando un incumplimiento grave de la normativa financiera.",
+      "vulnerability": "Falta de controles internos en clubes deportivos para prevenir el uso de información privilegiada por parte de jugadores, directivos o empleados con acceso a datos sensibles.",
+      "financial_impact": "200.000€ (multa) + costes reputacionales y posibles indemnizaciones derivadas de litigios civiles o penales.",
+      "recommended_action": "Revisar y reforzar los protocolos de compliance en clubes deportivos para evitar el uso de información privilegiada, incluyendo formación obligatoria a jugadores y directivos, y establecer canales de denuncia internos."
+    },
+    {
+      "id": "88beb5d39848",
+      "title": "Así fue la jugada de Gerard Piqué en Bolsa castigada con dureza por la CNMV",
+      "link": "https://www.expansion.com/mercados/2026/05/11/6a01caaae5fdea841f8b45a1.html",
+      "source": "NewsAPI-Q2 · Expansion.com",
+      "raw_date": "2026-05-11T12:25:40Z",
+      "fetched_at": "2026-05-12T14:31:27.835554+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Uso de información privilegiada (insider trading)",
+        "Incumplimiento de la normativa de mercados (Ley del Mercado de Valores y Reglamento UE 596/2014)",
+        "Daño reputacional para la empresa y el sector"
+      ],
+      "norms_affected": [
+        "Ley 6/2023 de los Mercados de Valores y de los Servicios de Inversión (transposición de MiFID II)",
+        "Reglamento (UE) 596/2014 sobre abuso de mercado",
+        "Código Penal español (art. 285 bis)"
+      ],
+      "summary": "El exfutbolista Gerard Piqué fue sancionado por la CNMV con una multa de 200.000 euros por usar información privilegiada en una operación bursátil relacionada con la OPA de Atrys Health sobre Aspy, mientras aún era jugador del FC Barcelona. La CNMV considera probado el abuso de mercado.",
+      "vulnerability": "Falta de controles internos para detectar y prevenir el uso de información privilegiada por parte de empleados, directivos o terceros vinculados a la empresa.",
+      "financial_impact": "Multa de 200.000€ (empresa española media: impacto moderado, pero con posible daño reputacional y costes legales adicionales por recursos).",
+      "recommended_action": "Revisar y reforzar los protocolos de compliance en materia de abuso de mercado (insider trading), incluyendo formación obligatoria para empleados con acceso a información sensible, auditorías internas periódicas y sistemas de alerta temprana para transacciones sospechosas."
+    },
+    {
+      "id": "19ead5f0c689",
+      "title": "Anticorrupción mantiene las peticiones de condena para los Pujol tras concluir la prueba del juicio: 29 años para el primogénito y entre 8 y 14 para los otros seis hijos",
+      "link": "https://www.elmundo.es/espana/2026/05/11/6a01cce4fc6c839e4d8b459b.html",
+      "source": "NewsAPI-Q4 · El Mundo",
+      "raw_date": "2026-05-11T12:41:49Z",
+      "fetched_at": "2026-05-12T14:31:33.049485+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Soborno y tráfico de influencias",
+        "Blanqueo de capitales",
+        "Corrupción en el sector público",
+        "Responsabilidad penal de la persona jurídica (art. 31 bis CP)",
+        "Daño reputacional severo"
+      ],
+      "norms_affected": [
+        "ISO 37001 (Sistemas de Gestión Antisoborno)",
+        "UNE 19601 (Compliance Penal)",
+        "Código Penal español (arts. 286 bis, 31 bis, 430 y ss.)",
+        "Ley Orgánica 1/2015 (Ley de Reforma del Código Penal)",
+        "Reglamento (UE) 2019/2121 (Directiva Whistleblowing)"
+      ],
+      "summary": "La Fiscalía Anticorrupción mantiene acusaciones graves contra la familia Pujol por delitos de corrupción, blanqueo y tráfico de influencias, con penas que superan los 29 años para el primogénito y entre 8 y 14 para los demás hijos. El caso evidencia fallos en controles internos y posibles incumplimientos en compliance penal y antisoborno.",
+      "vulnerability": "Falta de controles efectivos en la identificación y mitigación de riesgos de corrupción en relaciones con el sector público y terceros (ej.: due diligence en contratación, canales de denuncia, auditorías internas).",
+      "financial_impact": "Entre 10M€ y 50M€ (multas penales, indemnizaciones, costes legales, pérdida de licitaciones públicas y daño reputacional con impacto en valoración bursátil o acceso a financiación).",
+      "recommended_action": "Revisar urgentemente el mapa de riesgos de compliance penal y antisoborno, implementar auditorías forenses en áreas críticas (contratación pública, donaciones, relaciones con autoridades) y reforzar el canal de denuncias con protección a informantes. Presentar informe al Consejo de Administración en 15 días."
+    },
+    {
       "id": "3e11959fa476",
       "title": "Piqué enfrenta una multa de miles de euros por operar en Bolsa con datos privilegiados",
       "link": "https://actualidad.rt.com/actualidad/604318-pique-multa-miles-euros-informacion-privilegiada",
@@ -7401,13 +7477,13 @@
     }
   ],
   "stats": {
-    "total_hits": 297,
-    "critical_count": 90,
-    "warning_count": 204,
+    "total_hits": 300,
+    "critical_count": 91,
+    "warning_count": 206,
     "info_count": 3,
     "new_this_run": 3,
-    "articles_checked": 4,
-    "seen_ids_total": 392,
+    "articles_checked": 3,
+    "seen_ids_total": 395,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -7426,5 +7502,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-12T11:23:08.984039+00:00"
+  "last_updated": "2026-05-12T14:31:34.250232+00:00"
 }
