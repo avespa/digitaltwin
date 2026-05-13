@@ -1,6 +1,88 @@
 {
   "hits": [
     {
+      "id": "e32c98b92858",
+      "title": "El 47,8% de los chiringuitos financieros detectados operan con criptomonedas y el fraude más común es la suplantación de identidad",
+      "link": "https://www.elperiodico.com/es/economia/20260512/chiringuitos-financieros-fraude-fiscal-estafas-criptomonedas-estudio-collegi-deconomistes-desinformacion-economica-fakes-economicas-130131229",
+      "source": "NewsAPI-Q2 · Elperiodico.com",
+      "raw_date": "2026-05-12T16:00:02Z",
+      "fetched_at": "2026-05-13T17:19:00.680764+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Fraude financiero",
+        "Blanqueo de capitales",
+        "Suplantación de identidad",
+        "Incumplimiento de normativa CNMV (Ley 6/2023)",
+        "Vulneración de RGPD (tratamiento de datos personales)",
+        "Daño reputacional severo"
+      ],
+      "norms_affected": [
+        "Ley 6/2023 de los Mercados de Valores y de los Servicios de Inversión (CNMV)",
+        "Reglamento (UE) 2016/679 (RGPD)",
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de derechos digitales"
+      ],
+      "summary": "El 47,8% de los chiringuitos financieros detectados operan con criptomonedas, destacando el fraude por suplantación de identidad. Estos entes no regulados incumplen la normativa CNMV y exponen a inversores a estafas masivas con impacto en blanqueo de capitales y protección de datos.",
+      "vulnerability": "Falta de controles de debida diligencia (KYC/AML) y verificación de identidad en plataformas de inversión no reguladas, especialmente en criptomonedas.",
+      "financial_impact": "Entre 500.000€ y 5.000.000€ (multas CNMV, reclamaciones judiciales y pérdida de confianza en el mercado)",
+      "recommended_action": "Revisar urgentemente la exposición de la empresa a chiringuitos financieros, implementar alertas de suplantación de identidad en canales digitales y reforzar la formación en prevención de blanqueo de capitales para empleados y clientes."
+    },
+    {
+      "id": "f3b574bffd57",
+      "title": "Guerra por el apagón: Red Eléctrica exige el archivo del expediente y ataca a la CNMC",
+      "link": "https://www.libertaddigital.com/libremercado/2026-05-12/red-electrica-ataca-a-la-cnmc-por-el-apagon-la-acusa-de-conflicto-de-interes-y-exige-el-archivo-7403489/",
+      "source": "NewsAPI-Q2 · Libertaddigital.com",
+      "raw_date": "2026-05-12T15:19:46Z",
+      "fetched_at": "2026-05-13T17:19:05.126761+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Falta de imparcialidad en la supervisión regulatoria",
+        "Posible conflicto de interés en la CNMC",
+        "Incumplimiento de principios de transparencia y objetividad en la investigación de incidentes críticos",
+        "Riesgo de sanciones por obstrucción a la labor de supervisión"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Reglamento (UE) 2019/943 sobre el mercado interior de la electricidad",
+        "Ley 3/2013 de creación de la CNMC",
+        "ISO 37301 (Sistemas de Gestión de Compliance)",
+        "UNE 19601 (Compliance Penal)"
+      ],
+      "summary": "Red Eléctrica de España rechaza su responsabilidad en el apagón de abril de 2025 y acusa a la CNMC de parcialidad, exigiendo el archivo del expediente. La CNMC investiga el incidente que afectó a millones de usuarios, lo que podría derivar en sanciones si se demuestra negligencia.",
+      "vulnerability": "Falta de protocolos independientes para la investigación de incidentes críticos por parte de la CNMC, así como de mecanismos de transparencia en la gestión de conflictos de interés.",
+      "financial_impact": "Entre 500.000€ y 5 millones de euros (multas por incumplimiento de la Ley del Sector Eléctrico, posibles indemnizaciones a afectados y costes reputacionales)",
+      "recommended_action": "Revisar y reforzar los protocolos de independencia y transparencia de la CNMC en investigaciones de incidentes críticos, así como documentar cualquier interacción con Red Eléctrica para evitar acusaciones de parcialidad. Notificar al Consejo de Administración y al Comité de Compliance sobre el riesgo de conflicto de interés."
+    },
+    {
+      "id": "99bb50eb6db1",
+      "title": "Más de un año de prisión para una enfermera por fisgonear el historial clínico de su cuñada",
+      "link": "https://www.abc.es/espana/castilla-la-mancha/ano-prision-enfermera-fisgonear-historial-clinico-cunada-20260512173758-nt.html",
+      "source": "NewsAPI-Q5 · Www.abc.es",
+      "raw_date": "2026-05-12T15:38:11Z",
+      "fetched_at": "2026-05-13T17:19:12.960617+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Violación de confidencialidad de datos sanitarios (RGPD y Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales)",
+        "Acceso no autorizado a información médica (Ley 41/2002 de Autonomía del Paciente)",
+        "Incumplimiento de protocolos de secreto profesional (Ley 44/2003 de Ordenación de las Profesiones Sanitarias)",
+        "Sanción penal por delito contra la intimidad (Artículo 197 del Código Penal)"
+      ],
+      "norms_affected": [
+        "RGPD (Reglamento General de Protección de Datos)",
+        "Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales",
+        "Ley 41/2002 de Autonomía del Paciente",
+        "Ley 44/2003 de Ordenación de las Profesiones Sanitarias",
+        "Artículo 197 del Código Penal (España)"
+      ],
+      "summary": "Una enfermera del Sescam ha sido condenada a 15 meses de prisión e inhabilitación por acceder ilegalmente al historial clínico de su cuñada, violando la confidencialidad de datos sanitarios. La sentencia confirma la gravedad del acceso no autorizado y el incumplimiento de protocolos profesionales.",
+      "vulnerability": "Falta de controles técnicos y organizativos para restringir el acceso a historiales clínicos solo a personal autorizado (ej.: implementación de logs de acceso, autenticación multifactor, formación obligatoria en protección de datos).",
+      "financial_impact": "Multa administrativa (hasta 10M€ o 2% de la facturación anual global) + costes legales y reputacionales (pérdida de confianza en el sistema sanitario). Para una empresa española media del sector salud, impacto estimado entre 200K€ y 1M€.",
+      "recommended_action": "Revisar y reforzar los protocolos de acceso a historiales clínicos, implementar sistemas de auditoría en tiempo real, formar al personal en RGPD y secretos profesionales, y actualizar el registro de actividades de tratamiento (RAT) para incluir estos accesos."
+    },
+    {
       "id": "e64a48af37a7",
       "title": "Red Eléctrica contrataca en la batalla del apagón y acusa a la CNMC de \"conflicto de interés\"",
       "link": "https://www.expansion.com/empresas/energia/2026/05/12/6a031aede5fdea8a338b45a7.html",
@@ -7811,13 +7893,13 @@
     }
   ],
   "stats": {
-    "total_hits": 313,
-    "critical_count": 95,
-    "warning_count": 215,
+    "total_hits": 316,
+    "critical_count": 97,
+    "warning_count": 216,
     "info_count": 3,
-    "new_this_run": 4,
+    "new_this_run": 3,
     "articles_checked": 4,
-    "seen_ids_total": 408,
+    "seen_ids_total": 412,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -7836,5 +7918,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-13T14:41:35.333325+00:00"
+  "last_updated": "2026-05-13T17:19:14.161318+00:00"
 }
