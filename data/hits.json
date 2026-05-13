@@ -1,6 +1,60 @@
 {
   "hits": [
     {
+      "id": "2b340515bde2",
+      "title": "Red Eléctrica pide archivar el expediente de la CNMC del apagón y ve conflicto de interés",
+      "link": "https://www.elconfidencial.com/empresas/2026-05-12/red-electrica-pide-archivar-el-expediente-de-la-cnmc_4353838/",
+      "source": "NewsAPI-Q2 · Elconfidencial.com",
+      "raw_date": "2026-05-12T11:12:00Z",
+      "fetched_at": "2026-05-13T11:32:00.442599+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "conflicto de interés en organismo regulador",
+        "falta de imparcialidad en procedimiento sancionador",
+        "incumplimiento de principios de buena administración (art. 103 CE)",
+        "riesgo de nulidad de procedimiento por vicio formal"
+      ],
+      "norms_affected": [
+        "Ley 3/2013 de creación de la CNMC (art. 5 y 6)",
+        "Ley 24/2013 del Sector Eléctrico (art. 14 y 15)",
+        "Ley 39/2015 de Procedimiento Administrativo Común (art. 28 y 29)",
+        "Reglamento (UE) 2019/943 (mercado interior de la electricidad)"
+      ],
+      "summary": "Red Eléctrica de España solicita el archivo de un expediente sancionador de la CNMC alegando conflicto de interés en el organismo regulador, lo que comprometería la imparcialidad del procedimiento. La CNMC, como regulador sectorial, debe garantizar transparencia y objetividad en sus actuaciones.",
+      "vulnerability": "Falta de protocolos internos en la CNMC para identificar y gestionar conflictos de interés en procedimientos sancionadores, así como ausencia de mecanismos de revisión independiente de decisiones regulatorias.",
+      "financial_impact": "Entre 500.000€ y 2.000.000€ (multa potencial por parte de la CNMC, costes legales y reputacionales, y posible indemnización por nulidad del procedimiento)",
+      "recommended_action": "Revisar inmediatamente los procedimientos internos de la CNMC para detectar conflictos de interés en expedientes sancionadores, documentar cualquier alegación de parcialidad y preparar una estrategia de defensa legal en caso de que el procedimiento continúe. Coordinar con el área legal para evaluar la viabilidad de recursos administrativos o judiciales."
+    },
+    {
+      "id": "a3ab2778b467",
+      "title": "Anticorrupción acusa a los Pujol de querer convertir el juicio en un \"ataque a Cataluña\" y ve probado el fraude fiscal",
+      "link": "https://www.europapress.es/nacional/noticia-anticorrupcion-acusa-pujol-querer-convertir-juicio-ataque-cataluna-ve-probado-fraude-fiscal-20260512123756.html",
+      "source": "NewsAPI-Q3 · Europapress.es",
+      "raw_date": "2026-05-12T10:37:56Z",
+      "fetched_at": "2026-05-13T11:32:05.370009+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "fraude fiscal",
+        "corrupción",
+        "daño reputacional",
+        "incumplimiento de ISO 37001 (Sistemas de Gestión Antisoborno)",
+        "incumplimiento de UNE 19601 (Compliance Penal)"
+      ],
+      "norms_affected": [
+        "Ley Orgánica 10/1995 (Código Penal, arts. 305-310 fraude fiscal)",
+        "Ley 11/2021 de medidas de prevención y lucha contra el fraude fiscal",
+        "ISO 37001:2016 (Sistemas de Gestión Antisoborno)",
+        "UNE 19601:2017 (Compliance Penal)",
+        "RGPD (posible uso indebido de datos en defensa)"
+      ],
+      "summary": "La Fiscalía Anticorrupción acusa a la familia Pujol de intentar instrumentalizar el juicio para presentarlo como un ataque a Cataluña, mientras se confirma la existencia de fraude fiscal probado. El caso podría derivar en sanciones penales y administrativas graves para la entidad implicada.",
+      "vulnerability": "Falta de controles internos robustos en prevención de fraude fiscal y soborno (ISO 37001/UNE 19601), así como deficiencias en la gestión de riesgos de compliance en operaciones con entidades públicas.",
+      "financial_impact": "Entre 5M€ y 50M€ (multas penales, indemnizaciones, pérdida de licitaciones públicas y daño reputacional en empresa española media con facturación >100M€).",
+      "recommended_action": "Revisar urgentemente los protocolos de compliance penal y antisoborno, realizar auditoría interna independiente sobre fraude fiscal histórico, y reforzar el canal de denuncias para evitar nuevos incumplimientos. Notificar a la AEPD si hay datos personales afectados."
+    },
+    {
       "id": "6d2657e020d0",
       "title": "La UDEF cerca a Zapatero por un entramado de presuntas actividades de blanqueo",
       "link": "https://www.elespanol.com/espana/20260512/udef-cerca-zapatero-entramado-presuntas-actividades-blanqueo/1003744241789_0.html",
@@ -7653,13 +7707,13 @@
     }
   ],
   "stats": {
-    "total_hits": 307,
-    "critical_count": 93,
-    "warning_count": 211,
+    "total_hits": 309,
+    "critical_count": 94,
+    "warning_count": 212,
     "info_count": 3,
-    "new_this_run": 3,
-    "articles_checked": 3,
-    "seen_ids_total": 402,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 404,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -7678,5 +7732,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-13T08:48:05.059020+00:00"
+  "last_updated": "2026-05-13T11:32:06.570789+00:00"
 }
