@@ -1,6 +1,110 @@
 {
   "hits": [
     {
+      "id": "e64a48af37a7",
+      "title": "Red Eléctrica contrataca en la batalla del apagón y acusa a la CNMC de \"conflicto de interés\"",
+      "link": "https://www.expansion.com/empresas/energia/2026/05/12/6a031aede5fdea8a338b45a7.html",
+      "source": "NewsAPI-Q1 · Expansion.com",
+      "raw_date": "2026-05-12T12:42:00Z",
+      "fetched_at": "2026-05-13T14:41:19.870945+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Conflicto de interés en la regulación del sector eléctrico",
+        "Interferencia en la independencia del regulador (CNMC)",
+        "Riesgo de sanciones por incumplimiento de principios de transparencia y objetividad",
+        "Daño reputacional para Redeia y el Estado (accionista)"
+      ],
+      "norms_affected": [
+        "Ley 3/2013 de creación de la CNMC (Art. 5: independencia y objetividad)",
+        "Reglamento (UE) 2019/943 sobre el mercado interior de la electricidad (Art. 56: independencia de los reguladores)",
+        "Ley 24/2013 del Sector Eléctrico (Art. 10: funciones de la CNMC)",
+        "ISO 37301:2021 (Compliance en conflictos de interés)",
+        "UNE 19601:2017 (Sistemas de gestión de compliance penal)"
+      ],
+      "summary": "Redeia (matriz de Red Eléctrica) acusa a la CNMC de conflicto de interés en la gestión del apagón, cuestionando su imparcialidad como regulador. La CNMC, organismo público independiente, podría verse afectada en su credibilidad y enfrentar expedientes sancionadores por posible vulneración de principios de transparencia.",
+      "vulnerability": "Falta de protocolos robustos para gestionar conflictos de interés en la relación con reguladores sectoriales y evitar percepciones de parcialidad en la toma de decisiones.",
+      "financial_impact": "Entre 500.000€ y 2.000.000€ (multas por incumplimiento de principios de independencia, costes legales y posibles indemnizaciones por daño reputacional).",
+      "recommended_action": "Revisar y reforzar los protocolos de compliance en conflictos de interés, especialmente en relaciones con reguladores, y documentar todas las interacciones con la CNMC para demostrar transparencia y objetividad. Notificar al Consejo de Administración y al Comité de Cumplimiento."
+    },
+    {
+      "id": "b2442cf0b8d0",
+      "title": "El Gobierno rescató a Plus Ultra con informes externos pagados por la propia aerolínea cuya autenticidad nadie verificó",
+      "link": "https://www.elespanol.com/espana/politica/20260512/gobierno-rescato-plus-ultra-informes-externos-no-comprobaron-contabilidad-air-europa-sabiendo-directivos-repartieron-millones/1003744242310_0.html",
+      "source": "NewsAPI-Q2 · Elespanol.com",
+      "raw_date": "2026-05-12T11:59:38Z",
+      "fetched_at": "2026-05-13T14:41:25.261207+00:00",
+      "level": "critical",
+      "relevance_score": 85,
+      "risks": [
+        "Soborno y corrupción (ISO 37001)",
+        "Fraude contable (Ley Orgánica 1/2015)",
+        "Incumplimiento de deberes de diligencia (Código Penal art. 295)",
+        "Vulneración de principios de transparencia (Ley 19/2013 de transparencia)",
+        "Posible blanqueo de capitales (Ley 10/2010)"
+      ],
+      "norms_affected": [
+        "ISO 37001 (Sistemas de gestión antisoborno)",
+        "Ley Orgánica 1/2015 (Código Penal: delitos societarios)",
+        "Ley 19/2013 (Transparencia y buen gobierno)",
+        "Ley 10/2010 (Prevención del blanqueo de capitales)",
+        "Reglamento (UE) 2016/679 (RGPD - si hubo filtración de datos en informes)",
+        "Ley 24/1988 (Mercado de Valores - CNMV)"
+      ],
+      "summary": "El Gobierno rescató a Plus Ultra con informes externos no verificados, pagados por la propia aerolínea, mientras directivos repartían millones. La UDEF investiga un posible entramado de blanqueo vinculado a altos cargos, incluyendo al exvicepresidente de la SEPI, quien habría presionado para agilizar el rescate.",
+      "vulnerability": "Falta de controles independientes en la contratación de informes externos y verificación de su autenticidad antes de tomar decisiones críticas (ej.: rescates públicos). Implementar un protocolo de due diligence previo a la contratación de servicios externos con cláusulas de independencia y auditoría.",
+      "financial_impact": "Entre 50M€ y 500M€ (incluyendo costes del rescate, posibles multas por blanqueo, fraude contable y daños reputacionales para la empresa y el Estado)",
+      "recommended_action": "1) Iniciar una auditoría interna urgente sobre los informes utilizados en el rescate de Plus Ultra. 2) Revisar los protocolos de contratación de servicios externos en la SEPI y otras entidades públicas. 3) Notificar a la Fiscalía Anticorrupción y a la CNMV cualquier indicio de irregularidades. 4) Actualizar el mapa de riesgos de compliance para incluir escenarios de blanqueo y fraude en rescates públicos."
+    },
+    {
+      "id": "d7df2a0eed57",
+      "title": "Red Eléctrica reclama que se archive el expediente que le abrió Competencia por el apagón",
+      "link": "https://www.huffingtonpost.es/sociedad/red-electrica-reclama-archive-expediente-le-abrio-competencia-cnmc-apagon-f202605.html",
+      "source": "NewsAPI-Q2 · Huffingtonpost.es",
+      "raw_date": "2026-05-12T11:43:44Z",
+      "fetched_at": "2026-05-13T14:41:29.659920+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Sanción administrativa por posible infracción muy grave en el sector energético",
+        "Daño reputacional en la gestión de infraestructuras críticas",
+        "Posible incumplimiento de normativas de seguridad y calidad del suministro eléctrico"
+      ],
+      "norms_affected": [
+        "Ley 3/2013 de creación de la CNMC",
+        "Real Decreto 1955/2000 sobre actividades de transporte, distribución, comercialización, suministro y procedimientos de autorización de instalaciones de energía eléctrica",
+        "Reglamento (UE) 2019/943 sobre el mercado interior de la electricidad"
+      ],
+      "summary": "Red Eléctrica de España (REE) solicita el archivo de un expediente sancionador abierto por la CNMC por un posible apagón, alegando que no hubo infracción. La CNMC investiga si existió una infracción muy grave en la gestión del sistema eléctrico, lo que podría derivar en sanciones económicas significativas.",
+      "vulnerability": "Falta de protocolos robustos de gestión de crisis y comunicación con el regulador (CNMC) en incidentes de suministro eléctrico crítico.",
+      "financial_impact": "Entre 100.000€ y 500.000€ (multa por infracción muy grave según Ley 3/2013 y normativa sectorial, dependiendo de la gravedad y reincidencia).",
+      "recommended_action": "Revisar y documentar los protocolos de actuación ante incidentes de suministro eléctrico, incluyendo comunicación inmediata con la CNMC, y preparar una defensa legal sólida con evidencia técnica que demuestre el cumplimiento de las obligaciones regulatorias."
+    },
+    {
+      "id": "8b0be533ef1c",
+      "title": "Red Eléctrica pide archivar el expediente de la CNMC por el apagón y ve que hay conflicto de interés del regulador",
+      "link": "https://www.elespanol.com/invertia/empresas/energia/20260512/red-electrica-pide-archivar-expediente-cnmc-apagon-ve-conflicto-interes-regulador/1003744242276_0.html",
+      "source": "NewsAPI-Q2 · Elespanol.com",
+      "raw_date": "2026-05-12T11:41:20Z",
+      "fetched_at": "2026-05-13T14:41:34.132652+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Conflicto de interés en el regulador (CNMC)",
+        "Falta de transparencia en procedimientos sancionadores",
+        "Posible vulneración del principio de imparcialidad en la administración pública"
+      ],
+      "norms_affected": [
+        "Ley 3/2013 de creación de la CNMC (Art. 5 y 6 sobre independencia y objetividad)",
+        "Ley 24/2013 del Sector Eléctrico (Art. 10 sobre garantías procedimentales)",
+        "Principios generales del Derecho Administrativo (Art. 28 de la Ley 39/2015)"
+      ],
+      "summary": "Red Eléctrica (Redeia) denuncia un conflicto de interés en el expediente abierto por la CNMC por el apagón de 2021, alegando indefensión y falta de precisión en el procedimiento. La CNMC, como regulador, podría haber incumplido su obligación de imparcialidad.",
+      "vulnerability": "Implementar protocolos de evaluación de conflictos de interés en procedimientos sancionadores de la CNMC, con revisión independiente por parte de la Secretaría de Estado de Energía o el Ministerio para la Transición Ecológica.",
+      "financial_impact": "Entre 500.000€ y 2.000.000€ (multa potencial por parte de la CNMC, costes legales y reputacionales)",
+      "recommended_action": "Solicitar informe jurídico urgente para evaluar la viabilidad de recurrir el expediente ante la CNMC y, en su caso, presentar alegaciones formales basadas en el conflicto de interés alegado. Coordinar con la asesoría legal externa para preparar una estrategia de defensa."
+    },
+    {
       "id": "2b340515bde2",
       "title": "Red Eléctrica pide archivar el expediente de la CNMC del apagón y ve conflicto de interés",
       "link": "https://www.elconfidencial.com/empresas/2026-05-12/red-electrica-pide-archivar-el-expediente-de-la-cnmc_4353838/",
@@ -7707,13 +7811,13 @@
     }
   ],
   "stats": {
-    "total_hits": 309,
-    "critical_count": 94,
-    "warning_count": 212,
+    "total_hits": 313,
+    "critical_count": 95,
+    "warning_count": 215,
     "info_count": 3,
-    "new_this_run": 2,
-    "articles_checked": 2,
-    "seen_ids_total": 404,
+    "new_this_run": 4,
+    "articles_checked": 4,
+    "seen_ids_total": 408,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -7732,5 +7836,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-13T11:32:06.570789+00:00"
+  "last_updated": "2026-05-13T14:41:35.333325+00:00"
 }
