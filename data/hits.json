@@ -1,6 +1,34 @@
 {
   "hits": [
     {
+      "id": "c6dab0682d57",
+      "title": "La Audiencia Nacional investiga a un mando de la Guardia Civil en un caso contra el prostíbulo Vive Madrid",
+      "link": "https://www.eldiario.es/politica/audiencia-nacional-investiga-mando-guardia-civil-caso-prostibulo-vive-madrid_1_13216809.html",
+      "source": "NewsAPI-Q3 · Eldiario.es",
+      "raw_date": "2026-05-13T19:53:32Z",
+      "fetched_at": "2026-05-14T22:13:46.042510+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Blanqueo de capitales (Ley 10/2010)",
+        "Explotación sexual (Código Penal, arts. 187-189)",
+        "Corrupción en el ámbito público (Ley Orgánica 1/2015)",
+        "Incumplimiento de deberes de integridad en fuerzas de seguridad (Ley Orgánica 4/2015)"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Código Penal (arts. 187-189, 318 bis, 436)",
+        "Ley Orgánica 1/2015 de modificación del Código Penal (corrupción)",
+        "Ley Orgánica 4/2015 de protección de la seguridad ciudadana (deberes de integridad)",
+        "ISO 37001 (Sistemas de gestión antisoborno)",
+        "UNE 19601 (Compliance penal)"
+      ],
+      "summary": "Un teniente coronel de la Guardia Civil ha sido investigado por su presunta implicación en una trama de explotación sexual y blanqueo de capitales vinculada al prostíbulo 'Vive Madrid'. El juez ha dictado prisión provisional para el dueño del local y su pareja, mientras que el mando militar ha quedado en libertad con medidas cautelares.",
+      "vulnerability": "Falta de controles robustos en la contratación y supervisión de personal en fuerzas de seguridad, así como deficiencias en la identificación de riesgos de blanqueo en operaciones vinculadas a establecimientos de alto riesgo.",
+      "financial_impact": "Entre 500.000€ y 2.000.000€ (multas, indemnizaciones, costes legales y pérdida de reputación en caso de condena)",
+      "recommended_action": "Revisar urgentemente los protocolos de compliance en la Guardia Civil, especialmente en materia de blanqueo y conflictos de interés, e implementar auditorías internas en establecimientos vinculados a personal de seguridad."
+    },
+    {
       "id": "747fb757741e",
       "title": "No conviertas un \"like\" en una inversión: los gurús financieros que no son más que charlatanes",
       "link": "https://www.elperiodico.com/es/economia/20260513/conviertas-like-inversion-gurus-financieros-dv-130181903",
@@ -8153,13 +8181,13 @@
     }
   ],
   "stats": {
-    "total_hits": 326,
+    "total_hits": 327,
     "critical_count": 100,
-    "warning_count": 223,
+    "warning_count": 224,
     "info_count": 3,
     "new_this_run": 1,
     "articles_checked": 1,
-    "seen_ids_total": 425,
+    "seen_ids_total": 426,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -8178,5 +8206,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-14T19:49:57.060489+00:00"
+  "last_updated": "2026-05-14T22:13:47.243188+00:00"
 }
