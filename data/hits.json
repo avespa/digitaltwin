@@ -1,6 +1,56 @@
 {
   "hits": [
     {
+      "id": "be1d86500712",
+      "title": "El verdadero Gerard Piqué",
+      "link": "https://www.lavozdegalicia.es/noticia/opinion/2026/05/13/verdadero-gerard-pique/0003_202605G13P10992.htm",
+      "source": "NewsAPI-Q1 · Lavozdegalicia.es",
+      "raw_date": "2026-05-13T03:00:00Z",
+      "fetched_at": "2026-05-14T03:39:48.786428+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Operaciones con información privilegiada (insider trading)",
+        "Incumplimiento de la normativa de mercados de valores (Ley del Mercado de Valores y Reglamento UE 596/2014)",
+        "Daño reputacional para la empresa y los implicados",
+        "Exposición a sanciones administrativas y penales"
+      ],
+      "norms_affected": [
+        "Ley 6/2023 de los Mercados de Valores y de los Servicios de Inversión (transposición de MiFID II)",
+        "Reglamento (UE) 596/2014 sobre abuso de mercado",
+        "Reglamento Delegado (UE) 2016/1052 sobre operaciones con información privilegiada"
+      ],
+      "summary": "La CNMV ha sancionado a Gerard Piqué y a José Elías por operar con información privilegiada en la OPA de Atrys Health sobre Aspy, incumpliendo la normativa de mercados de valores. El caso afecta a la integridad del mercado y expone a los implicados a sanciones económicas y penales.",
+      "vulnerability": "Falta de controles internos para detectar y prevenir operaciones con información privilegiada, así como de formación en compliance a directivos y empleados con acceso a información sensible.",
+      "financial_impact": "Multa administrativa de entre 500.000€ y 5.000.000€ (según gravedad), más posibles indemnizaciones por daños y perjuicios a terceros afectados. Impacto reputacional con posible pérdida de valor en bolsa y desconfianza de inversores.",
+      "recommended_action": "Revisar urgentemente los protocolos de prevención de abuso de mercado, implementar sistemas de monitorización de operaciones sospechosas, y realizar formación específica en compliance a todos los miembros del consejo de administración y directivos con acceso a información privilegiada."
+    },
+    {
+      "id": "3cab449ad90e",
+      "title": "Corredor carga contra la CNMC por el expediente del apagón y gana tiempo para retrasar al máximo una posible sanción",
+      "link": "https://www.elespanol.com/invertia/empresas/energia/20260513/corredor-carga-cnmc-expediente-apagon-gana-tiempo-retrasar-maximo-posible-sancion/1003744242807_0.html",
+      "source": "NewsAPI-Q2 · Elespanol.com",
+      "raw_date": "2026-05-13T00:47:04Z",
+      "fetched_at": "2026-05-14T03:39:55.056868+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Sanción administrativa por incumplimiento de obligaciones en la gestión de la red eléctrica (Ley 24/2013 del Sector Eléctrico)",
+        "Daño reputacional por fallos críticos en infraestructura crítica",
+        "Posible responsabilidad penal por negligencia en la operación del sistema (Código Penal, Art. 316 y 318)"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Real Decreto 1955/2000 (regulación de la actividad de transporte y distribución)",
+        "Reglamento (UE) 2019/943 (seguridad del suministro eléctrico)",
+        "Ley Orgánica 10/1995 (Código Penal, delitos contra la seguridad colectiva)"
+      ],
+      "summary": "Redeia (antes Red Eléctrica) recurre ante la CNMC un expediente por un apagón que pudo comprometer la estabilidad del sistema eléctrico español. La empresa alega conflicto de intereses y busca retrasar una posible sanción administrativa, que podría superar los 500.000€.",
+      "vulnerability": "Falta de protocolos robustos de gestión de crisis y cumplimiento en infraestructuras críticas, con supervisión insuficiente de la CNMC sobre operaciones de la red.",
+      "financial_impact": "Entre 500.000€ y 2.000.000€ (multa administrativa + costes legales y reputacionales)",
+      "recommended_action": "Revisar urgentemente los protocolos de operación y cumplimiento de la Ley 24/2013, documentar todas las acciones correctivas implementadas y preparar una estrategia de defensa legal ante la CNMC, incluyendo análisis de conflicto de intereses."
+    },
+    {
       "id": "5cc8319bca89",
       "title": "La CNMC bloquea a las eléctricas el acceso a informes internos y comunicaciones con el Gobierno sobre el gran apagón",
       "link": "https://www.elmundo.es/economia/empresas/2026/05/13/6a03246421efa0c3358b45ac.html",
@@ -7945,13 +7995,13 @@
     }
   ],
   "stats": {
-    "total_hits": 318,
-    "critical_count": 97,
-    "warning_count": 218,
+    "total_hits": 320,
+    "critical_count": 98,
+    "warning_count": 219,
     "info_count": 3,
-    "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 414,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 416,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -7970,5 +8020,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-13T22:15:34.170764+00:00"
+  "last_updated": "2026-05-14T03:39:56.257517+00:00"
 }
