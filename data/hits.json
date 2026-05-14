@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "747fb757741e",
+      "title": "No conviertas un \"like\" en una inversión: los gurús financieros que no son más que charlatanes",
+      "link": "https://www.elperiodico.com/es/economia/20260513/conviertas-like-inversion-gurus-financieros-dv-130181903",
+      "source": "NewsAPI-Q2 · Elperiodico.com",
+      "raw_date": "2026-05-13T17:15:59Z",
+      "fetched_at": "2026-05-14T19:49:55.859688+00:00",
+      "level": "warning",
+      "relevance_score": 95,
+      "risks": [
+        "Promoción de inversiones no reguladas sin supervisión de la CNMV",
+        "Posible fraude o manipulación de mercados por parte de 'finfluencers'",
+        "Exposición a productos financieros complejos o de alto riesgo sin adecuada información",
+        "Incumplimiento de la normativa de transparencia y protección al inversor (Ley 6/2023 de Mercados de Valores)"
+      ],
+      "norms_affected": [
+        "Ley 6/2023 de los Mercados de Valores y de los Servicios de Inversión",
+        "Real Decreto 217/2008 sobre el régimen jurídico de las empresas de servicios de inversión",
+        "Guía CNMV 'Del like a la inversión: qué debes saber de los finfluencers' (2026)",
+        "Reglamento (UE) 2019/2088 (SFDR) sobre transparencia en sostenibilidad"
+      ],
+      "summary": "La CNMV alerta sobre los riesgos de invertir siguiendo recomendaciones de 'finfluencers' en redes sociales, que pueden incumplir normativas de transparencia y protección al inversor. La guía publicada en 2026 destaca la necesidad de verificar la idoneidad de los asesores financieros en redes.",
+      "vulnerability": "Falta de controles internos para verificar la idoneidad de asesores financieros externos (incluyendo 'finfluencers') y supervisión de inversiones recomendadas por terceros no regulados.",
+      "financial_impact": "Entre 50.000€ y 500.000€ por multas administrativas, reclamaciones de clientes y posibles pérdidas por inversiones inadecuadas en una empresa española media.",
+      "recommended_action": "Revisar y actualizar la política de inversiones de la empresa para incluir cláusulas que prohíban seguir recomendaciones de 'finfluencers' o asesores no regulados por la CNMV. Formar al equipo de compliance en la guía CNMV 2026 y establecer un protocolo de verificación de fuentes financieras externas."
+    },
+    {
       "id": "ee63b1ebb489",
       "title": "La CNMV multa a Gerard Piqué por usar información privilegiada en una operación bursátil",
       "link": "https://www.elconfidencialdigital.com/articulo/dinero/cnmv-multa-gerard-pique-usar-informacion-privilegiada-operacion-bursatil/202605131732001020619.html",
@@ -8127,13 +8153,13 @@
     }
   ],
   "stats": {
-    "total_hits": 325,
+    "total_hits": 326,
     "critical_count": 100,
-    "warning_count": 222,
+    "warning_count": 223,
     "info_count": 3,
     "new_this_run": 1,
     "articles_checked": 1,
-    "seen_ids_total": 424,
+    "seen_ids_total": 425,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -8152,5 +8178,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-14T17:03:04.132992+00:00"
+  "last_updated": "2026-05-14T19:49:57.060489+00:00"
 }
