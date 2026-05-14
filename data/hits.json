@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "bc7349227829",
+      "title": "Igualdad vuelve a adjudicar a Vodafone el contrato de las pulseras para maltratadores pese a la multa que recibió por los fallos detectados en el pasado",
+      "link": "https://www.elmundo.es/espana/2026/05/13/6a045dc1e85ece35208b45b6.html",
+      "source": "NewsAPI-Q1 · El Mundo",
+      "raw_date": "2026-05-13T11:18:51Z",
+      "fetched_at": "2026-05-14T14:21:27.628680+00:00",
+      "level": "warning",
+      "relevance_score": 75,
+      "risks": [
+        "Incumplimiento de principios de transparencia y libre competencia en contratación pública",
+        "Riesgo de reincidencia en fallos operativos que afecten a la seguridad de víctimas de violencia de género",
+        "Posible vulneración de la Ley 9/2017 de Contratos del Sector Público (LCSP)",
+        "Daño reputacional para el Ministerio de Igualdad y las empresas adjudicatarias"
+      ],
+      "norms_affected": [
+        "Ley 9/2017 de Contratos del Sector Público (LCSP)",
+        "Ley Orgánica 1/2004 de Medidas de Protección Integral contra la Violencia de Género",
+        "Ley 15/2022 de Igualdad de Trato y No Discriminación",
+        "Reglamento (UE) 2016/679 (RGPD) - si hay tratamiento de datos personales"
+      ],
+      "summary": "El Ministerio de Igualdad ha propuesto nuevamente a Vodafone España y Securitas para el contrato de pulseras telemáticas para maltratadores, pese a multas previas por fallos en el sistema. La decisión podría vulnerar principios de transparencia y competencia en la contratación pública.",
+      "vulnerability": "Falta de un mecanismo de evaluación independiente y periódico de los proveedores adjudicatarios para garantizar el cumplimiento continuo de los requisitos técnicos y de seguridad.",
+      "financial_impact": "Multa administrativa de entre 50.000€ y 500.000€ por incumplimiento de la LCSP, además de posibles costes de indemnización por fallos operativos y daño reputacional estimado en 1-3 millones de euros para el Ministerio y las empresas.",
+      "recommended_action": "Revisar inmediatamente el proceso de adjudicación para verificar el cumplimiento de los principios de transparencia y competencia, y solicitar un informe técnico independiente que evalúe la idoneidad de Vodafone y Securitas en el contexto de los fallos previos. Notificar a la CNMC y a la Fiscalía de Delitos Económicos si se detectan irregularidades."
+    },
+    {
       "id": "516e5a9d518b",
       "title": "Red Eléctrica, contra todos: Corredor carga contra las eléctricas y la CNMC por el apagón y el colapso de las redes",
       "link": "https://www.elperiodico.com/es/economia/20260513/red-electrica-junta-apagon-corredor-cnmc-130178837",
@@ -8075,13 +8101,13 @@
     }
   ],
   "stats": {
-    "total_hits": 323,
+    "total_hits": 324,
     "critical_count": 100,
-    "warning_count": 220,
+    "warning_count": 221,
     "info_count": 3,
-    "new_this_run": 2,
-    "articles_checked": 3,
-    "seen_ids_total": 421,
+    "new_this_run": 1,
+    "articles_checked": 2,
+    "seen_ids_total": 423,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -8100,5 +8126,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-14T11:18:18.731620+00:00"
+  "last_updated": "2026-05-14T14:21:28.829041+00:00"
 }
