@@ -1,6 +1,32 @@
 {
   "hits": [
     {
+      "id": "471c65826d42",
+      "title": "Fiscalía y notarios alertan del impacto negativo de la nueva \"ley anticorrupción\" en la lucha contra el blanqueo",
+      "link": "https://www.elperiodico.com/es/politica/20260514/fiscalia-notarios-alertan-impacto-negativo-ley-anticorrupcion-blanqueo-de-capitales-130011551",
+      "source": "NewsAPI-Q3 · Elperiodico.com",
+      "raw_date": "2026-05-14T04:01:00Z",
+      "fetched_at": "2026-05-15T08:52:24.584196+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Conflicto normativo entre prevención de blanqueo y lucha contra la corrupción",
+        "Incertidumbre jurídica en la aplicación de controles internos",
+        "Posible duplicidad de obligaciones con la Ley 10/2010 de prevención de blanqueo",
+        "Riesgo de sanciones por incumplimiento de nuevas obligaciones no armonizadas"
+      ],
+      "norms_affected": [
+        "Ley Orgánica de Integridad Pública (anteproyecto)",
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Reglamento (UE) 2015/847 (transferencias de fondos)",
+        "ISO 37001 (Sistemas de gestión antisoborno)"
+      ],
+      "summary": "La Fiscalía y notarios advierten que el anteproyecto de Ley Orgánica de Integridad Pública podría generar conflictos con la normativa de prevención de blanqueo de capitales (Ley 10/2010), creando duplicidades y riesgos de incumplimiento para empresas. La ley busca reforzar la integridad pública pero podría complicar la gestión de compliance en sectores regulados.",
+      "vulnerability": "Falta de alineación entre los sistemas de gestión antisoborno (ISO 37001) y los nuevos requisitos de la Ley de Integridad Pública, especialmente en la identificación de beneficiarios finales y controles de diligencia debida.",
+      "financial_impact": "Entre 100.000€ y 500.000€ por multas administrativas, costes de adaptación de sistemas de compliance y posibles sanciones penales en casos de incumplimiento grave.",
+      "recommended_action": "Analizar el anteproyecto en detalle para identificar solapamientos con la Ley 10/2010 y ajustar el mapa de riesgos corporativo. Coordinar con asesoría jurídica para proponer enmiendas que armonicen ambas normativas y evitar duplicidades en los controles internos."
+    },
+    {
       "id": "c6dab0682d57",
       "title": "La Audiencia Nacional investiga a un mando de la Guardia Civil en un caso contra el prostíbulo Vive Madrid",
       "link": "https://www.eldiario.es/politica/audiencia-nacional-investiga-mando-guardia-civil-caso-prostibulo-vive-madrid_1_13216809.html",
@@ -8181,13 +8207,13 @@
     }
   ],
   "stats": {
-    "total_hits": 327,
+    "total_hits": 328,
     "critical_count": 100,
-    "warning_count": 224,
+    "warning_count": 225,
     "info_count": 3,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 426,
+    "new_this_run": 1,
+    "articles_checked": 3,
+    "seen_ids_total": 429,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -8206,5 +8232,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-15T03:43:05.165961+00:00"
+  "last_updated": "2026-05-15T08:52:25.784890+00:00"
 }
