@@ -1,6 +1,34 @@
 {
   "hits": [
     {
+      "id": "bf635231e4ee",
+      "title": "La Guardia Civil detiene en Alicante a uno de los criminales más buscados por Reino Unido",
+      "link": "https://www.libertaddigital.com/valencia/2026-05-14/la-guardia-civil-detiene-en-alicante-a-uno-de-los-criminales-mas-buscados-por-reino-unido-7404862/",
+      "source": "NewsAPI-Q3 · Libertaddigital.com",
+      "raw_date": "2026-05-14T20:09:41Z",
+      "fetched_at": "2026-05-15T22:01:31.339608+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Blanqueo de capitales",
+        "Financiación del crimen organizado",
+        "Incumplimiento de la Ley 10/2010 de prevención del blanqueo de capitales",
+        "Exposición a sanciones penales y administrativas",
+        "Daño reputacional severo"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Código Penal (arts. 301 y 368)",
+        "Reglamento (UE) 2015/847",
+        "ISO 37001:2016 (Sistemas de gestión antisoborno)",
+        "UNE 19601:2017 (Compliance penal)"
+      ],
+      "summary": "La detención de Simon Dutton, buscado por Reino Unido por blanqueo y tráfico de drogas, evidencia fallos en los controles internos de prevención de blanqueo en empresas con exposición a operaciones internacionales. Supone un riesgo penal y reputacional para entidades con vínculos en el sector logístico o financiero.",
+      "vulnerability": "Falta de diligencia debida en clientes, proveedores y operaciones transaccionales (especialmente en sectores de alto riesgo como logística, transporte o servicios financieros).",
+      "financial_impact": "Entre 500.000€ y 5.000.000€ (multas administrativas, pérdida de licencias, costes legales y reparación de imagen, según tamaño y sector de la empresa).",
+      "recommended_action": "Revisar urgentemente los protocolos de diligencia debida (KYC) y screening de clientes/proveedores, especialmente en operaciones con terceros países de alto riesgo. Actualizar el mapa de riesgos de blanqueo y reforzar la formación en compliance penal para empleados clave."
+    },
+    {
       "id": "34bd94fea3e0",
       "title": "Las gasolineras 'low cost' denuncian a Repsol ante la CNMC por \"posible abuso dominante\" con sus descuentos",
       "link": "https://www.elperiodico.com/es/economia/20260514/gasolineras-low-cost-denuncian-repsol-130229745",
@@ -8256,13 +8284,13 @@
     }
   ],
   "stats": {
-    "total_hits": 330,
-    "critical_count": 100,
+    "total_hits": 331,
+    "critical_count": 101,
     "warning_count": 227,
     "info_count": 3,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 433,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 434,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -8281,5 +8309,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-15T19:42:12.810831+00:00"
+  "last_updated": "2026-05-15T22:01:32.540329+00:00"
 }
