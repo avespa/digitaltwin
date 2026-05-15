@@ -1,6 +1,55 @@
 {
   "hits": [
     {
+      "id": "34bd94fea3e0",
+      "title": "Las gasolineras 'low cost' denuncian a Repsol ante la CNMC por \"posible abuso dominante\" con sus descuentos",
+      "link": "https://www.elperiodico.com/es/economia/20260514/gasolineras-low-cost-denuncian-repsol-130229745",
+      "source": "NewsAPI-Q2 · Elperiodico.com",
+      "raw_date": "2026-05-14T13:29:55Z",
+      "fetched_at": "2026-05-15T14:12:47.487724+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "abuso de posición dominante (Art. 102 TFUE y Ley 15/2007 de Defensa de la Competencia)",
+        "prácticas anticompetitivas que pueden derivar en sanciones de la CNMC (hasta 10% de la facturación global)",
+        "daño reputacional para Repsol y posibles reclamaciones de terceros afectados"
+      ],
+      "norms_affected": [
+        "Ley 15/2007 de Defensa de la Competencia",
+        "Reglamento (UE) 2019/1150 sobre transparencia en el sector de los carburantes",
+        "Directiva (UE) 2019/2161 sobre prácticas comerciales desleales"
+      ],
+      "summary": "La Asociación de gasolineras 'low cost' (Aesae) ha denunciado a Repsol ante la CNMC por presunto abuso de posición dominante mediante descuentos en carburantes, lo que podría configurar una práctica anticompetitiva. La CNMC investigará si estos descuentos distorsionan la competencia en el mercado.",
+      "vulnerability": "Falta de análisis previo de impacto en la competencia antes de implementar estrategias comerciales con descuentos agresivos.",
+      "financial_impact": "Multa potencial de entre 500.000€ y 50 millones de euros (1-10% de la facturación global de Repsol en España, estimada en ~50.000M€ anuales), más costes legales y reputacionales.",
+      "recommended_action": "Revisar inmediatamente la estrategia de descuentos con asesoría legal especializada en competencia para evaluar riesgos y ajustar políticas. Documentar todas las decisiones comerciales y recopilar pruebas de que los descuentos no tienen efecto anticompetitivo. Notificar a la CNMC cualquier medida correctiva adoptada."
+    },
+    {
+      "id": "9a69e5a86333",
+      "title": "La web de Competencia sufre un ciberataque",
+      "link": "https://www.eldiario.es/economia/web-competencia-sufre-ciberataque_1_13221662.html",
+      "source": "NewsAPI-Q2 · Eldiario.es",
+      "raw_date": "2026-05-14T12:59:13Z",
+      "fetched_at": "2026-05-15T14:12:51.680437+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Interrupción de servicios críticos",
+        "Posible vulneración de datos sensibles",
+        "Incumplimiento de obligaciones de transparencia y acceso a información pública"
+      ],
+      "norms_affected": [
+        "Ley 3/2018 de Protección de Datos y Garantía de Derechos Digitales (LOPDGDD)",
+        "Reglamento (UE) 2016/679 (RGPD)",
+        "Ley 9/2014 General de Telecomunicaciones (en relación con la seguridad de redes y servicios)",
+        "Ley 11/2022 de Transparencia y Buen Gobierno"
+      ],
+      "summary": "La CNMC sufrió un ciberataque que dejó su web inoperativa, generando riesgos en la transparencia y acceso a información pública. Podría implicar vulneración de datos si el ataque afectó a sistemas internos.",
+      "vulnerability": "Falta de medidas robustas de ciberseguridad (firewalls, sistemas de detección de intrusiones, protocolos de respuesta a incidentes) en infraestructuras críticas de la CNMC.",
+      "financial_impact": "Entre 50.000€ y 300.000€ (costes de recuperación, posibles sanciones por incumplimiento de transparencia y multas por brechas de datos si se confirman).",
+      "recommended_action": "Revisar y reforzar los protocolos de ciberseguridad de la CNMC, notificar el incidente a la AEPD si hubo acceso a datos personales, y evaluar el impacto en la transparencia según la Ley 11/2022."
+    },
+    {
       "id": "471c65826d42",
       "title": "Fiscalía y notarios alertan del impacto negativo de la nueva \"ley anticorrupción\" en la lucha contra el blanqueo",
       "link": "https://www.elperiodico.com/es/politica/20260514/fiscalia-notarios-alertan-impacto-negativo-ley-anticorrupcion-blanqueo-de-capitales-130011551",
@@ -8207,13 +8256,13 @@
     }
   ],
   "stats": {
-    "total_hits": 328,
+    "total_hits": 330,
     "critical_count": 100,
-    "warning_count": 225,
+    "warning_count": 227,
     "info_count": 3,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 429,
+    "new_this_run": 2,
+    "articles_checked": 4,
+    "seen_ids_total": 433,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -8232,5 +8281,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-15T11:22:54.310760+00:00"
+  "last_updated": "2026-05-15T14:12:54.048201+00:00"
 }
