@@ -1,6 +1,31 @@
 {
   "hits": [
     {
+      "id": "23b65cbe7099",
+      "title": "La CNMC empieza a abrir expediente a renovables por el apagón y arranca con Mercuria",
+      "link": "https://www.elconfidencial.com/empresas/2026-05-15/a-cnmc-empieza-a-abrir-expediente-a-renovables_4356019/",
+      "source": "NewsAPI-Q2 · Elconfidencial.com",
+      "raw_date": "2026-05-15T11:02:00Z",
+      "fetched_at": "2026-05-16T13:28:12.872841+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Incumplimiento de normativa de mercado eléctrico (Ley 24/2013, RD 1048/2013)",
+        "Sanciones administrativas por parte de la CNMC",
+        "Daño reputacional en el sector de energías renovables",
+        "Posible impacto en la concesión de ayudas públicas o permisos"
+      ],
+      "norms_affected": [
+        "Ley 24/2013 del Sector Eléctrico",
+        "Real Decreto 1048/2013 sobre condiciones de acceso y ejercicio de actividades en el sector eléctrico",
+        "Reglamento (UE) 2019/943 sobre el mercado interior de la electricidad"
+      ],
+      "summary": "La CNMC ha iniciado un expediente sancionador contra Mercuria Sostenible por su presunta responsabilidad en el apagón eléctrico de abril de 2025, siendo la primera empresa del sector renovable en ser investigada. El caso podría sentar precedente en la aplicación de sanciones en el mercado eléctrico.",
+      "vulnerability": "Falta de controles internos robustos para garantizar el cumplimiento de las normas de operación del sistema eléctrico y la prevención de incidentes que afecten a la estabilidad de la red.",
+      "financial_impact": "Multa estimada entre 100.000€ y 400.000€ para una empresa mediana del sector, pudiendo superar el millón de euros en casos de reincidencia o gravedad extrema.",
+      "recommended_action": "Revisar inmediatamente los protocolos de operación y cumplimiento en el sector eléctrico, documentar todas las medidas preventivas adoptadas y preparar una estrategia de defensa legal ante la CNMC, incluyendo la posible colaboración con otras empresas del sector para compartir buenas prácticas."
+    },
+    {
       "id": "9c8d4e53c32f",
       "title": "La CNMC empieza con Bruc a expedientar a renovables por el apagón",
       "link": "https://www.expansion.com/empresas/energia/2026/05/15/6a06ca30468aeb1f6a8b4590.html",
@@ -8359,13 +8384,13 @@
     }
   ],
   "stats": {
-    "total_hits": 334,
+    "total_hits": 335,
     "critical_count": 102,
-    "warning_count": 229,
+    "warning_count": 230,
     "info_count": 3,
-    "new_this_run": 0,
-    "articles_checked": 0,
-    "seen_ids_total": 437,
+    "new_this_run": 1,
+    "articles_checked": 1,
+    "seen_ids_total": 438,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -8384,5 +8409,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-16T10:18:27.991465+00:00"
+  "last_updated": "2026-05-16T13:28:14.073555+00:00"
 }
