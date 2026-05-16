@@ -1,6 +1,56 @@
 {
   "hits": [
     {
+      "id": "da302ba0b3dd",
+      "title": "El Sepblac multa con 13 millones a la filial de banca privada de Crédit Agricole",
+      "link": "https://www.expansion.com/empresas/banca/2026/05/15/6a061b0ce5fdea78618b458b.html",
+      "source": "NewsAPI-Q1 · Expansion.com",
+      "raw_date": "2026-05-14T23:41:00Z",
+      "fetched_at": "2026-05-16T03:27:41.682975+00:00",
+      "level": "critical",
+      "relevance_score": 95,
+      "risks": [
+        "Blanqueo de capitales",
+        "Incumplimiento de sistemas de prevención (ISO 37001)",
+        "Exposición a sanciones regulatorias severas",
+        "Daño reputacional"
+      ],
+      "norms_affected": [
+        "Ley 10/2010 de prevención del blanqueo de capitales",
+        "Real Decreto 304/2014",
+        "ISO 37001:2016 (Sistemas de gestión antisoborno)",
+        "Reglamento (UE) 2015/847"
+      ],
+      "summary": "La filial de banca privada de Crédit Agricole, Indosuez Wealth, ha sido multada con 13 millones de euros por el Sepblac por deficiencias graves en sus sistemas de prevención de blanqueo de capitales, clasificadas como infracción grave.",
+      "vulnerability": "Falta de implementación efectiva de controles internos y procedimientos de diligencia debida en la identificación de clientes y operaciones sospechosas, conforme a los requisitos de la Ley 10/2010 y normativa europea.",
+      "financial_impact": "13 millones de euros (multa) + costes legales y de implementación de medidas correctivas (estimación adicional: 2-5 millones de euros).",
+      "recommended_action": "Revisar y reforzar urgentemente los sistemas de prevención de blanqueo de capitales (LPB), realizar una auditoría independiente de cumplimiento, y presentar un plan de acción correctivo al Sepblac en un plazo máximo de 30 días."
+    },
+    {
+      "id": "5ff8cc6d866d",
+      "title": "La deconstrucción del sistema de prevención del fraude",
+      "link": "https://www.lavozdegalicia.es/noticia/opinion/2026/05/15/deconstruccion-sistema-prevencion-fraude/0003_202605G15P13996.htm",
+      "source": "NewsAPI-Q3 · Lavozdegalicia.es",
+      "raw_date": "2026-05-15T03:00:00Z",
+      "fetched_at": "2026-05-16T03:27:45.579819+00:00",
+      "level": "warning",
+      "relevance_score": 85,
+      "risks": [
+        "Falta de eficacia en el sistema de prevención de fraude",
+        "Incumplimiento de ISO 37001 (Sistemas de Gestión Antisoborno)",
+        "Exposición a sanciones administrativas por incumplimiento normativo"
+      ],
+      "norms_affected": [
+        "ISO 37001:2016",
+        "Ley 11/2018 de prevención del blanqueo de capitales",
+        "RGPD (Reglamento (UE) 2016/679)"
+      ],
+      "summary": "Artículo de opinión que cuestiona la efectividad de los sistemas de prevención de fraude en empresas españolas, destacando posibles fallos estructurales y de implementación. Podría indicar debilidades en controles internos y cumplimiento normativo.",
+      "vulnerability": "Falta de revisión periódica y auditoría independiente del sistema de prevención de fraude (requerido por ISO 37001 y Ley 11/2018).",
+      "financial_impact": "Entre 100.000€ y 400.000€ (multas por incumplimiento de normativa antisoborno y protección de datos, más costes de reparación de imagen y posibles indemnizaciones).",
+      "recommended_action": "Revisar y auditar el sistema de prevención de fraude (ISO 37001) y blanqueo de capitales (Ley 11/2018), con especial atención a controles de debida diligencia y canales de denuncia. Documentar hallazgos y proponer mejoras urgentes al Comité de Cumplimiento."
+    },
+    {
       "id": "bf635231e4ee",
       "title": "La Guardia Civil detiene en Alicante a uno de los criminales más buscados por Reino Unido",
       "link": "https://www.libertaddigital.com/valencia/2026-05-14/la-guardia-civil-detiene-en-alicante-a-uno-de-los-criminales-mas-buscados-por-reino-unido-7404862/",
@@ -8284,13 +8334,13 @@
     }
   ],
   "stats": {
-    "total_hits": 331,
-    "critical_count": 101,
-    "warning_count": 227,
+    "total_hits": 333,
+    "critical_count": 102,
+    "warning_count": 228,
     "info_count": 3,
-    "new_this_run": 1,
-    "articles_checked": 1,
-    "seen_ids_total": 434,
+    "new_this_run": 2,
+    "articles_checked": 2,
+    "seen_ids_total": 436,
     "sources_active": [
       "BOE - Disposiciones generales",
       "BOE - Administración de Justicia",
@@ -8309,5 +8359,5 @@
       "(\"protección de datos\" OR RGPD OR \"brecha de seguridad\") AND (sanción OR multa OR AEPD)"
     ]
   },
-  "last_updated": "2026-05-15T22:01:32.540329+00:00"
+  "last_updated": "2026-05-16T03:27:46.780618+00:00"
 }
